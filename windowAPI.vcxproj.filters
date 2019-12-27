@@ -46,9 +46,6 @@
     <Filter Include="2DGameFramework\effect">
       <UniqueIdentifier>{0dbf570f-42b2-481b-8632-983fa151eedb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="playGround\starScene">
-      <UniqueIdentifier>{16739aa5-e0ee-4ff8-b124-fc4e90aa2ac4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="2DGameFramework\button">
       <UniqueIdentifier>{edec0274-25d5-4cd4-9858-73c06504f062}</UniqueIdentifier>
     </Filter>
@@ -119,18 +116,6 @@
     </ClInclude>
     <ClInclude Include="soundManager.h">
       <Filter>2DGameFramework\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="ship.h">
-      <Filter>playGround\starScene</Filter>
-    </ClInclude>
-    <ClInclude Include="battle.h">
-      <Filter>playGround\starScene</Filter>
-    </ClInclude>
-    <ClInclude Include="selectScene.h">
-      <Filter>playGround\starScene</Filter>
-    </ClInclude>
-    <ClInclude Include="starScene.h">
-      <Filter>playGround\starScene</Filter>
     </ClInclude>
     <ClInclude Include="sceneManager.h">
       <Filter>2DGameFramework\Manager</Filter>
@@ -205,18 +190,6 @@
     </ClCompile>
     <ClCompile Include="soundManager.cpp">
       <Filter>2DGameFramework\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="ship.cpp">
-      <Filter>playGround\starScene</Filter>
-    </ClCompile>
-    <ClCompile Include="battle.cpp">
-      <Filter>playGround\starScene</Filter>
-    </ClCompile>
-    <ClCompile Include="selectScene.cpp">
-      <Filter>playGround\starScene</Filter>
-    </ClCompile>
-    <ClCompile Include="starScene.cpp">
-      <Filter>playGround\starScene</Filter>
     </ClCompile>
     <ClCompile Include="sceneManager.cpp">
       <Filter>2DGameFramework\Manager</Filter>

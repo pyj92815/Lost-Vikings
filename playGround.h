@@ -1,6 +1,5 @@
 #pragma once
 #include "gameNode.h"
-#include "starScene.h"
 #include "selectScene.h"
 #include "worldMap.h"
 
