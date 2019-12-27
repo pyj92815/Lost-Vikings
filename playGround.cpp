@@ -45,7 +45,7 @@ void playGround::render()
 	PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
 	//==================================================
 	_wd->render();
-	
+	//test
 	//===================================================
 	//µü ¸»Çß´Ù
 	_backBuffer->render(getHDC(), 0, 0);
