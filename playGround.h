@@ -2,14 +2,16 @@
 #include "gameNode.h"
 #include "selectScene.h"
 #include "worldMap.h"
+#include "scene_Manager.h"
 #include "playerManager.h" // 플레이어
+
 
 class playGround : public gameNode
 {
 private:
-	playerManager* _pm;   // 플레이어 매니져 
 	worldMap* _wd;
-	int a;
+	scene_Manager* _sm;
+	playerManager* _pm;   // 플레이어 매니져 
 
 public:
 	playGround();

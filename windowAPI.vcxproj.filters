@@ -52,8 +52,14 @@
     <Filter Include="playGround\맵">
       <UniqueIdentifier>{b1443c61-444d-4676-9866-2ee9fbb79c79}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\scene_Manager">
+      <UniqueIdentifier>{d087255e-7acc-4b22-a070-a021fc589fc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\scene">
+      <UniqueIdentifier>{16a0c9cb-f79b-450d-a286-9bb43d67549a}</UniqueIdentifier>
+    </Filter>
     <Filter Include="playGround\characters">
-      <UniqueIdentifier>{096626c7-fb8c-44e3-88b2-a59acc81631d}</UniqueIdentifier>
+      <UniqueIdentifier>{e7f04b4f-28b5-4fad-bbe9-28066b77042e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -144,13 +150,25 @@
     <ClInclude Include="enemyManager.h">
       <Filter>2DGameFramework</Filter>
     </ClInclude>
+    <ClInclude Include="scene_Manager.h">
+      <Filter>playGround\scene_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="stageScene.h">
+      <Filter>playGround\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="introScene.h">
+      <Filter>playGround\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="cameraManager.h">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClInclude>
     <ClInclude Include="player.h">
       <Filter>playGround\characters</Filter>
     </ClInclude>
-    <ClInclude Include="playerManager.h">
+    <ClInclude Include="playerEric.h">
       <Filter>playGround\characters</Filter>
     </ClInclude>
-    <ClInclude Include="playerEric.h">
+    <ClInclude Include="playerManager.h">
       <Filter>playGround\characters</Filter>
     </ClInclude>
   </ItemGroup>
@@ -227,13 +245,25 @@
     <ClCompile Include="enemyManager.cpp">
       <Filter>2DGameFramework</Filter>
     </ClCompile>
+    <ClCompile Include="scene_Manager.cpp">
+      <Filter>playGround\scene_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="stageScene.cpp">
+      <Filter>playGround\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="introScene.cpp">
+      <Filter>playGround\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="cameraManager.cpp">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClCompile>
     <ClCompile Include="player.cpp">
       <Filter>playGround\characters</Filter>
     </ClCompile>
-    <ClCompile Include="playerManager.cpp">
+    <ClCompile Include="playerEric.cpp">
       <Filter>playGround\characters</Filter>
     </ClCompile>
-    <ClCompile Include="playerEric.cpp">
+    <ClCompile Include="playerManager.cpp">
       <Filter>playGround\characters</Filter>
     </ClCompile>
   </ItemGroup>
