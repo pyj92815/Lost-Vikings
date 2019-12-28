@@ -52,6 +52,9 @@
     <Filter Include="playGround\맵">
       <UniqueIdentifier>{b1443c61-444d-4676-9866-2ee9fbb79c79}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\characters">
+      <UniqueIdentifier>{096626c7-fb8c-44e3-88b2-a59acc81631d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -141,6 +144,15 @@
     <ClInclude Include="enemyManager.h">
       <Filter>2DGameFramework</Filter>
     </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>playGround\characters</Filter>
+    </ClInclude>
+    <ClInclude Include="playerManager.h">
+      <Filter>playGround\characters</Filter>
+    </ClInclude>
+    <ClInclude Include="playerEric.h">
+      <Filter>playGround\characters</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -214,6 +226,15 @@
     </ClCompile>
     <ClCompile Include="enemyManager.cpp">
       <Filter>2DGameFramework</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>playGround\characters</Filter>
+    </ClCompile>
+    <ClCompile Include="playerManager.cpp">
+      <Filter>playGround\characters</Filter>
+    </ClCompile>
+    <ClCompile Include="playerEric.cpp">
+      <Filter>playGround\characters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

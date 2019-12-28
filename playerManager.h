@@ -20,4 +20,3 @@ public:
 	tagPlayer getPlayerEric() { return _eric->getEric(); }
 };
 
-
