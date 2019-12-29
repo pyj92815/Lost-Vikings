@@ -18,5 +18,8 @@ public:
 	void render();
 
 	tagPlayer getPlayerEric() { return _eric->getEric(); }
+ 
+	void setColisionFloor(); // ¹Ù´Ú Ãæµ¹ 
+
 };
 

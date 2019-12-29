@@ -49,5 +49,6 @@ public:
 	HDC getWorDC() { return _worldDC; }
 	void setWorImage(image* img) { __worImage = img; }
 	image* getWorImage() { return __worImage; }
+
 };
 

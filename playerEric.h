@@ -35,5 +35,10 @@ public:
 	void setEricImage();
 
 	tagPlayer getEric() { return _eric; }
+	void setEricX(float x) { _eric.x = x; }	 // eric x 설정
+	void setEricY(float y) { _eric.y = y; }  // eric y 설정 
+
+	float getEricProbeX() { return _eric.probeX; }
+	float getEricProbeY() { return _eric.probeY; }
 };
 

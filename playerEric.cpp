@@ -48,6 +48,9 @@ HRESULT playerEric::init(float x, float y)
 	_breathCount = 0;
 	_breathFrameCount = 0;
 	_test = RectMake(WINSIZEX / 2 + 200, WINSIZEY / 2, 200, 200);
+	// 충돌처리를 위한 픽셀 프로브X/Y값
+	_eric.probeX = _eric.x + _eric.image->getFrameWidth() / 2;
+	_eric.probeY = _eric.y + _eric.image->getFrameHeight() / 2;
 	return S_OK;
 }
 
@@ -88,6 +91,9 @@ void playerEric::update()
 	// 191229 PM 02:01 형길이 추가
 	// 에릭의 좌표를 카메라 매니저에 넘겨준다.
 	CAMERAMANAGER->set_Camera_XY(_eric.rc);
+	//충돌 프로브 업데이트
+	_eric.probeX = _eric.x + _eric.image->getFrameWidth() / 2;
+	_eric.probeY = _eric.y + _eric.image->getFrameHeight() / 2;
 }
 
 void playerEric::render()

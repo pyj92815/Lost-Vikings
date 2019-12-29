@@ -42,7 +42,9 @@ struct tagPlayer
 	float jumpPower;	 // 에릭만 사용하는 점프 
 	float movePower;
 	float movePowerCount;
-	float gravity;		 // 에릭	  중력			
+	float gravity;		 // 에릭	  중력		
+	float probeY;
+	float probeX;
 	int direction;		 // FRAME Y 0은 왼쪽, 1은 오른쪽  
 	int frameCount;
 	int currentFrameX, currentFrameY;

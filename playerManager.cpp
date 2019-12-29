@@ -12,6 +12,7 @@ HRESULT playerManager::init()
 void playerManager::update()
 {
 	_eric->update();
+	setColisionFloor();
 }
 
 void playerManager::release()
@@ -22,4 +23,24 @@ void playerManager::release()
 void playerManager::render()
 {
 	_eric->render();
+}
+
+void playerManager::setColisionFloor()
+{
+	for (int i = _eric->getEricProbeY(); i < _eric->getEricProbeY() + 10; ++i)
+	{
+		COLORREF color = GetPixel(IMAGEMANAGER->findImage("worldMap")->getMemDC(), _eric->getEric().x + (_eric->getEric().image->getFrameWidth() / 2), i);
+
+		int r = GetRValue(color);
+		int g = GetRValue(color);
+		int b = GetRValue(color);
+
+		cout << "r :" << r << "g :" << g << "b :" << b << endl;
+		if (!(r == 255 && g == 0 && b == 255))
+		{
+			_eric->setEricY(i- _eric->getEric().image->getFrameHeight()/2);
+			break;
+		}
+
+	}
 }
