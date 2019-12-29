@@ -36,30 +36,53 @@ void cameraManager::set_WorldSize(string strKey)
 
 void cameraManager::set_Camera_XY(int x, int y)
 {
-	_camera.cameraXY.x = WINSIZEX / 2 - x;
-	_camera.cameraXY.y = WINSIZEY / 2 - y;
+	_camera.cameraXY.x = x - _camera.cameraSizeX / 2.f;
+	_camera.cameraXY.y = y - _camera.cameraSizeX / 2.f;
+
+	Camera_Correction();	// 카메라가 맵 밖으로 나갔을때 예외처리
 }
 
 void cameraManager::set_Camera_XY(float x, float y)
 {
-	_camera.cameraXY.x = WINSIZEX / 2 - x;
-	_camera.cameraXY.y = WINSIZEY / 2 - y;
+	_camera.cameraXY.x = x - _camera.cameraSizeX / 2.f;
+	_camera.cameraXY.y = y - _camera.cameraSizeX / 2.f;
+
+	Camera_Correction();	// 카메라가 맵 밖으로 나갔을때 예외처리
 }
 
 void cameraManager::set_Camera_XY(POINT xy)
 {
-	_camera.cameraXY.x = WINSIZEX / 2 - xy.x;
-	_camera.cameraXY.y = WINSIZEY / 2 - xy.y;
+	_camera.cameraXY.x = xy.x - _camera.cameraSizeX / 2.f;
+	_camera.cameraXY.y = xy.y - _camera.cameraSizeX / 2.f;
+
+	Camera_Correction();	// 카메라가 맵 밖으로 나갔을때 예외처리
 }
 
 void cameraManager::set_Camera_XY(POINTFLOAT xy)
 {
-	_camera.cameraXY.x = WINSIZEX / 2 - xy.x;
-	_camera.cameraXY.y = WINSIZEY / 2 - xy.y;
+	_camera.cameraXY.x = xy.x - _camera.cameraSizeX / 2.f;
+	_camera.cameraXY.y = xy.y - _camera.cameraSizeX / 2.f;
+
+	Camera_Correction();	// 카메라가 맵 밖으로 나갔을때 예외처리
 }
 
 void cameraManager::set_Camera_XY(RECT rc)
 {
-	_camera.cameraXY.x = WINSIZEX / 2 - (rc.right - rc.left);
-	_camera.cameraXY.y = WINSIZEY / 2 - (rc.bottom - rc.top);
+	// 받아온 rc의 x, y 중심좌표를 구해서, 카메라 사이즈 절반 만큼을 빼주면
+	// 카메라의 left, top 좌표가 구해진다.
+	_camera.cameraXY.x = ((rc.right + rc.left) / 2) - _camera.cameraSizeX / 2;
+	_camera.cameraXY.y = ((rc.bottom + rc.top) / 2) - _camera.cameraSizeY / 2;
+
+	Camera_Correction();	// 카메라가 맵 밖으로 나갔을때 예외처리
+}
+
+void cameraManager::Camera_Correction()
+{
+	// 만약 카메라가 맵을 넘어가려고 할때 보정을 해준다.
+	if (_camera.cameraXY.x < 0) _camera.cameraXY.x = 0;
+	if (_camera.cameraXY.y < 0) _camera.cameraXY.y = 0;
+	if (_camera.cameraXY.x + _camera.cameraSizeX > _camera.world_Size.x)
+		_camera.cameraXY.x = _camera.world_Size.x - _camera.cameraSizeX;
+	if (_camera.cameraXY.y + _camera.cameraSizeY > _camera.world_Size.y)
+		_camera.cameraXY.y = _camera.world_Size.y - _camera.cameraSizeY;
 }

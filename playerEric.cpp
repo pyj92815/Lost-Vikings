@@ -84,12 +84,18 @@ void playerEric::update()
 			_eric.image->setFrameX(_eric.currentFrameX);
 		}
 	}
+
+	// 191229 PM 02:01 형길이 추가
+	// 에릭의 좌표를 카메라 매니저에 넘겨준다.
+	CAMERAMANAGER->set_Camera_XY(_eric.rc);
 }
 
 void playerEric::render()
 {
-	Rectangle(getMemDC(), _eric.rc);
+	//Rectangle(getMemDC(), _eric.rc);
+
 	//Rectangle(getMemDC(), _test);
+
 	_eric.image->frameRender(getMemDC(), _eric.x, _eric.y, _eric.currentFrameX, _eric.currentFrameY);
 	char str[100];
 	sprintf_s(str, "%d", _breathCount);

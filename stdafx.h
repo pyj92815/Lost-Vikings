@@ -25,6 +25,7 @@ using namespace std;
 #include "txtData.h"
 #include "soundManager.h"
 #include "sceneManager.h"
+#include "cameraManager.h"
 
 using namespace SEVENTEEN_UTIL;
 
@@ -47,6 +48,7 @@ using namespace SEVENTEEN_UTIL;
 #define TXTDATA txtData::getSingleton()
 #define SOUNDMANAGER soundManager::getSingleton()
 #define SCENEMANAGER sceneManager::getSingleton()
+#define CAMERAMANAGER cameraManager::getSingleton()
 
 
 #define SAFE_DELETE(p) {if(p) {delete(p); (p)=NULL;}}
