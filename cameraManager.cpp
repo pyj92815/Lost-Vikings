@@ -11,7 +11,6 @@ cameraManager::~cameraManager()
 
 HRESULT cameraManager::init()
 {
-
 	return S_OK;
 }
 

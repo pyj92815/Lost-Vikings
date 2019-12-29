@@ -6,7 +6,7 @@
 struct _tagCamera
 {
 	POINTFLOAT world_Size, cameraXY;		// 월드 사이즈, 카메라 좌표를 담을곳
-	int		   cameraSizeX, cameraSizeY;
+	int		   cameraSizeX, cameraSizeY;	// 카메라의 사이즈
 };
 
 class cameraManager : public singletonBase<cameraManager>
@@ -15,6 +15,7 @@ private:
 	_tagCamera  _camera;
 
 	HDC			_worldDC;
+	image*		__worImage;
 
 public:
 	cameraManager();
@@ -43,5 +44,10 @@ public:
 	float get_Camera_Y() { return _camera.cameraXY.y; }			// 카메라 y좌표를 가져온다.
 
 	void Camera_Correction();									// 카메라 예외처리 함수
+
+	void set_worldDC(HDC wDC) { _worldDC = wDC; }
+	HDC getWorDC() { return _worldDC; }
+	void setWorImage(image* img) { __worImage = img; }
+	image* getWorImage() { return __worImage; }
 };
 

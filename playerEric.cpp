@@ -96,7 +96,11 @@ void playerEric::render()
 
 	//Rectangle(getMemDC(), _test);
 
-	_eric.image->frameRender(getMemDC(), _eric.x, _eric.y, _eric.currentFrameX, _eric.currentFrameY);
+	// 191229 PM 03:17 에릭이 그려지는 위치를 월드DC로 옴겼다.
+	_eric.image->frameRender(CAMERAMANAGER->getWorDC(), _eric.x, _eric.y, _eric.currentFrameX, _eric.currentFrameY);
+	CAMERAMANAGER->getWorImage()->render(getMemDC(), 0, 0,
+		CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y()
+		, CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
 	char str[100];
 	sprintf_s(str, "%d", _breathCount);
 	TextOut(getMemDC(), WINSIZEX / 2, WINSIZEY / 2, str, strlen(str));
@@ -221,6 +225,16 @@ void playerEric::key()
 		}
 	}
 
+
+	// 191229 PM 03:18 테스트용 이동키 추가 (삭제해야함)
+	if (KEYMANAGER->isStayKeyDown('O'))
+	{
+		_eric.y -= 5;
+	}
+	if (KEYMANAGER->isStayKeyDown('L'))
+	{
+		_eric.y += 5;
+	}
 }
 
 void playerEric::frameCount()
@@ -314,33 +328,33 @@ void playerEric::ericJump()
 void playerEric::ericAttack()
 {
 	// eric의 벽 
-	if (_eric.state != STATE_ERIC_HEADBUTT && _eric.state != STATE_ERIC_HEADBUTTEND)
-	{
-		if (_test.left < _eric.x + _eric.image->getFrameWidth())
-		{
-			_eric.state = STATE_PUSH;
-			if (_eric.image->getMaxFrameX() < _eric.currentFrameX)
-			{
-				_eric.currentFrameX = 0;
-				_eric.image->setFrameX(_eric.currentFrameX);
-			}
-			_eric.x = _test.left - _eric.image->getFrameWidth();
-		}
-	}
+	//if (_eric.state != STATE_ERIC_HEADBUTT && _eric.state != STATE_ERIC_HEADBUTTEND)
+	//{
+	//	if (_test.left < _eric.x + _eric.image->getFrameWidth())
+	//	{
+	//		_eric.state = STATE_PUSH;
+	//		if (_eric.image->getMaxFrameX() < _eric.currentFrameX)
+	//		{
+	//			_eric.currentFrameX = 0;
+	//			_eric.image->setFrameX(_eric.currentFrameX);
+	//		}
+	//		_eric.x = _test.left - _eric.image->getFrameWidth();
+	//	}
+	//}
 
-	if (_eric.state == STATE_ERIC_HEADBUTT && _eric.currentFrameX > 3)
-	{
-		RECT temp;
-		if (IntersectRect(&temp, &_eric.rc, &_test))
-		{
-			// 벽을 부딪히면 에릭의 위치는 
-			_eric.state = STATE_ERIC_HEADBUTTEND;
-			_eric.currentFrameX = 0;
-			_eric.image->setFrameX(0);
-			_ericUnable = true;
-			_eric.frameSpeed = 12;
-		}
-	}
+	//if (_eric.state == STATE_ERIC_HEADBUTT && _eric.currentFrameX > 3)
+	//{
+	//	RECT temp;
+	//	if (IntersectRect(&temp, &_eric.rc, &_test))
+	//	{
+	//		// 벽을 부딪히면 에릭의 위치는 
+	//		_eric.state = STATE_ERIC_HEADBUTTEND;
+	//		_eric.currentFrameX = 0;
+	//		_eric.image->setFrameX(0);
+	//		_ericUnable = true;
+	//		_eric.frameSpeed = 12;
+	//	}
+	//}
 }
 
 void playerEric::ericAttackMove()
