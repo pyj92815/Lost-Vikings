@@ -98,9 +98,10 @@ void playerEric::render()
 
 	// 191229 PM 03:17 에릭이 그려지는 위치를 월드DC로 옴겼다.
 	_eric.image->frameRender(CAMERAMANAGER->getWorDC(), _eric.x, _eric.y, _eric.currentFrameX, _eric.currentFrameY);
-	CAMERAMANAGER->getWorImage()->render(getMemDC(), 0, 0,
-		CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y()
-		, CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
+	
+	//CAMERAMANAGER->getWorImage()->render(getMemDC(), 0, 0,
+	//	CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y()
+	//	, CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
 	char str[100];
 	sprintf_s(str, "%d", _breathCount);
 	TextOut(getMemDC(), WINSIZEX / 2, WINSIZEY / 2, str, strlen(str));

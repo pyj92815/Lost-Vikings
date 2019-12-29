@@ -26,7 +26,7 @@ HRESULT worldMap::init()
 	CAMERAMANAGER->set_WorldSize("background");
 	CAMERAMANAGER->set_CameraSize(960, 573);
 	CAMERAMANAGER->set_worldDC(worldDC);
-
+	
 	return S_OK;
 }
 
@@ -41,12 +41,14 @@ void worldMap::update()
 void worldMap::render()
 {
 	// 191229 PM 02:09 보여지는 부분 카메라 좌표를 수정했음 -형길-
-	IMAGEMANAGER->findImage("blackground")->render(CAMERAMANAGER->getWorDC(), 0, 0);
+	// 191229 PM 19:11 -락훈 - 렉 때문에 blackground를 지우고 patBlt로 카메라 배경만큼 그리도록 함 
+	PatBlt(CAMERAMANAGER->getWorDC(), CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), WINSIZEX, WINSIZEY, BLACKNESS);
+	//PatBlt(CAMERAMANAGER->getWorDC(), 0, 0, 3840, 2292, BLACKNESS);  => 렉걸림
+	//IMAGEMANAGER->findImage("blackground")->render(CAMERAMANAGER->getWorDC(), 0, 0); => 렉걸림 
 	IMAGEMANAGER->findImage("background")->render(CAMERAMANAGER->getWorDC(), 0, 0);
 	IMAGEMANAGER->findImage("firstground")->render(CAMERAMANAGER->getWorDC(), 0, 0);
-	CAMERAMANAGER->setWorImage(worldImage);
+	CAMERAMANAGER->setWorImage(worldImage); //?
 	//worldImage->render(getMemDC(), 0, 0,
 	//	CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
-
 
 }

@@ -59,7 +59,11 @@ void playGround::render()
 	//_sm->render();
 
 	_pm->render();
-	
+
+	// 191229 PM 19:11 -¶ôÈÆ - WorldDc ÄÉ¸¯ÅÍ-> PG·Î ·»´õ¸µºÎºÐ ¿Å±è 
+	CAMERAMANAGER->getWorImage()->render(getMemDC(), 0, 0,
+		CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y()
+		, CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
 	//===================================================
 	//µü ¸»Çß´Ù
 	_backBuffer->render(getHDC(), 0, 0);
