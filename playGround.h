@@ -1,6 +1,5 @@
 #pragma once
 #include "gameNode.h"
-#include "selectScene.h"
 #include "worldMap.h"
 #include "scene_Manager.h"
 #include "playerManager.h" // 플레이어

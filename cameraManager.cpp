@@ -3,6 +3,14 @@
 
 cameraManager::cameraManager()
 {
+	_camera.cameraSizeX =   NULL;
+	_camera.cameraSizeY =   NULL;
+	_camera.cameraXY.x =    NULL;
+	_camera.cameraXY.y =    NULL;
+	_camera.world_Size.x =  NULL;
+	_camera.world_Size.y =  NULL;
+	_worldDC =				NULL;
+	__worImage =			NULL;
 }
 
 cameraManager::~cameraManager()

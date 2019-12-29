@@ -45,7 +45,7 @@ void playGround::update()
 
 	_sm->update();
 
-	_pm->update();
+	if(SCENEMANAGER->get_SceneState() == SS_STAGE)	_pm->update();
 
 }
 
@@ -56,9 +56,9 @@ void playGround::render()
 	//==================================================
 	_wd->render();
 
-	//_sm->render();
-
 	_pm->render();
+
+	_sm->render();
 	
 	//===================================================
 	//µü ¸»Çß´Ù

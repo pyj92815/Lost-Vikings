@@ -147,12 +147,13 @@ void introScene::setting_AlphaBlend()
 
 void introScene::Select_Key()
 {
+	// 씬 넘버가 4일때만 실행한다.
 	if (_introScene.scene_Number == 4)
 	{
-
+		
 		if (KEYMANAGER->isOnceKeyDown(VK_UP) || KEYMANAGER->isOnceKeyDown('W'))
 		{
-			if (!_introScene.scene_Change_pos)
+			if (!_introScene.scene_Change_pos)	
 			{
 				_introScene.scene_Select_Image->setX(_introScene.scene_Select_rc[SS_GAME_PASSWORD].left);
 				_introScene.scene_Select_Image->setY(_introScene.scene_Select_rc[SS_GAME_PASSWORD].top);
@@ -187,8 +188,17 @@ void introScene::Select_Key()
 		// 엔터를 입력한다면 해당 렉트의 씬으로 이동한다.
 		if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
 		{
-			// 셀렉 이미지가 어느 렉트안에 있는지 비교하고 
-			// 해당 씬으로 이동하게 코드를 짜야한다. (미완성)
+			// _introScene.scene_Change_pos의 값이 false라면 게임 스타트에 위치하고 있다. (키입력에서 빠져나올때 들어있는값이 바뀌기 때문에)
+			if (!_introScene.scene_Change_pos)
+			{
+				SCENEMANAGER->set_SceneState(SS_STAGE);		// 상태를 바꿔주면서 씬을 전환해준다.
+			}
+
+			// 만약 true의 값을 가지고 있다면, 패스워드 위치에 있다.
+			if (_introScene.scene_Change_pos)
+			{
+
+			}
 		}
 	}
 }
