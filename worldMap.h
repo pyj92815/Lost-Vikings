@@ -5,8 +5,6 @@ class worldMap : public gameNode
 {
 private:
 
-	image* worldImage;
-	HDC worldDC;
 
 private:
 	image* player;

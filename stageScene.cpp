@@ -33,6 +33,17 @@ void stageScene::render()
 	// 테스트용 배경이다. 이후에는 지울것!
 	//IMAGEMANAGER->findImage("Test_BG")->render(getMemDC(), 0, 0);
 
+
+	//CAMERAMANAGER->get_WorImage()->render(getMemDC(), 0, 0);
+
+
+
+	CAMERAMANAGER->get_WorImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(),
+		CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
+
+	IMAGEMANAGER->findImage("OBJECT")->render(getMemDC(), 0, 0, CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(),
+		CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
+
 	IMAGEMANAGER->findImage("UI_Image")->render(getMemDC(), 0, WINSIZEY - (WINSIZEY - 573));
 
 	// 쓰레기통 출력
@@ -46,8 +57,7 @@ void stageScene::render()
 			_UI_State[i].image->getFrameX(), 0);
 	}
 
-	CAMERAMANAGER->getWorImage()->render(getMemDC(), 0, 0,
-		CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
+
 }
 
 void stageScene::posSetting()

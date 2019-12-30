@@ -62,7 +62,7 @@
       <UniqueIdentifier>{673f8783-a194-4030-a62e-7657b3c793a7}</UniqueIdentifier>
     </Filter>
     <Filter Include="playGround\Enemy">
-      <UniqueIdentifier>{b78edb3b-4ec9-4e60-9941-bfa62c622d25}</UniqueIdentifier>
+      <UniqueIdentifier>{0db7d735-5cb5-4f74-bab8-ffe946dd806b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -159,21 +159,24 @@
     <ClInclude Include="scene_Manager.h">
       <Filter>playGround\Scene_Manager</Filter>
     </ClInclude>
-    <ClInclude Include="enemyManager.h">
-      <Filter>playGround\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy_Scorpion.h">
+    <ClInclude Include="enemy.h">
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Enemy_Mummy.h">
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="enemy.h">
+    <ClInclude Include="Enemy_Scorpion.h">
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Enemy_Snake.h">
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
+<<<<<<< HEAD
+=======
+    <ClInclude Include="enemyManager.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+>>>>>>> 7c6969c42fefc7480e17ee67445ad5bcd63b637b
     <ClInclude Include="playerbaleog.h">
       <Filter>playGround\characters</Filter>
     </ClInclude>
@@ -257,19 +260,19 @@
     <ClCompile Include="scene_Manager.cpp">
       <Filter>playGround\Scene_Manager</Filter>
     </ClCompile>
-    <ClCompile Include="enemyManager.cpp">
-      <Filter>playGround\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy_Snake.cpp">
-      <Filter>playGround\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy_Scorpion.cpp">
+    <ClCompile Include="enemy.cpp">
       <Filter>playGround\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Enemy_Mummy.cpp">
       <Filter>playGround\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="enemy.cpp">
+    <ClCompile Include="Enemy_Scorpion.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_Snake.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="enemyManager.cpp">
       <Filter>playGround\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="playerbaleog.cpp">
