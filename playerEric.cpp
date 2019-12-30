@@ -411,7 +411,7 @@ void playerEric::setEricImage()
 		break;
 	case STATE_BALEOG_ARROW:
 		break;
-	case STATE_BALEOG_SWORD:
+	case STATE_BALEOG_SWORD1:
 		break;
 	case STATE_BREATH:
 		_eric.image = IMAGEMANAGER->findImage("eric_breath");

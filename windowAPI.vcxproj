@@ -164,6 +164,7 @@
     <ClInclude Include="introScene.h" />
     <ClInclude Include="keyManager.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="playerbaleog.h" />
     <ClInclude Include="playerEric.h" />
     <ClInclude Include="playerManager.h" />
     <ClInclude Include="scene_Manager.h" />
@@ -201,6 +202,7 @@
     <ClCompile Include="introScene.cpp" />
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="playerbaleog.cpp" />
     <ClCompile Include="playerEric.cpp" />
     <ClCompile Include="playerManager.cpp" />
     <ClCompile Include="scene_Manager.cpp" />
