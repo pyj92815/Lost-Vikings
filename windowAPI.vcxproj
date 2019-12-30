@@ -167,6 +167,7 @@
     <ClInclude Include="playerbaleog.h" />
     <ClInclude Include="playerEric.h" />
     <ClInclude Include="playerManager.h" />
+    <ClInclude Include="PlayerOlaf.h" />
     <ClInclude Include="scene_Manager.h" />
     <ClInclude Include="stageScene.h" />
     <ClInclude Include="worldMap.h" />
@@ -205,6 +206,7 @@
     <ClCompile Include="playerbaleog.cpp" />
     <ClCompile Include="playerEric.cpp" />
     <ClCompile Include="playerManager.cpp" />
+    <ClCompile Include="PlayerOlaf.cpp" />
     <ClCompile Include="scene_Manager.cpp" />
     <ClCompile Include="stageScene.cpp" />
     <ClCompile Include="worldMap.cpp" />
