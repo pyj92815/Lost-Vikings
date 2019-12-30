@@ -65,7 +65,7 @@ public:
 	virtual void update();
 	virtual void render();
 
-	void fire(float x, float y, float speed , float angle, int direction);
+	void fire(float x, float y, float speed, float angle, int direction);
 
 	void removeArrow(int arrNum);
 
@@ -107,6 +107,8 @@ public:
 
 
 	tagPlayer getBaleog() { return _baleog; }
+
+	void hgKey();	// 형길이가 쓰는 비밀 이동키
 };
 
 

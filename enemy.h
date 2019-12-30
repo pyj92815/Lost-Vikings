@@ -39,12 +39,12 @@ public:
 	//이미지 추가 함수
 	virtual void imageReset()
 	{
-		IMAGEMANAGER->addFrameImage("Enemy_Mummy", "./image./Enemy/Enemy_Mummy.bmp", 696, 224, 6, 2, true, RGB(255, 0, 255));
-		IMAGEMANAGER->addFrameImage("Enemy_Mummy_Attack", "./image./Enemy/Enemy_Mummy_Attack.bmp", 672, 256, 6, 2, true, RGB(255, 0, 255));
-		IMAGEMANAGER->addFrameImage("Enemy_Scorpion", "./image./Enemy/Enemy_Scorpion.bmp", 480, 240, 4, 2, true, RGB(255, 0, 255));
-		IMAGEMANAGER->addFrameImage("Enemy_Scorpion_Attack", "./image./Enemy/Enemy_Scorpion_Attack.bmp", 980, 248, 7, 2, true, RGB(255, 0, 255));
-		IMAGEMANAGER->addFrameImage("Enemy_Snake", "./image./Enemy/Enemy_Snake.bmp", 288, 16, 8, 2, true, RGB(255, 0, 255));
-		IMAGEMANAGER->addFrameImage("Enemy_Snake_Attack", "./image./Enemy/Enemy_Snake_Attack", 765, 120, 9, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("Enemy_Mummy", "./_Resources./_Enemy/Enemy_Mummy.bmp", 696, 224, 6, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("Enemy_Mummy_Attack", "./_Resources./_Enemy/Enemy_Mummy_Attack.bmp", 672, 256, 6, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("Enemy_Scorpion", "./_Resources./_Enemy/Enemy_Scorpion.bmp", 480, 240, 4, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("Enemy_Scorpion_Attack", "./_Resources./_Enemy/Enemy_Scorpion_Attack.bmp", 980, 248, 7, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("Enemy_Snake", "./_Resources./_Enemy/Enemy_Snake.bmp", 288, 16, 8, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("Enemy_Snake_Attack", "./_Resources./_Enemy/Enemy_Snake_Attack", 765, 120, 9, 2, true, RGB(255, 0, 255));
 	}
 };
 

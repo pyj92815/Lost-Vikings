@@ -14,8 +14,11 @@ class cameraManager : public singletonBase<cameraManager>
 private:
 	_tagCamera  _camera;
 
-	HDC			_worldDC;
-	image*		__worImage;
+	HDC			_worldDC;  // 플레이어, 적, 함정, 아이템을 그려줄 DC
+	image*		_worImage;
+
+	HDC			_worldObjectDC;	// 배경 오브젝트를 그려줄 DC
+	image*		_worObImage;
 
 public:
 	cameraManager();
@@ -49,13 +52,12 @@ public:
 	// 카메라가 맵 밖으로 나가지 못하게
 	void Camera_Correction();									// 카메라 예외처리 함수
 
-
-	// 월드DC, 월드Img 셋팅
-	void set_worldDC(HDC wDC) { _worldDC = wDC; }				// _worldDC를 셋팅한다.
+	// 월드 DC
 	HDC  getWorDC() { return _worldDC; }						// _worldDC를 가져온다.
+	image* get_WorImage() { return _worImage; }
 
-	void setWorImage(image* img) { __worImage = img; }
-	image* getWorImage() { return __worImage; }
-
+	// 월드 오브젝트 DC
+	HDC getWorOBDC() { return _worldObjectDC; }
+	image* get_worObImage() { return _worObImage; }
 };
 
