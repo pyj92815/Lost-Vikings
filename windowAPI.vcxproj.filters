@@ -171,6 +171,9 @@
     <ClInclude Include="scene_Manager.h">
       <Filter>playGround\Scene_Manager</Filter>
     </ClInclude>
+    <ClInclude Include="playerbaleog.h">
+      <Filter>playGround\characters</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -265,6 +268,9 @@
     </ClCompile>
     <ClCompile Include="scene_Manager.cpp">
       <Filter>playGround\Scene_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="playerbaleog.cpp">
+      <Filter>playGround\characters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
