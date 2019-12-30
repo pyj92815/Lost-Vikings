@@ -33,6 +33,9 @@ protected:
 	float _x, _y;
 	RECT _rect;
 	image* _image;
+	
+	int _frameX,_frameY;
+	int _frameCount;
 public:
 	
 	virtual HRESULT init(EnemyType enemyType,float x, float y);

@@ -56,4 +56,8 @@ void EnemyManager::render()
 	}
 }
 
+void EnemyManager::enemyCreate()
+{
+}
+
 
