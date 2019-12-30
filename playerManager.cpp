@@ -19,7 +19,6 @@ void playerManager::update()
 	_eric->update();
 	_baleog->update();
 	_olaf->update();
-	setColisionFloor();
 }
 
 void playerManager::release()
@@ -36,26 +35,3 @@ void playerManager::render()
 	_olaf->render();
 }
 
-void playerManager::setColisionFloor()
-{
-<<<<<<< HEAD
-	for (int i = _eric->getEric().y;  i < _eric->getEric().y + (_eric->getEric().image->getFrameHeight()); ++i)
-=======
-	for (int i = _eric->getEricProbeY(); i < _eric->getEricProbeY() + 450; ++i)
->>>>>>> b6db8201b7c119eae05dcf64b92b3daeed20d771
-	{
-		COLORREF color = GetPixel(CAMERAMANAGER->getWorDC(), _eric->getEric().x + 45, i);
-
-		int r = GetRValue(color);
-		int g = GetGValue(color);
-		int b = GetBValue(color);
-		
-		cout << "r :" << r << "g :" << g << "b :" << b << endl;
-		if ((r == 255 && g == 255 && b ==0))
-		{
-			_eric->setEricY(i - _eric->getEric().image->getFrameHeight() );
-			break;
-		}
-
-	}
-}

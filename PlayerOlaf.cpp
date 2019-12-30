@@ -46,7 +46,7 @@ void PlayerOlaf::release()
 
 void PlayerOlaf::update()
 {
-	KeyControl();
+	//KeyControl();
 	SetOlafState();
 	SetOlafPosState();
 	PixelCollision();
@@ -130,7 +130,6 @@ void PlayerOlaf::SetOlafState()
 		else
 			_olaf.image = IMAGEMANAGER->findImage("Olaf_Move_ShieldUp");
 		break;
-
 	case STATE_DIE:
 		break;
 

@@ -16,6 +16,7 @@ private:
 	int _breathCount;
 	int _breathFrameCount;
 	float _jumpStart;
+	float _gravity;
 
 public:
 	playerEric();
@@ -34,7 +35,10 @@ public:
 	void ericAttackMove();
 	void setEricImage();
 
+	void PixelCollision();
+	void isJumpPixelCollision();
 	tagPlayer getEric() { return _eric; }
+
 	void setEricX(float x) { _eric.x = x; }	 // eric x 설정
 	void setEricY(float y) { _eric.y = y; }  // eric y 설정 
 

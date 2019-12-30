@@ -38,7 +38,7 @@ HRESULT playerEric::init(float x, float y)
 	_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());
 	//점프
 	_ericJump = false;
-	_eric.jumpPower = 7;
+	_eric.jumpPower = 15;
 	_eric.movePower = 2;
 	_eric.movePowerCount = 0;
 	_eric.gravity = 0.3;
@@ -48,6 +48,7 @@ HRESULT playerEric::init(float x, float y)
 	_breathCount = 0;
 	_breathFrameCount = 0;
 	_test = RectMake(WINSIZEX / 2 + 200, WINSIZEY / 2, 200, 200);
+	_gravity = 0; // 중력 
 	// 충돌처리를 위한 픽셀 프로브X/Y값
 	_eric.probeX = _eric.x + _eric.image->getFrameWidth() / 2;
 	_eric.probeY = _eric.y + _eric.image->getFrameHeight() / 2;
@@ -60,13 +61,20 @@ void playerEric::release()
 
 void playerEric::update()
 {
-	if (!_ericUnable) key();			// 방향키
+	if (!_ericUnable) key();		// 방향키
 	frameCount();					// 이미지프레임증가 
 	setEricImage();					// image 세팅 
 	ericJump();
 	ericAttack();
 	if (_ericUnable) ericAttackMove();
 	_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());
+
+	//중력
+	if (_eric.posState == POSSTATE_AIR)
+	{
+		if(_gravity < 5)	 	_gravity += 0.7;
+		_eric.y += _gravity;
+	}
 
 	//맞을 때 히트값을 조정해주셈 
 	if (_isHit)
@@ -91,9 +99,16 @@ void playerEric::update()
 	// 191229 PM 02:01 형길이 추가
 	// 에릭의 좌표를 카메라 매니저에 넘겨준다.
 	CAMERAMANAGER->set_Camera_XY(_eric.rc);
-	//충돌 프로브 업데이트
-	_eric.probeX = _eric.x + _eric.image->getFrameWidth() / 2;
-	_eric.probeY = _eric.y + _eric.image->getFrameHeight() / 2;
+
+	// 점프가 아니면 픽셀충돌, 점프중에도 픽셀충돌 
+	if (!_ericJump)
+	{
+		PixelCollision();
+	}
+	else
+	{
+		isJumpPixelCollision();
+	}
 }
 
 void playerEric::render()
@@ -104,7 +119,6 @@ void playerEric::render()
 
 	// 191229 PM 03:17 에릭이 그려지는 위치를 월드DC로 옴겼다.
 	_eric.image->frameRender(CAMERAMANAGER->getWorDC(), _eric.x, _eric.y, _eric.currentFrameX, _eric.currentFrameY);
-
 	// 191229 PM 04:27 UI에서 출력을 하기 위해 주석처리
 	//CAMERAMANAGER->getWorImage()->render(getMemDC(), 0, 0,
 	//	CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y()
@@ -224,11 +238,12 @@ void playerEric::key()
 		if (KEYMANAGER->isOnceKeyDown('F'))
 		{
 			_eric.state = STATE_ERIC_JUMP;
-			_eric.jumpPower = 7;
+			_eric.posState = POSSTATE_AIR; // 점프이면 air
+			_eric.jumpPower = 12;
 			_eric.currentFrameX = 0;
+			_eric.image->setFrameX(0);
 			_eric.frameCount = 0;
 			_eric.frameSpeed = 15;
-			_eric.image->setFrameX(0);
 			_ericJump = true;
 			_jumpStart = _eric.y;
 		}
@@ -322,7 +337,7 @@ void playerEric::ericJump()
 	{
 		_eric.y -= _eric.jumpPower;
 		_eric.jumpPower -= _eric.gravity;
-		if (_eric.y >= _jumpStart)
+		if (_jumpStart <= _eric.y && _eric.state == POSSTATE_AIR)
 		{
 			_eric.y = _jumpStart;
 			_ericJump = false;
@@ -444,5 +459,68 @@ void playerEric::setEricImage()
 	case STATE_STEPLADDEREND:
 		_eric.image = IMAGEMANAGER->findImage("eric_stepladderend");
 		break;
+	}
+}
+
+void playerEric::PixelCollision()
+{
+	_eric.probeY = _eric.y + _eric.image->getFrameHeight();
+
+	for (int i = _eric.probeY - 4; i < _eric.probeY + 10; ++i)
+	{
+		COLORREF getPixel_Bottom = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_eric.rc.left + _eric.rc.right) / 2, i);
+
+		int r = GetRValue(getPixel_Bottom);
+		int g = GetGValue(getPixel_Bottom);
+		int b = GetBValue(getPixel_Bottom);
+
+		if (!(r == 255 && g == 0 && b == 255))
+		{
+			_eric.y = i - _eric.image->getFrameHeight();
+			_eric.posState = POSSTATE_GROUND;
+			if (_gravity > 0)
+			{
+				_gravity = 0;
+			}
+			break;
+		}
+		else
+		{
+			_eric.posState = POSSTATE_AIR;
+		}
+	}
+	
+}
+
+void playerEric::isJumpPixelCollision()
+{
+	_eric.probeY = _eric.y + _eric.image->getFrameHeight();
+
+	for (int i = _eric.probeY - 4; i < _eric.probeY + 10; ++i)
+	{
+		COLORREF getPixel_Bottom = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_eric.rc.left + _eric.rc.right) / 2, i);
+
+		int r = GetRValue(getPixel_Bottom);
+		int g = GetGValue(getPixel_Bottom);
+		int b = GetBValue(getPixel_Bottom);
+
+		if (!(r == 255 && g == 0 && b == 255))
+		{
+			_eric.y = i - _eric.image->getFrameHeight();
+			_eric.posState = POSSTATE_GROUND;
+			if (_gravity > 0)
+			{
+				_gravity = 0;
+			}
+			_eric.currentFrameX = 0;
+			_eric.image->setFrameX(0);
+			_ericJump = false;
+			_eric.state = STATE_IDLE;
+			break;
+		}
+		else
+		{
+			_eric.posState = POSSTATE_AIR;
+		}
 	}
 }
