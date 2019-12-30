@@ -33,7 +33,7 @@ void playerManager::render()
 
 void playerManager::setColisionFloor()
 {
-	for (int i = _eric->getEricProbeY(); i < _eric->getEricProbeY() + 10; ++i)
+	for (int i = _eric->getEricProbeY(); i < _eric->getEricProbeY() + 450; ++i)
 	{
 		COLORREF color = GetPixel(IMAGEMANAGER->findImage("worldMap")->getMemDC(), _eric->getEric().x + (_eric->getEric().image->getFrameWidth() / 2), i);
 

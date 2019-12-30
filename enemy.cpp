@@ -52,17 +52,21 @@ void Enemy::EnemyAction()
 		//if(카메라 안에 들어오면)_enemyState=EnemyState::SCOUT;
 		break;
 	case EnemyState::SCOUT:
+		
 		//좌우로 움직이다
 		//if(적을 발견하면(적이 렉트 범위 안에 들어오면))_enemyState=EnemyState::DISCOVERY;
+		//else if(카메라 밖으로 나가면)_enemyState=EnemyState::IDLE;
 		break;
 	case EnemyState::DISCOVERY:
 		//적을 추적
 		//if(_x>player.x)_x-=
 		//if(_x<_player.x)_x+=
 		//if(플레이어의 렉트가 공격범위 렉트안에 들어오면)_enemyState=EnemyState::ATTACK;
+		//else if(적이 탐색 범위 밖으로 나가면)_enemyState=EnemyState::SCOUT;
 		break;
 	case EnemyState::ATTACK:
 		//이미지 = 공격 이미지로 바꾸고
+		//if(공격 판정이 있을만한 이미지에 플레이어가 닿으면 플레이어 사망)
 		break;
 	case EnemyState::DIE:
 
