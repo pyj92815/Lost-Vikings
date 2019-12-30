@@ -5,6 +5,7 @@
 
 class scene_Manager : public gameNode
 {
+
 public:
 	scene_Manager();
 	~scene_Manager();

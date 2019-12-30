@@ -45,7 +45,7 @@ void playGround::update()
 
 	_sm->update();
 
-	_pm->update();
+	if(SCENEMANAGER->get_SceneState() == SS_STAGE)	_pm->update();
 
 }
 
@@ -56,14 +56,17 @@ void playGround::render()
 	//==================================================
 	_wd->render();
 
-	//_sm->render();
-
 	_pm->render();
 
+<<<<<<< HEAD
 	// 191229 PM 19:11 -¶ôÈÆ - WorldDc ÄÉ¸¯ÅÍ-> PG·Î ·»´õ¸µºÎºĞ ¿Å±è 
 	CAMERAMANAGER->getWorImage()->render(getMemDC(), 0, 0,
 		CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y()
 		, CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
+=======
+	_sm->render();
+	
+>>>>>>> 0a98c4f5ba4f76f6ae71ea8b9fd4a32109aa1889
 	//===================================================
 	//µü ¸»Çß´Ù
 	_backBuffer->render(getHDC(), 0, 0);

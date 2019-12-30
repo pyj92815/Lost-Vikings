@@ -26,27 +26,34 @@ public:
 	void update();
 	void render();
 
-	void set_WorldSize(string strKey);							// 월드 사이즈를 받아온다.
-	float get_WorldSize_X() { return _camera.world_Size.x; }	// 월드 사이즈 X를 호출한다.
-	float get_WorldSize_Y() { return _camera.world_Size.y; }	// 월드 사이즈 Y를 호출한다.
+	// 월드 사이즈
+	void  set_WorldSize(string strKey);							// 월드 사이즈를 세팅한다.
+	float get_WorldSize_X() { return _camera.world_Size.x; }	// 월드 사이즈 X를 가져온다.
+	float get_WorldSize_Y() { return _camera.world_Size.y; }	// 월드 사이즈 Y를 가져온다.
 
-	void set_CameraSize(int x, int y) { _camera.cameraSizeX = x; _camera.cameraSizeY = y; };
-	int get_CameraSizeX() { return _camera.cameraSizeX; }
-	int get_CameraSizeY() { return _camera.cameraSizeY; }
+	// 카메라 사이즈
+	void set_CameraSize(int x, int y) { _camera.cameraSizeX = x; _camera.cameraSizeY = y; };	// 카메라의 사이즈를 세팅한다.
+	int  get_CameraSizeX() { return _camera.cameraSizeX; }										// 카메라 사이즈 x를 가져온다.
+	int  get_CameraSizeY() { return _camera.cameraSizeY; }										// 카메라 사이즈 y를 가져온다.
 
-	void set_Camera_XY(int x, int y);							// 캐릭터의 좌표를 초기화한다.
-	void set_Camera_XY(float x, float y);						// 캐릭터의 좌표를 초기화한다.
-	void set_Camera_XY(POINT xy);								// 캐릭터의 좌표를 초기화한다.
-	void set_Camera_XY(POINTFLOAT xy);							// 캐릭터의 좌표를 초기화한다.
-	void set_Camera_XY(RECT rc);								// 캐릭터의 좌표를 초기화한다.
+	// 카메라의 xy 좌표
+	void set_Camera_XY(int x, int y);							// 캐릭터의 좌표를 세팅한다.
+	void set_Camera_XY(float x, float y);						// 캐릭터의 좌표를 세팅한다.
+	void set_Camera_XY(POINT xy);								// 캐릭터의 좌표를 세팅한다.
+	void set_Camera_XY(POINTFLOAT xy);							// 캐릭터의 좌표를 세팅한다.
+	void set_Camera_XY(RECT rc);								// 캐릭터의 좌표를 세팅한다.
 
 	float get_Camera_X() { return _camera.cameraXY.x; }			// 카메라 X좌표를 가져온다.
 	float get_Camera_Y() { return _camera.cameraXY.y; }			// 카메라 y좌표를 가져온다.
 
+	// 카메라가 맵 밖으로 나가지 못하게
 	void Camera_Correction();									// 카메라 예외처리 함수
 
-	void set_worldDC(HDC wDC) { _worldDC = wDC; }
-	HDC getWorDC() { return _worldDC; }
+
+	// 월드DC, 월드Img 셋팅
+	void set_worldDC(HDC wDC) { _worldDC = wDC; }				// _worldDC를 셋팅한다.
+	HDC  getWorDC() { return _worldDC; }						// _worldDC를 가져온다.
+
 	void setWorImage(image* img) { __worImage = img; }
 	image* getWorImage() { return __worImage; }
 
