@@ -3,7 +3,7 @@
 #include "worldMap.h"
 #include "scene_Manager.h"
 #include "playerManager.h" // 플레이어
-
+#include"enemyManager.h"
 
 class playGround : public gameNode
 {
@@ -11,7 +11,7 @@ private:
 	worldMap* _wd;
 	scene_Manager* _sm;
 	playerManager* _pm;   // 플레이어 매니져 
-
+	EnemyManager* _enemyManager;
 public:
 	playGround();
 	~playGround();

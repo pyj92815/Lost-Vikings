@@ -98,7 +98,7 @@ void playerEric::update()
 
 void playerEric::render()
 {
-	//Rectangle(getMemDC(), _eric.rc);
+	Rectangle(getMemDC(), _eric.rc);
 
 	//Rectangle(getMemDC(), _test);
 

@@ -25,6 +25,8 @@ HRESULT playGround::init()
 	_pm = new playerManager;
 	_pm->init();
 
+	_enemyManager = new EnemyManager;
+	_enemyManager->init();
 	
 	return S_OK;
 }
@@ -44,6 +46,7 @@ void playGround::update()
 	_wd->update();
 
 	_sm->update();
+	_enemyManager->update();
 
 	if(SCENEMANAGER->get_SceneState() == SS_STAGE)	_pm->update();
 
@@ -63,6 +66,8 @@ void playGround::render()
 	CAMERAMANAGER->getWorImage()->render(getMemDC(), 0, 0,
 		CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y()
 		, CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
+
+	_enemyManager->render();
 
 	_sm->render();
 

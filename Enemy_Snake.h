@@ -1,5 +1,6 @@
 #pragma once
-class Enemy_Snake
+#include"enemy.h"
+class Enemy_Snake:public Enemy
 {
 };
 

@@ -16,25 +16,31 @@ enum class EnemyLR
 	LEFT,		//적의 이미지 방향을 결정하기 위한 ENUM 
 	RIGHT		//				"
 };
-
+enum class EnemyType
+{
+	MUMMY,
+	SCORPION,
+	SNAKE
+};
 class Enemy : public gameNode
 {
 protected:
 	//적의 상태 및 이미지 방향을 결정할 ENUM문
 	EnemyState _enemyState;
 	EnemyLR _enemyLR;
-
+	EnemyType _enemyType;
 	//적의 위치를 지정할 변수
 	float _x, _y;
 	RECT _rect;
-
+	image* _image;
 public:
-	virtual HRESULT init();
+	
+	virtual HRESULT init(EnemyType enemyType,float x, float y);
 	virtual void release();
 	virtual void update();
 	virtual void render();
-
-
+	virtual void EnemyAction();
+	virtual void EnemyCreate(float x, float y);
 
 	//이미지 추가 함수
 	virtual void imageReset()
