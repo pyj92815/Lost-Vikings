@@ -159,7 +159,6 @@
     <ClInclude Include="scene_Manager.h">
       <Filter>playGround\Scene_Manager</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="enemyManager.h">
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
@@ -174,10 +173,6 @@
     </ClInclude>
     <ClInclude Include="Enemy_Snake.h">
       <Filter>playGround\Enemy</Filter>
-=======
-    <ClInclude Include="playerbaleog.h">
-      <Filter>playGround\characters</Filter>
->>>>>>> f3899e2c876ec2a77663d1d55361afc9697d6925
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -259,7 +254,6 @@
     <ClCompile Include="scene_Manager.cpp">
       <Filter>playGround\Scene_Manager</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="enemyManager.cpp">
       <Filter>playGround\Enemy</Filter>
     </ClCompile>
@@ -274,10 +268,6 @@
     </ClCompile>
     <ClCompile Include="enemy.cpp">
       <Filter>playGround\Enemy</Filter>
-=======
-    <ClCompile Include="playerbaleog.cpp">
-      <Filter>playGround\characters</Filter>
->>>>>>> f3899e2c876ec2a77663d1d55361afc9697d6925
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
