@@ -32,8 +32,6 @@ void EnemyManager::update()
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
 		(*_viEnemy)->update();
-		
-		
 	}
 }
 

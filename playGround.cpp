@@ -46,6 +46,7 @@ void playGround::update()
 	_wd->update();
 
 	_sm->update();
+
 	_enemyManager->update();
 
 	if(SCENEMANAGER->get_SceneState() == SS_STAGE)	_pm->update();
