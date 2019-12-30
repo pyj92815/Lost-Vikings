@@ -31,7 +31,8 @@ protected:
 	EnemyType _enemyType;
 	//적의 위치를 지정할 변수
 	float _x, _y;
-	RECT _rect;
+	RECT _enemyRect;
+	RECT _enemy_DISCOVERY_Rect;
 	image* _image;
 	
 	int _frameX,_frameY;
@@ -43,7 +44,7 @@ public:
 	virtual void update();
 	virtual void render();
 	virtual void EnemyAction();
-	virtual void EnemyCreate(float x, float y);
+
 
 	//이미지 추가 함수
 	virtual void imageReset()

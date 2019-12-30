@@ -11,8 +11,6 @@ EnemyManager::~EnemyManager()
 
 HRESULT EnemyManager::init()
 {
-<<<<<<< HEAD
-	
 	/*for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
 		(*_viEnemy)->init();
@@ -21,8 +19,6 @@ HRESULT EnemyManager::init()
 	//적을 생성하는 함수
 	enemyCreate();
 
-=======
->>>>>>> 7c6969c42fefc7480e17ee67445ad5bcd63b637b
 	return S_OK;
 }
 

@@ -171,12 +171,9 @@
     <ClInclude Include="Enemy_Snake.h">
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
-<<<<<<< HEAD
-=======
     <ClInclude Include="enemyManager.h">
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
->>>>>>> 7c6969c42fefc7480e17ee67445ad5bcd63b637b
     <ClInclude Include="playerbaleog.h">
       <Filter>playGround\characters</Filter>
     </ClInclude>
