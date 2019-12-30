@@ -177,6 +177,9 @@
     <ClInclude Include="playerbaleog.h">
       <Filter>playGround\characters</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerOlaf.h">
+      <Filter>playGround\characters</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -273,6 +276,9 @@
       <Filter>playGround\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="playerbaleog.cpp">
+      <Filter>playGround\characters</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerOlaf.cpp">
       <Filter>playGround\characters</Filter>
     </ClCompile>
   </ItemGroup>
