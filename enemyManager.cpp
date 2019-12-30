@@ -11,7 +11,6 @@ EnemyManager::~EnemyManager()
 
 HRESULT EnemyManager::init()
 {
-	
 	return S_OK;
 }
 

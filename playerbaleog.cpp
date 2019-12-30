@@ -59,7 +59,13 @@ void playerbaleog::release()
 
 void playerbaleog::update()
 {
-	if(!_baleogAttack) key();
+
+	// 비밀이동키
+	if (!_baleogAttack) hgKey();
+
+	// 창규꺼 이동 코드지만 형길이가 봉인 시켰음
+	// if (!_baleogAttack) key();
+
 	_baleog.rc = RectMake(_baleog.x, _baleog.y, _baleog.image->getFrameWidth(), _baleog.image->getFrameHeight());
 
 	setBaleogState();
@@ -68,72 +74,72 @@ void playerbaleog::update()
 	_baleog.frameCount++;
 
 
-		//이구문 
-		if (_baleog.state == STATE_BALEOG_SWORD1 || _baleog.state == STATE_BALEOG_SWORD2)
+	//이구문 
+	if (_baleog.state == STATE_BALEOG_SWORD1 || _baleog.state == STATE_BALEOG_SWORD2)
+	{
+		_baleog.frameCount++;
+		if (_baleog.frameCount > _baleog.frameSpeed)
 		{
-			_baleog.frameCount++;
-			if (_baleog.frameCount > _baleog.frameSpeed)
-			{
-				_baleog.currentFrameX++;
-				_baleog.image->setFrameX(_baleog.currentFrameX);
+			_baleog.currentFrameX++;
+			_baleog.image->setFrameX(_baleog.currentFrameX);
 
-				if (_baleog.image->getMaxFrameX() < _baleog.currentFrameX)
+			if (_baleog.image->getMaxFrameX() < _baleog.currentFrameX)
+			{
+				if (_baleog.state == STATE_BALEOG_SWORD1)
 				{
-					if (_baleog.state == STATE_BALEOG_SWORD1)
-					{
-						_baleogAttackMotion = true;
-					}
-					else
-					{
-						_baleogAttackMotion = false;
-					}
-					_baleog.state = STATE_IDLE;
-					_baleog.currentFrameX = 0;
-					_baleog.image->setFrameX(_baleog.currentFrameX);
-					_baleogAttack = false;
-
+					_baleogAttackMotion = true;
 				}
-				_baleog.frameCount = 0;
-			}
-		}
-
-		if (_baleog.state == STATE_BALEOG_ARROW_REDY)
-		{
-			_baleog.frameCount++;
-			if (_baleog.frameCount >= _baleog.frameSpeed)
-			{
+				else
+				{
+					_baleogAttackMotion = false;
+				}
+				_baleog.state = STATE_IDLE;
+				_baleog.currentFrameX = 0;
 				_baleog.image->setFrameX(_baleog.currentFrameX);
-				//_baleog.currentFrameX++;
+				_baleogAttack = false;
 
-				if (_baleog.image->getMaxFrameX() > _baleog.currentFrameX) _baleog.currentFrameX++;
-
-				if (_baleog.image->getMaxFrameX() < _baleog.currentFrameX)
-				{/*
-					if(_baleog.state == STATE_BALEOG_ARROW_REDY)*/
-					//_baleog.currentFrameX = 3;
-					ss = false;
-				}
+			}
 			_baleog.frameCount = 0;
-			}
 		}
-		else
+	}
+
+	if (_baleog.state == STATE_BALEOG_ARROW_REDY)
+	{
+		_baleog.frameCount++;
+		if (_baleog.frameCount >= _baleog.frameSpeed)
 		{
-			_baleog.frameCount++;
-			if (_baleog.frameCount > _baleog.frameSpeed)	//프레임카운트 > 프레임스피드 면
-			{
-				_baleog.currentFrameX++;
-				_baleog.image->setFrameX(_baleog.currentFrameX);
-		
-				if (_baleog.image->getMaxFrameX() < _baleog.currentFrameX)
-				{
-		
-					_baleog.currentFrameX = 0;
-		
-				}
-				_baleog.frameCount = 0;
+			_baleog.image->setFrameX(_baleog.currentFrameX);
+			//_baleog.currentFrameX++;
+
+			if (_baleog.image->getMaxFrameX() > _baleog.currentFrameX) _baleog.currentFrameX++;
+
+			if (_baleog.image->getMaxFrameX() < _baleog.currentFrameX)
+			{/*
+				if(_baleog.state == STATE_BALEOG_ARROW_REDY)*/
+				//_baleog.currentFrameX = 3;
+				ss = false;
 			}
+			_baleog.frameCount = 0;
 		}
-	
+	}
+	else
+	{
+		_baleog.frameCount++;
+		if (_baleog.frameCount > _baleog.frameSpeed)	//프레임카운트 > 프레임스피드 면
+		{
+			_baleog.currentFrameX++;
+			_baleog.image->setFrameX(_baleog.currentFrameX);
+
+			if (_baleog.image->getMaxFrameX() < _baleog.currentFrameX)
+			{
+
+				_baleog.currentFrameX = 0;
+
+			}
+			_baleog.frameCount = 0;
+		}
+	}
+
 
 	/*if (_count % 2 == 0 && _move.type != MT_BOSS &&
 		_move.type != MT_BOSS2)
@@ -191,7 +197,7 @@ void playerbaleog::key()
 	////이동키 예외처리
 	if (KEYMANAGER->isOnceKeyUp(VK_RIGHT))
 	{
-		if (_baleog.state == STATE_MOVE )
+		if (_baleog.state == STATE_MOVE)
 			_baleog.state = STATE_IDLE;
 		_baleog.image->setFrameY(0);
 	}
@@ -223,10 +229,10 @@ void playerbaleog::key()
 	if (KEYMANAGER->isStayKeyDown('D'))
 	{
 		_baleog.state = STATE_BALEOG_ARROW_REDY;
-		if (!ss) 
+		if (!ss)
 		{
-			/*_baleog.currentFrameX = 0; */ 
-			ss = true; 
+			/*_baleog.currentFrameX = 0; */
+			ss = true;
 		}
 	}
 
@@ -235,9 +241,9 @@ void playerbaleog::key()
 		_baleog.state = STATE_BALEOG_ARROW_FIRE;
 		_baleog.currentFrameX = 0;
 
-		_ar->fire(_baleog.x + _baleog.image->getFrameWidth()/2, 
-			_baleog.y + _baleog.image->getFrameHeight()/2, 10.f, _baleog.currentFrameY*PI, _baleog.currentFrameY);
-		
+		_ar->fire(_baleog.x + _baleog.image->getFrameWidth() / 2,
+			_baleog.y + _baleog.image->getFrameHeight() / 2, 10.f, _baleog.currentFrameY * PI, _baleog.currentFrameY);
+
 	}
 }
 
@@ -287,6 +293,100 @@ void playerbaleog::setBaleogState()
 	}
 }
 
+void playerbaleog::hgKey()
+{
+	//이동
+
+	if (KEYMANAGER->isStayKeyDown(VK_NUMPAD5))
+	{
+		_baleog.state = STATE_MOVE;
+		_baleog.y -= 3;
+		_baleog.currentFrameY = 0;
+
+	}
+	if (KEYMANAGER->isStayKeyDown(VK_NUMPAD2))
+	{
+		_baleog.state = STATE_MOVE;
+		_baleog.y += 3;
+		_baleog.currentFrameY = 0;
+
+	}
+
+	if (KEYMANAGER->isStayKeyDown(VK_NUMPAD3))
+	{
+		_baleog.state = STATE_MOVE;
+		_baleog.x += 3;
+		_baleog.currentFrameY = 0;
+
+	}
+	if (KEYMANAGER->isStayKeyDown(VK_NUMPAD1))
+	{
+		_baleog.state = STATE_MOVE;
+		_baleog.x -= 3;
+		_baleog.currentFrameY = 1;
+	}
+
+	if (KEYMANAGER->isOnceKeyUp(VK_NUMPAD3) || KEYMANAGER->isOnceKeyUp(VK_NUMPAD1))
+	{
+		_baleog.state = STATE_IDLE;
+		_baleog.currentFrameX = 0;
+		_baleog.image->setFrameX(_baleog.currentFrameX);
+		_baleog.frameCount = 0;
+	}
+
+	////이동키 예외처리
+	if (KEYMANAGER->isOnceKeyUp(VK_NUMPAD3))
+	{
+		if (_baleog.state == STATE_MOVE)
+			_baleog.state = STATE_IDLE;
+		_baleog.image->setFrameY(0);
+	}
+	if (KEYMANAGER->isOnceKeyUp(VK_NUMPAD1))
+	{
+		if ((_baleog.state == STATE_MOVE && _baleog.currentFrameY == 1) ||
+			(_baleog.state == STATE_BALEOG_SWORD1 && _baleog.currentFrameY == 1))
+			_baleog.state = STATE_IDLE;
+		_baleog.image->setFrameY(1);
+	}
+
+
+
+	//공격키
+	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD4))
+	{
+		_baleogAttack = true;
+		if (!_baleogAttackMotion)
+		{
+			_baleog.state = STATE_BALEOG_SWORD1;
+		}
+		else
+		{
+			_baleog.state = STATE_BALEOG_SWORD2;
+		}
+		/*_baleog.currentFrameX = 0;*/
+	}
+
+	if (KEYMANAGER->isStayKeyDown(VK_NUMPAD6))
+	{
+		_baleog.state = STATE_BALEOG_ARROW_REDY;
+		if (!ss)
+		{
+			/*_baleog.currentFrameX = 0; */
+			ss = true;
+		}
+	}
+
+	if (KEYMANAGER->isOnceKeyUp(VK_NUMPAD6))
+	{
+		_baleog.state = STATE_BALEOG_ARROW_FIRE;
+		_baleog.currentFrameX = 0;
+
+		_ar->fire(_baleog.x + _baleog.image->getFrameWidth() / 2,
+			_baleog.y + _baleog.image->getFrameHeight() / 2, 10.f, _baleog.currentFrameY * PI, _baleog.currentFrameY);
+
+	}
+}
+
 
 HRESULT arrow::init(int arrowMax, float range)
 {
@@ -328,9 +428,9 @@ void arrow::render()
 	}
 }
 
-void arrow::fire(float x, float y, float speed, float angle,int direction )
+void arrow::fire(float x, float y, float speed, float angle, int direction)
 {
-	
+
 	if (_arrowMax < _vArrow.size())return;
 	tagArrow arrow;
 	ZeroMemory(&arrow, sizeof(arrow));

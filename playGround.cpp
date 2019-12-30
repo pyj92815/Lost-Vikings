@@ -52,20 +52,14 @@ void playGround::update()
 //여기다 그려라!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 void playGround::render()
 {
-	PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
+	//PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
 	//==================================================
 	_wd->render();
 
 	_pm->render();
 
-
-	// 191229 PM 19:11 -락훈 - WorldDc 케릭터-> PG로 렌더링부분 옮김 
-	CAMERAMANAGER->getWorImage()->render(getMemDC(), 0, 0,
-		CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y()
-		, CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
-
 	_sm->render();
-
+	
 	//===================================================
 	//딱 말했다
 	_backBuffer->render(getHDC(), 0, 0);

@@ -44,7 +44,7 @@ void playerManager::setColisionFloor()
 		cout << "r :" << r << "g :" << g << "b :" << b << endl;
 		if (!(r == 255 && g == 0 && b == 255))
 		{
-			_eric->setEricY(i- _eric->getEric().image->getFrameHeight()/2);
+			_eric->setEricY(i - _eric->getEric().image->getFrameHeight() / 2);
 			break;
 		}
 

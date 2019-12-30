@@ -21,8 +21,7 @@ public:
 
 	tagPlayer getPlayerEric() { return _eric->getEric(); }
 	tagPlayer getPlayerBaleog() { return _baleog->getBaleog(); }
- 
-	void setColisionFloor(); // ¹Ù´Ú Ãæµ¹ 
 
+	void setColisionFloor(); // ¹Ù´Ú Ãæµ¹ 
 };
 
