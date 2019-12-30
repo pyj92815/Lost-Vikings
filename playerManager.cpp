@@ -33,9 +33,9 @@ void playerManager::render()
 
 void playerManager::setColisionFloor()
 {
-	for (int i = _eric->getEric().y; i < _eric->getEric().y + (_eric->getEric().image->getFrameHeight() / 2); ++i)
+	for (int i = _eric->getEric().y; i < _eric->getEric().y + (_eric->getEric().image->getFrameHeight()); ++i)
 	{
-		COLORREF color = GetPixel(CAMERAMANAGER->getWorDC() , _eric->getEric().x , i);
+		COLORREF color = GetPixel(CAMERAMANAGER->getWorDC(), _eric->getEric().x + 45, i);
 
 		int r = GetRValue(color);
 		int g = GetGValue(color);
@@ -44,7 +44,7 @@ void playerManager::setColisionFloor()
 		cout << "r :" << r << "g :" << g << "b :" << b << endl;
 		if ((r == 255 && g == 255 && b == 0))
 		{
-			_eric->setEricY(i - (_eric->getEric().image->getFrameHeight() / 2));
+			_eric->setEricY(i - (_eric->getEric().image->getFrameHeight()));
 			break;
 		}
 	}
