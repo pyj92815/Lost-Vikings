@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Enemy.h"
 
-HRESULT Enemy::init(EnemyType enemyType,float x,float y)
+HRESULT Enemy::init(EnemyType enemyType, float x, float y)
 {
 	imageReset();
 	//프레임 관련 변수 초기화
@@ -52,7 +52,7 @@ void Enemy::EnemyAction()
 		//if(카메라 안에 들어오면)_enemyState=EnemyState::SCOUT;
 		break;
 	case EnemyState::SCOUT:
-		
+
 		//좌우로 움직이다
 		//if(적을 발견하면(적이 렉트 범위 안에 들어오면))_enemyState=EnemyState::DISCOVERY;
 		//else if(카메라 밖으로 나가면)_enemyState=EnemyState::IDLE;
