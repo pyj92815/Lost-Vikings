@@ -82,6 +82,6 @@ void Enemy::EnemyAction()
 	default:
 		break;
 	}
-
+	//for(int i=_y;i)
 	_enemyRect = RectMakeCenter(_x, _y, _image->getFrameWidth(), _image->getFrameHeight());
 }

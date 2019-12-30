@@ -32,6 +32,8 @@ void EnemyManager::update()
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
 		(*_viEnemy)->update();
+		
+		
 	}
 }
 
@@ -100,11 +102,6 @@ void EnemyManager::enemyCreate()
 	Snake_3->init(EnemyType::SNAKE, 2751, 615);
 	_vEnemy.push_back(Snake_3);
 	
-
-	/*Enemy* Snake;
-	Snake = new Enemy_Snake;
-	Snake->init(EnemyType::SNAKE, 83, 750);
-	_vEnemy.push_back(Snake);*/
 }
 
 

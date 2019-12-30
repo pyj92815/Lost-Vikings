@@ -32,9 +32,12 @@ protected:
 	//적의 위치를 지정할 변수
 	float _x, _y;
 	RECT _enemyRect;
+	//적의 탐지 범위
 	RECT _enemy_DISCOVERY_Rect;
 	image* _image;
 	
+	int _probeX, _probeY;
+
 	int _frameX,_frameY;
 	int _frameCount;
 public:
@@ -45,6 +48,7 @@ public:
 	virtual void render();
 	virtual void EnemyAction();
 
+	virtual EnemyState getEnemyState() { return _enemyState; }
 
 	//이미지 추가 함수
 	virtual void imageReset()
