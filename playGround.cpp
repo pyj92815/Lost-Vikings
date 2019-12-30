@@ -55,7 +55,7 @@ void playGround::update()
 //¿©±â´Ù ±×·Á¶ó!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 void playGround::render()
 {
-	//PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
+	PatBlt(CAMERAMANAGER->getWorDC(), 0, 0, CAMERAMANAGER->get_WorldSize_X(), CAMERAMANAGER->get_WorldSize_Y(), WHITENESS);
 	//==================================================
 	_wd->render();
 
@@ -63,9 +63,6 @@ void playGround::render()
 
 
 	// 191229 PM 19:11 -¶ôÈÆ - WorldDc ÄÉ¸¯ÅÍ-> PG·Î ·»´õ¸µºÎºĞ ¿Å±è 
-	CAMERAMANAGER->get_WorImage()->render(getMemDC(), 0, 0,
-		CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y()
-		, CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
 
 	_enemyManager->render();
 
