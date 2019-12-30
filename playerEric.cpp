@@ -49,8 +49,8 @@ HRESULT playerEric::init(float x, float y)
 	_breathFrameCount = 0;
 	_test = RectMake(WINSIZEX / 2 + 200, WINSIZEY / 2, 200, 200);
 	// 충돌처리를 위한 픽셀 프로브X/Y값
-	_eric.probeX = _eric.x + _eric.image->getFrameWidth() / 2;
-	_eric.probeY = _eric.y + _eric.image->getFrameHeight() / 2;
+	_eric.probeX = _eric.x + _eric.image->getFrameWidth();
+	_eric.probeY = _eric.y + _eric.image->getFrameHeight();
 	return S_OK;
 }
 
@@ -92,8 +92,9 @@ void playerEric::update()
 	// 에릭의 좌표를 카메라 매니저에 넘겨준다.
 	CAMERAMANAGER->set_Camera_XY(_eric.rc);
 	//충돌 프로브 업데이트
-	_eric.probeX = _eric.x + _eric.image->getFrameWidth() / 2;
-	_eric.probeY = _eric.y + _eric.image->getFrameHeight() / 2;
+	_eric.probeX = _eric.x + _eric.image->getFrameWidth();
+	_eric.probeY = _eric.y + _eric.image->getFrameHeight();
+
 }
 
 void playerEric::render()
@@ -104,6 +105,8 @@ void playerEric::render()
 
 	// 191229 PM 03:17 에릭이 그려지는 위치를 월드DC로 옴겼다.
 	_eric.image->frameRender(CAMERAMANAGER->getWorDC(), _eric.x, _eric.y, _eric.currentFrameX, _eric.currentFrameY);
+
+
 
 	// 191229 PM 04:27 UI에서 출력을 하기 위해 주석처리
 	//CAMERAMANAGER->getWorImage()->render(getMemDC(), 0, 0,

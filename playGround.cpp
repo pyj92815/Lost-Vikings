@@ -43,16 +43,17 @@ void playGround::update()
 	gameNode::update();
 	_wd->update();
 
+	if(SCENEMANAGER->get_SceneState() == SS_STAGE)	_pm->update();
+
 	_sm->update();
 
-	if(SCENEMANAGER->get_SceneState() == SS_STAGE)	_pm->update();
 
 }
 
 //여기다 그려라!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 void playGround::render()
 {
-	//PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
+	PatBlt(CAMERAMANAGER->getWorDC(), 0, 0, CAMERAMANAGER->get_WorldSize_X(), CAMERAMANAGER->get_WorldSize_Y(), WHITENESS);
 	//==================================================
 	_wd->render();
 
