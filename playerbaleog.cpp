@@ -59,9 +59,7 @@ void playerbaleog::release()
 
 void playerbaleog::update()
 {
-<<<<<<< HEAD
 	//if (!_baleogAttack) key();
-=======
 
 	// 비밀이동키
 	//if (!_baleogAttack) hgKey();
@@ -69,7 +67,6 @@ void playerbaleog::update()
 	// 창규꺼 이동 코드지만 형길이가 봉인 시켰음
 	 if (!_baleogAttack) key();
 
->>>>>>> 321e694003ebbbef6a52f8696155feb7550821dd
 	_baleog.rc = RectMake(_baleog.x, _baleog.y, _baleog.image->getFrameWidth(), _baleog.image->getFrameHeight());
 
 	setBaleogState();

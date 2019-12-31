@@ -19,11 +19,9 @@ HRESULT playerManager::init()
 
 void playerManager::update()
 {
-<<<<<<< HEAD
 	_eric->update();
 	_baleog->update();
 	_olaf->update();
-=======
 	switch (_P_type)
 	{
 	case ERIC:
@@ -53,7 +51,6 @@ void playerManager::update()
 	//_olaf->update();
 
 	setColisionFloor();
->>>>>>> 6404d0946eda9d809087c9b2912bb539d8601016
 }
 
 void playerManager::release()
@@ -70,8 +67,6 @@ void playerManager::render()
 	_olaf->render();
 }
 
-<<<<<<< HEAD
-=======
 void playerManager::setColisionFloor()
 {
 	for (int i = _eric->getEric().y; i < _eric->getEric().y + (_eric->getEric().image->getFrameHeight()); ++i)
@@ -91,4 +86,3 @@ void playerManager::setColisionFloor()
 		}
 	}
 }
->>>>>>> 6404d0946eda9d809087c9b2912bb539d8601016
