@@ -180,6 +180,9 @@
     <ClInclude Include="PlayerOlaf.h">
       <Filter>playGround\characters</Filter>
     </ClInclude>
+    <ClInclude Include="worldObjects.h">
+      <Filter>playGround\맵</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -280,6 +283,9 @@
     </ClCompile>
     <ClCompile Include="PlayerOlaf.cpp">
       <Filter>playGround\characters</Filter>
+    </ClCompile>
+    <ClCompile Include="worldObjects.cpp">
+      <Filter>playGround\맵</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

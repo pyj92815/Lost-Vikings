@@ -54,6 +54,7 @@ struct tagPlayer
 	int currentFrameX, currentFrameY;
 	int frameSpeed;
 	int hp;	   // 3개 
+	bool isDead;				// 살았는지 죽었는지
 };
 
 class player :public gameNode

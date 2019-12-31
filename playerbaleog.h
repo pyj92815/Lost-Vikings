@@ -86,12 +86,13 @@ private:
 	bool _baleogAttackMotion;
 	bool _baleogArrowMotion;
 	bool _baleogArrowAction;
-
+	bool _pullString;
+	float _probeY;
 	int _baleogAttackCount;
 
 	arrow* _ar;
 
-	bool ss;
+	bool	   _stopControl;		// 이값이 true라면 움직일 수 없다.
 
 public:
 	playerbaleog();
@@ -104,11 +105,14 @@ public:
 
 	void key();
 	void setBaleogState();
+	void PixelCollision();
 
 
 	tagPlayer getBaleog() { return _baleog; }
 
 	void hgKey();	// 형길이가 쓰는 비밀 이동키
+	void set_stopKey(bool stop) { _stopControl = stop; }
+	void player_Kill() { _baleog.isDead = true; }
 };
 
 

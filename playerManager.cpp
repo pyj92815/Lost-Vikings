@@ -12,46 +12,42 @@ HRESULT playerManager::init()
 	_olaf = new PlayerOlaf;
 	_olaf->init(180, 155);
 
-	_P_type = 0;
-
 	return S_OK;
 }
 
 void playerManager::update()
 {
-	switch (_P_type)
+	KILLPlayer();	// 플레이어를 죽인다
+
+	switch (_playing)
 	{
-	case ERIC:
-		_eric->update();
+	case 0:
+		_eric->set_stopKey(true);
+		_baleog->set_stopKey(false);
+		_olaf->set_stopKey(false);
 		break;
 
-	case BALEOG:
-		_baleog->update();
+	case 1:
+		_eric->set_stopKey(false);
+		_baleog->set_stopKey(true);
+		_olaf->set_stopKey(false);
 		break;
 
-	case OLAF:
-		_olaf->update();
+	case 2:
+		_eric->set_stopKey(false);
+		_baleog->set_stopKey(false);
+		_olaf->set_stopKey(true);
 		break;
 	}
 
-	if (KEYMANAGER->isOnceKeyDown(VK_CONTROL))
-	{
-		_P_type++;
-		if (_P_type > 2)
-		{
-			_P_type = 0;
-		}
-	}
-
-	//_eric->update();
-	//_baleog->update();
-	//_olaf->update();
-
-	setColisionFloor();
+	_eric->update();
+	_baleog->update();
+	_olaf->update();
 }
 
 void playerManager::release()
 {
+	
 	_eric->release();
 	_baleog->release();
 	_olaf->release();
@@ -64,22 +60,21 @@ void playerManager::render()
 	_olaf->render();
 }
 
-void playerManager::setColisionFloor()
+void playerManager::KILLPlayer()
 {
-	for (int i = _eric->getEric().y; i < _eric->getEric().y + (_eric->getEric().image->getFrameHeight()); ++i)
+	if (KEYMANAGER->isOnceKeyDown(VK_F1))
 	{
-		COLORREF color = GetPixel(CAMERAMANAGER->getWorDC(), _eric->getEric().x + 45, i);
+		_eric->player_Kill();
+	}
 
-		int r = GetRValue(color);
-		int g = GetGValue(color);
-		int b = GetBValue(color);
+	if (KEYMANAGER->isOnceKeyDown(VK_F2))
+	{
+		_baleog->player_Kill();
+	}
 
-		// 이걸 지우니까 렉이 사라지는 매직
-		//cout << "r :" << r << "g :" << g << "b :" << b << endl;
-		if ((r == 255 && g == 255 && b == 0))
-		{
-			_eric->setEricY(i - (_eric->getEric().image->getFrameHeight()));
-			break;
-		}
+	if (KEYMANAGER->isOnceKeyDown(VK_F3))
+	{
+		_olaf->player_Kill();
 	}
 }
+

@@ -46,7 +46,8 @@ void PlayerOlaf::release()
 
 void PlayerOlaf::update()
 {
-	KeyControl();
+	if (_stopControl) KeyControl();
+
 	SetOlafState();
 	SetOlafPosState();
 	PixelCollision();
@@ -66,7 +67,7 @@ void PlayerOlaf::update()
 		_olaf.frameCount = 0;
 	}
 
-	CAMERAMANAGER->set_Camera_XY(_olaf.rc);
+	//CAMERAMANAGER->set_Camera_XY(_olaf.rc);
 }
 
 void PlayerOlaf::render()
@@ -132,7 +133,6 @@ void PlayerOlaf::SetOlafState()
 		else
 			_olaf.image = IMAGEMANAGER->findImage("Olaf_Move_ShieldUp");
 		break;
-
 	case STATE_DIE:
 		break;
 
@@ -175,6 +175,7 @@ void PlayerOlaf::SetOlafPosState()
 		break;
 	}
 }
+
 
 void PlayerOlaf::PixelCollision()
 {

@@ -4,11 +4,12 @@
 #include "playerbaleog.h"
 #include "PlayerOlaf.h"
 
+// 플레이어의 타입
 enum PLAYER_TYPE
 {
-	ERIC,
-	BALEOG,
-	OLAF
+	PT_Eric,
+	PT_Baleog,
+	PT_Olaf
 };
 
 class playerManager : public gameNode
@@ -18,7 +19,7 @@ private:
 	playerbaleog* _baleog;
 	PlayerOlaf* _olaf;
 
-	int _P_type;
+	int			_playing;
 
 public:
 	playerManager() {}
@@ -32,7 +33,8 @@ public:
 	tagPlayer getPlayerEric() { return _eric->getEric(); }
 	tagPlayer getPlayerBaleog() { return _baleog->getBaleog(); }
 	tagPlayer getPlayerOlaf() { return _olaf->getOlaf(); }
+	void set_Playing(int playChar) { _playing = playChar; }
+	void KILLPlayer();
 
-	void setColisionFloor(); // 바닥 충돌 
 };
 
