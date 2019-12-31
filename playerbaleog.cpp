@@ -59,7 +59,7 @@ void playerbaleog::release()
 
 void playerbaleog::update()
 {
-	if (!_baleogAttack) key();
+	//if (!_baleogAttack) key();
 	_baleog.rc = RectMake(_baleog.x, _baleog.y, _baleog.image->getFrameWidth(), _baleog.image->getFrameHeight());
 
 	setBaleogState();
