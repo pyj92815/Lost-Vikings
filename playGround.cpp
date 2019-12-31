@@ -65,21 +65,20 @@ void playGround::render()
 
 	_pm->render();
 
-<<<<<<< HEAD
+
 
 	// 191229 PM 19:11 -¶ôÈÆ - WorldDc ÄÉ¸¯ÅÍ-> PG·Î ·»´õ¸µºÎºĞ ¿Å±è 
 
-=======
->>>>>>> 6404d0946eda9d809087c9b2912bb539d8601016
+
 	_enemyManager->render();
 
 	_sm->render();
-<<<<<<< HEAD
+
 	TIMEMANAGER->render(getMemDC());
-=======
+
 
 	
->>>>>>> 321e694003ebbbef6a52f8696155feb7550821dd
+
 	//===================================================
 	//µü ¸»Çß´Ù
 	_backBuffer->render(getHDC(), 0, 0);

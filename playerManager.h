@@ -33,5 +33,6 @@ public:
 	tagPlayer getPlayerBaleog() { return _baleog->getBaleog(); }
 	tagPlayer getPlayerOlaf() { return _olaf->getOlaf(); }
 
+	void setColisionFloor();
 };
 
