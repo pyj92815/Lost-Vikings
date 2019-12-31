@@ -3,17 +3,23 @@
 #include "Player.h"
 
 #define GRAVITY 0.04f
-#define PLAYER_SPEED 3
+#define PLAYER_SPEED 5
 
 class PlayerOlaf : public gameNode
 {
 private:
 	tagPlayer _olaf;
-	float _probeY;
+	float _probeY_Top;
+	float _probeY_Bottom;
 	bool _isShieldUp;
 	RECT _shield;
 	POINTFLOAT _shieldPos;
 	POINTFLOAT _shieldRadius;
+
+	COLORREF getPixel_BC;
+	int r_BC;
+	int g_BC;
+	int b_BC;
 
 public:
 	PlayerOlaf();
@@ -24,6 +30,7 @@ public:
 	virtual void update();
 	virtual void render();
 
+	void init_SettingOlafImg();
 	void KeyControl();
 	void SetOlafState();
 	void SetOlafPosState();

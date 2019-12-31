@@ -30,8 +30,7 @@ void playerManager::release()
 
 void playerManager::render()
 {
-	_eric->render();
-	_baleog->render();
 	_olaf->render();
+	_baleog->render();
+	_eric->render();
 }
-
