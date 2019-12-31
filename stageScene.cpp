@@ -49,7 +49,7 @@ void stageScene::render()
 	// 쓰레기통 출력
 	_UI_Garbage.image->render(getMemDC(), _UI_Garbage.rc.left, _UI_Garbage.rc.top);
 
-	// 테스트용 렉트
+	// 테스트용 렉트 (캐릭터 상태 위치)
 	for (int i = 0; i < 3; ++i)
 	{
 		Rectangle(getMemDC(), _UI_State[i].rc);
@@ -63,44 +63,44 @@ void stageScene::render()
 void stageScene::posSetting()
 {
 	// 상태 UI 초기화
-	_UI_State[PT_Run].image = new image;
-	_UI_State[PT_Run].image = IMAGEMANAGER->findImage("R_State");
+	_UI_State[PT_ERIC].image = new image;
+	_UI_State[PT_ERIC].image = IMAGEMANAGER->findImage("R_State");
 
-	_UI_State[PT_Attack].image = new image;
-	_UI_State[PT_Attack].image = IMAGEMANAGER->findImage("A_State");
+	_UI_State[PT_BALEOG].image = new image;
+	_UI_State[PT_BALEOG].image = IMAGEMANAGER->findImage("A_State");
 
-	_UI_State[PT_Def].image = new image;
-	_UI_State[PT_Def].image = IMAGEMANAGER->findImage("S_State");
+	_UI_State[PT_OLAF].image = new image;
+	_UI_State[PT_OLAF].image = IMAGEMANAGER->findImage("S_State");
 
 
-	_UI_State[PT_Run].pos.x = 185;
-	_UI_State[PT_Run].pos.y = WINSIZEY - 95;
+	_UI_State[PT_ERIC].pos.x = 185;
+	_UI_State[PT_ERIC].pos.y = WINSIZEY - 95;
 
-	_UI_State[PT_Attack].pos.x = 400;
-	_UI_State[PT_Attack].pos.y = WINSIZEY - 95;
+	_UI_State[PT_BALEOG].pos.x = 400;
+	_UI_State[PT_BALEOG].pos.y = WINSIZEY - 95;
 
-	_UI_State[PT_Def].pos.x = 615;
-	_UI_State[PT_Def].pos.y = WINSIZEY - 95;
+	_UI_State[PT_OLAF].pos.x = 615;
+	_UI_State[PT_OLAF].pos.y = WINSIZEY - 95;
 
-	_UI_State[PT_Run].rc = RectMakeCenter(_UI_State[PT_Run].pos.x, _UI_State[PT_Run].pos.y,
-		_UI_State[PT_Run].image->getFrameWidth(), _UI_State[PT_Run].image->getFrameHeight());
-	_UI_State[PT_Run].rc.left += 2;	// 삐져나온 위치 조정
-	_UI_State[PT_Run].rc.right += 2;
-	_UI_State[PT_Run].rc.top -= 2;
-	_UI_State[PT_Run].rc.bottom -= 2;
+	_UI_State[PT_ERIC].rc = RectMakeCenter(_UI_State[PT_ERIC].pos.x, _UI_State[PT_ERIC].pos.y,
+		_UI_State[PT_ERIC].image->getFrameWidth(), _UI_State[PT_ERIC].image->getFrameHeight());
+	_UI_State[PT_ERIC].rc.left += 2;	// 삐져나온 위치 조정
+	_UI_State[PT_ERIC].rc.right += 2;
+	_UI_State[PT_ERIC].rc.top -= 2;
+	_UI_State[PT_ERIC].rc.bottom -= 2;
 
-	_UI_State[PT_Attack].rc = RectMakeCenter(_UI_State[PT_Attack].pos.x, _UI_State[PT_Attack].pos.y,
-		_UI_State[PT_Attack].image->getFrameWidth(), _UI_State[PT_Attack].image->getFrameHeight());
-	_UI_State[PT_Attack].rc.top -= 2;
-	_UI_State[PT_Attack].rc.bottom -= 2;
+	_UI_State[PT_BALEOG].rc = RectMakeCenter(_UI_State[PT_BALEOG].pos.x, _UI_State[PT_BALEOG].pos.y,
+		_UI_State[PT_BALEOG].image->getFrameWidth(), _UI_State[PT_BALEOG].image->getFrameHeight());
+	_UI_State[PT_BALEOG].rc.top -= 2;
+	_UI_State[PT_BALEOG].rc.bottom -= 2;
 
-	_UI_State[PT_Def].rc = RectMakeCenter(_UI_State[PT_Def].pos.x, _UI_State[PT_Def].pos.y,
-		_UI_State[PT_Def].image->getFrameWidth(), _UI_State[PT_Def].image->getFrameHeight());
-	_UI_State[PT_Def].rc.top -= 2;
-	_UI_State[PT_Def].rc.bottom -= 2;
+	_UI_State[PT_OLAF].rc = RectMakeCenter(_UI_State[PT_OLAF].pos.x, _UI_State[PT_OLAF].pos.y,
+		_UI_State[PT_OLAF].image->getFrameWidth(), _UI_State[PT_OLAF].image->getFrameHeight());
+	_UI_State[PT_OLAF].rc.top -= 2;
+	_UI_State[PT_OLAF].rc.bottom -= 2;
 
 	// 시작 시엔 빨간놈이 선택되어 있다
-	_UI_State[PT_Run].image->setFrameX(1);
+	_UI_State[PT_ERIC].image->setFrameX(1);
 
 
 	// 인벤토리 UI 초기화 (캐릭터마다 4개씩 있다.)
@@ -108,12 +108,12 @@ void stageScene::posSetting()
 
 	// 쓰레기통 UI 초기화
 	_UI_Garbage.image = IMAGEMANAGER->findImage("GarbageBox");
-	_UI_Garbage.rc = RectMake(764, _UI_State[PT_Run].rc.top, _UI_Garbage.image->getWidth(), _UI_Garbage.image->getHeight());
+	_UI_Garbage.rc = RectMake(764, _UI_State[PT_ERIC].rc.top, _UI_Garbage.image->getWidth(), _UI_Garbage.image->getHeight());
 	_UI_Garbage.pos.x = (_UI_Garbage.rc.left + _UI_Garbage.rc.right) / 2;
 	_UI_Garbage.pos.y = (_UI_Garbage.rc.top + _UI_Garbage.rc.bottom) / 2;
 
 	// 캐릭터 전환 변수 (이 숫자가 바뀌면 그 캐릭터를 바라본다?)
-	_charNum = PT_Run;
+	_charNum = PT_ERIC;
 
 }
 
@@ -133,13 +133,13 @@ void stageScene::addStageImage()
 void stageScene::testStateImage()
 {
 
-	// 테스트용 컨트롤을 누른다면
-	if (KEYMANAGER->isOnceKeyDown(VK_CONTROL))
-	{
-		_UI_State[_charNum].image->setFrameX(0);
-		_charNum++;
-		if (_charNum > PT_Def) _charNum = PT_Run;
-		_UI_State[_charNum].image->setFrameX(1);
-	}
+	//// 테스트용 컨트롤을 누른다면
+	//if (KEYMANAGER->isOnceKeyDown(VK_CONTROL))
+	//{
+	//	_UI_State[_charNum].image->setFrameX(0);
+	//	_charNum++;
+	//	if (_charNum > PT_OLAF) _charNum = PT_ERIC;
+	//	_UI_State[_charNum].image->setFrameX(1);
+	//}
 
 }

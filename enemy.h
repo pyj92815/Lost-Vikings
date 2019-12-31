@@ -3,7 +3,7 @@
 
 enum class EnemyState
 {
-	
+
 	IDLE,		//카메라 밖에 있을때 가만히 있는 상태
 	SCOUT,		//카메라 안에 들어와서 플레이어를 찾아 정찰하는 상태
 	DISCOVERY,	//플레이어가 정찰 범위 안에 들어와 플레이어를 추적하는 상태
@@ -35,14 +35,14 @@ protected:
 	//적의 탐지 범위
 	RECT _enemy_DISCOVERY_Rect;
 	image* _image;
-	
+
 	int _probeX, _probeY;
 
-	int _frameX,_frameY;
+	int _frameX, _frameY;
 	int _frameCount;
 public:
-	
-	virtual HRESULT init(EnemyType enemyType,float x, float y);
+
+	virtual HRESULT init(EnemyType enemyType, float x, float y);
 	virtual void release();
 	virtual void update();
 	virtual void render();
