@@ -49,7 +49,7 @@ void cameraManager::set_WorldSize(string strKey)
 void cameraManager::set_Camera_XY(int x, int y)
 {
 	_camera.cameraXY.x = x - _camera.cameraSizeX / 2.f;
-	_camera.cameraXY.y = y - _camera.cameraSizeX / 2.f;
+	_camera.cameraXY.y = y - _camera.cameraSizeY / 2.f;
 
 	Camera_Correction();	// 카메라가 맵 밖으로 나갔을때 예외처리
 }
@@ -57,7 +57,7 @@ void cameraManager::set_Camera_XY(int x, int y)
 void cameraManager::set_Camera_XY(float x, float y)
 {
 	_camera.cameraXY.x = x - _camera.cameraSizeX / 2.f;
-	_camera.cameraXY.y = y - _camera.cameraSizeX / 2.f;
+	_camera.cameraXY.y = y - _camera.cameraSizeY / 2.f;
 
 	Camera_Correction();	// 카메라가 맵 밖으로 나갔을때 예외처리
 }
@@ -65,7 +65,7 @@ void cameraManager::set_Camera_XY(float x, float y)
 void cameraManager::set_Camera_XY(POINT xy)
 {
 	_camera.cameraXY.x = xy.x - _camera.cameraSizeX / 2.f;
-	_camera.cameraXY.y = xy.y - _camera.cameraSizeX / 2.f;
+	_camera.cameraXY.y = xy.y - _camera.cameraSizeY / 2.f;
 
 	Camera_Correction();	// 카메라가 맵 밖으로 나갔을때 예외처리
 }
@@ -73,7 +73,7 @@ void cameraManager::set_Camera_XY(POINT xy)
 void cameraManager::set_Camera_XY(POINTFLOAT xy)
 {
 	_camera.cameraXY.x = xy.x - _camera.cameraSizeX / 2.f;
-	_camera.cameraXY.y = xy.y - _camera.cameraSizeX / 2.f;
+	_camera.cameraXY.y = xy.y - _camera.cameraSizeY / 2.f;
 
 	Camera_Correction();	// 카메라가 맵 밖으로 나갔을때 예외처리
 }

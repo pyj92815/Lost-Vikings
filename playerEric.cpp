@@ -39,7 +39,7 @@ HRESULT playerEric::init(float x, float y)
 	//점프
 	_ericJump = false;
 	_eric.jumpPower = 15;
-	_eric.movePower = 2;
+	_eric.movePower = 3;
 	_eric.movePowerCount = 0;
 	_eric.gravity = 0.3;
 	//공격
@@ -49,6 +49,9 @@ HRESULT playerEric::init(float x, float y)
 	_breathFrameCount = 0;
 	_test = RectMake(WINSIZEX / 2 + 200, WINSIZEY / 2, 200, 200);
 	_gravity = 0; // 중력 
+	// 슬라이딩
+	_isSlide = false;
+	_slidePower = 7;
 	// 충돌처리를 위한 픽셀 프로브X/Y값
 	_eric.probeX = _eric.x + _eric.image->getFrameWidth() / 2;
 	_eric.probeY = _eric.y + _eric.image->getFrameHeight() / 2;
@@ -72,8 +75,15 @@ void playerEric::update()
 	//중력
 	if (_eric.posState == POSSTATE_AIR)
 	{
-		if(_gravity < 5)	 	_gravity += 0.7;
+		PixelAirCollision();
+		if (_gravity < 5)	 	_gravity += 0.7;
 		_eric.y += _gravity;
+		if (_eric.state != STATE_ERIC_JUMP)
+		{
+			_eric.state = STATE_ERIC_JUMP;
+			_eric.currentFrameX = 2;
+			_eric.image->setFrameX(_eric.currentFrameX);
+		}
 	}
 
 	//맞을 때 히트값을 조정해주셈 
@@ -98,10 +108,11 @@ void playerEric::update()
 
 	// 191229 PM 02:01 형길이 추가
 	// 에릭의 좌표를 카메라 매니저에 넘겨준다.
-	CAMERAMANAGER->set_Camera_XY(_eric.rc);
+	CAMERAMANAGER->set_Camera_XY(_eric.x, _eric.y);
 
 	// 점프가 아니면 픽셀충돌, 점프중에도 픽셀충돌 
-	if (!_ericJump)
+
+	if (_eric.posState == POSSTATE_GROUND)
 	{
 		PixelCollision();
 	}
@@ -113,7 +124,8 @@ void playerEric::update()
 
 void playerEric::render()
 {
-	Rectangle(getMemDC(), _eric.rc);
+
+	Rectangle(CAMERAMANAGER->getWorDC(), _eric.rc);
 
 	//Rectangle(getMemDC(), _test);
 
@@ -135,6 +147,21 @@ void playerEric::move()
 
 void playerEric::key()
 {
+	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+	{
+		_eric.frameSpeed = 10;
+		_eric.currentFrameY = 0;
+		_breathCount = 0;
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+	{
+		_eric.frameSpeed = 10;
+		_eric.currentFrameY = 1;
+		_breathCount = 0;
+	}
+
+
+
 	if (KEYMANAGER->isStayKeyDown(VK_UP))
 	{
 		_eric.state = STATE_STEPLADDER;
@@ -143,63 +170,92 @@ void playerEric::key()
 	if (KEYMANAGER->isStayKeyDown(VK_DOWN))
 	{
 	}
+
 	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
 	{
-		_breathCount++; // 숨카운트 
-		_eric.movePowerCount++;
-		if (_eric.movePower <= 5)
+		PixelLeftCollision();
+		if (_eric.state == STATE_PUSH)
 		{
-			if (_eric.movePowerCount > 4)
-			{
-				_eric.movePower += 0.2;
-				_eric.movePowerCount = 0;
-			}
-		}
 
-		if (_eric.state == STATE_ERIC_HEADBUTT || _eric.state == STATE_ERIC_JUMP || _eric.state == STATE_PUSH)
-		{
-			_eric.x -= _eric.movePower;
-			_eric.currentFrameY = 1;		 // 1이 왼쪽 
 		}
 		else
 		{
-			_eric.state = STATE_MOVE;
-			_eric.frameSpeed = 10;
-			_eric.x -= _eric.movePower;
-			_eric.currentFrameY = 1;		 // 1이 왼쪽 
+			_breathCount++; // 숨카운트 
+			_eric.movePowerCount++;
+			if (_eric.movePower <= 8)
+			{
+				if (_eric.movePowerCount > 4)
+				{
+					_eric.movePower += 0.5;
+					_eric.movePowerCount = 0;
+				}
+			}
+
+			if (_eric.state == STATE_ERIC_HEADBUTT || _eric.state == STATE_ERIC_JUMP || _eric.state == STATE_PUSH)
+			{
+				_eric.x -= _eric.movePower;
+			}
+			else
+			{
+				_eric.state = STATE_MOVE;
+				_eric.x -= _eric.movePower;
+			}
+
+			if (_isSlide)
+			{
+				_isSlideOn = true;
+			}
 		}
+
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
 	{
-		_breathCount++; // 숨카운트 
-		_eric.movePowerCount++;
-		if (_eric.movePower <= 5)
+		PixelRightCollision();
+		if (_eric.state == STATE_PUSH)
 		{
-			if (_eric.movePowerCount > 4)
-			{
-				_eric.movePower += 0.2;
-				_eric.movePowerCount = 0;
-			}
-		}
 
-		if (_eric.state == STATE_ERIC_HEADBUTT || _eric.state == STATE_ERIC_JUMP || _eric.state == STATE_PUSH)
-		{
-			_eric.x += _eric.movePower;
-			_eric.currentFrameY = 0;		 // 0 이 오른쪽 
 		}
 		else
 		{
-			_eric.state = STATE_MOVE;
-			_eric.frameSpeed = 10;
-			_eric.x += _eric.movePower;
-			_eric.currentFrameY = 0;		 // 0 이 오른쪽 
+			_breathCount++; // 숨카운트 
+			_eric.movePowerCount++;
+			if (_eric.movePower <= 8)
+			{
+				if (_eric.movePowerCount > 4)
+				{
+					_eric.movePower += 0.5;
+					_eric.movePowerCount = 0;
+				}
+			}
+
+			if (_eric.state == STATE_ERIC_HEADBUTT || _eric.state == STATE_ERIC_JUMP || _eric.state == STATE_PUSH)
+			{
+				_eric.x += _eric.movePower;
+				// 0 이 오른쪽 
+			}
+			else
+			{
+				_eric.state = STATE_MOVE;
+				_eric.x += _eric.movePower;	 // 0 이 오른쪽 
+			}
+
+			if (_isSlide)
+			{
+				_isSlideOn = true;
+			}
+
 		}
 	}
 
+	// 슬라이딩을 구성 
+
 	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_RIGHT))
 	{
-		//_eric.movePowerCount = 0;
-		//_eric.movePower = 2;
+		if (_breathCount > 10 && _eric.state != STATE_PUSH)
+		{
+			_isSlide = true;
+		}
+
 		if (_breathCount > 150)
 		{
 			_eric.state = STATE_BREATH;
@@ -225,6 +281,39 @@ void playerEric::key()
 			_breathCount = 0; // 숨카운트 
 		}
 	}
+
+	if (_isSlide)
+	{
+		_slideCount++;
+		if (_slideCount > 5)
+		{
+			_slideCount = 0;
+			_isSlide = false;
+		}
+	}
+
+	if (_isSlideOn)
+	{
+		if (_eric.currentFrameY == 0)
+		{
+			_eric.x -= _slidePower;
+		}
+		else
+		{
+			_eric.x += _slidePower;
+		}
+
+		if (_slidePower >= 0)
+		{
+			_slidePower -= 0.1;
+		}
+		else
+		{
+			_slidePower = 7;
+			_isSlideOn = false;
+		}
+	}
+
 	if (KEYMANAGER->isOnceKeyDown('D'))
 	{
 		_eric.state = STATE_ERIC_HEADBUTT;
@@ -237,14 +326,14 @@ void playerEric::key()
 	{
 		if (KEYMANAGER->isOnceKeyDown('F'))
 		{
+			_ericJump = true;
 			_eric.state = STATE_ERIC_JUMP;
 			_eric.posState = POSSTATE_AIR; // 점프이면 air
-			_eric.jumpPower = 12;
+			_eric.jumpPower = 14;
 			_eric.currentFrameX = 0;
 			_eric.image->setFrameX(0);
 			_eric.frameCount = 0;
 			_eric.frameSpeed = 15;
-			_ericJump = true;
 			_jumpStart = _eric.y;
 		}
 	}
@@ -307,6 +396,25 @@ void playerEric::frameCount()
 				_eric.state = STATE_IDLE;
 			}
 			_eric.frameCount = 0;
+		}
+	}
+	else if (_eric.state == STATE_ERIC_JUMP)
+	{
+		if (_eric.frameCount >= _eric.frameSpeed)
+		{
+			if (_eric.currentFrameX == _eric.image->getMaxFrameX()) _eric.currentFrameX = _eric.currentFrameX - 2;
+			if (_eric.currentFrameX < _eric.image->getMaxFrameX())
+			{
+				_eric.currentFrameX++;
+				_eric.image->setFrameX(_eric.currentFrameX);
+			}
+			_eric.frameCount = 0;
+		}
+		if (_eric.posState == POSSTATE_GROUND)
+		{
+			_eric.state = STATE_IDLE;
+			_eric.currentFrameX = 0;
+			_eric.image->setFrameX(_eric.currentFrameX);
 		}
 	}
 	else
@@ -466,6 +574,7 @@ void playerEric::PixelCollision()
 {
 	_eric.probeY = _eric.y + _eric.image->getFrameHeight();
 
+	// 바닥 처리를 위한 픽셀 처리 
 	for (int i = _eric.probeY - 4; i < _eric.probeY + 10; ++i)
 	{
 		COLORREF getPixel_Bottom = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_eric.rc.left + _eric.rc.right) / 2, i);
@@ -489,22 +598,73 @@ void playerEric::PixelCollision()
 			_eric.posState = POSSTATE_AIR;
 		}
 	}
-	
+
 }
+
+void playerEric::PixelRightCollision()
+{
+	if (_eric.state != STATE_PUSH) _eric.probeX = _eric.x + _eric.image->getFrameWidth(); // _eric.right  
+
+	COLORREF getPixel_RIGHT = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _eric.probeX + 2, _eric.y);
+
+	int r = GetRValue(getPixel_RIGHT);
+	int g = GetGValue(getPixel_RIGHT);
+	int b = GetBValue(getPixel_RIGHT);
+
+	if (!(r == 255 && g == 0 && b == 255))
+	{
+		if (_eric.posState == POSSTATE_GROUND)
+		{
+			if (_eric.state != STATE_PUSH)
+			{
+				_eric.state = STATE_PUSH;
+				_eric.currentFrameX = 0;
+				_eric.image->setFrameX(0);
+			}
+		}
+		_eric.x = _eric.probeX - _eric.image->getFrameWidth();
+	}
+}
+
+void playerEric::PixelLeftCollision()
+{
+	if (_eric.state != STATE_PUSH) _eric.probeX = _eric.x - 3;
+
+	COLORREF getPixel_LEFT = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _eric.probeX, _eric.y);
+
+	int r = GetRValue(getPixel_LEFT);
+	int g = GetGValue(getPixel_LEFT);
+	int b = GetBValue(getPixel_LEFT);
+
+	if (!(r == 255 && g == 0 && b == 255))
+	{
+		if (_eric.posState == POSSTATE_GROUND)
+		{
+			if (_eric.state != STATE_PUSH)
+			{
+				_eric.state = STATE_PUSH;
+				_eric.currentFrameX = 0;
+				_eric.image->setFrameX(0);
+			}
+		}
+		_eric.x = _eric.probeX + 6;
+	}
+}
+
 
 void playerEric::isJumpPixelCollision()
 {
 	_eric.probeY = _eric.y + _eric.image->getFrameHeight();
 
-	for (int i = _eric.probeY - 4; i < _eric.probeY + 10; ++i)
+	for (int i = _eric.probeY; i < _eric.probeY + 10; ++i)
 	{
 		COLORREF getPixel_Bottom = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_eric.rc.left + _eric.rc.right) / 2, i);
 
-		int r = GetRValue(getPixel_Bottom);
-		int g = GetGValue(getPixel_Bottom);
-		int b = GetBValue(getPixel_Bottom);
+		int r_Bottom = GetRValue(getPixel_Bottom);
+		int g_Bottom = GetGValue(getPixel_Bottom);
+		int b_Bottom = GetBValue(getPixel_Bottom);
 
-		if (!(r == 255 && g == 0 && b == 255))
+		if (!(r_Bottom == 255 && g_Bottom == 0 && b_Bottom == 255) && _eric.currentFrameX > 0)
 		{
 			_eric.y = i - _eric.image->getFrameHeight();
 			_eric.posState = POSSTATE_GROUND;
@@ -523,4 +683,37 @@ void playerEric::isJumpPixelCollision()
 			_eric.posState = POSSTATE_AIR;
 		}
 	}
+}
+
+void playerEric::PixelAirCollision()
+{
+	COLORREF getPixel_LB = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _eric.rc.left, _eric.rc.bottom);
+	COLORREF getPixel_RB = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _eric.rc.right, _eric.rc.bottom);
+
+	int r_LB = GetRValue(getPixel_LB);
+	int g_LB = GetGValue(getPixel_LB);
+	int b_LB = GetBValue(getPixel_LB);
+
+	int r_RB = GetRValue(getPixel_RB);
+	int g_RB = GetGValue(getPixel_RB);
+	int b_RB = GetBValue(getPixel_RB);
+
+
+	if (!(r_LB == 255 && g_LB == 0 && b_LB == 255))
+	{
+		if (_eric.currentFrameY == 1) // 왼쪽 
+		{
+			_eric.x = _eric.rc.left;
+		}
+	}
+
+	if (!(r_RB == 255 && g_RB == 0 && b_RB == 255))
+	{
+		if (_eric.currentFrameY == 0) // 오른쪽 
+		{
+			_eric.x = _eric.rc.left;
+		}
+	}
+
+
 }
