@@ -86,12 +86,11 @@ private:
 	bool _baleogAttackMotion;
 	bool _baleogArrowMotion;
 	bool _baleogArrowAction;
-
+	bool _pullString;
+	float _probeY;
 	int _baleogAttackCount;
 
 	arrow* _ar;
-
-	bool ss;
 
 public:
 	playerbaleog();
@@ -104,6 +103,7 @@ public:
 
 	void key();
 	void setBaleogState();
+	void PixelCollision();
 
 
 	tagPlayer getBaleog() { return _baleog; }
