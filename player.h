@@ -12,6 +12,11 @@ enum tagState			// 이미지의 상태값
 	STATE_BALEOG_ARROW_REDY, // 벨로그 화살	
 	STATE_BALEOG_ARROW_FIRE,
 	STATE_BALEOG_SWORD1, // 벨로그 킬
+	STATE_BALEOG_ARROW_REDY,// 벨로그 화살
+	STATE_BALEOG_ARROW_FIRE,
+	STATE_BALEOG_ARROW,
+	STATE_BALEOG_SWORD,
+	STATE_BALEOG_SWORD1,	//벨로그 칼
 	STATE_BALEOG_SWORD2,
 	STATE_HIT,
 	STATE_PUSH,
@@ -44,12 +49,15 @@ struct tagPlayer
 	float jumpPower;	 // 에릭만 사용하는 점프 
 	float movePower;
 	float movePowerCount;
-	float gravity;		 // 에릭	  중력			
+	float gravity;		 // 에릭	  중력		
+	float probeY;
+	float probeX;
 	int direction;		 // FRAME Y 0은 왼쪽, 1은 오른쪽  
 	int frameCount;
 	int currentFrameX, currentFrameY;
 	int frameSpeed;
 	int hp;	   // 3개 
+	bool isDead;				// 살았는지 죽었는지
 };
 
 class player :public gameNode

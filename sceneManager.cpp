@@ -77,3 +77,37 @@ HRESULT sceneManager::changeScene(string sceneName)
 
 	return E_FAIL;
 }
+
+void sceneManager::set_SceneState(int state)
+{
+	if (state >= 0 && state <= 5) _scene.state = (SceneState)state;
+}
+
+void sceneManager::SceneChange()
+{
+	// 플레이어의 상태에 따라 장면을 바꿔준다.
+	switch (_scene.state)
+	{
+	case SS_NONE:
+		break;
+
+	case SS_PAUSE:
+		break;
+
+	case SS_INTRO:
+		// 인트로 씬을 출력한다.
+		SCENEMANAGER->changeScene("Intro");
+		break;
+
+	case SS_STAGE:
+		// 스테이지 씬을 출력한다.
+		SCENEMANAGER->changeScene("Stage");
+		break;
+
+	case SS_GAMEOVER:
+		break;
+
+	case SS_STOP:
+		break;
+	}
+}

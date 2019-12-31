@@ -52,14 +52,17 @@
     <Filter Include="playGround\맵">
       <UniqueIdentifier>{b1443c61-444d-4676-9866-2ee9fbb79c79}</UniqueIdentifier>
     </Filter>
-    <Filter Include="playGround\scene_Manager">
-      <UniqueIdentifier>{d087255e-7acc-4b22-a070-a021fc589fc2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="playGround\scene">
       <UniqueIdentifier>{16a0c9cb-f79b-450d-a286-9bb43d67549a}</UniqueIdentifier>
     </Filter>
     <Filter Include="playGround\characters">
       <UniqueIdentifier>{e7f04b4f-28b5-4fad-bbe9-28066b77042e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\Scene_Manager">
+      <UniqueIdentifier>{673f8783-a194-4030-a62e-7657b3c793a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\Enemy">
+      <UniqueIdentifier>{0db7d735-5cb5-4f74-bab8-ffe946dd806b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -135,24 +138,6 @@
     <ClInclude Include="worldMap.h">
       <Filter>playGround\맵</Filter>
     </ClInclude>
-    <ClInclude Include="enemy.h">
-      <Filter>2DGameFramework</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy_Mummy.h">
-      <Filter>2DGameFramework</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy_Scorpion.h">
-      <Filter>2DGameFramework</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy_Snake.h">
-      <Filter>2DGameFramework</Filter>
-    </ClInclude>
-    <ClInclude Include="enemyManager.h">
-      <Filter>2DGameFramework</Filter>
-    </ClInclude>
-    <ClInclude Include="scene_Manager.h">
-      <Filter>playGround\scene_Manager</Filter>
-    </ClInclude>
     <ClInclude Include="stageScene.h">
       <Filter>playGround\scene</Filter>
     </ClInclude>
@@ -173,6 +158,33 @@
     </ClInclude>
     <ClInclude Include="playerbaleog.h">
       <Filter>playGround\characters</Filter>
+    </ClInclude>
+    <ClInclude Include="scene_Manager.h">
+      <Filter>playGround\Scene_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_Mummy.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_Scorpion.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_Snake.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="enemyManager.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="playerbaleog.h">
+      <Filter>playGround\characters</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerOlaf.h">
+      <Filter>playGround\characters</Filter>
+    </ClInclude>
+    <ClInclude Include="worldObjects.h">
+      <Filter>playGround\맵</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -233,24 +245,6 @@
     <ClCompile Include="worldMap.cpp">
       <Filter>playGround\맵</Filter>
     </ClCompile>
-    <ClCompile Include="enemy.cpp">
-      <Filter>2DGameFramework</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy_Mummy.cpp">
-      <Filter>2DGameFramework</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy_Scorpion.cpp">
-      <Filter>2DGameFramework</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy_Snake.cpp">
-      <Filter>2DGameFramework</Filter>
-    </ClCompile>
-    <ClCompile Include="enemyManager.cpp">
-      <Filter>2DGameFramework</Filter>
-    </ClCompile>
-    <ClCompile Include="scene_Manager.cpp">
-      <Filter>playGround\scene_Manager</Filter>
-    </ClCompile>
     <ClCompile Include="stageScene.cpp">
       <Filter>playGround\scene</Filter>
     </ClCompile>
@@ -271,6 +265,33 @@
     </ClCompile>
     <ClCompile Include="playerbaleog.cpp">
       <Filter>playGround\characters</Filter>
+    </ClCompile>
+    <ClCompile Include="scene_Manager.cpp">
+      <Filter>playGround\Scene_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_Mummy.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_Scorpion.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_Snake.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="enemyManager.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="playerbaleog.cpp">
+      <Filter>playGround\characters</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerOlaf.cpp">
+      <Filter>playGround\characters</Filter>
+    </ClCompile>
+    <ClCompile Include="worldObjects.cpp">
+      <Filter>playGround\맵</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

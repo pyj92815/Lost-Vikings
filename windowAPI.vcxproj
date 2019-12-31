@@ -167,6 +167,7 @@
     <ClInclude Include="playerbaleog.h" />
     <ClInclude Include="playerEric.h" />
     <ClInclude Include="playerManager.h" />
+    <ClInclude Include="PlayerOlaf.h" />
     <ClInclude Include="scene_Manager.h" />
     <ClInclude Include="stageScene.h" />
     <ClInclude Include="worldMap.h" />
@@ -184,6 +185,7 @@
     <ClInclude Include="txtData.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="windowAPI.h" />
+    <ClInclude Include="worldObjects.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="animation.cpp" />
@@ -205,6 +207,7 @@
     <ClCompile Include="playerbaleog.cpp" />
     <ClCompile Include="playerEric.cpp" />
     <ClCompile Include="playerManager.cpp" />
+    <ClCompile Include="PlayerOlaf.cpp" />
     <ClCompile Include="scene_Manager.cpp" />
     <ClCompile Include="stageScene.cpp" />
     <ClCompile Include="worldMap.cpp" />
@@ -223,6 +226,7 @@
     <ClCompile Include="txtData.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="windowAPI.cpp" />
+    <ClCompile Include="worldObjects.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="windowAPI.rc" />

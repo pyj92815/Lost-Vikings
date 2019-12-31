@@ -1,15 +1,11 @@
 #pragma once
 #include "gameNode.h"
+#include "worldObjects.h"
 
 class worldMap : public gameNode
 {
 private:
-
-	image* worldImage;
-	HDC worldDC;
-
-private:
-	image* player;
+	worldObjects* _wo;
 public:
 	worldMap();
 	~worldMap();
