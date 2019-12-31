@@ -35,24 +35,18 @@ public:
 	virtual void move();
 	virtual void key();
 
-	void frameCount();
+	void ericFrameCount();
 	void ericJump();
 	void ericAttack();
 	void ericAttackMove();
+	void ericHit();
 	void setEricImage();
 
-	void PixelCollision();
-	void PixelRightCollision(); // X绵 面倒 贸府 
-	void PixelLeftCollision(); // X绵 面倒 贸府 
-	void isJumpPixelCollision();
-	void PixelAirCollision();
-	tagPlayer getEric() { return _eric; }
-
-	void setEricX(float x) { _eric.x = x; }	 // eric x 汲沥
-	void setEricY(float y) { _eric.y = y; }  // eric y 汲沥 
-
-	float getEricProbeX() { return _eric.probeX; }
-	float getEricProbeY() { return _eric.probeY; }
+	tagPlayer getEric() { return _eric; }	 // ERIC 
+	void PixelCollision();			// Y绵 面倒 贸府 
+	void PixelRightCollision();		// X绵 坷弗率 面倒 贸府 
+	void PixelLeftCollision();		// X绵 哭率   面倒 贸府 
+	void isJumpPixelCollision();	// 痢橇矫 面倒 贸府 
 
 	void set_stopKey(bool stop) { _stopControl = stop; }
 	void player_Kill() { _eric.isDead = true; }
