@@ -71,6 +71,8 @@ void playerbaleog::update()
 	 if (!_baleogAttack) key();
 
 
+	if(_stopControl) if (!_baleogAttack) key();
+
 	_baleog.rc = RectMake(_baleog.x, _baleog.y, _baleog.image->getFrameWidth(), _baleog.image->getFrameHeight());
 
 	setBaleogState();
@@ -189,7 +191,7 @@ void playerbaleog::update()
 		_count = 0;
 	}
 */
-	CAMERAMANAGER->set_Camera_XY(_baleog.rc);
+
 
 	_ar->update();
 

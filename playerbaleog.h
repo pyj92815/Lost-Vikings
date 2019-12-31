@@ -92,6 +92,8 @@ private:
 
 	arrow* _ar;
 
+	bool	   _stopControl;		// 이값이 true라면 움직일 수 없다.
+
 public:
 	playerbaleog();
 	~playerbaleog();
@@ -109,6 +111,8 @@ public:
 	tagPlayer getBaleog() { return _baleog; }
 
 	void hgKey();	// 형길이가 쓰는 비밀 이동키
+	void set_stopKey(bool stop) { _stopControl = stop; }
+	void player_Kill() { _baleog.isDead = true; }
 };
 
 
