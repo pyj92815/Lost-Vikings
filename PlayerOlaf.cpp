@@ -46,7 +46,7 @@ void PlayerOlaf::release()
 
 void PlayerOlaf::update()
 {
-	//KeyControl();
+	if (_stopControl) KeyControl();
 	SetOlafState();
 	SetOlafPosState();
 	PixelCollision();

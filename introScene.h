@@ -3,6 +3,7 @@
 
 #define INTROIMAGESIZE 5		// 인트로 이미지 개수
 #define NEXTSCENECOUNT 50		// 다음씬으로 넘어가기까지 멈춰있는 시간
+#define FADEINSPEED 50
 
 enum Scene_Select_RC
 {
@@ -22,13 +23,25 @@ struct tagIntroInfo
 	RECT			scene_Select_rc[2];		// 씬 선택 렉트
 	image*			scene_Select_Image;		// 셀렉 이미지
 	bool			scene_Change_pos;		// 입력에 따라 셀렉 이미지의 좌표를 바꾼다.
+	bool			input_Pass;				// 패스워드 입력 상태
+	int				pass_Select_Pos;		// 패스워드 위치
+};
+
+struct tagPasswordInfo
+{
+	RECT			pass_Num_rc;			// 비밀번호 렉트의 위치
+	image*			pass_Num_Image;			// 비밀번호 이미지
+	int				save_Num_Pos;			// 어떤 이미지를 출력해야하는지 이미지 위치정보
 };
 
 // 인트로 씬을 처리할 클래스이다.
 class introScene : public gameNode
 {
 private:
-	tagIntroInfo	_introScene;
+	tagIntroInfo		_introScene;
+	tagPasswordInfo		_password[4];	
+	int					_passwordMove;
+	int					_passCnt;			// 패스워드 카운트
 
 public:
 	introScene();

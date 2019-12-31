@@ -18,6 +18,8 @@ private:
 	float _jumpStart;
 	float _gravity;
 
+	bool	   _stopControl;		// 이값이 true라면 움직일 수 없다.
+
 public:
 	playerEric();
 	~playerEric();
@@ -44,5 +46,8 @@ public:
 
 	float getEricProbeX() { return _eric.probeX; }
 	float getEricProbeY() { return _eric.probeY; }
+
+	void set_stopKey(bool stop) { _stopControl = stop; }
+	void player_Kill() { _eric.isDead = true; }
 };
 

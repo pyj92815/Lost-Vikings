@@ -1,5 +1,8 @@
 #pragma once
 #include "gameNode.h"
+#include "worldMap.h"			// 스테이지에서만 필요하기 때문에 이곳으로 이동
+#include "playerManager.h"		// 스테이지에서만 필요하기 때문에 이곳으로 이동
+#include "enemyManager.h"		// 스테이지에서만 필요하기 때문에 이곳으로 이동
 
 // 플레이어의 타입
 enum PlayerType
@@ -26,6 +29,10 @@ private:
 	_tagStateUI		_UI_Garbage;				// 휴지통 이미지 위치
 	int				_charNum;
 
+	worldMap* _wm;
+	playerManager* _pm;
+	EnemyManager* _em;
+
 public:
 	stageScene();
 	~stageScene();
@@ -40,7 +47,7 @@ public:
 
 	void testStateImage();		// 이미지 테스트용 함수
 
-	void set_Player_Dead(int type, bool dead) { _UI_State[type].dead = dead; }	// 플레이어가 죽었는지 수정하는 함수
+	void set_PlayerDead();
 
 };
 
