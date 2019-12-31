@@ -9,8 +9,10 @@ enum tagState			// 이미지의 상태값
 	STATE_ERIC_HEADBUTTEND,// 박치기 이후 
 	STATE_OLAF_GUARD,	   // 울라프
 	STATE_OLAF_FLY,		   // 울라프 날때
-	STATE_BALEOG_ARROW,	   // 벨로그 화살	
-	STATE_BALEOG_SWORD,	   // 벨로그 킬
+	STATE_BALEOG_ARROW_REDY, // 벨로그 화살	
+	STATE_BALEOG_ARROW_FIRE,
+	STATE_BALEOG_SWORD1, // 벨로그 킬
+	STATE_BALEOG_SWORD2,
 	STATE_HIT,
 	STATE_PUSH,
 	STATE_BREATH,
