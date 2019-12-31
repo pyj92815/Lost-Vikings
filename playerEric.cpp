@@ -218,7 +218,7 @@ void playerEric::key()
 	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_RIGHT))
 	{
 		// 슬라이딩을 활성화 시키기 위한 
-		if (_breathCount > 10 && _eric.state != STATE_PUSH) 	_isSlide = true;
+		if (_breathCount > 10 && _eric.state != STATE_PUSH) _isSlide = true;
 	
 		// 숨 카운트가 150이상이면 숨 에릭 이미지를 띄운다 
 		if (_breathCount > 150)
