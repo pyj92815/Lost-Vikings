@@ -88,6 +88,8 @@ void worldObjects::framework()
 
 void worldObjects::move()
 {
+	//TEST
+
 	RECT temp;
 	for (int i = 0; i < 4; i++)
 	{
