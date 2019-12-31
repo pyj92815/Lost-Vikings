@@ -12,11 +12,15 @@ private:
 	bool _ericUnable;		// 전투 불능 상태
 	bool _isHit;
 	bool _isBreath;
+	bool _isSlide;
+	bool _isSlideOn;
 	int _hitCount;
 	int _breathCount;
 	int _breathFrameCount;
+	int _slideCount; // 슬라이딩 카운트 
 	float _jumpStart;
 	float _gravity;
+	float _slidePower;
 
 	bool	   _stopControl;		// 이값이 true라면 움직일 수 없다.
 
@@ -38,7 +42,10 @@ public:
 	void setEricImage();
 
 	void PixelCollision();
+	void PixelRightCollision(); // X축 충돌 처리 
+	void PixelLeftCollision(); // X축 충돌 처리 
 	void isJumpPixelCollision();
+	void PixelAirCollision();
 	tagPlayer getEric() { return _eric; }
 
 	void setEricX(float x) { _eric.x = x; }	 // eric x 설정
