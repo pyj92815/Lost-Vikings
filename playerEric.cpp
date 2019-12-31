@@ -64,11 +64,11 @@ void playerEric::release()
 
 void playerEric::update()
 {
-<<<<<<< HEAD
+
 	//if (!_ericUnable) key();		// 방향키
-=======
+
 	if (_stopControl)  if (!_ericUnable) key();		// 방향키
->>>>>>> fc585a4fce4e411f37c058052db62e3798d34b7f
+
 	frameCount();					// 이미지프레임증가 
 	setEricImage();					// image 세팅 
 	ericJump();
@@ -112,15 +112,15 @@ void playerEric::update()
 
 	// 191229 PM 02:01 형길이 추가
 	// 에릭의 좌표를 카메라 매니저에 넘겨준다.
-<<<<<<< HEAD
+
 
 	CAMERAMANAGER->set_Camera_XY(_eric.x, _eric.y);
 
 	//CAMERAMANAGER->set_Camera_XY(_eric.rc);
 
-=======
+
 	// CAMERAMANAGER->set_Camera_XY(_eric.rc);
->>>>>>> fc585a4fce4e411f37c058052db62e3798d34b7f
+
 
 	// 점프가 아니면 픽셀충돌, 점프중에도 픽셀충돌 
 

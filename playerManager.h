@@ -20,7 +20,7 @@ private:
 	PlayerOlaf* _olaf;
 
 	int			_playing;
-
+	
 public:
 	playerManager() {}
 	~playerManager() {}

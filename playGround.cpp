@@ -63,7 +63,7 @@ void playGround::render()
 {
 	PatBlt(CAMERAMANAGER->getWorDC(), 0, 0, CAMERAMANAGER->get_WorldSize_X(), CAMERAMANAGER->get_WorldSize_Y(), WHITENESS);
 	//==================================================
-<<<<<<< HEAD
+
 	
 	_wd->render();
 
@@ -81,7 +81,7 @@ void playGround::render()
 	TIMEMANAGER->render(getMemDC());
 
 
-=======
+
 	//_wd->render();
 	//
 	//_pm->render();
@@ -94,7 +94,7 @@ void playGround::render()
 	//_sm->render();
 
 	_sm->render();
->>>>>>> fc585a4fce4e411f37c058052db62e3798d34b7f
+
 	
 
 	//===================================================
