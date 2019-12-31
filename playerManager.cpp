@@ -17,16 +17,8 @@ HRESULT playerManager::init()
 void playerManager::update()
 {
 
-	_eric->update();
-	_baleog->update();
-	_olaf->update();
-
-	switch (_P_type)
-
-	KILLPlayer();	// 플레이어를 죽인다
-
+	KILLPlayer();
 	switch (_playing)
-
 	{
 	case 0:
 		_eric->set_stopKey(true);
@@ -46,23 +38,6 @@ void playerManager::update()
 		_olaf->set_stopKey(true);
 		break;
 	}
-
-
-	if (KEYMANAGER->isOnceKeyDown(VK_CONTROL))
-	{
-		_P_type++;
-		if (_P_type > 2)
-		{
-			_P_type = 0;
-		}
-	}
-
-	//_eric->update();
-	//_baleog->update();
-	//_olaf->update();
-
-	setColisionFloor();
-
 
 	_eric->update();
 	_baleog->update();
@@ -85,8 +60,6 @@ void playerManager::render()
 	_olaf->render();
 }
 
-
-
 void playerManager::KILLPlayer()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_F1))
@@ -104,4 +77,3 @@ void playerManager::KILLPlayer()
 		_olaf->player_Kill();
 	}
 }
-

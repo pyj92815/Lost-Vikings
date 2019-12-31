@@ -34,8 +34,7 @@ public:
 	tagPlayer getPlayerBaleog() { return _baleog->getBaleog(); }
 	tagPlayer getPlayerOlaf() { return _olaf->getOlaf(); }
 	void set_Playing(int playChar) { _playing = playChar; }
-	void KILLPlayer();
 
-	void setColisionFloor();
+	void KILLPlayer();
 };
 
