@@ -29,26 +29,44 @@ protected:
 	EnemyState _enemyState;
 	EnemyLR _enemyLR;
 	EnemyType _enemyType;
+
 	//적의 위치를 지정할 변수
 	float _x, _y;
 	RECT _enemyRect;
+
 	//적의 탐지 범위
 	RECT _enemy_DISCOVERY_Rect;
+
+	//카메라의 범위 카메라 안에 적이 들어왔는지 판단하기 위함
+	RECT _cameraRect;
+
 	image* _image;
 	
 	int _probeX, _probeY;
 
 	int _frameX,_frameY;
 	int _frameCount;
+
+	//enemy의 방향을 바꿔주기 위한 bool변수
+	bool _turn;
+
+
 public:
 	
 	virtual HRESULT init(EnemyType enemyType,float x, float y);
 	virtual void release();
 	virtual void update();
 	virtual void render();
+
 	virtual void EnemyAction();
+	virtual void turn();
+	virtual void Frame();
+
+	virtual void proveLeft();
+	virtual void proveRight();
 
 	virtual EnemyState getEnemyState() { return _enemyState; }
+	
 
 	//이미지 추가 함수
 	virtual void imageReset()

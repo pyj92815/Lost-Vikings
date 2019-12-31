@@ -253,11 +253,13 @@ void playerEric::key()
 	// 191229 PM 03:18 테스트용 이동키 추가 (삭제해야함)
 	if (KEYMANAGER->isStayKeyDown('O'))
 	{
-		_eric.y -= 5;
+		//_eric.y -= 5;
+		_eric.y -= 20;
 	}
 	if (KEYMANAGER->isStayKeyDown('L'))
 	{
-		_eric.y += 5;
+		//_eric.y += 5;
+		_eric.y+=20;
 	}
 }
 

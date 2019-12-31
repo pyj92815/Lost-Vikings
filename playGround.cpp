@@ -53,7 +53,7 @@ void playGround::update()
 
 }
 
-//여기다 그려라!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//여기다 그려라!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!대훈아 어제 뭐 했길레 오자마자 잠이드는 거니?
 void playGround::render()
 {
 	PatBlt(CAMERAMANAGER->getWorDC(), 0, 0, CAMERAMANAGER->get_WorldSize_X(), CAMERAMANAGER->get_WorldSize_Y(), WHITENESS);
@@ -68,7 +68,7 @@ void playGround::render()
 	_enemyManager->render();
 
 	_sm->render();
-	
+	TIMEMANAGER->render(getMemDC());
 	//===================================================
 	//딱 말했다
 	_backBuffer->render(getHDC(), 0, 0);
