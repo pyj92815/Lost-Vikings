@@ -27,7 +27,7 @@ HRESULT playGround::init()
 
 	_enemyManager = new EnemyManager;
 	_enemyManager->init();
-	
+
 	return S_OK;
 }
 
@@ -47,9 +47,11 @@ void playGround::update()
 
 	_sm->update();
 
-	_enemyManager->update();
-
-	if(SCENEMANAGER->get_SceneState() == SS_STAGE)	_pm->update();
+	if (SCENEMANAGER->get_SceneState() == SS_STAGE)
+	{
+		_enemyManager->update();
+		_pm->update();
+	}
 
 }
 
@@ -58,17 +60,26 @@ void playGround::render()
 {
 	PatBlt(CAMERAMANAGER->getWorDC(), 0, 0, CAMERAMANAGER->get_WorldSize_X(), CAMERAMANAGER->get_WorldSize_Y(), WHITENESS);
 	//==================================================
+	
 	_wd->render();
 
 	_pm->render();
 
+<<<<<<< HEAD
 
 	// 191229 PM 19:11 -¶ôÈÆ - WorldDc ÄÉ¸¯ÅÍ-> PG·Î ·»´õ¸µºÎºĞ ¿Å±è 
 
+=======
+>>>>>>> 6404d0946eda9d809087c9b2912bb539d8601016
 	_enemyManager->render();
 
 	_sm->render();
+<<<<<<< HEAD
 	TIMEMANAGER->render(getMemDC());
+=======
+
+	
+>>>>>>> 321e694003ebbbef6a52f8696155feb7550821dd
 	//===================================================
 	//µü ¸»Çß´Ù
 	_backBuffer->render(getHDC(), 0, 0);

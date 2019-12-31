@@ -9,6 +9,7 @@ cameraManager::cameraManager()
 	_camera.cameraXY.y =    NULL;
 	_camera.world_Size.x =  NULL;
 	_camera.world_Size.y =  NULL;
+
 	_worImage = new image;
 	_worImage = IMAGEMANAGER->addImage("worldMap", 3840, 2292);
 	_worldDC = _worImage->getMemDC();

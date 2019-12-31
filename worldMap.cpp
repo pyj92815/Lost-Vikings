@@ -39,13 +39,21 @@ void worldMap::render()
 {
 	// 191229 PM 02:09 보여지는 부분 카메라 좌표를 수정했음 -형길-
 	// 191229 PM 19:11 -락훈 - 렉 때문에 blackground를 지우고 patBlt로 카메라 배경만큼 그리도록 함 
+<<<<<<< HEAD
 //	PatBlt(CAMERAMANAGER->getWorDC(), CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), WINSIZEX, WINSIZEY, BLACKNESS);
+<<<<<<< HEAD
 	IMAGEMANAGER->findImage("Background")->render(CAMERAMANAGER->getWorDC(), 0, 0);
 	_wo->render();
 	if (KEYMANAGER->isStayKeyDown('Q'))
 	{
 		IMAGEMANAGER->findImage("BG")->render(CAMERAMANAGER->getWorDC(), 0, 0);
 	}
+=======
+=======
+	//PatBlt(CAMERAMANAGER->getWorDC(), CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), WINSIZEX, WINSIZEY, BLACKNESS);
+>>>>>>> 6404d0946eda9d809087c9b2912bb539d8601016
+	IMAGEMANAGER->findImage("BG")->render(CAMERAMANAGER->getWorDC(), 0, 0);
+>>>>>>> 321e694003ebbbef6a52f8696155feb7550821dd
 	//IMAGEMANAGER->findImage("OBJECT")->render(CAMERAMANAGER->getWorOBDC(), 0, 0);
 	//worldImage->render(getMemDC(), 0, 0,
 	//	CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());

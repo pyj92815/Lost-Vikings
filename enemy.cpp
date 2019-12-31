@@ -62,8 +62,15 @@ void Enemy::EnemyAction()
 		if (IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::SCOUT;
 		break;
 	case EnemyState::SCOUT:
+<<<<<<< HEAD
 		//probeY,X 값을 이용해 절벽을 만나면 반대편으로 돌아간다
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;
+=======
+
+		//좌우로 움직이다
+		//if(적을 발견하면(적이 렉트 범위 안에 들어오면))_enemyState=EnemyState::DISCOVERY;
+		//else if(카메라 밖으로 나가면)_enemyState=EnemyState::IDLE;
+>>>>>>> 321e694003ebbbef6a52f8696155feb7550821dd
 		break;
 	case EnemyState::DISCOVERY:
 		//적을 추적
