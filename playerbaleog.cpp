@@ -73,7 +73,7 @@ void playerbaleog::update()
 	setBaleogState();
 	PixelCollision();
 
-	CAMERAMANAGER->set_Camera_XY(_baleog.rc);
+	//CAMERAMANAGER->set_Camera_XY(_baleog.rc);
 
 	//Áß·Â
 	if (_baleog.posState = POSSTATE_AIR)
@@ -186,7 +186,7 @@ void playerbaleog::update()
 		_count = 0;
 	}
 */
-	CAMERAMANAGER->set_Camera_XY(_baleog.rc);
+	//CAMERAMANAGER->set_Camera_XY(_baleog.rc);
 
 	_ar->update();
 

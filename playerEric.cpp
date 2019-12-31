@@ -64,7 +64,7 @@ void playerEric::release()
 
 void playerEric::update()
 {
-	//if (!_ericUnable) key();		// 방향키
+	if (!_ericUnable) key();		// 방향키
 	frameCount();					// 이미지프레임증가 
 	setEricImage();					// image 세팅 
 	ericJump();
