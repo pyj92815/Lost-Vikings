@@ -21,6 +21,8 @@ HRESULT worldMap::init()
 	CAMERAMANAGER->set_WorldSize("BG");
 	CAMERAMANAGER->set_CameraSize(960, 573);
 
+	_wo = new worldObjects;
+	_wo->init();
 	return S_OK;
 }
 
@@ -30,6 +32,7 @@ void worldMap::release()
 
 void worldMap::update()
 {
+	_wo->update();
 }
 
 void worldMap::render()
@@ -38,7 +41,11 @@ void worldMap::render()
 	// 191229 PM 19:11 -락훈 - 렉 때문에 blackground를 지우고 patBlt로 카메라 배경만큼 그리도록 함 
 //	PatBlt(CAMERAMANAGER->getWorDC(), CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), WINSIZEX, WINSIZEY, BLACKNESS);
 	IMAGEMANAGER->findImage("Background")->render(CAMERAMANAGER->getWorDC(), 0, 0);
-	if (KEYMANAGER->isStayKeyDown(']')){IMAGEMANAGER->findImage("BG")->render(CAMERAMANAGER->getWorDC(), 0, 0);}
+	_wo->render();
+	if (KEYMANAGER->isStayKeyDown('Q'))
+	{
+		IMAGEMANAGER->findImage("BG")->render(CAMERAMANAGER->getWorDC(), 0, 0);
+	}
 	//IMAGEMANAGER->findImage("OBJECT")->render(CAMERAMANAGER->getWorOBDC(), 0, 0);
 	//worldImage->render(getMemDC(), 0, 0,
 	//	CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
