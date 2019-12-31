@@ -7,9 +7,9 @@
 // 플레이어의 타입
 enum PlayerType
 {
-	PT_ERIC,
-	PT_BALEOG,
-	PT_OLAF
+	PT_Run,
+	PT_Attack,
+	PT_Def
 };
 
 // 상태 UI의 정보를 담는 구조체
