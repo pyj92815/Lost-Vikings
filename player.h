@@ -57,6 +57,25 @@ struct tagPlayer
 	bool isDead;				// 살았는지 죽었는지
 };
 
+//
+
+enum tagItem
+{
+	ITME_HP,	 // HP Item 
+	ITME_HP2,
+	ITME_FIRE,
+	ITME_KEY,
+};
+
+enum tagTypeDie
+{
+	TYPE_DIE,		 // 기본 죽는 모션 
+	TYPE_FLYDIE,	 // 낙사 
+	TYPE_PRESS,      // 프레스 
+	TYPE_POISION,	 // 독
+};
+
+
 class player :public gameNode
 {
 

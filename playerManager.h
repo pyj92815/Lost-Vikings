@@ -18,7 +18,7 @@ private:
 	playerEric* _eric;
 	playerbaleog* _baleog;
 	PlayerOlaf* _olaf;
-
+	
 	int			_playing;
 
 public:

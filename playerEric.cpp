@@ -24,6 +24,7 @@ HRESULT playerEric::init(float x, float y)
 	IMAGEMANAGER->addFrameImage("eric_hitState", "./image/Characters/eric_hitState.bmp", 93, 192, 1, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("eric_pressdie", "./image/Characters/eric_pressdie.bmp", 384, 192, 4, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("eric_headbutt", "./image/Characters/eric_headbutt.bmp", 888, 192, 8, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("eric_mirra.bmp", "./image/Characters/eric_mirraddie.bmp", 216, 180, 3, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("eric_stepladder", "./image/Characters/eric_stepladder.bmp", 336, 105, 4, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("eric_headbuttend", "./image/Characters/eric_headbuttend.bmp", 990, 186, 11, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("eric_stepladderend", "./image/Characters/eric_stepladderend.bmp", 186, 78, 2, 1, true, RGB(255, 0, 255));
@@ -37,7 +38,8 @@ HRESULT playerEric::init(float x, float y)
 	_eric.y = y;															 // y
 	_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());   // RECT
 	
-	_eric.hp = 3;															 // 체력 
+	_eric.hp = 3;		
+	_eric.isDead = false;// 체력 
 	//========================== 점프 관련 ==================================//
 	_ericJump = false;					
 	_eric.jumpPower = 15;
@@ -391,9 +393,23 @@ void playerEric::ericFrameCount()
 		{
 			_eric.currentFrameX++;
 			_eric.image->setFrameX(_eric.currentFrameX);
+	
+			
 			if (_eric.currentFrameX > _eric.image->getMaxFrameX())
 			{
-				_eric.currentFrameX = 0;
+				//죽는 상태라면 
+				if (_eric.state == STATE_DIE ||
+					_eric.state == STATE_MIRRA ||
+					_eric.state == STATE_PRESSDIE ||
+					_eric.state == STATE_POISON ||
+					_eric.state == STATE_TRAPDIE)
+				{
+					_eric.isDead = true;
+				}
+				else
+				{
+					_eric.currentFrameX = 0;	
+				}
 				//숨쉬기 위한 
 				if (_eric.state == STATE_BREATH) _breathFrameCount++;
 				if (_breathFrameCount > 3)
@@ -502,6 +518,10 @@ void playerEric::ericHit()
 // 에릭의 이미지를 설정해주는 함수 
 void playerEric::setEricImage()
 {
+	if (_eric.hp == 0)
+	{
+		_eric.state = STATE_DIE;
+	}
 	switch (_eric.state)
 	{
 		case STATE_IDLE:
@@ -543,6 +563,7 @@ void playerEric::setEricImage()
 		_eric.image = IMAGEMANAGER->findImage("eric_poison");
 		break;
 		case STATE_MIRRA:
+		_eric.image = IMAGEMANAGER->findImage("eric_mirra");
 		break;
 		case STATE_PRESSDIE:
 		_eric.image = IMAGEMANAGER->findImage("eric_pressdie");
@@ -707,4 +728,8 @@ void playerEric::isJumpPixelCollision()
 			_eric.posState = POSSTATE_AIR;
 		}
 	}
+}
+
+void playerEric::ericDie()
+{
 }

@@ -21,9 +21,7 @@ private:
 	float _jumpStart;
 	float _gravity;
 	float _slidePower;
-
-	bool	   _stopControl;		// 이값이 true라면 움직일 수 없다.
-
+	bool  _stopControl;		// 이값이 true라면 움직일 수 없다.
 public:
 	playerEric();
 	~playerEric();
@@ -43,12 +41,16 @@ public:
 	void setEricImage();
 
 	tagPlayer getEric() { return _eric; }	 // ERIC 
+
 	void PixelCollision();			// Y축 충돌 처리 
 	void PixelRightCollision();		// X축 오른쪽 충돌 처리 
 	void PixelLeftCollision();		// X축 왼쪽   충돌 처리 
 	void isJumpPixelCollision();	// 점프시 충돌 처리 
 
 	void set_stopKey(bool stop) { _stopControl = stop; }
-	void player_Kill() { _eric.isDead = true; }
+	void player_Kill() { _eric.isDead = true; } // 지울 예정 
+
+	void ericDie();
+	void setEricState(tagState state) { _eric.state = state; }	// 상태를 정의해 주는 세터 
 };
 
