@@ -58,6 +58,7 @@ public:
 
 
 	void trapColision();
+	void itemColision();
 	void boradColision();
 
 };
