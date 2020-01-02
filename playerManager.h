@@ -18,8 +18,7 @@ private:
 	playerEric* _eric;
 	playerbaleog* _baleog;
 	PlayerOlaf* _olaf;
-
-	int			_playing;
+	int	_playing;
 	
 public:
 	playerManager() {}
@@ -36,4 +35,3 @@ public:
 	void set_Playing(int playChar) { _playing = playChar; }
 	void KILLPlayer();
 };
-
