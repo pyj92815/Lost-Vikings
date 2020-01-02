@@ -39,7 +39,7 @@ HRESULT playerEric::init(float x, float y)
 	//점프
 	_ericJump = false;
 	_eric.jumpPower = 15;
-	_eric.movePower = 3;
+	_eric.movePower = 2;
 	_eric.movePowerCount = 0;
 	_eric.gravity = 0.3;
 	//공격
@@ -64,7 +64,7 @@ void playerEric::release()
 
 void playerEric::update()
 {
-	if (!_ericUnable) key();		// 방향키
+	if (_stopControl)  if (!_ericUnable) key();		// 방향키
 	frameCount();					// 이미지프레임증가 
 	setEricImage();					// image 세팅 
 	ericJump();
@@ -108,10 +108,9 @@ void playerEric::update()
 
 	// 191229 PM 02:01 형길이 추가
 	// 에릭의 좌표를 카메라 매니저에 넘겨준다.
-	CAMERAMANAGER->set_Camera_XY(_eric.x, _eric.y);
+	// CAMERAMANAGER->set_Camera_XY(_eric.rc);
 
 	// 점프가 아니면 픽셀충돌, 점프중에도 픽셀충돌 
-
 	if (_eric.posState == POSSTATE_GROUND)
 	{
 		PixelCollision();
@@ -124,8 +123,7 @@ void playerEric::update()
 
 void playerEric::render()
 {
-
-	Rectangle(CAMERAMANAGER->getWorDC(), _eric.rc);
+	Rectangle(getMemDC(), _eric.rc);
 
 	//Rectangle(getMemDC(), _test);
 
@@ -342,11 +340,13 @@ void playerEric::key()
 	// 191229 PM 03:18 테스트용 이동키 추가 (삭제해야함)
 	if (KEYMANAGER->isStayKeyDown('O'))
 	{
-		_eric.y -= 5;
+		//_eric.y -= 5;
+		_eric.y -= 20;
 	}
 	if (KEYMANAGER->isStayKeyDown('L'))
 	{
-		_eric.y += 5;
+		//_eric.y += 5;
+		_eric.y += 20;
 	}
 }
 
@@ -574,7 +574,6 @@ void playerEric::PixelCollision()
 {
 	_eric.probeY = _eric.y + _eric.image->getFrameHeight();
 
-	// 바닥 처리를 위한 픽셀 처리 
 	for (int i = _eric.probeY - 4; i < _eric.probeY + 10; ++i)
 	{
 		COLORREF getPixel_Bottom = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_eric.rc.left + _eric.rc.right) / 2, i);
@@ -598,8 +597,9 @@ void playerEric::PixelCollision()
 			_eric.posState = POSSTATE_AIR;
 		}
 	}
-
+	
 }
+
 
 void playerEric::PixelRightCollision()
 {
@@ -650,7 +650,6 @@ void playerEric::PixelLeftCollision()
 		_eric.x = _eric.probeX + 6;
 	}
 }
-
 
 void playerEric::isJumpPixelCollision()
 {

@@ -15,10 +15,10 @@ class worldObjects : public gameNode
 {
 private:
 	//■■■■■■■■■■■가시 함정■■■■■■■■■■■■■■■■■■■■■■
-	tagObjects _niddle[2];
+	tagObjects _niddle[3];
 private:
 	//■■■■■■■■■■■독 함정■■■■■■■■■■■■■■■■■■■■■■
-	tagObjects _poision[3];
+	tagObjects _poision[4];
 	bool _isntColliToNiddle;
 	int _poisionCount;
 private:
@@ -26,7 +26,7 @@ private:
 	tagObjects _flyingBoard[1];
 private:
 	//■■■■■■■■■■■폭포■■■■■■■■■■■■■■■■■■■■■■
-	tagObjects _waterFall[2];
+	tagObjects _waterFall[3];
 private:
 	int _frameCount;
 public:
@@ -39,7 +39,7 @@ public:
 	virtual void render();
 
 	virtual void collision(int x, int y);
-	
+
 	virtual void framework();
 	virtual void move();
 };

@@ -29,6 +29,24 @@ HRESULT introScene::init()
 	_introScene.scene_Select_Image->setX(_introScene.scene_Select_rc[SS_GAME_START].left);
 	_introScene.scene_Select_Image->setY(_introScene.scene_Select_rc[SS_GAME_START].top);
 
+	// 패스워드 초기화
+	for (int i = 0; i < 4; ++i)
+	{
+		_password[i].pass_Num_rc = RectMakeCenter((WINSIZEX / 2 - 100) + (i * 60), WINSIZEY / 2 + 65, 50, 50);
+		_password[i].pass_Num_Image = new image;
+		_password[i].pass_Num_Image = IMAGEMANAGER->findImage("PassNum");
+	}
+
+	// 패스워드 정답은 YANG (30, 32, 21, 15)
+	// 처음 시작할때는 기본으로 STAT에 맞춰있다.
+	_password[0].save_Num_Pos = 25;
+	_password[1].save_Num_Pos = 26;
+	_password[2].save_Num_Pos = 32;
+	_password[3].save_Num_Pos = 26;
+
+	// 패스워드 셀렉트 위치는 제일 왼쪽이다.
+	_passwordMove = 0;
+
 	return S_OK;
 }
 
@@ -50,6 +68,7 @@ void introScene::render()
 	{
 		_introScene.scene_Image->alphaRender(getMemDC(), _introScene.fade_In);
 	}
+
 	else
 	{
 		_introScene.scene_Image->render(getMemDC(), 0, 0);
@@ -58,8 +77,23 @@ void introScene::render()
 			_introScene.scene_Select_Image->getX(), _introScene.scene_Select_Image->getY());
 	}
 
-	//Rectangle(getMemDC(), _introScene.scene_Select_rc[SS_GAME_START]);
-	//Rectangle(getMemDC(), _introScene.scene_Select_rc[SS_GAME_PASSWORD]);
+	// 패스워드를 눌렀을때 출력을 한다.
+	if (_introScene.input_Pass)
+	{
+		IMAGEMANAGER->findImage("Intro3")->render(getMemDC(), 0, 0);
+		IMAGEMANAGER->findImage("PassImage")->render(getMemDC(), WINSIZEX / 2 - 135, WINSIZEY / 2);
+		for (int i = 0; i < 4; ++i)
+		{
+			Rectangle(getMemDC(), _password[i].pass_Num_rc);
+			_password[i].pass_Num_Image->frameRender(getMemDC(), _password[i].pass_Num_rc.left, _password[i].pass_Num_rc.top,
+				_password[i].save_Num_Pos, 0);
+		}
+		IMAGEMANAGER->findImage("PassSelect")->render(getMemDC(), _password[_passwordMove].pass_Num_rc.left, _password[_passwordMove].pass_Num_rc.top - 5);
+	}
+
+	// 테스트용 렉트
+	// Rectangle(getMemDC(), _introScene.scene_Select_rc[SS_GAME_START]);
+	// Rectangle(getMemDC(), _introScene.scene_Select_rc[SS_GAME_PASSWORD]);
 }
 
 void introScene::addIntroImage()
@@ -74,6 +108,11 @@ void introScene::addIntroImage()
 
 		IMAGEMANAGER->addImage(keyName, imageAddress, WINSIZEX, WINSIZEY, false, RGB(0, 0, 0));
 	}
+
+	// 패스워드 폰트 이미지 
+	IMAGEMANAGER->addFrameImage("PassNum", "./image/UI/password/password_Font.bmp", 1650, 50, 33, 1, false, RGB(0, 0, 0));
+	IMAGEMANAGER->addImage("PassImage", "./image/UI/password/password_Image.bmp", 252, 28, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("PassSelect", "./image/UI/password/password_Select.bmp", 55, 60, true, RGB(255, 0, 255));
 
 	// 기본 배경 이미지
 	IMAGEMANAGER->addImage("Intro_BG", "./image/UI/Intro/Intro_BG.bmp", WINSIZEX, WINSIZEY, false, RGB(0, 0, 0));
@@ -90,7 +129,7 @@ void introScene::setting_AlphaBlend()
 		// _introScene.scene_State의 상태가 false일때는 이미지를 서서히 보이게 한다.
 		if (!_introScene.scene_State)
 		{
-			if (_introScene.scene_State < 255)	_introScene.fade_In += 4;
+			if (_introScene.scene_State < 255)	_introScene.fade_In += FADEINSPEED;
 
 			// 최대값인 255와 같거나 이상이라면 
 			if (_introScene.fade_In >= 255)
@@ -121,7 +160,7 @@ void introScene::setting_AlphaBlend()
 		// _introScene.scene_State의 상태가 true일때는 이미지를 서서히 사라지게 한다.
 		if (_introScene.scene_State)
 		{
-			if (_introScene.fade_In > 0)  _introScene.fade_In -= 4;
+			if (_introScene.fade_In > 0)  _introScene.fade_In -= FADEINSPEED;
 
 			// 최소값인 0과 같거나 이하라면
 			if (_introScene.fade_In <= 0)
@@ -147,8 +186,8 @@ void introScene::setting_AlphaBlend()
 
 void introScene::Select_Key()
 {
-	// 씬 넘버가 4일때만 실행한다.
-	if (_introScene.scene_Number == 4)
+	// 씬 넘버가 4일때만 실행한다. (_introScene.input_Pass는 패스워드 입력을 누르지 않은 상태)
+	if (_introScene.scene_Number == 4 && !_introScene.input_Pass)
 	{
 		
 		if (KEYMANAGER->isOnceKeyDown(VK_UP) || KEYMANAGER->isOnceKeyDown('W'))
@@ -197,8 +236,109 @@ void introScene::Select_Key()
 			// 만약 true의 값을 가지고 있다면, 패스워드 위치에 있다.
 			if (_introScene.scene_Change_pos)
 			{
-
+				// 만약 패스워드 입력을 누른다면 해당 값을 true
+				_introScene.input_Pass = true;
 			}
 		}
+
 	}
+		// true의 값을 가지고 있다면
+		if (_introScene.input_Pass)
+		{
+				// 틀린 비밀번호를 입력하면 틀렸다는 메시지가 출력된다.
+				// 일정 시간이 지나거나 엔터를 누르면 다시 선택으로 돌아간다.
+				// _introScene.input_Pass = false; 
+			
+
+				// 맞는 비밀번호라면 스테이지로 이동을 한다.
+				// SCENEMANAGER->set_SceneState(SS_STAGE);
+			if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+			{
+				_passwordMove--;
+				if (_passwordMove < 0) _passwordMove = 3;
+			}
+
+			if (KEYMANAGER->isStayKeyDown(VK_LEFT))
+			{
+				_passCnt++;
+				if (_passCnt == 10)
+				{
+					_passwordMove--;
+					if (_passwordMove < 0) _passwordMove = 3;
+
+					_passCnt = 0;
+				}
+			}
+
+			if (KEYMANAGER->isOnceKeyDown(VK_UP))
+			{
+				_password[_passwordMove].save_Num_Pos++;
+				if (_password[_passwordMove].save_Num_Pos > 31) _password[_passwordMove].save_Num_Pos = 0;
+			}
+
+			if (KEYMANAGER->isStayKeyDown(VK_UP))
+			{
+				_passCnt++;
+				if (_passCnt == 10)
+				{
+					_password[_passwordMove].save_Num_Pos++;
+					if (_password[_passwordMove].save_Num_Pos > 31) _password[_passwordMove].save_Num_Pos = 0;
+
+					_passCnt = 0;
+				}
+			}
+
+			if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+			{
+				_passwordMove++;
+				if (_passwordMove > 3) _passwordMove = 0;
+			}
+
+			if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
+			{
+				_passCnt++;
+				if (_passCnt == 10)
+				{
+					_passwordMove++;
+					if (_passwordMove > 3) _passwordMove = 0;
+
+					_passCnt = 0;
+				}
+			}
+
+			if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
+			{
+				_password[_passwordMove].save_Num_Pos--;
+				if (_password[_passwordMove].save_Num_Pos < 0) _password[_passwordMove].save_Num_Pos = 31;
+			}
+
+			if (KEYMANAGER->isStayKeyDown(VK_DOWN))
+			{
+				_passCnt++;
+				if (_passCnt == 10)
+				{
+					_password[_passwordMove].save_Num_Pos--;
+					if (_password[_passwordMove].save_Num_Pos < 0) _password[_passwordMove].save_Num_Pos = 31;
+
+					_passCnt = 0;
+				}
+			}
+		}
+
+		if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_UP) ||
+			KEYMANAGER->isOnceKeyUp(VK_RIGHT) || KEYMANAGER->isOnceKeyUp(VK_DOWN))
+		{
+			_passCnt = 0;
+		}
+
+		// 만약 패스워드가 맞다면 다음 스테이지로 이동을 한다.
+		if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
+		{
+			if (_password[0].save_Num_Pos == 30 && _password[1].save_Num_Pos == 32 &&
+				_password[2].save_Num_Pos == 21 && _password[3].save_Num_Pos == 15)
+			{
+				_introScene.input_Pass = false;
+				SCENEMANAGER->set_SceneState(SS_STAGE);
+			}
+		}
 }

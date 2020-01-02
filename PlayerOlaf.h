@@ -15,6 +15,8 @@ private:
 	POINTFLOAT _shieldPos;
 	POINTFLOAT _shieldRadius;
 
+	bool	   _stopControl;		// 이값이 true라면 움직일 수 없다.
+
 public:
 	PlayerOlaf();
 	~PlayerOlaf();
@@ -30,4 +32,7 @@ public:
 	void PixelCollision();
 
 	tagPlayer getOlaf() { return _olaf; }
+
+	void set_stopKey(bool stop) { _stopControl = stop; }
+	void player_Kill() { _olaf.isDead = true; }
 };

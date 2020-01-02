@@ -46,7 +46,8 @@ void PlayerOlaf::release()
 
 void PlayerOlaf::update()
 {
-	//KeyControl();
+	if (_stopControl) KeyControl();
+
 	SetOlafState();
 	SetOlafPosState();
 	PixelCollision();
@@ -65,6 +66,8 @@ void PlayerOlaf::update()
 		}
 		_olaf.frameCount = 0;
 	}
+
+	//CAMERAMANAGER->set_Camera_XY(_olaf.rc);
 }
 
 void PlayerOlaf::render()
@@ -173,24 +176,25 @@ void PlayerOlaf::SetOlafPosState()
 	}
 }
 
+
 void PlayerOlaf::PixelCollision()
 {
 	_probeY = _olaf.y + _olaf.image->getHeight() / 2;
 
 	// 플레이어 왼쪽 영역 픽셀 검색
-	COLORREF getPixel_Left = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _olaf.rc.left, _olaf.rc.top);
+	COLORREF getPixel_Left = GetPixel(CAMERAMANAGER->getWorDC(), _olaf.rc.left, _olaf.rc.top);
 	int r_left = GetRValue(getPixel_Left);
 	int g_left = GetGValue(getPixel_Left);
 	int b_left = GetBValue(getPixel_Left);
 
 	// 플레이어 오른쪽 영역 픽셀 검색
-	COLORREF getPixel_Right = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _olaf.rc.right, _olaf.rc.top);
+	COLORREF getPixel_Right = GetPixel(CAMERAMANAGER->getWorDC(), _olaf.rc.right, _olaf.rc.top);
 	int r_right = GetRValue(getPixel_Right);
 	int g_right = GetGValue(getPixel_Right);
 	int b_right = GetBValue(getPixel_Right);
 
 	// 플레이어 위쪽 영역 픽셀 검색
-	COLORREF getPixel_Top = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_olaf.rc.right + _olaf.rc.left) / 2, _olaf.rc.top);
+	COLORREF getPixel_Top = GetPixel(CAMERAMANAGER->getWorDC(), (_olaf.rc.right + _olaf.rc.left) / 2, _olaf.rc.top);
 	int r_top = GetRValue(getPixel_Top);
 	int g_top = GetGValue(getPixel_Top);
 	int b_top = GetBValue(getPixel_Top);
@@ -198,12 +202,12 @@ void PlayerOlaf::PixelCollision()
 	// 올라프 아래 영역 픽셀 검색
 	for (int i = _probeY - 4; i < _probeY + 10; ++i)
 	{
-		COLORREF getPixel_Bottom = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_olaf.rc.right + _olaf.rc.left) / 2, i);
+		COLORREF getPixel_Bottom = GetPixel(CAMERAMANAGER->getWorDC(), (_olaf.rc.right + _olaf.rc.left) / 2, i);
 		int r_bottom = GetRValue(getPixel_Bottom);
 		int g_bottom = GetGValue(getPixel_Bottom);
 		int b_bottom = GetBValue(getPixel_Bottom);
 
-		if (!(r_bottom == 255 && g_bottom == 0 && b_bottom == 255))
+		if ((r_bottom == 255 && g_bottom == 255 && b_bottom == 0))
 		{
 			if (_olaf.gravity > 0)
 			{
