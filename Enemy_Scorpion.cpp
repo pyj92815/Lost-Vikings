@@ -3,19 +3,23 @@
 
 void Enemy_Scorpion::EnemyAction()
 {
+	_probeY = _y + _image->getFrameHeight() / 2;
+
 	switch (_enemyState)
 	{
 	case EnemyState::IDLE:
 		RECT temp;
+		//카메라 안으로 들어가면 SCOUT상태로 변함
 		if (IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::SCOUT;
 		break;
 	case EnemyState::SCOUT:
-		//_probeY = _enemyRect.bottom;
-		//_x += 2;
-		//좌우로 움직이다
-		//if(적을 발견하면(적이 렉트 범위 안에 들어오면))_enemyState=EnemyState::DISCOVERY;
-
+	
+		Scout();				//움직이다 절벽/벽 을 만나면 반대편으로 돌아가도록 하는 함수
+		Move();					//좌우로 움직이게 하는 함수
+		
+		//카메라 밖으로 나가면 IDLE상태로 변함
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;
+		//if(적을 발견하면(적이 렉트 범위 안에 들어오면))_enemyState=EnemyState::DISCOVERY;
 		break;
 	case EnemyState::DISCOVERY:
 		//적을 추적
@@ -47,22 +51,22 @@ void Enemy_Scorpion::EnemyAction()
 		break;
 	}
 
-	_probeY = _y + _image->getFrameHeight() / 2;
-	for (int i = _probeY; i < _probeY + 200; ++i)
+	//적을 바닥에 붙여주기 위함
+	for (int i = _probeY - 20; i < _probeY + 200; ++i)
 	{
-		COLORREF getPixel_Bottom = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_enemyRect.left + _enemyRect.right) / 2, i);
+		COLORREF getPixel_Bottom = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _x, i);
 
 		int r = GetRValue(getPixel_Bottom);
 		int g = GetGValue(getPixel_Bottom);
 		int b = GetBValue(getPixel_Bottom);
 
-		if (!(r == 255 && g == 0 && b == 255))
+		if (r == 255 && g == 255 && b == 0)
 		{
 			_y = i - _image->getFrameHeight() / 2;
 			break;
 		}
 	}
-	_enemyRect = RectMakeCenter(_x, _y, _image->getFrameWidth(), _image->getFrameHeight());
+
 }
 
 void Enemy_Scorpion::Frame()

@@ -24,6 +24,7 @@ HRESULT EnemyManager::init()
 
 void EnemyManager::release()
 {
+
 }
 
 void EnemyManager::update()

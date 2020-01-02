@@ -4,8 +4,8 @@
 #include"Enemy_Scorpion.h"
 #include"Enemy_Snake.h"
 #include<vector>
-
 using namespace std;
+
 class EnemyManager : public gameNode
 {
 private:
