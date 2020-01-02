@@ -47,7 +47,7 @@ void worldMap::render()
 
 //	PatBlt(CAMERAMANAGER->getWorDC(), CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), WINSIZEX, WINSIZEY, BLACKNESS);
 
-	IMAGEMANAGER->findImage("Background")->render(CAMERAMANAGER->getWorDC(), 0, 0);
+	//IMAGEMANAGER->findImage("Background")->render(CAMERAMANAGER->getWorDC(), 0, 0);
 	_wo->render();
 	if (KEYMANAGER->isStayKeyDown('Q'))
 	{
