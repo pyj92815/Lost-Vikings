@@ -18,7 +18,7 @@ HRESULT scene_Manager::init()
 	SCENEMANAGER->addScene("GameOver", new gameOverScene);
 
 	// 제일 처음에는 인트로를 보여줘야 한다.
-	SCENEMANAGER->set_SceneState(SS_INTRO);
+	SCENEMANAGER->set_SceneState(SS_STAGE);
 
 	return S_OK;
 }

@@ -183,11 +183,8 @@
     <ClInclude Include="worldObjects.h">
       <Filter>playGround\맵</Filter>
     </ClInclude>
-    <ClInclude Include="gameOverScene.h">
-      <Filter>playGround\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="keyAniManager.h">
-      <Filter>2DGameFramework\Manager</Filter>
+    <ClInclude Include="Enemy_PlayerMummy.h">
+      <Filter>playGround\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -293,11 +290,8 @@
     <ClCompile Include="worldObjects.cpp">
       <Filter>playGround\맵</Filter>
     </ClCompile>
-    <ClCompile Include="gameOverScene.cpp">
-      <Filter>playGround\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="keyAniManager.cpp">
-      <Filter>2DGameFramework\Manager</Filter>
+    <ClCompile Include="Enemy_PlayerMummy.cpp">
+      <Filter>playGround\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

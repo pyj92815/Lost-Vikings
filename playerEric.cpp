@@ -76,24 +76,25 @@ void playerEric::update()
 		if (!_ericUnable) key();	// 전투 불능 상태가 아니면 key값 
 	}	
 	ericFrameCount();				// 이미지 프레임 증가 
+	setEricImage();					// image 세팅 
+	if (!_ericUnable)
+	{
+
+
 	ericJump();						// 점프 
 	ericHit();						// 맞을 때 이미지 
-	setEricImage();					// image 세팅 
 		//======================구현 예정==================//
 	ericAttack();							// 공격 
 	if (_ericUnable) ericAttackMove();		// 공격하면 튕겨나오는 함수 
-
 
 	_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());   // RECT 갱신
 
 
 	// 에릭의 좌표를 카메라 매니저에 넘겨준다.
 	// CAMERAMANAGER->set_Camera_XY(_eric.rc);
-
-
 	// 에릭의 위치가 그라운드이면 
-
 	// 점프가 아니면 픽셀충돌, 점프중에도 픽셀충돌 
+
 	if (_eric.posState == POSSTATE_GROUND)
 	{
 		PixelCollision();
@@ -112,7 +113,9 @@ void playerEric::update()
 			_eric.image->setFrameX(_eric.currentFrameX);
 		}
 	}
-
+	}
+	//  플레이어 사망
+	ericDie();
 }
 
 void playerEric::render()
@@ -146,14 +149,16 @@ void playerEric::key()
 	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 	{
 		_eric.frameSpeed = 10;
-		_eric.currentFrameY = 0;
 		_breathCount = 0;
+		if (_eric.state != STATE_PUSH) _eric.currentFrameY = 0;
+		if (_isSlide && _eric.state != STATE_PUSH)  _isSlideOn = true;		// 슬라이딩을 활성화 시키기 위한 
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 	{
 		_eric.frameSpeed = 10;
-		_eric.currentFrameY = 1;
 		_breathCount = 0;
+		if(_eric.state != STATE_PUSH) _eric.currentFrameY = 1;
+		if (_isSlide && _eric.state != STATE_PUSH)   _isSlideOn = true;		// 슬라이딩을 활성화 시키기 위한 
 	}
 
 
@@ -189,13 +194,17 @@ void playerEric::key()
 			{
 				_eric.x -= _eric.movePower;
 			}
+			else if (_eric.state == STATE_PUSH)
+			{
+				// 아무것도 아니어야함 
+			}
 			else
 			{
 				_eric.state = STATE_MOVE;
 				_eric.x -= _eric.movePower;
 			}
 			// 만약 슬라이딩 이라면 슬라이딩 시켜라 
-			if (_isSlide) _isSlideOn = true;  
+			if (_breathCount > 10 && _eric.state != STATE_PUSH) _isSlide = true;
 		}
 	}
 	// 오른쪽 키를 지속적으로 누르면 
@@ -221,22 +230,23 @@ void playerEric::key()
 			{
 				_eric.x += _eric.movePower;
 			}
+			else if (_eric.state == STATE_PUSH)
+			{
+				// 아무것도 아니어야함 
+			}
 			else
 			{
 				_eric.state = STATE_MOVE;
 				_eric.x += _eric.movePower;	 // 0 이 오른쪽 
 			}
 
-			if (_isSlide)  _isSlideOn = true;
+			if (_breathCount > 10 && _eric.state != STATE_PUSH) _isSlide = true;
 		}
 	}
 
 	//  좌우키를 때면 
 	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_RIGHT))
 	{
-		// 슬라이딩을 활성화 시키기 위한 
-		if (_breathCount > 10 && _eric.state != STATE_PUSH) _isSlide = true;
-	
 		// 숨 카운트가 150이상이면 숨 에릭 이미지를 띄운다 
 		if (_breathCount > 150)
 		{
@@ -628,7 +638,7 @@ void playerEric::PixelCollision()
 
 void playerEric::PixelRightCollision()
 {
-	if (_eric.state != STATE_PUSH) _eric.probeX = _eric.x + _eric.image->getFrameWidth(); // _eric.right  
+	_eric.probeX = _eric.x + _eric.image->getFrameWidth(); // _eric.right  
 
 	COLORREF getPixel_RIGHT = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _eric.probeX + 2, _eric.y);
 
@@ -653,7 +663,7 @@ void playerEric::PixelRightCollision()
 
 void playerEric::PixelLeftCollision()
 {
-	if (_eric.state != STATE_PUSH) _eric.probeX = _eric.x - 3;
+	_eric.probeX = _eric.x - 3;
 
 	COLORREF getPixel_LEFT = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _eric.probeX, _eric.y);
 
@@ -747,5 +757,8 @@ void playerEric::isJumpPixelCollision()
 
 void playerEric::ericDie()
 {
-
+	if (_eric.hp == 0)
+	{
+		_eric.state == STATE_DIE;
+	}
 }

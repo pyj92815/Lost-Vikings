@@ -82,7 +82,7 @@ void Enemy_Snake::Frame()
 		if (_frameCount >= 10)
 		{
 			_frameX++;
-			if (_frameX > 7)
+			if (_frameX > 1)
 				_frameX = 0;
 			_frameCount = 0;
 		}
