@@ -32,6 +32,7 @@ enum tagPosState  // position state
 {
 	POSSTATE_GROUND,    // 중력을 안받고 
 	POSSTATE_AIR,		// 중력을 받는다 
+	POSSTATE_BORAD,
 };
 
 struct tagPlayer

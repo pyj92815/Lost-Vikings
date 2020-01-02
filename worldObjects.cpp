@@ -140,7 +140,6 @@ void worldObjects::render()
 	//IMAGEMANAGER->findImage("Moving_Flatform")->render(CAMERAMANAGER->getWorDC(), _flyingBoard.rc.left, _flyingBoard.rc.top);
 	if (KEYMANAGER->isStayKeyDown('Q'))
 	{//■■■■■■■■■■■■■■■■■벽 및 발판 충돌 렉트■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-		Rectangle(CAMERAMANAGER->getWorDC(), _flyingBoard.rc);
 		Rectangle(CAMERAMANAGER->getWorDC(), _breakableWallOne.rc);
 		Rectangle(CAMERAMANAGER->getWorDC(), _breakableWallTwo.rc);
 		Rectangle(CAMERAMANAGER->getWorDC(), _unbreakableWallOne.rc);
@@ -159,6 +158,7 @@ void worldObjects::render()
 		else if (_viTrap->trap == TRAP_BORAD)
 		{
 			_viTrap->image->render(CAMERAMANAGER->getWorDC(), _viTrap->x, _viTrap->y);
+			//Rectangle(CAMERAMANAGER->getWorDC(), _viTrap->rc);
 		}
 	}
 }
