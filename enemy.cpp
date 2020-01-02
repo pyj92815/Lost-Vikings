@@ -71,10 +71,10 @@ void Enemy::update()
 
 void Enemy::render()
 {
-	Rectangle(CAMERAMANAGER->getWorDC(), _enemy_DISCOVERY_Rect);
+	//Rectangle(CAMERAMANAGER->getWorDC(), _enemy_DISCOVERY_Rect);
 	if(KEYMANAGER->isToggleKey(VK_F1)) Rectangle(CAMERAMANAGER->getWorDC(), _enemyRect);
 	_image->frameRender(CAMERAMANAGER->getWorDC(), _enemyRect.left, _enemyRect.top, _frameX, _frameY);
-	Rectangle(CAMERAMANAGER->getWorDC(), _ericRect);
+	//Rectangle(CAMERAMANAGER->getWorDC(), _ericRect);
 }
 
 void Enemy::EnemyAction()

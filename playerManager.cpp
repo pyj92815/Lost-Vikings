@@ -140,9 +140,33 @@ void playerManager::trapColision()
 								_eric->setEricUnable();
 							}
 						}
-					}					
-				}
-				
+					}	
+					else if((_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left &&
+						  	_eric->getEric().rc.right <= _wo->get_vTrap()[i].rc.right  )
+						   	||
+						    (_eric->getEric().rc.left >= _wo->get_vTrap()[i].rc.left  &&
+						   	_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right ))
+					{
+						if (_eric->getEric().state != STATE_PRESSDIE)
+						{
+							RECT temp;
+							if (IntersectRect(&temp, &_eric->getEricRect(), &_wo->get_vTrap()[i].rc))
+							{
+								_eric->setEricPosState(POSSTATE_GROUND);
+								_eric->setEricJump();
+								_eric->setEricJumpPower();
+							}
+							if (_wo->getUpDown())
+							{
+								_eric->setEricY(_wo->get_vTrap()[i].rc.top - _eric->getEric().image->getFrameHeight() + 3);
+							}
+							else
+							{
+								_eric->setEricY(_wo->get_vTrap()[i].rc.top - _eric->getEric().image->getFrameHeight() + 7);
+							}
+						}
+					}
+				}			
 			}
 		}
 	}
