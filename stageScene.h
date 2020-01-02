@@ -7,10 +7,11 @@
 // 플레이어의 타입
 enum PlayerType
 {
-	PT_Run,
-	PT_Attack,
-	PT_Def
+	PT_ERIC,
+	PT_BALEOG,
+	PT_OLAF
 };
+
 
 // 상태 UI의 정보를 담는 구조체
 struct _tagStateUI

@@ -11,6 +11,7 @@ HRESULT playerManager::init()
 
 	_olaf = new PlayerOlaf;
 	_olaf->init(180, 155);
+
 	return S_OK;
 }
 

@@ -52,8 +52,8 @@ void worldObjects::render()
 	for (int i = 0; i < 4; i++)
 	{
 		Rectangle(CAMERAMANAGER->getWorDC(), _poision[0].rc);
-		IMAGEMANAGER->findImage("poision")->frameRender(CAMERAMANAGER->getWorDC(), 
-			_poision[0].rc.left, _poision[0].rc.top - 20,_poision[0].frameX, _poision[0].frameY);
+		IMAGEMANAGER->findImage("poision")->frameRender(CAMERAMANAGER->getWorDC(),
+			_poision[0].rc.left, _poision[0].rc.top - 20, _poision[0].frameX, _poision[0].frameY);
 	}
 }
 
@@ -81,7 +81,7 @@ void worldObjects::framework()
 				_poision[i].image->setFrameX(_poision[i].frameX);
 				_poision[i].frameX++;
 			}
-			if (_poision[i].frameX >= 4){ _poision[0].rc = RectMake(1307, 1250, 26, 34); }
+			if (_poision[i].frameX >= 4) { _poision[0].rc = RectMake(1307, 1250, 26, 34); }
 		}
 	}
 }
