@@ -29,7 +29,15 @@ private:
 	PlayerOlaf* _olaf;
 
 
+
 	int			_playing;  // 0 eric 1 baleog 2 olaf
+
+
+
+	int			_playing;  // 0 eric 1 baleog 2 olaf
+
+	int	_playing;
+
 
 	worldObjects* _wo;
 
@@ -62,6 +70,9 @@ public:
 	void trapColision();
 	void itemColision();
 	void boradColision();
+
+};
+
 
 };
 
