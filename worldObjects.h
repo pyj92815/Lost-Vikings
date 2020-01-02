@@ -31,17 +31,6 @@ struct tagObjects
 	int frameY;
 	int maxFrameX;			//최대 프레임값
 };
-struct tagItem
-{
-	tagObjects oneBoom;
-	tagObjects twoBoom;
-	tagObjects oneTomato;
-	tagObjects twoTomato;
-	tagObjects blueKey;
-	tagObjects blueLocker;
-	tagObjects redKey;
-	tagObjects redLocker;
-};
 class worldObjects : public gameNode
 {
 private:
@@ -51,8 +40,8 @@ private:
 	vector<tagObjects>				 _vTrap;   // 가시 , 독, 발판 
 	vector<tagObjects>::iterator    _viTrap;
 	//■■■■■■■■■■■아이템 벡터■■■■■■■■■■■■■■■■■■■■■■
-	vector<tagItem>				  _vItem;
-	vector<tagItem>::iterator	 _viItem;
+	vector<tagObjects>				  _vItem;
+	vector<tagObjects>::iterator	 _viItem;
 private:
 	//■■■■■■■■■■■가시 함정■■■■■■■■■■■■■■■■■■■■■■
 	tagObjects _niddle[3];
@@ -73,7 +62,7 @@ private:
 	tagObjects _waterFall[3];
 private:
 	//■■■■■■■■■■■아이템■■■■■■■■■■■■■■■■■■■■■■
-	tagItem _Items;
+	tagObjects _Items[8];
 private:
 	int _frameCount;
 public:
@@ -85,14 +74,14 @@ public:
 	virtual void release();
 	virtual void render();
 
-	vector<tagObjects> get_vTrap()			  { return _vTrap;}
-	vector<tagObjects>::iterator get_viTrap()  { return _viTrap;}
-	
-	vector<tagItem> get_vItem()			  { return _vItem;}
-	vector<tagItem>::iterator get_viItem() { return _viItem;}
-	void setCollision(int arrNum) 
-	{ 
-		_vTrap[arrNum].isCollision = true; 
+	vector<tagObjects> get_vTrap() { return _vTrap; }
+	vector<tagObjects>::iterator get_viTrap() { return _viTrap; }
+
+	vector<tagObjects> get_vItem() { return _vItem; }
+	vector<tagObjects>::iterator get_viItem() { return _viItem; }
+	void setCollision(int arrNum)
+	{
+		_vTrap[arrNum].isCollision = true;
 	}
 	virtual void framework();
 	virtual void move();
