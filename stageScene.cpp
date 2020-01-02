@@ -61,24 +61,32 @@ void stageScene::render()
 	CAMERAMANAGER->get_WorImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(),
 		CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
 
+
 	IMAGEMANAGER->findImage("OBJECT")->render(getMemDC(), 0, 0, CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(),
 		CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
 
 	IMAGEMANAGER->findImage("UI_Image")->render(getMemDC(), 0, WINSIZEY - (WINSIZEY - 573));
 
-
-
 	// 쓰레기통 출력
 	_UI_Garbage.image->render(getMemDC(), _UI_Garbage.rc.left, _UI_Garbage.rc.top);
 
-	// 테스트용 렉트
+	// 이미지 상태 출력
 	for (int i = 0; i < 3; ++i)
 	{
-		Rectangle(getMemDC(), _UI_State[i].rc);
+		//Rectangle(getMemDC(), _UI_State[i].rc);
 		_UI_State[i].image->frameRender(getMemDC(), _UI_State[i].rc.left, _UI_State[i].rc.top,
 			_UI_State[i].image->getFrameX(), 0);
 	}
 
+	// 인벤토리 렉트 출력
+	for (int i = 0; i < 3; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			//Rectangle(getMemDC(), _UI_Inventory[i][j].rc);
+			IMAGEMANAGER->findImage("Select_Image")->render(getMemDC(), _UI_Inventory[i][j].rc.left, _UI_Inventory[i][j].rc.top);
+		}
+	}
 
 }
 
@@ -126,6 +134,19 @@ void stageScene::posSetting()
 
 
 	// 인벤토리 UI 초기화 (캐릭터마다 4개씩 있다.)
+	for (int i = 0; i < 3; ++i)			// 캐릭터가 3개
+	{
+		for (int j = 0; j < 4; ++j)		// 인벤토리 4개
+		{
+			_UI_Inventory[i][j].image = new image;
+			if (j < 2)
+				_UI_Inventory[i][j].rc = RectMake(238 + (j * 48) + (i * 213), WINSIZEY - 138, 49, 48);		// 인벤토리 렉트
+			else if (j < 4)
+				_UI_Inventory[i][j].rc = RectMake(238 + ((j - 2) * 48) + (i * 213), WINSIZEY - 90, 49, 48);		// 인벤토리 렉트
+			_UI_Inventory[i][j].pos.x = (_UI_Inventory[i][j].rc.left + _UI_Inventory[i][j].rc.right) / 2;		// 인벤토리 중심좌표
+			_UI_Inventory[i][j].pos.y = (_UI_Inventory[i][j].rc.bottom + _UI_Inventory[i][j].rc.top) / 2;		// 인벤토리 중심좌표
+		}
+	}
 
 
 	// 쓰레기통 UI 초기화
@@ -136,6 +157,14 @@ void stageScene::posSetting()
 
 	// 캐릭터 전환 변수 (이 숫자가 바뀌면 그 캐릭터를 바라본다?)
 	_charNum = PT_ERIC;
+
+
+	// GiveUP 메뉴에 관한 내용
+	// 캐릭터가 모두 죽었거나, Esc를 눌렀을때 들어가는 옵션이다.
+	// 위치 초기화
+	_UI_GiveUp[GU_CENTER];
+	_UI_GiveUp[GU_YES];
+	_UI_GiveUp[GU_NO];
 
 }
 
@@ -148,8 +177,11 @@ void stageScene::addStageImage()
 	IMAGEMANAGER->addFrameImage("S_State", "./image/UI/UI_Inventory/S_Player_Image.bmp", 305, 80, 3, 1, false, RGB(0, 0, 0));
 	IMAGEMANAGER->addImage("Life_Image", "./image/UI/UI_Inventory/Life_Point.bmp", 12, 12, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("GarbageBox", "./image/UI/UI_Inventory/Garbage_Box.bmp", 46, 47, false, RGB(0, 0, 0));
-	IMAGEMANAGER->addImage("Select_Image", "./image/UI/UI_Inventory/Select_Point.bmp", 32, 32, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("Select_Image", "./image/UI/UI_Inventory/Select_Point.bmp", 50, 50, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("UI_Image", "./image/UI/UI_Inventory/UI_Image.bmp", 960, 185, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("Give_Center", "./image/UI/GiveUp/GiveUp.bmp", 156, 68, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Give_Yes", "./image/UI/GiveUp/GiveUp.bmp", 100, 15, 2, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Give_No", "./image/UI/GiveUp/GiveUp.bmp", 100, 15, 2, 1, true, RGB(255, 0, 255));
 }
 
 void stageScene::testStateImage()
@@ -239,10 +271,13 @@ void stageScene::set_PlayerDead()
 				// 인터벌을 주고 넘어갈지 그냥 넘어갈지 정하고
 				// 게임 오버 씬으로 넘어간다.
 				// 임시로 인트로 씬으로 넘겼음
-				_wm->init();
+				_wm->init();		// 새로 시작하니까 모든 정보를 초기화 해준다.
 				_pm->init();
 				_em->init();
-				SCENEMANAGER->set_SceneState(SS_INTRO);
+
+				// 인터벌을 주고 GiveUp에서 Yes에서 엔터를 누르면 게임오버씬으로 넘어간다.
+				// 만약 No를 눌렀다면 타이틀 화면으로 넘어간다.
+				SCENEMANAGER->set_SceneState(SS_GAMEOVER);
 				break;
 			}
 
@@ -257,4 +292,9 @@ void stageScene::set_PlayerDead()
 			if (_charNum == 3)	_charNum = 0;				// 만약 캐릭터의 개수를 초과했다면 다시 0번으로
 		}
 	}
+}
+
+void stageScene::collisionMIX()
+{
+	
 }

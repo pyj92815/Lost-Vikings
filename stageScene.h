@@ -4,12 +4,21 @@
 #include "playerManager.h"		// 스테이지에서만 필요하기 때문에 이곳으로 이동
 #include "enemyManager.h"		// 스테이지에서만 필요하기 때문에 이곳으로 이동
 
+
 // 플레이어의 타입
 enum PlayerType
 {
 	PT_ERIC,
 	PT_BALEOG,
 	PT_OLAF
+};
+
+
+enum tagGiveUp
+{
+	GU_CENTER,
+	GU_YES,
+	GU_NO
 };
 
 
@@ -28,7 +37,8 @@ private:
 	_tagStateUI		_UI_State[3];				// 캐릭터마다 상태 이미지가 있다. 3칸
 	_tagStateUI		_UI_Inventory[3][4];		// 캐릭터마다 인벤토리가 있다. 각각 4칸씩
 	_tagStateUI		_UI_Garbage;				// 휴지통 이미지 위치
-	int				_charNum;
+	_tagStateUI		_UI_GiveUp[3];				// 기브업 UI의 정보
+	int				_charNum;					// 캐릭터를 가리키는 번호
 
 	worldMap* _wm;
 	playerManager* _pm;
@@ -49,6 +59,8 @@ public:
 	void testStateImage();		// 이미지 테스트용 함수
 
 	void set_PlayerDead();
+
+	void collisionMIX();		// 혼돈의 충돌함수
 
 };
 

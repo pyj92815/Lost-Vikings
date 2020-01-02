@@ -15,6 +15,13 @@ enum SceneState
 	SS_STOP
 };
 
+enum PlayerName
+{
+	PN_Eric,
+	PN_Baleog,
+	PN_Olaf
+};
+
 struct SceneInfo
 {
 	SceneState	state;
@@ -32,6 +39,9 @@ private:
 	mapSceneList _mSceneList;
 	SceneInfo _scene;
 
+	bool	  _YouDie[3];		// 캐릭터의 죽음을 관리한다.
+
+
 public:
 	sceneManager();
 	~sceneManager();
@@ -45,9 +55,12 @@ public:
 
 	HRESULT changeScene(string sceneName);
 
-	void set_SceneState(int state);					// 씬의 상태를 셋팅해준다.
+	void set_SceneState(int state);							// 씬의 상태를 셋팅해준다.
 	SceneState get_SceneState() { return _scene.state; }	// 씬의 상태를 불러온다.
 
-	void SceneChange();								// 상태에 따라 씬을 바꿔준다.
+	void SceneChange();										// 상태에 따라 씬을 바꿔준다.
+
+	void get_PlayerLife(int type, bool dead) { _YouDie[type] = dead; }
+
 };
 

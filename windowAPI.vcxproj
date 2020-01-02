@@ -160,9 +160,11 @@
     <ClInclude Include="Enemy_Scorpion.h" />
     <ClInclude Include="Enemy_Snake.h" />
     <ClInclude Include="gameNode.h" />
+    <ClInclude Include="gameOverScene.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="imageManager.h" />
     <ClInclude Include="introScene.h" />
+    <ClInclude Include="keyAniManager.h" />
     <ClInclude Include="keyManager.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playerbaleog.h" />
@@ -201,9 +203,11 @@
     <ClCompile Include="Enemy_Scorpion.cpp" />
     <ClCompile Include="Enemy_Snake.cpp" />
     <ClCompile Include="gameNode.cpp" />
+    <ClCompile Include="gameOverScene.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="imageManager.cpp" />
     <ClCompile Include="introScene.cpp" />
+    <ClCompile Include="keyAniManager.cpp" />
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playerbaleog.cpp" />
