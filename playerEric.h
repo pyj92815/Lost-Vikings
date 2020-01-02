@@ -61,6 +61,8 @@ public:
 	void player_Kill() { _eric.isDead = true; } // 지울 예정 
 	void setEricUnable() { _ericUnable = true;	}
 	void setEricFrame() { _eric.currentFrameX = 0; }
+	void setEricJump() { _ericJump = false; }
+	void setEricJumpPower() { _eric.jumpPower = 14;  }
 	void setEricFrameSpeed(int speed) {	_eric.frameSpeed = speed; }
 	void ericDie();
 	void setEricState(tagState state) { _eric.state = state; }	// 상태를 정의해 주는 세터 

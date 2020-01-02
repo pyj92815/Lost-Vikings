@@ -454,10 +454,13 @@ void playerEric::ericJump()
 {
 	if (_ericJump)
 	{
-		_eric.y -= _eric.jumpPower;
-		_eric.jumpPower -= _eric.gravity;
+		if (_eric.posState != POSSTATE_GROUND)
+		{
+			_eric.y -= _eric.jumpPower;
+			_eric.jumpPower -= _eric.gravity;
+		}
 		// 점프 초기값 && 공기중이라면 
-		if (_jumpStart <= _eric.y && _eric.state == POSSTATE_AIR)
+		if (_jumpStart <= _eric.y && _eric.posState == POSSTATE_AIR)
 		{
 			_eric.y = _jumpStart;
 			_ericJump = false;
@@ -629,7 +632,7 @@ void playerEric::PixelCollision()
 			}
 			break;
 		}
-		else
+		else if(_eric.posState != POSSTATE_BORAD)
 		{
 			_eric.posState = POSSTATE_AIR;
 		}
