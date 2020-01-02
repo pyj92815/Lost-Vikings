@@ -166,7 +166,25 @@ void playerbaleog::update()
 		{
 			_baleog.currentFrameX++;
 			_baleog.image->setFrameX(_baleog.currentFrameX);
-			/*_baleog.state = STATE_IDLE;*/
+			
+			if (_baleog.currentFrameX > _baleog.image->getMaxFrameX())
+			{
+				if (_baleog.state == STATE_DIE ||
+					_baleog.state == STATE_MIRRA ||
+					_baleog.state == STATE_PRESSDIE ||
+					_baleog.state == STATE_POISON ||
+					_baleog.state == STATE_TRAPDIE)
+				{
+					_baleog.isDead = true;
+				}
+				else
+				{
+					_baleog.currentFrameX = 0;
+				}
+				_baleog.frameCount = 0;
+			}
+
+
 			if (_baleog.image->getMaxFrameX() < _baleog.currentFrameX)
 			{
 
@@ -305,6 +323,12 @@ void playerbaleog::key()
 
 void playerbaleog::setBaleogState()
 {
+	if (_baleog.hp == 0)
+	{
+		_baleog.state = STATE_DIE;
+	}
+
+
 	switch (_baleog.state)
 	{
 	case STATE_IDLE:
