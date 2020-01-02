@@ -27,6 +27,7 @@ private:
 	int b_TC;
 
 	RECT _testRect;
+	bool _stopControl;
 
 public:
 	PlayerOlaf();
@@ -42,6 +43,7 @@ public:
 	void SetOlafState();
 	void SetOlafPosState();
 	void PixelCollision();
-
+	void set_stopKey(bool stop) { _stopControl = stop; }
+	void player_Kill() { _olaf.isDead = true; } // 지울 예정 
 	tagPlayer getOlaf() { return _olaf; }
 };
