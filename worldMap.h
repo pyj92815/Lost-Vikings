@@ -4,6 +4,7 @@
 
 class worldMap : public gameNode
 {
+
 private:
 	worldObjects* _wo;
 public:
@@ -13,6 +14,8 @@ public:
 	virtual void release();
 	virtual void update();
 	virtual void render();
+
+	worldObjects* getWorldObject() { return _wo; }
 
 };
 

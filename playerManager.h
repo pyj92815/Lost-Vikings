@@ -3,7 +3,7 @@
 #include "playerEric.h"
 #include "playerbaleog.h"
 #include "PlayerOlaf.h"
-
+class worldObjects;
 // 플레이어의 타입
 enum PLAYER_TYPE
 {
@@ -30,6 +30,8 @@ private:
 
 	int			_playing;  // 0 eric 1 baleog 2 olaf
 	
+	worldObjects* _wo;
+
 public:
 	playerManager() {}
 	~playerManager() {}
@@ -47,7 +49,8 @@ public:
 	void KILLPlayer();
 
 	int getPlaying() { return _playing; }
-	
 	void itemKey();
+	void setWorldObjectAddressLink(worldObjects* wo) { _wo = wo; }
+
 };
 
