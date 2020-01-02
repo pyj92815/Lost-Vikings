@@ -87,7 +87,6 @@ void playerEric::update()
 	ericAttack();							// 공격 
 	if (_ericUnable) ericAttackMove();		// 공격하면 튕겨나오는 함수 
 
-	_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());   // RECT 갱신
 
 
 	// 에릭의 좌표를 카메라 매니저에 넘겨준다.
@@ -95,11 +94,7 @@ void playerEric::update()
 	// 에릭의 위치가 그라운드이면 
 	// 점프가 아니면 픽셀충돌, 점프중에도 픽셀충돌 
 
-	if (_eric.posState == POSSTATE_GROUND)
-	{
-		PixelCollision();
-	}
-	else // 에릭의 위치가 공기중이면 
+	if (_eric.posState == POSSTATE_AIR)
 	{
 		isJumpPixelCollision();
 
@@ -113,20 +108,27 @@ void playerEric::update()
 			_eric.image->setFrameX(_eric.currentFrameX);
 		}
 	}
+	else if(_eric.posState == POSSTATE_GROUND)// 에릭의 위치가 공기중이면 
+	{
+		PixelCollision();
 	}
+
+
+	} // unable
 	//  플레이어 사망
 	ericDie();
+	_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());   // RECT 갱신
 }
 
 void playerEric::render()
 {
 
 	// 임시 렌더링 값 
-	Rectangle(getMemDC(), _eric.rc);
 
 	//Rectangle(getMemDC(), _test);
 
 	// 191229 PM 03:17 에릭이 그려지는 위치를 월드DC로 옴겼다.
+	Rectangle(CAMERAMANAGER->getWorDC(), _eric.rc);
 	_eric.image->frameRender(CAMERAMANAGER->getWorDC(), _eric.x, _eric.y, _eric.currentFrameX, _eric.currentFrameY);
 	// 191229 PM 04:27 UI에서 출력을 하기 위해 주석처리
 	//CAMERAMANAGER->getWorImage()->render(getMemDC(), 0, 0,
@@ -631,8 +633,7 @@ void playerEric::PixelCollision()
 		{
 			_eric.posState = POSSTATE_AIR;
 		}
-	}
-	
+	}	
 }
 
 

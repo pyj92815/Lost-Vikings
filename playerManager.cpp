@@ -116,6 +116,54 @@ void playerManager::trapColision()
 					_eric->setEricUnable();
 					break;
 				}
+				else if (_wo->get_vTrap()[i].trap == TRAP_BORAD)
+				{
+					if ((_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left + 10 &&
+						_eric->getEric().rc.right <= _wo->get_vTrap()[i].rc.right - 10 &&
+						_eric->getEric().rc.bottom >= _wo->get_vTrap()[i].rc.bottom) ||
+						(_eric->getEric().rc.left >= _wo->get_vTrap()[i].rc.left + 10 &&
+							_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right - 10 &&
+							_eric->getEric().rc.bottom >= _wo->get_vTrap()[i].rc.bottom))
+					{
+						RECT temp;
+						if (IntersectRect(&temp, &_eric->getEricRect(), &_wo->get_vTrap()[i].rc))
+						{
+							if(_eric->getEric().state != STATE_PRESSDIE) _eric->setEricY(_wo->get_vTrap()[i].rc.bottom);
+						}
+						if (_eric->getEric().posState == POSSTATE_GROUND)
+						{
+							if (_eric->getEric().state != STATE_PRESSDIE)
+							{
+								_eric->setEricState(STATE_PRESSDIE);
+								_eric->setEricFrame();
+								_eric->setEricFrameSpeed(10);
+								_eric->setEricUnable();
+							}
+						}
+					}					
+				}
+				
+			}
+		}
+	}
+}
+
+void playerManager::itemColision()
+{
+	//만들고 있는중 이게 맞는건가? ㅋㅋ
+	for (int i = 0; i < _wo->get_vItem().size(); i++)
+	{
+		if (0 > _wo->get_vItem().size()) break;
+		RECT temp;
+		if (IntersectRect(&temp, &_eric->getEricRect(), &_wo->get_vItem()[i].oneBoom.rc))
+		{
+			if (!_wo->get_vItem()[i].oneBoom.isCollision)
+			{
+				if (_wo->get_vItem()[i].oneBoom.item == ITEM_BOMB)
+				{
+					_wo->setCollision(i);
+					break;
+				}
 			}
 		}
 	}
@@ -128,12 +176,21 @@ void playerManager::boradColision()
 		if (0 > _wo->get_vTrap().size()) break;
 		if (_wo->get_vTrap()[i].trap == TRAP_BORAD)
 		{
-			if(_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left &&
-				_eric->getEric().x+)
+			if ((_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left &&
+				_eric->getEric().rc.right <= _wo->get_vTrap()[i].rc.right &&
+				_eric->getEric().y + _eric->getEric().image->getFrameHeight() <= _wo->get_vTrap()[i].y) ||
+				(_eric->getEric().rc.left >= _wo->get_vTrap()[i].rc.left &&
+					_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right &&
+					_eric->getEric().y + _eric->getEric().image->getFrameHeight() <= _wo->get_vTrap()[i].y))
+			{
+				RECT temp;
+				if (IntersectRect(&temp, &_eric->getEricRect(), &_wo->get_vTrap()[i].rc))
+				{
+					_eric->setEricY(_wo->get_vTrap()[i].rc.top);
 
-
-
-
+				}
+				cout << "eric.y" << _eric->getEric().rc.bottom << "trap.y" << _wo->get_vTrap()[i].y << endl;
+			}
 		}	
 	}*/
 }

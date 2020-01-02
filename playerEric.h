@@ -2,6 +2,12 @@
 #include "gameNode.h"
 #include "player.h"
 
+#ifdef UNICODE
+#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
+#else
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#endif
+
 class playerEric : public player
 {
 private:
@@ -40,9 +46,12 @@ public:
 	void ericAttackMove();
 	void ericHit();
 	void setEricImage();
-
+	
 	tagPlayer getEric() { return _eric; }	 // ERIC 
 	RECT getEricRect() { return _eric.rc; }
+
+	void setEricY(float y) { _eric.y = y; }
+	void setEricPosState(tagPosState posstate) {	_eric.posState = posstate; }
 	void PixelCollision();			// Y绵 面倒 贸府 
 	void PixelRightCollision();		// X绵 坷弗率 面倒 贸府 
 	void PixelLeftCollision();		// X绵 哭率   面倒 贸府 

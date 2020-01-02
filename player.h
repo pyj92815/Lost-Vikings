@@ -23,15 +23,18 @@ enum tagState			// 이미지의 상태값
 	STATE_MIRRA,		// 미라사
 	STATE_PRESSDIE,		// 압축사
 	STATE_TRAPDIE,		// 뿔에 찔려 죽는사
-	// 추가
-	STATE_STEPLADDER, // 사다리탈때
-	STATE_STEPLADDEREND, // 사다리끝
+	STATE_STEPLADDER,
+	STATE_STEPLADDEREND
 };
 
 enum tagPosState  // position state
 {
 	POSSTATE_GROUND,    // 중력을 안받고 
 	POSSTATE_AIR,		// 중력을 받는다 
+	POSSTATE_BORAD,
+	POSSTATE_STEPLADDER,
+	POSSTATE_LADDERFALL
+
 };
 
 struct tagPlayer
