@@ -58,6 +58,7 @@ HRESULT playerEric::init(float x, float y)
 	_gravity = 0;			// ERIC AIR 상태일 때 중력 
 	_slidePower = 7;		// 
 	_isSlide = false;		// 슬라이딩 
+	_stop = false;
 	//========================== 충돌처리 초기화 ============================//
 	_eric.probeX = _eric.x + _eric.image->getFrameWidth() / 2;
 	_eric.probeY = _eric.y + _eric.image->getFrameHeight() / 2;
@@ -77,7 +78,7 @@ void playerEric::update()
 	}	
 	ericFrameCount();				// 이미지 프레임 증가 
 	setEricImage();					// image 세팅 
-	if (!_ericUnable)
+	if (!_stop)
 	{
 
 
@@ -162,7 +163,6 @@ void playerEric::key()
 		if(_eric.state != STATE_PUSH) _eric.currentFrameY = 1;
 		if (_isSlide && _eric.state != STATE_PUSH)   _isSlideOn = true;		// 슬라이딩을 활성화 시키기 위한 
 	}
-
 
 	if (KEYMANAGER->isStayKeyDown(VK_UP))
 	{
@@ -385,8 +385,7 @@ void playerEric::ericFrameCount()
 			_eric.currentFrameX++;
 			_eric.image->setFrameX(_eric.currentFrameX);
 
-
-			if (_eric.currentFrameX > _eric.image->getMaxFrameX())
+			if (_eric.currentFrameX > _eric.image->getMaxFrameX()) // 조금 느리게 하고 싶음 
 			{
 				_ericUnable = false;
 				_eric.currentFrameX = 0;
@@ -488,19 +487,20 @@ void playerEric::ericAttack()
 	//		_eric.x = _test.left - _eric.image->getFrameWidth();
 	//	}
 	//}
-
-	//if (_eric.state == STATE_ERIC_HEADBUTT && _eric.currentFrameX > 3)
-	//{
-	//	RECT temp;
-	//	if (IntersectRect(&temp, &_eric.rc, &_test))
-	//	{
-	//		// 벽을 부딪히면 에릭의 위치는 
-	//		_eric.state = STATE_ERIC_HEADBUTTEND;
-	//		_eric.currentFrameX = 0;
-	//		_eric.image->setFrameX(0);
-	//		_ericUnable = true;
-	//		_eric.frameSpeed = 12;
-	//	}
+	/*
+	if (_eric.state == STATE_ERIC_HEADBUTT && _eric.currentFrameX > 3)
+	{
+		RECT temp;
+		if (IntersectRect(&temp, &_eric.rc, &_test))
+		{
+		// 벽을 부딪히면 에릭의 위치는 
+			_eric.state = STATE_ERIC_HEADBUTTEND;
+			_eric.currentFrameX = 0;
+			_eric.image->setFrameX(0);
+			_ericUnable = true;
+			_eric.frameSpeed = 12;
+	}
+	*/
 	//}
 }
 // 공격후 
@@ -508,21 +508,21 @@ void playerEric::ericAttackMove()
 {
 	if (_eric.currentFrameY == 0)
 	{
-		_eric.x -= 0.3;
+		_eric.x -= 0.5;
 	}
 	else
 	{
-		_eric.x += 0.3;
+		_eric.x += 0.5;
 	}
 	// 공식이 안좋음 앵ㅇ글로 바꿀예정
 	// 프레임 4번 올리고 4번 낮춘다 
 	if (_eric.currentFrameX >= 0 && _eric.currentFrameX < 4)
 	{
-		_eric.y -= 0.3;
+		_eric.y -= 1;
 	}
 	else if (_eric.currentFrameX > 4 && _eric.currentFrameX < _eric.image->getMaxFrameX() - 1)
 	{
-		_eric.y += 0.3;
+		_eric.y += 1;
 	}
 }
 

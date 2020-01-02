@@ -69,12 +69,23 @@ HRESULT worldObjects::init()
 	_flyingBoard.y = 325;
 	//발판타입
 	_flyingBoard.trap = TRAP_BORAD;
-	_breakableWallOne.rc = RectMake(1324, 225, 48, 243);
-	_breakableWallTwo.rc = RectMake(3055, 85, 48, 192);
+	_breakableWallOne.trap = TRAP_WALL;
+	_breakableWallTwo.trap = TRAP_WALL;
+	_breakableWallOne.x = 1324;
+	_breakableWallOne.y = 225;
+	_breakableWallOne.isCollision = false;
+	_breakableWallTwo.x = 3055;
+	_breakableWallTwo.y = 85;
+	_breakableWallTwo.isCollision = false;
+	_breakableWallOne.rc = RectMake(_breakableWallOne.x, _breakableWallOne.y, 48, 243);
+	_breakableWallTwo.rc = RectMake(_breakableWallTwo.x, _breakableWallTwo.y, 48, 192);
 	_unbreakableWallOne.rc = RectMake(2090, 85, 45, 195);
 	_unbreakableWallTwo.rc = RectMake(3695, 2055, 45, 195);
 	//□□□□□□□□□□□□□발판을 벡터에 넣자□□□□□□□□□□□□□□□□□□□
 	_vTrap.push_back(_flyingBoard);
+	_vTrap.push_back(_breakableWallOne);
+	_vTrap.push_back(_breakableWallTwo);
+
 	//■■■■■■■■■■■■■■■■■아이템 위치■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	_Items.oneBoom.image = IMAGEMANAGER->addImage("Boom", "./image/ImageCollection/Boom_Item.bmp", 48, 47, true, RGB(255, 0, 255));
 	_Items.twoBoom.image = IMAGEMANAGER->addImage("Boom", "./image/ImageCollection/Boom_Item.bmp", 48, 47, true, RGB(255, 0, 255));
