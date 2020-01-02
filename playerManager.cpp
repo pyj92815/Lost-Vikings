@@ -121,26 +121,34 @@ void playerManager::trapColision()
 					if ((_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left + 10 &&
 						_eric->getEric().rc.right <= _wo->get_vTrap()[i].rc.right - 10 &&
 						_eric->getEric().rc.bottom >= _wo->get_vTrap()[i].rc.bottom) ||
-						(_eric->getEric().rc.left >= _wo->get_vTrap()[i].rc.left +10 &&
+						(_eric->getEric().rc.left >= _wo->get_vTrap()[i].rc.left + 10 &&
 							_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right - 10 &&
 							_eric->getEric().rc.bottom >= _wo->get_vTrap()[i].rc.bottom))
 					{
+						RECT temp;
+						if (IntersectRect(&temp, &_eric->getEricRect(), &_wo->get_vTrap()[i].rc))
+						{
+							if(_eric->getEric().state != STATE_PRESSDIE) _eric->setEricY(_wo->get_vTrap()[i].rc.bottom);
+						}
 						if (_eric->getEric().posState == POSSTATE_GROUND)
 						{
-							_eric->setEricState(STATE_PRESSDIE);
-							_eric->setEricFrame();
-							_eric->setEricFrameSpeed(7);
-							_eric->setEricUnable();
+							if (_eric->getEric().state != STATE_PRESSDIE)
+							{
+								_eric->setEricState(STATE_PRESSDIE);
+								_eric->setEricFrame();
+								_eric->setEricFrameSpeed(10);
+								_eric->setEricUnable();
+							}
 						}
-					}
+					}					
 				}
+				
 			}
 		}
 	}
 }
 
 void playerManager::boradColision()
-
 {
 	for (int i = 0; i < _wo->get_vTrap().size(); ++i)
 	{

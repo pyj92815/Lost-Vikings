@@ -108,10 +108,9 @@ void playerEric::update()
 			_eric.image->setFrameX(_eric.currentFrameX);
 		}
 	}
-	else // 에릭의 위치가 공기중이면 
+	else if(_eric.posState == POSSTATE_GROUND)// 에릭의 위치가 공기중이면 
 	{
 		PixelCollision();
-
 	}
 	}
 	//  플레이어 사망
