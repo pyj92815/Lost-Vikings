@@ -9,8 +9,8 @@ class PlayerOlaf : public gameNode
 {
 private:
 	tagPlayer _olaf;
-	float _probeY_Top;
-	float _probeY_Bottom;
+	float _probeX_FixRange; // 사다리 탈 상황에 검색 길이 값 조정하기 위한 변수
+	float _probeY_FixRange;
 	bool _isShieldUp;
 	RECT _shield;
 	POINTFLOAT _shieldPos;
@@ -20,6 +20,13 @@ private:
 	int r_BC;
 	int g_BC;
 	int b_BC;
+
+	COLORREF getPixel_TC;
+	int r_TC;
+	int g_TC;
+	int b_TC;
+
+	RECT _testRect;
 
 public:
 	PlayerOlaf();
