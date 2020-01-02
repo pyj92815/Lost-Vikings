@@ -116,24 +116,52 @@ void playerManager::trapColision()
 					_eric->setEricUnable();
 					break;
 				}
+				else if (_wo->get_vTrap()[i].trap == TRAP_BORAD)
+				{
+					if ((_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left + 10 &&
+						_eric->getEric().rc.right <= _wo->get_vTrap()[i].rc.right - 10 &&
+						_eric->getEric().rc.bottom >= _wo->get_vTrap()[i].rc.bottom) ||
+						(_eric->getEric().rc.left >= _wo->get_vTrap()[i].rc.left +10 &&
+							_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right - 10 &&
+							_eric->getEric().rc.bottom >= _wo->get_vTrap()[i].rc.bottom))
+					{
+						if (_eric->getEric().posState == POSSTATE_GROUND)
+						{
+							_eric->setEricState(STATE_PRESSDIE);
+							_eric->setEricFrame();
+							_eric->setEricFrameSpeed(7);
+							_eric->setEricUnable();
+						}
+					}
+				}
 			}
 		}
 	}
 }
 
 void playerManager::boradColision()
+
 {
 	for (int i = 0; i < _wo->get_vTrap().size(); ++i)
 	{
 		if (0 > _wo->get_vTrap().size()) break;
 		if (_wo->get_vTrap()[i].trap == TRAP_BORAD)
 		{
-			if(_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left &&
-				_eric->getEric().x+)
+			if ((_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left &&
+				_eric->getEric().rc.right <= _wo->get_vTrap()[i].rc.right &&
+				_eric->getEric().y + _eric->getEric().image->getFrameHeight() <= _wo->get_vTrap()[i].y) ||
+				(_eric->getEric().rc.left >= _wo->get_vTrap()[i].rc.left &&
+					_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right &&
+					_eric->getEric().y + _eric->getEric().image->getFrameHeight() <= _wo->get_vTrap()[i].y))
+			{
+				RECT temp;
+				if (IntersectRect(&temp, &_eric->getEricRect(), &_wo->get_vTrap()[i].rc))
+				{
+					_eric->setEricY(_wo->get_vTrap()[i].rc.top);
 
-
-
-
+				}
+				cout << "eric.y" << _eric->getEric().rc.bottom << "trap.y" << _wo->get_vTrap()[i].y << endl;
+			}
 		}	
 	}
 }
