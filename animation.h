@@ -1,6 +1,11 @@
 #pragma once
 #include <vector>
 
+typedef void(*CALLBACK_FUNCTION)(void);
+typedef void(*CALLBACK_FUNCTION_PARAMETER)(void*);
+
+//void*  뭐든 담을 수 있다 형변환만 하면
+
 class animation
 {
 public:
@@ -24,6 +29,10 @@ private:
 	DWORD _nowPlayIndex;			//현재 플레이 인덱스
 	BOOL _play;						//애니메이션 재생여부
 
+	void* _obj;
+	CALLBACK_FUNCTION				_callbackFunction;
+	CALLBACK_FUNCTION_PARAMETER		_callbackFunctionParameter;
+
 public:
 	animation();
 	~animation();
@@ -34,12 +43,18 @@ public:
 
 	//디폴트 애니메이션
 	void setDefPlayFrame(BOOL reverse = FALSE, BOOL loop = FALSE);
+	void setDefPlayFrame(BOOL reverse, BOOL loop, CALLBACK_FUNCTION cbFunction);
+	void setDefPlayFrame(BOOL reverse, BOOL loop, CALLBACK_FUNCTION_PARAMETER cbFunction, void* obj);
 
 	//배열에 담아 애니메이션 재생
 	void setPlayFrame(int* playArr, int arrLen, BOOL loop = FALSE);
+	void setPlayFrame(int* playArr, int arrLen, BOOL loop, CALLBACK_FUNCTION cbFunction);
+	void setPlayFrame(int* playArr, int arrLen, BOOL loop, CALLBACK_FUNCTION_PARAMETER cbFunction, void* obj);
 
 	//구간 애니메이션 재생
 	void setPlayFrame(int start, int end, BOOL reverse = FALSE, BOOL loop = FALSE);
+	void setPlayFrame(int start, int end, BOOL reverse, BOOL loop, CALLBACK_FUNCTION cbFunction);
+	void setPlayFrame(int start, int end, BOOL reverse, BOOL loop, CALLBACK_FUNCTION_PARAMETER cbFunction, void* obj);
 
 	//애니메이션 프레임 재생속도 셋팅
 	void setFPS(int framePerSec);

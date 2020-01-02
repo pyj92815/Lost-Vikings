@@ -42,6 +42,11 @@ private:
 	tagPasswordInfo		_password[4];	
 	int					_passwordMove;
 	int					_passCnt;			// 패스워드 카운트
+	bool				_passMiss;			// 패스워드가 틀렸는지
+	bool				_changingScene;		// 씬 체인지
+
+	HDC					_sceneDC;
+	image*				_sceneImage;
 
 public:
 	introScene();
@@ -55,6 +60,7 @@ public:
 	void addIntroImage();		// 인트로에 쓰일 이미지를 셋팅한다.
 	void setting_AlphaBlend();	// 알파블렌드에 사용할 값을 연산한다.
 	void Select_Key();			// 선택 키를 설정한다.
+	void Input_Key();			// 키보드 입력에 따른 저장
 
 };
 
