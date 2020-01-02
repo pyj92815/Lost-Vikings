@@ -105,6 +105,7 @@ void sceneManager::SceneChange()
 		break;
 
 	case SS_GAMEOVER:
+		SCENEMANAGER->changeScene("GameOver");
 		break;
 
 	case SS_STOP:

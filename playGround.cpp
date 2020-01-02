@@ -16,14 +16,14 @@ HRESULT playGround::init()
 {
 	gameNode::init(true);
 
+
+
 	//_wd = new worldMap;
 	//_wd->init();
 	//
 	//_sm = new scene_Manager;
 	//_sm->init();
 	//
-	//_pm = new playerManager;
-	//_pm->init();
 	//
 	//_enemyManager = new EnemyManager;
 	//_enemyManager->init();

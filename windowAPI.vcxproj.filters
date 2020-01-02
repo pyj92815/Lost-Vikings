@@ -183,6 +183,9 @@
     <ClInclude Include="worldObjects.h">
       <Filter>playGround\맵</Filter>
     </ClInclude>
+    <ClInclude Include="Enemy_PlayerMummy.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -286,6 +289,9 @@
     </ClCompile>
     <ClCompile Include="worldObjects.cpp">
       <Filter>playGround\맵</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_PlayerMummy.cpp">
+      <Filter>playGround\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

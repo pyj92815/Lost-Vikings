@@ -14,7 +14,11 @@ private:
 	//scene_Manager* _sm;
 	playerManager* _pm;   // 플레이어 매니져 
 	EnemyManager* _enemyManager;
+
 	
+
+	
+
 	scene_Manager* _sm;
 public:
 	playGround();

@@ -1,10 +1,9 @@
 #include "stdafx.h"
-#include "Enemy_Scorpion.h"
+#include "Enemy_PlayerMummy.h"
 
-void Enemy_Scorpion::EnemyAction()
+void Enemy_PlayerMummy::EnemyAction()
 {
 	_probeY = _y + _image->getFrameHeight() / 2;
-
 	switch (_enemyState)
 	{
 	case EnemyState::IDLE:
@@ -13,13 +12,29 @@ void Enemy_Scorpion::EnemyAction()
 		if (IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::SCOUT;
 		break;
 	case EnemyState::SCOUT:
-	
+
 		Scout();				//움직이다 절벽/벽 을 만나면 반대편으로 돌아가도록 하는 함수
 		Move();					//좌우로 움직이게 하는 함수
-		
-		//카메라 밖으로 나가면 IDLE상태로 변함
-		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;
-		//if(적을 발견하면(적이 렉트 범위 안에 들어오면))_enemyState=EnemyState::DISCOVERY;
+
+		if (IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_ericRect))
+		{
+			_enemyState = EnemyState::DISCOVERY;	//플레이어를 발견하면 DISCOVERY상태로 변함
+			_playerRect = _ericRect;
+		}
+		if (IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_olafRect))
+		{
+			_enemyState = EnemyState::DISCOVERY;	//플레이어를 발견하면 DISCOVERY상태로 변함
+			_playerRect = _olafRect;
+		}
+		if (IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_baleogRect))
+		{
+			_enemyState = EnemyState::DISCOVERY;	//플레이어를 발견하면 DISCOVERY상태로 변함
+			_playerRect = _baleogRect;
+		}
+			
+			
+
+		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 	case EnemyState::DISCOVERY:
 		//적을 추적
@@ -27,6 +42,9 @@ void Enemy_Scorpion::EnemyAction()
 		//if(_x<_player.x)_x+=
 		//if(플레이어의 렉트가 공격범위 렉트안에 들어오면)_enemyState=EnemyState::ATTACK;
 		//else if(적이 탐색 범위 밖으로 나가면)_enemyState=EnemyState::SCOUT;
+
+		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
+		break;
 		break;
 	case EnemyState::ATTACK:
 		//이미지 = 공격 이미지로 바꾸고
@@ -69,7 +87,7 @@ void Enemy_Scorpion::EnemyAction()
 
 }
 
-void Enemy_Scorpion::Frame()
+void Enemy_PlayerMummy::Frame()
 {
 	switch (_enemyState)
 	{
@@ -82,13 +100,20 @@ void Enemy_Scorpion::Frame()
 		if (_frameCount >= 10)
 		{
 			_frameX++;
-			if (_frameX > 3)
+			if (_frameX > 5)
 				_frameX = 0;
 			_frameCount = 0;
 		}
-
 		break;
 	case EnemyState::DISCOVERY:
+		_frameCount++;
+		if (_frameCount >= 10)
+		{
+			_frameX++;
+			if (_frameX > 5)
+				_frameX = 0;
+			_frameCount = 0;
+		}
 		break;
 	case EnemyState::ATTACK:
 		break;

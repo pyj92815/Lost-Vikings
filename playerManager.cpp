@@ -150,7 +150,7 @@ void playerManager::trapColision()
 
 void playerManager::boradColision()
 {
-	for (int i = 0; i < _wo->get_vTrap().size(); ++i)
+	/*for (int i = 0; i < _wo->get_vTrap().size(); ++i)
 	{
 		if (0 > _wo->get_vTrap().size()) break;
 		if (_wo->get_vTrap()[i].trap == TRAP_BORAD)
@@ -171,5 +171,5 @@ void playerManager::boradColision()
 				cout << "eric.y" << _eric->getEric().rc.bottom << "trap.y" << _wo->get_vTrap()[i].y << endl;
 			}
 		}	
-	}
+	}*/
 }
