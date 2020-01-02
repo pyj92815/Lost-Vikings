@@ -11,49 +11,42 @@ HRESULT playerManager::init()
 
 	_olaf = new PlayerOlaf;
 	_olaf->init(180, 155);
-
-	_P_type = 0;
-
 	return S_OK;
 }
 
 void playerManager::update()
 {
+	KILLPlayer();
+	switch (_playing)
+	{
+	case 0:
+		_eric->set_stopKey(true);
+		_baleog->set_stopKey(false);
+		_olaf->set_stopKey(false);
+		break;
+
+	case 1:
+		_eric->set_stopKey(false);
+		_baleog->set_stopKey(true);
+		_olaf->set_stopKey(false);
+		break;
+
+	case 2:
+		_eric->set_stopKey(false);
+		_baleog->set_stopKey(false);
+		_olaf->set_stopKey(true);
+		break;
+	}
+
 	_eric->update();
 	_baleog->update();
 	_olaf->update();
-	switch (_P_type)
-	{
-	case ERIC:
-		_eric->update();
-		break;
-
-	case BALEOG:
-		_baleog->update();
-		break;
-
-	case OLAF:
-		_olaf->update();
-		break;
-	}
-
-	if (KEYMANAGER->isOnceKeyDown(VK_CONTROL))
-	{
-		_P_type++;
-		if (_P_type > 2)
-		{
-			_P_type = 0;
-		}
-	}
-
-	//_eric->update();
-	//_baleog->update();
-	//_olaf->update();
 
 }
 
 void playerManager::release()
 {
+	
 	_eric->release();
 	_baleog->release();
 	_olaf->release();
@@ -66,3 +59,20 @@ void playerManager::render()
 	_olaf->render();
 }
 
+void playerManager::KILLPlayer()
+{
+	if (KEYMANAGER->isOnceKeyDown(VK_F1))
+	{
+		_eric->player_Kill();
+	}
+
+	if (KEYMANAGER->isOnceKeyDown(VK_F2))
+	{
+		_baleog->player_Kill();
+	}
+
+	if (KEYMANAGER->isOnceKeyDown(VK_F3))
+	{
+		_olaf->player_Kill();
+	}
+}

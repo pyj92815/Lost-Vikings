@@ -3,8 +3,11 @@
 #include "introScene.h"
 #include "stageScene.h"
 
+
 class scene_Manager : public gameNode
-{
+{	
+	
+
 
 public:
 	scene_Manager();

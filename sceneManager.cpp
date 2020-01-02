@@ -97,7 +97,6 @@ void sceneManager::SceneChange()
 	case SS_INTRO:
 		// 인트로 씬을 출력한다.
 		SCENEMANAGER->changeScene("Intro");
-
 		break;
 
 	case SS_STAGE:

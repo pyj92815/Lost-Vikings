@@ -60,13 +60,12 @@ void playerbaleog::release()
 
 void playerbaleog::update()
 {
-	//if (!_baleogAttack) key();
 
 	// 비밀이동키
 	//if (!_baleogAttack) hgKey();
 
-	// 창규꺼 이동 코드지만 형길이가 봉인 시켰음
-	 if (!_baleogAttack) key();
+
+	if(_stopControl) if (!_baleogAttack) key();
 
 	_baleog.rc = RectMake(_baleog.x, _baleog.y, _baleog.image->getFrameWidth(), _baleog.image->getFrameHeight());
 
@@ -186,7 +185,11 @@ void playerbaleog::update()
 		_count = 0;
 	}
 */
+<<<<<<< HEAD
 	//CAMERAMANAGER->set_Camera_XY(_baleog.rc);
+=======
+
+>>>>>>> bea35be2ef25f9d65b19a2c76a61b70bb32226fd
 
 	_ar->update();
 

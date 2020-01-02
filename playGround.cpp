@@ -16,18 +16,21 @@ HRESULT playGround::init()
 {
 	gameNode::init(true);
 
-	_wd = new worldMap;
-	_wd->init();
+	//_wd = new worldMap;
+	//_wd->init();
+	//
+	//_sm = new scene_Manager;
+	//_sm->init();
+	//
+	//_pm = new playerManager;
+	//_pm->init();
+	//
+	//_enemyManager = new EnemyManager;
+	//_enemyManager->init();
 
 	_sm = new scene_Manager;
 	_sm->init();
-
-	_pm = new playerManager;
-	_pm->init();
-
-	_enemyManager = new EnemyManager;
-	_enemyManager->init();
-
+	
 	return S_OK;
 }
 
@@ -43,15 +46,15 @@ void playGround::release()
 void playGround::update()
 {
 	gameNode::update();
-	_wd->update();
+	//_wd->update();
+	//
+	//_sm->update();
+	//
+	//_enemyManager->update();
+	//
+	//if(SCENEMANAGER->get_SceneState() == SS_STAGE)	_pm->update();
 
 	_sm->update();
-
-	if (SCENEMANAGER->get_SceneState() == SS_STAGE)
-	{
-		_enemyManager->update();
-		_pm->update();
-	}
 
 }
 
@@ -60,20 +63,27 @@ void playGround::render()
 {
 	PatBlt(CAMERAMANAGER->getWorDC(), 0, 0, CAMERAMANAGER->get_WorldSize_X(), CAMERAMANAGER->get_WorldSize_Y(), WHITENESS);
 	//==================================================
-	
-	_wd->render();
-
-	_pm->render();
 
 
-	// 191229 PM 19:11 -¶ôÈÆ - WorldDc ÄÉ¸¯ÅÍ-> PG·Î ·»´õ¸µºÎºÐ ¿Å±è 
 
-
-	_enemyManager->render();
-
-	_sm->render();
 	TIMEMANAGER->render(getMemDC());
 
+
+
+	//_wd->render();
+	//
+	//_pm->render();
+	//
+	//
+	//// 191229 PM 19:11 -¶ôÈÆ - WorldDc ÄÉ¸¯ÅÍ-> PG·Î ·»´õ¸µºÎºÐ ¿Å±è 
+	//
+	//_enemyManager->render();
+	//
+	//_sm->render();
+
+	_sm->render();
+
+	
 	//===================================================
 	//µü ¸»Çß´Ù
 	_backBuffer->render(getHDC(), 0, 0);
