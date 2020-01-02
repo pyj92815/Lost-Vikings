@@ -143,6 +143,7 @@ public:
 
 	inline void setFrameX(int frameX)
 	{
+
 		_imageInfo->currentFrameX = frameX;
 
 		//프레임번호가 최대프레임번호를 넘어가면 마지막 프레임으로 고정

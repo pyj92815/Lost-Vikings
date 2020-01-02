@@ -70,6 +70,7 @@ void playerEric::release()
 
 void playerEric::update()
 {
+
 	if (_stopControl)				// 케릭터 선택 BOOL값
 	{
 		if (!_ericUnable) key();	// 전투 불능 상태가 아니면 key값 
@@ -87,10 +88,12 @@ void playerEric::update()
 
 
 	// 에릭의 좌표를 카메라 매니저에 넘겨준다.
-	CAMERAMANAGER->set_Camera_XY(_eric.x, _eric.y);
+	// CAMERAMANAGER->set_Camera_XY(_eric.rc);
 
 
 	// 에릭의 위치가 그라운드이면 
+
+	// 점프가 아니면 픽셀충돌, 점프중에도 픽셀충돌 
 	if (_eric.posState == POSSTATE_GROUND)
 	{
 		PixelCollision();
@@ -114,14 +117,23 @@ void playerEric::update()
 
 void playerEric::render()
 {
+
 	// 임시 렌더링 값 
 	Rectangle(getMemDC(), _eric.rc);
+
+	//Rectangle(getMemDC(), _test);
+
+	// 191229 PM 03:17 에릭이 그려지는 위치를 월드DC로 옴겼다.
+	_eric.image->frameRender(CAMERAMANAGER->getWorDC(), _eric.x, _eric.y, _eric.currentFrameX, _eric.currentFrameY);
+	// 191229 PM 04:27 UI에서 출력을 하기 위해 주석처리
+	//CAMERAMANAGER->getWorImage()->render(getMemDC(), 0, 0,
+	//	CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y()
+	//	, CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
+
 	char str[100];
 	sprintf_s(str, "%d", _breathCount);
 	TextOut(getMemDC(), WINSIZEX / 2, WINSIZEY / 2, str, strlen(str));
 
-
-	_eric.image->frameRender(CAMERAMANAGER->getWorDC(), _eric.x, _eric.y, _eric.currentFrameX, _eric.currentFrameY);
 }
 
 void playerEric::move()
@@ -610,7 +622,7 @@ void playerEric::PixelCollision()
 			_eric.posState = POSSTATE_AIR;
 		}
 	}
-
+	
 }
 
 
@@ -735,4 +747,5 @@ void playerEric::isJumpPixelCollision()
 
 void playerEric::ericDie()
 {
+
 }

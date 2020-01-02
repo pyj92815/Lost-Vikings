@@ -17,7 +17,6 @@ HRESULT playerManager::init()
 
 void playerManager::update()
 {
-
 	KILLPlayer();	// 플레이어를 죽인다
 
 	switch (_playing)
@@ -48,6 +47,7 @@ void playerManager::update()
 
 void playerManager::release()
 {
+	
 	_eric->release();
 	_baleog->release();
 	_olaf->release();
@@ -77,4 +77,3 @@ void playerManager::KILLPlayer()
 		_olaf->player_Kill();
 	}
 }
-

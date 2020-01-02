@@ -21,7 +21,9 @@ private:
 	float _jumpStart;
 	float _gravity;
 	float _slidePower;
-	bool  _stopControl;		// 이값이 true라면 움직일 수 없다.
+
+	bool	   _stopControl;		// 이값이 true라면 움직일 수 없다.
+
 public:
 	playerEric();
 	~playerEric();
@@ -50,7 +52,15 @@ public:
 	void set_stopKey(bool stop) { _stopControl = stop; }
 	void player_Kill() { _eric.isDead = true; } // 지울 예정 
 
+
 	void ericDie();
 	void setEricState(tagState state) { _eric.state = state; }	// 상태를 정의해 주는 세터 
+
+	float getEricProbeX() { return _eric.probeX; }
+	float getEricProbeY() { return _eric.probeY; }
+
+	void set_stopKey(bool stop) { _stopControl = stop; }
+	void player_Kill() { _eric.isDead = true; }
+
 };
 

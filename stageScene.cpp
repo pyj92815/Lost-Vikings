@@ -59,6 +59,8 @@ void stageScene::render()
 
 	IMAGEMANAGER->findImage("UI_Image")->render(getMemDC(), 0, WINSIZEY - (WINSIZEY - 573));
 
+
+
 	// 쓰레기통 출력
 	_UI_Garbage.image->render(getMemDC(), _UI_Garbage.rc.left, _UI_Garbage.rc.top);
 

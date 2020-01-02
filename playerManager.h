@@ -18,7 +18,7 @@ private:
 	playerEric* _eric;
 	playerbaleog* _baleog;
 	PlayerOlaf* _olaf;
-	
+
 	int			_playing;
 	
 public:
@@ -33,6 +33,8 @@ public:
 	tagPlayer getPlayerEric() { return _eric->getEric(); }
 	tagPlayer getPlayerBaleog() { return _baleog->getBaleog(); }
 	tagPlayer getPlayerOlaf() { return _olaf->getOlaf(); }
+	void set_Playing(int playChar) { _playing = playChar; }
+	void KILLPlayer();
 
 	void set_Playing(int playChar) { _playing = playChar; }
 	void KILLPlayer();
