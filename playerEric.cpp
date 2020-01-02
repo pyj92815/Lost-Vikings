@@ -146,14 +146,14 @@ void playerEric::key()
 	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 	{
 		_eric.frameSpeed = 10;
-		_eric.currentFrameY = 0;
 		_breathCount = 0;
+		if (_eric.state != STATE_PUSH) _eric.currentFrameY = 0;
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 	{
 		_eric.frameSpeed = 10;
-		_eric.currentFrameY = 1;
 		_breathCount = 0;
+		if(_eric.state != STATE_PUSH) _eric.currentFrameY = 1;
 	}
 
 
@@ -189,6 +189,10 @@ void playerEric::key()
 			{
 				_eric.x -= _eric.movePower;
 			}
+			else if (_eric.state == STATE_PUSH)
+			{
+				// 아무것도 아니어야함 
+			}
 			else
 			{
 				_eric.state = STATE_MOVE;
@@ -220,6 +224,10 @@ void playerEric::key()
 			if (_eric.state == STATE_ERIC_HEADBUTT || _eric.state == STATE_ERIC_JUMP || _eric.state == STATE_PUSH)
 			{
 				_eric.x += _eric.movePower;
+			}
+			else if (_eric.state == STATE_PUSH)
+			{
+				// 아무것도 아니어야함 
 			}
 			else
 			{
@@ -628,7 +636,7 @@ void playerEric::PixelCollision()
 
 void playerEric::PixelRightCollision()
 {
-	if (_eric.state != STATE_PUSH) _eric.probeX = _eric.x + _eric.image->getFrameWidth(); // _eric.right  
+	_eric.probeX = _eric.x + _eric.image->getFrameWidth(); // _eric.right  
 
 	COLORREF getPixel_RIGHT = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _eric.probeX + 2, _eric.y);
 
@@ -653,7 +661,7 @@ void playerEric::PixelRightCollision()
 
 void playerEric::PixelLeftCollision()
 {
-	if (_eric.state != STATE_PUSH) _eric.probeX = _eric.x - 3;
+	_eric.probeX = _eric.x - 3;
 
 	COLORREF getPixel_LEFT = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _eric.probeX, _eric.y);
 
