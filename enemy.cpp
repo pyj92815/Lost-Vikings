@@ -32,7 +32,7 @@ HRESULT Enemy::init(EnemyType enemyType, float x, float y)
 	_turn_Num = 0;
 	_turn = false;
 	_enemyRect = RectMakeCenter(_x, _y, _image->getFrameWidth(), _image->getFrameHeight());
-	_enemy_DISCOVERY_Rect = RectMakeCenter(_x, _y, 600, 200);
+	_enemy_DISCOVERY_Rect = RectMakeCenter(_x, _y, 600, 400);
 	_cameraRect = RectMake(CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
 	return S_OK;
 }
@@ -50,15 +50,16 @@ void Enemy::update()
 	//playerLink();		//플레이어의 렉트를 받아오는 함수
 
 	_cameraRect = RectMake(CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
-	_enemy_DISCOVERY_Rect = RectMakeCenter(_x, _y, 600, 200);
+	_enemy_DISCOVERY_Rect = RectMakeCenter(_x, _y, 600, 400);
 	_enemyRect = RectMakeCenter(_x, _y, _image->getFrameWidth(), _image->getFrameHeight());
 }
 
 void Enemy::render()
 {
-	Rectangle(CAMERAMANAGER->getWorDC(), _enemy_DISCOVERY_Rect);
 	if(KEYMANAGER->isToggleKey(VK_F1)) Rectangle(CAMERAMANAGER->getWorDC(), _enemyRect);
 	_image->frameRender(CAMERAMANAGER->getWorDC(), _enemyRect.left, _enemyRect.top, _frameX, _frameY);
+	//Rectangle(CAMERAMANAGER->getWorDC(), _enemy_DISCOVERY_Rect);
+	char buffer[128];
 	Rectangle(CAMERAMANAGER->getWorDC(), _ericRect);
 }
 
@@ -107,7 +108,7 @@ void Enemy::Scout()
 			int platformG = GetGValue(platformCOLOR);
 			int platformB = GetBValue(platformCOLOR);
 
-			if (((platformR == 255 && platformG == 0 && platformB == 255) || (platformR == 255 && platformG == 255 && platformB == 255) || (platformR == 255 && platformG == 0 && platformB == 0) || (wallR == 255 && wallG == 255 && wallB == 0)))
+			if (((platformR == 255 && platformG == 0 && platformB == 255) || (platformR == 255 && platformG == 255 && platformB == 255) || (platformR == 255 && platformG == 0 && platformB == 0) || (wallR == 255 && wallG == 255 && wallB == 0)) && !_turn)
 			{
 				_turn_Num++;
 				_turn = true;
@@ -136,7 +137,7 @@ void Enemy::Scout()
 			int platformG = GetGValue(platformCOLOR);
 			int platformB = GetBValue(platformCOLOR);
 
-			if (((platformR == 255 && platformG == 0 && platformB == 255) || (platformR == 255 && platformG == 255 && platformB == 255) || (platformR == 255 && platformG == 0 && platformB == 0) || (wallR == 255 && wallG == 255 && wallB == 0)))
+			if (((platformR == 255 && platformG == 0 && platformB == 255) || (platformR == 255 && platformG == 255 && platformB == 255) || (platformR == 255 && platformG == 0 && platformB == 0) || (wallR == 255 && wallG == 255 && wallB == 0)) && !_turn)
 			{
 				_turn_Num++;
 				_turn = true;

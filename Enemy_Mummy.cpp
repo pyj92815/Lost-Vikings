@@ -35,36 +35,25 @@ void Enemy_Mummy::EnemyAction()
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 	case EnemyState::DISCOVERY:
-		if (IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_ericRect))
-		{
-			_playerRect = _ericRect;
-		}
-		if (IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_olafRect))
-		{
-			_playerRect = _olafRect;
-		}
-		if (IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_baleogRect))
-		{
-			_playerRect = _baleogRect;
-		}
+		//적을 추적
+		
 		_player.x = (_playerRect.left + _playerRect.right) / 2;
-		if (_x < _player.x)
+		_player.y = (_playerRect.top + _playerRect.bottom) / 2;
+		if (_x > _player.x&&!_turn)
 		{
-			_enemyLR = EnemyLR::RIGHT;
-			if (_frameX <= 3)
-				_x += 3;
+			_turn_Num++;
+			_turn = true;
 		}
-		if(_x>_player.x)
+		else if (_x < _player.x&&!_turn)
 		{
-			_enemyLR = EnemyLR::LEFT;
-			if (_frameX <= 3)
-				_x -= 3;
+			_turn_Num++;
+			_turn = true;
 		}
 		Scout();
-		//Move();
-
+		Move();
 		if (!IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_playerRect))_enemyState = EnemyState::SCOUT;
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
+		break;
 		break;
 	case EnemyState::ATTACK:
 		//이미지 = 공격 이미지로 바꾸고
