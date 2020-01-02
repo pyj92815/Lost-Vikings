@@ -35,9 +35,5 @@ public:
 	tagPlayer getPlayerOlaf() { return _olaf->getOlaf(); }
 	void set_Playing(int playChar) { _playing = playChar; }
 	void KILLPlayer();
-
-	void set_Playing(int playChar) { _playing = playChar; }
-	void KILLPlayer();
-
 };
 

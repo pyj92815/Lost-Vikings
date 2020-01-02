@@ -56,11 +56,5 @@ public:
 	void ericDie();
 	void setEricState(tagState state) { _eric.state = state; }	// 상태를 정의해 주는 세터 
 
-	float getEricProbeX() { return _eric.probeX; }
-	float getEricProbeY() { return _eric.probeY; }
-
-	void set_stopKey(bool stop) { _stopControl = stop; }
-	void player_Kill() { _eric.isDead = true; }
-
 };
 
