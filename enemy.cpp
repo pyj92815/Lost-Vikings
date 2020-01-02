@@ -401,6 +401,22 @@ void Enemy::Attack(EnemyType enemyType)
 
 void Enemy::Attack()
 {
+	RECT temp;
+	if (IntersectRect(&temp, &_enemyAttackRect, &_ericRect))
+	{
+		_discoveryPlayer = DISCOVERYPlayer::ERIC;
+		_enemyState = EnemyState::ATTACK;	//플레이어를 발견하면 DISCOVERY상태로 변함
+	}
+	if (IntersectRect(&temp, &_enemyAttackRect, &_olafRect))
+	{
+		_discoveryPlayer = DISCOVERYPlayer::OLAF;
+		_enemyState = EnemyState::ATTACK;	//플레이어를 발견하면 DISCOVERY상태로 변함
+	}
+	if (IntersectRect(&temp, &_enemyAttackRect, &_baleogRect))
+	{
+		_discoveryPlayer = DISCOVERYPlayer::BALEOG;
+		_enemyState = EnemyState::ATTACK;	//플레이어를 발견하면 DISCOVERY상태로 변함
+	}
 }
 
 void Enemy::setPlayerRect(RECT eric, RECT baleog, RECT olaf)

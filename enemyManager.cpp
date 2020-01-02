@@ -124,3 +124,9 @@ void EnemyManager::EnemyRemove()
 		}
 	}
 }
+
+
+void EnemyManager::Collision()
+{
+
+}

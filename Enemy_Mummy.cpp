@@ -21,11 +21,11 @@ void Enemy_Mummy::EnemyAction()
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 	case EnemyState::DISCOVERY:
-		Tracking();
+		Tracking();				//적을 추적하는 함수
+		Attack();				//적이 공격범위안에 들어올시 _enemyState를 ATTACK로 변경해주는 함수
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 	case EnemyState::ATTACK:
-		//이미지 = 공격 이미지로 바꾸고
 		//if(공격 판정이 있을만한 이미지에 플레이어가 닿으면 플레이어 사망)
 		break;
 	case EnemyState::DIE:
