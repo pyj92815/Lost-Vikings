@@ -32,6 +32,7 @@ enum tagPosState  // position state
 {
 	POSSTATE_GROUND,    // 중력을 안받고 
 	POSSTATE_AIR,		// 중력을 받는다 
+	POSSTATE_BORAD,
 };
 
 struct tagPlayer
@@ -55,24 +56,6 @@ struct tagPlayer
 	int frameSpeed;
 	int hp;	   // 3개 
 	bool isDead;				// 살았는지 죽었는지
-};
-
-//
-
-enum tagItem
-{
-	ITME_HP,	 // HP Item 
-	ITME_HP2,
-	ITME_FIRE,
-	ITME_KEY,
-};
-
-enum tagTypeDie
-{
-	TYPE_DIE,		 // 기본 죽는 모션 
-	TYPE_FLYDIE,	 // 낙사 
-	TYPE_PRESS,      // 프레스 
-	TYPE_POISION,	 // 독
 };
 
 
