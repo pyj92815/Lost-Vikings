@@ -12,8 +12,7 @@ EnemyManager::~EnemyManager()
 
 HRESULT EnemyManager::init()
 {
-	_playerManager = new playerManager;
-	_playerManager->init();
+
 	_enemy = new Enemy;
 
 	EnemyCreate();
@@ -32,7 +31,7 @@ void EnemyManager::update()
 		(*_viEnemy)->update();
 		(*_viEnemy)->setPlayerRect(_playerManager->getPlayerEric().rc, _playerManager->getPlayerBaleog().rc, _playerManager->getPlayerOlaf().rc);
 	}
-	_enemy->setPlayerRect(_playerManager->getPlayerEric().rc, _playerManager->getPlayerBaleog().rc, _playerManager->getPlayerOlaf().rc);
+	
 	EnemyRemove();
 }
 
@@ -42,7 +41,7 @@ void EnemyManager::render()
 	{
 		(*_viEnemy)->render();
 	}
-	
+
 }
 
 

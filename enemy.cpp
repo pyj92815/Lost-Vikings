@@ -60,8 +60,6 @@ void Enemy::render()
 	_image->frameRender(CAMERAMANAGER->getWorDC(), _enemyRect.left, _enemyRect.top, _frameX, _frameY);
 	//Rectangle(CAMERAMANAGER->getWorDC(), _enemy_DISCOVERY_Rect);
 	char buffer[128];
-	sprintf_s(buffer, "x : %f\ny : %f", _ericRect.left, _ericRect.top);
-	TextOut(CAMERAMANAGER->getWorDC(), 0, 100, buffer, strlen(buffer));
 	Rectangle(CAMERAMANAGER->getWorDC(), _ericRect);
 }
 

@@ -16,12 +16,6 @@ HRESULT playGround::init()
 {
 	gameNode::init(true);
 
-	_pm = new playerManager;
-	_pm->init();
-
-	_enemyManager = new EnemyManager;
-	_enemyManager->AddressLink(_pm);
-	
 
 
 	//_wd = new worldMap;
@@ -30,8 +24,6 @@ HRESULT playGround::init()
 	//_sm = new scene_Manager;
 	//_sm->init();
 	//
-	_pm = new playerManager;
-	_pm->init();
 	//
 	//_enemyManager = new EnemyManager;
 	//_enemyManager->init();
