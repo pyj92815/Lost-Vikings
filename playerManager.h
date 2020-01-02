@@ -41,6 +41,10 @@ public:
 	void release();
 	void render();
 
+	playerEric* getEric() { return _eric; }
+	playerbaleog* getbaleog() { return _baleog;}
+	PlayerOlaf* getOlaf() { return _olaf; }
+
 	tagPlayer getPlayerEric() { return _eric->getEric(); }
 	tagPlayer getPlayerBaleog() { return _baleog->getBaleog(); }
 	tagPlayer getPlayerOlaf() { return _olaf->getOlaf(); }

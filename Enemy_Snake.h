@@ -7,5 +7,6 @@ private:
 public:
 	void EnemyAction();
 	void Frame();
+
 };
 

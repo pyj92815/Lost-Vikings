@@ -26,10 +26,10 @@ void Enemy_Mummy::EnemyAction()
 			_enemyState = EnemyState::DISCOVERY;	//플레이어를 발견하면 DISCOVERY상태로 변함
 			_playerRect = _olafRect;
 		}
-		if (IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_beleogRect))
+		if (IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_baleogRect))
 		{
 			_enemyState = EnemyState::DISCOVERY;	//플레이어를 발견하면 DISCOVERY상태로 변함
-			_playerRect = _beleogRect;
+			_playerRect = _baleogRect;
 		}
 
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함

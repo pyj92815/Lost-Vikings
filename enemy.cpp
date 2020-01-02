@@ -6,8 +6,7 @@ HRESULT Enemy::init(EnemyType enemyType, float x, float y)
 {
 	imageReset();
 	//플레이어와 연동하는 함수
-	_playerManager = new playerManager;
-	playerLink();
+	
 	//프레임 관련 변수 초기화
 	_enemyState = EnemyState::IDLE;
 	_frameX = _frameY = _frameCount = 0;
@@ -47,7 +46,7 @@ void Enemy::update()
 {
 	EnemyAction();		//적의 상태의 따른 행동을 지정하는 함수
 	Frame();			//적의 프레임을 관리하는 함수
-	
+
 	//playerLink();		//플레이어의 렉트를 받아오는 함수
 
 	_cameraRect = RectMake(CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
@@ -60,82 +59,20 @@ void Enemy::render()
 	if(KEYMANAGER->isToggleKey(VK_F1)) Rectangle(CAMERAMANAGER->getWorDC(), _enemyRect);
 	_image->frameRender(CAMERAMANAGER->getWorDC(), _enemyRect.left, _enemyRect.top, _frameX, _frameY);
 	//Rectangle(CAMERAMANAGER->getWorDC(), _enemy_DISCOVERY_Rect);
-
+	char buffer[128];
+	sprintf_s(buffer, "x : %f\ny : %f", _ericRect.left, _ericRect.top);
+	TextOut(CAMERAMANAGER->getWorDC(), 0, 100, buffer, strlen(buffer));
+	Rectangle(CAMERAMANAGER->getWorDC(), _ericRect);
 }
 
 void Enemy::EnemyAction()
 {
-	_probeY = _y + _image->getFrameHeight() / 2;
-	switch (_enemyState)
-	{
-	case EnemyState::IDLE:
-		RECT temp;
-		//카메라 안으로 들어가면 SCOUT상태로 변함
-		if (IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::SCOUT;
-		break;
-	case EnemyState::SCOUT:
-			
-		Scout();			//움직이다 절벽/벽 을 만나면 반대편으로 돌아가도록 하는 함수
-		Move();				//좌우로 움직이게 하는 함수
-
-		//카메라 밖으로 나가면 IDLE상태로 변함
-		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;
-		//if(적을 발견하면(적이 렉트 범위 안에 들어오면))_enemyState=EnemyState::DISCOVERY;
-		break;
-	case EnemyState::DISCOVERY:
-		//적을 추적
-		//if(_x>player.x)_x-=
-		//if(_x<_player.x)_x+=
-		//if(플레이어의 렉트가 공격범위 렉트안에 들어오면)_enemyState=EnemyState::ATTACK;
-		//else if(적이 탐색 범위 밖으로 나가면)_enemyState=EnemyState::SCOUT;
-		break;
-	case EnemyState::ATTACK:
-		//이미지 = 공격 이미지로 바꾸고
-		//if(공격 판정이 있을만한 이미지에 플레이어가 닿으면 플레이어 사망)
-		break;
-	case EnemyState::DIE:
-
-		break;
-	default:
-		break;
-	}
-
-	switch (_enemyLR)
-	{
-	case EnemyLR::LEFT:
-		_frameY = 1;
-		break;
-	case EnemyLR::RIGHT:
-		_frameY = 0;
-		break;
-	default:
-		break;
-	}
-
-	//적을 바닥에 붙여주기 위함
-	for (int i = _probeY - 20; i < _probeY + 200; ++i)
-	{
-		COLORREF getPixel_Bottom = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _x, i);
-
-		int r = GetRValue(getPixel_Bottom);
-		int g = GetGValue(getPixel_Bottom);
-		int b = GetBValue(getPixel_Bottom);
-
-		if (r == 255 && g == 255 && b == 0)
-		{
-			_y = i - _image->getFrameHeight() / 2;
-			break;
-		}
-	}
-
 }
-
 
 void Enemy::Frame()
 {
 	
 }
-
 
 void Enemy::Move()
 {
@@ -220,9 +157,9 @@ void Enemy::Scout()
 	}
 }
 
-void Enemy::playerLink()
+void Enemy::setPlayerRect(RECT eric, RECT baleog, RECT olaf)
 {
-	_ericRect=_playerManager->getPlayerEric().rc;
-	_olafRect =_playerManager->getPlayerOlaf().rc;
-	_beleogRect=_playerManager->getPlayerBaleog().rc;
+	_ericRect = eric;
+	_baleogRect = baleog;
+	_olafRect = olaf;
 }

@@ -18,10 +18,12 @@ HRESULT playGround::init()
 
 	_pm = new playerManager;
 	_pm->init();
-	_enemy = new Enemy;
+
+	_enemyManager = new EnemyManager;
+	_enemyManager->AddressLink(_pm);
+	
 
 
-	_enemy->setAddressLink(_pm);
 	//_wd = new worldMap;
 	//_wd->init();
 	//

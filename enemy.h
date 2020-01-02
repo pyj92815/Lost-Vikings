@@ -1,7 +1,7 @@
 #pragma once
 #include"gameNode.h"
 
-class playerManager;
+
 
 enum class EnemyState
 {
@@ -52,14 +52,16 @@ protected:
 	bool _turn;								//적의 방향을 바꿔주기 위한 bool변수
 	bool _die;								//적의 사망 상태를 반환하기 위한 함수
 
+	
+
+
+public:
 	RECT _ericRect;							//에릭의 렉트
 	RECT _olafRect;							//올라프의 렉트
-	RECT _beleogRect;						//벨로그의 렉트
+	RECT _baleogRect;						//벨로그의 렉트
 	RECT _playerRect;						//플레이의 렉트
-				
+
 	POINT _player;							//플레이어의 위치	
-	playerManager* _playerManager;
-public:
 
 	virtual HRESULT init(EnemyType enemyType, float x, float y);
 	virtual void release();
@@ -71,12 +73,13 @@ public:
 
 	virtual void Move();					//적의 움직임을 담당하는 함수
 	virtual void Scout();					//적의 탐색을 담당하는 함수
-	virtual void playerLink();
 	//적의 상태를 반환하는 함수(_enemyState)
 	virtual EnemyState getEnemyState() { return _enemyState; }
 	virtual RECT getRect() { return _enemyRect; }
 	virtual bool getDie() { if(_die)return true; else return false; }
-	virtual void setAddressLink(playerManager* pm) { _playerManager = pm; }
+
+	virtual void setPlayerRect(RECT eric,RECT baleog,RECT olaf);
+
 	//이미지 추가 함수
 	virtual void imageReset()
 	{
