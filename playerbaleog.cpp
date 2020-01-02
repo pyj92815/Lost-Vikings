@@ -185,11 +185,8 @@ void playerbaleog::update()
 		_count = 0;
 	}
 */
-<<<<<<< HEAD
-	//CAMERAMANAGER->set_Camera_XY(_baleog.rc);
-=======
 
->>>>>>> bea35be2ef25f9d65b19a2c76a61b70bb32226fd
+	//CAMERAMANAGER->set_Camera_XY(_baleog.rc);
 
 	_ar->update();
 
