@@ -42,9 +42,9 @@ void gameOverScene::render()
 	_goPlayer.image->frameRender(getMemDC(), _goPlayerRC[GOP_Olaf].left, _goPlayerRC[GOP_Olaf].top, GOP_Olaf, 0);
 	_lightNing.image->aniRender(getMemDC(), _goPlayerRC[GOP_Olaf].left + 38, -15, _lightNing.ani);
 
-	_goEric.image->aniRender(getMemDC(), _goEric.rc.left, _goEric.rc.top, _goEric.ani);
-	_goBaleog.image->aniRender(getMemDC(), _goBaleog.rc.left, _goBaleog.rc.top, _goBaleog.ani);
-	_goOlaf.image->aniRender(getMemDC(), _goOlaf.rc.left, _goOlaf.rc.top, _goOlaf.ani);
+	//_goEric.image->aniRender(getMemDC(), _goEric.rc.left, _goEric.rc.top, _goEric.ani);
+	//_goBaleog.image->aniRender(getMemDC(), _goBaleog.rc.left, _goBaleog.rc.top, _goBaleog.ani);
+	//_goOlaf.image->aniRender(getMemDC(), _goOlaf.rc.left, _goOlaf.rc.top, _goOlaf.ani);
 }
 
 void gameOverScene::setting_Image()
