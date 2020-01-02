@@ -191,6 +191,12 @@
     </ClInclude>
     <ClInclude Include="keyAniManager.h">
       <Filter>헤더 파일</Filter>
+=======
+      <Filter>playGround\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="keyAniManager.h">
+      <Filter>2DGameFramework\Manager</Filter>
+>>>>>>> 18c630dce272ee3b2706f0617f569e40d6fcb731
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -304,6 +310,12 @@
     </ClCompile>
     <ClCompile Include="keyAniManager.cpp">
       <Filter>소스 파일</Filter>
+=======
+      <Filter>playGround\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="keyAniManager.cpp">
+      <Filter>2DGameFramework\Manager</Filter>
+>>>>>>> 18c630dce272ee3b2706f0617f569e40d6fcb731
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
