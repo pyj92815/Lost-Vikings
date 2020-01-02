@@ -32,12 +32,14 @@ public:
 	void render();
 
 	void EnemyCreate();
-	void EnemyCreate(float x,float y);
+	void EnemyCreate(float x, float y);
 	void EnemyRemove();
-	
+
 	void AddressLink(playerManager* pm) { _playerManager = pm; }
-	
+
 	vector<Enemy*> getVEnemy() { return _vEnemy; }
 	vector<Enemy*>::iterator getViEnemy() { return _viEnemy; }
 };
+
+
 

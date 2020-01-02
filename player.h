@@ -33,14 +33,7 @@ enum tagPosState  // position state
 	POSSTATE_AIR,		// 중력을 받는다 
 	POSSTATE_BORAD,
 	POSSTATE_STEPLADDER,
-	POSSTATE_LADDERFALL
-
-	POSSTATE_AIR,		// 중력을 받는다 
-	POSSTATE_BORAD,
-
-	POSSTATE_AIR,		// 중력을 받는다
-	POSSTATE_STEPLADDER,
-	POSSTATE_LADDERFALL
+	POSSTATE_LADDERFALL,
 };
 
 struct tagPlayer

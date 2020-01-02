@@ -14,14 +14,14 @@ public:
 	void update();
 	void render();
 
-	void bulletFire(float x,float y,float angle);
+	void bulletFire(float x, float y, float angle);
 	void bulletMove();
 };
 
 //발견한 적의 종류를 확인하는 Enum문
 enum class DISCOVERYPlayer
 {
-	ERIC,BALEOG,OLAF
+	ERIC, BALEOG, OLAF
 };
 
 enum class EnemyState
@@ -75,7 +75,7 @@ protected:
 	int _frameCount;						//적의 프레임 카운트 변수
 
 	int _enemyHP;							//적의 HP
-	
+
 	bool _turn;								//적의 방향을 바꿔주기 위한 bool변수
 	bool _die;								//적의 사망 상태를 반환하기 위한 함수
 
@@ -105,13 +105,13 @@ public:
 	//적의 상태를 반환하는 함수(_enemyState)
 	virtual EnemyState getEnemyState() { return _enemyState; }
 	virtual RECT getRect() { return _enemyRect; }
-	virtual bool getDie() { if(_die)return true; else return false; }
+	virtual bool getDie() { if (_die)return true; else return false; }
 
 	virtual void Hit() { _enemyHP--; }
 
-	virtual void setPlayerRect(RECT eric,RECT baleog,RECT olaf);
+	virtual void setPlayerRect(RECT eric, RECT baleog, RECT olaf);
 	virtual void platformColision();
-	
+
 	//이미지 추가 함수
 	virtual void imageReset()
 	{

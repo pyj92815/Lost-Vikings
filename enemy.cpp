@@ -6,7 +6,7 @@ HRESULT Enemy::init(EnemyType enemyType, float x, float y)
 {
 	imageReset();
 	//플레이어와 연동하는 함수
-	
+
 	//프레임 관련 변수 초기화
 	_enemyState = EnemyState::IDLE;
 	_frameX = _frameY = _frameCount = 0;
@@ -20,12 +20,12 @@ HRESULT Enemy::init(EnemyType enemyType, float x, float y)
 	case EnemyType::SCORPION:
 		_image = IMAGEMANAGER->findImage("Enemy_Scorpion");
 		_Attack_image = IMAGEMANAGER->findImage("Enemy_Scorpion_Attack");
-		_enemyAttackRect = RectMakeCenter(_x, _y, 600,200);
+		_enemyAttackRect = RectMakeCenter(_x, _y, 600, 200);
 		break;
 	case EnemyType::SNAKE:
 		_image = IMAGEMANAGER->findImage("Enemy_Snake");
 		_Attack_image = IMAGEMANAGER->findImage("Enemy_Snake_Attack");
-		_enemyAttackRect = RectMakeCenter(_x, _y,600,200);
+		_enemyAttackRect = RectMakeCenter(_x, _y, 600, 200);
 		break;
 	case EnemyType::PLAYERMUMMY:
 		_image = IMAGEMANAGER->findImage("Enemy_PlayerMummy");
@@ -47,7 +47,7 @@ HRESULT Enemy::init(EnemyType enemyType, float x, float y)
 	_turn = false;
 
 	_enemyRect = RectMakeCenter(_x, _y, _image->getFrameWidth(), _image->getFrameHeight());
-	_enemy_DISCOVERY_Rect = RectMakeCenter(_x, _y, 600, 400);
+	_enemy_DISCOVERY_Rect = RectMakeCenter(_x, _y, 600, 200);
 	_cameraRect = RectMake(CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
 	return S_OK;
 }
@@ -65,20 +65,15 @@ void Enemy::update()
 	//playerLink();		//플레이어의 렉트를 받아오는 함수
 	_enemyAttackRect = RectMakeCenter(_x, _y, _image->getFrameWidth() * 2, _image->getFrameHeight());
 	_cameraRect = RectMake(CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
-	_enemy_DISCOVERY_Rect = RectMakeCenter(_x, _y, 600, 400);
+	_enemy_DISCOVERY_Rect = RectMakeCenter(_x, _y, 600, 200);
 	_enemyRect = RectMakeCenter(_x, _y, _image->getFrameWidth(), _image->getFrameHeight());
 }
 
 void Enemy::render()
 {
-	//Rectangle(CAMERAMANAGER->getWorDC(), _enemy_DISCOVERY_Rect);
-	if(KEYMANAGER->isToggleKey(VK_F1)) Rectangle(CAMERAMANAGER->getWorDC(), _enemyRect);
+	Rectangle(CAMERAMANAGER->getWorDC(), _enemy_DISCOVERY_Rect);
+	if (KEYMANAGER->isToggleKey(VK_F1)) Rectangle(CAMERAMANAGER->getWorDC(), _enemyRect);
 	_image->frameRender(CAMERAMANAGER->getWorDC(), _enemyRect.left, _enemyRect.top, _frameX, _frameY);
-	//Rectangle(CAMERAMANAGER->getWorDC(), _ericRect);
-	if(KEYMANAGER->isToggleKey(VK_F1)) Rectangle(CAMERAMANAGER->getWorDC(), _enemyRect);
-	_image->frameRender(CAMERAMANAGER->getWorDC(), _enemyRect.left, _enemyRect.top, _frameX, _frameY);
-	//Rectangle(CAMERAMANAGER->getWorDC(), _enemy_DISCOVERY_Rect);
-	char buffer[128];
 	Rectangle(CAMERAMANAGER->getWorDC(), _ericRect);
 }
 
@@ -88,7 +83,7 @@ void Enemy::EnemyAction()
 
 void Enemy::Frame()
 {
-	
+
 }
 
 void Enemy::Move()
@@ -127,7 +122,7 @@ void Enemy::Scout()
 			int platformG = GetGValue(platformCOLOR);
 			int platformB = GetBValue(platformCOLOR);
 
-			if (((platformR == 255 && platformG == 0 && platformB == 255) || (platformR == 255 && platformG == 255 && platformB == 255) || (platformR == 255 && platformG == 0 && platformB == 0) || (wallR == 255 && wallG == 255 && wallB == 0)) && !_turn)
+			if (((platformR == 255 && platformG == 0 && platformB == 255) || (platformR == 255 && platformG == 255 && platformB == 255) || (platformR == 255 && platformG == 0 && platformB == 0) || (wallR == 255 && wallG == 255 && wallB == 0)))
 			{
 				_turn_Num++;
 				_turn = true;
@@ -156,7 +151,7 @@ void Enemy::Scout()
 			int platformG = GetGValue(platformCOLOR);
 			int platformB = GetBValue(platformCOLOR);
 
-			if (((platformR == 255 && platformG == 0 && platformB == 255) || (platformR == 255 && platformG == 255 && platformB == 255) || (platformR == 255 && platformG == 0 && platformB == 0) || (wallR == 255 && wallG == 255 && wallB == 0)) && !_turn)
+			if (((platformR == 255 && platformG == 0 && platformB == 255) || (platformR == 255 && platformG == 255 && platformB == 255) || (platformR == 255 && platformG == 0 && platformB == 0) || (wallR == 255 && wallG == 255 && wallB == 0)))
 			{
 				_turn_Num++;
 				_turn = true;
