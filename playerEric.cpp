@@ -112,7 +112,9 @@ void playerEric::update()
 	{
 		PixelCollision();
 	}
-	}
+
+
+	} // unable
 	//  플레이어 사망
 	ericDie();
 	_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());   // RECT 갱신
