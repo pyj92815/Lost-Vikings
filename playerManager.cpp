@@ -48,7 +48,6 @@ void playerManager::update()
 
 void playerManager::release()
 {
-	
 	_eric->release();
 	_baleog->release();
 	_olaf->release();
@@ -56,9 +55,9 @@ void playerManager::release()
 
 void playerManager::render()
 {
-	_eric->render();
-	_baleog->render();
 	_olaf->render();
+	_baleog->render();
+	_eric->render();
 }
 
 void playerManager::KILLPlayer()
@@ -78,3 +77,4 @@ void playerManager::KILLPlayer()
 		_olaf->player_Kill();
 	}
 }
+
