@@ -42,6 +42,7 @@ HRESULT playerbaleog::init(float x, float y)
 	_baleog.currentFrameX = _baleog.currentFrameY = 0;
 	_baleogAttackMotion = false;
 	_baleogAttack = false;
+	_notMove = false;	//활 시위 댕길 때 이동 못하게 하는 것
 	_baleogAttackCount = 0;
 	_baleog.gravity = 0;	//중력
 	_probeY = _baleog.y + _baleog.image->getHeight() / 2;
@@ -89,7 +90,7 @@ void playerbaleog::update()
 		{
 			_baleog.currentFrameX++;
 			_baleog.image->setFrameX(_baleog.currentFrameX);
-
+			_notMove = false;
 			if (_baleog.image->getMaxFrameX() < _baleog.currentFrameX)
 			{
 				if (_baleog.state == STATE_BALEOG_SWORD1)
@@ -144,11 +145,8 @@ void playerbaleog::update()
 			_baleog.state = STATE_IDLE;
 			if (_baleog.image->getMaxFrameX() > _baleog.currentFrameX) _baleog.currentFrameX++;
 			//currentFrameX가 이미지 최대보다 작으면 currentFrameX++해서 돌아가도록
+			_notMove = false;
 
-			//if (_baleog.image->getMaxFrameX() <= _baleog.currentFrameX)//currentFrameX가 이미지 최대보다 크면 불값은 꺼진다
-			//{
-			//	
-			//}
 			_baleog.frameCount = 0;	//프레임카운트 0으로 초기화
 		}
 	}
@@ -199,21 +197,28 @@ void playerbaleog::render()
 
 void playerbaleog::key()
 {
+	
 	//이동
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
 	{
-		_baleog.state = STATE_MOVE;
-		_baleog.x += 3;
-		_baleog.currentFrameY = 0;
+			if (!_notMove)
+			{
+				_baleog.state = STATE_MOVE;
+				_baleog.x += 3;
+			}
+			_baleog.currentFrameY = 0;
 
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
 	{
-		_baleog.state = STATE_MOVE;
-		_baleog.x -= 3;
-		_baleog.currentFrameY = 1;
+			if (!_notMove)
+			{
+				_baleog.state = STATE_MOVE;
+				_baleog.x -= 3;
+			}
+			_baleog.currentFrameY = 1;
 	}
-
+	
 	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_RIGHT))
 	{
 		_baleog.state = STATE_IDLE;
@@ -242,6 +247,7 @@ void playerbaleog::key()
 	//공격키
 	if (KEYMANAGER->isOnceKeyDown('F'))
 	{
+		_notMove = true;	//칼 쓰는 동안 이동키 금지
 		_baleogAttack = true;
 		_baleog.currentFrameX = 0;
 		_baleog.image->setFrameX(_baleog.currentFrameX);
@@ -257,9 +263,10 @@ void playerbaleog::key()
 		}
 		/*_baleog.currentFrameX = 0;*/
 	}
-
+	
 	if (KEYMANAGER->isStayKeyDown('D'))
 	{
+		_notMove = true;	//활시위 당기는 동안 이동키 금지
 		_baleog.state = STATE_BALEOG_ARROW_REDY;
 		if (!_pullString)
 		{
@@ -271,6 +278,7 @@ void playerbaleog::key()
 
 	if (KEYMANAGER->isOnceKeyUp('D'))
 	{
+		_notMove = true;	//활쏘는 동안 이동키 금지
 		_baleog.state = STATE_BALEOG_ARROW_FIRE;
 		_baleog.currentFrameX = 0;
 

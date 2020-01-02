@@ -87,6 +87,7 @@ private:
 	bool _baleogArrowMotion;
 	bool _baleogArrowAction;
 	bool _pullString;
+	bool _notMove;
 	float _probeY;
 	int _baleogAttackCount;
 

@@ -61,7 +61,6 @@ void PlayerOlaf::update()
 	}
 
 	//CAMERAMANAGER->set_Camera_XY(_olaf.rc);
-
 }
 
 void PlayerOlaf::render()
