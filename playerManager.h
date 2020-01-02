@@ -27,8 +27,12 @@ private:
 	playerEric* _eric;
 	playerbaleog* _baleog;
 	PlayerOlaf* _olaf;
+<<<<<<< HEAD
 
 	int			_playing;  // 0 eric 1 baleog 2 olaf
+=======
+	int	_playing;
+>>>>>>> 1a63f65d43ab54d34c73edb7c48b58f310a597a0
 	
 	worldObjects* _wo;
 
@@ -51,6 +55,7 @@ public:
 
 	void set_Playing(int playChar) { _playing = playChar; }
 	void KILLPlayer();
+<<<<<<< HEAD
 
 	int getPlaying() { return _playing; }
 	void itemKey();
@@ -63,3 +68,6 @@ public:
 
 };
 
+=======
+};
+>>>>>>> 1a63f65d43ab54d34c73edb7c48b58f310a597a0
