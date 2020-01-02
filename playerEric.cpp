@@ -76,24 +76,25 @@ void playerEric::update()
 		if (!_ericUnable) key();	// 전투 불능 상태가 아니면 key값 
 	}	
 	ericFrameCount();				// 이미지 프레임 증가 
+	setEricImage();					// image 세팅 
+	if (!_ericUnable)
+	{
+
+
 	ericJump();						// 점프 
 	ericHit();						// 맞을 때 이미지 
-	setEricImage();					// image 세팅 
 		//======================구현 예정==================//
 	ericAttack();							// 공격 
 	if (_ericUnable) ericAttackMove();		// 공격하면 튕겨나오는 함수 
-
 
 	_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());   // RECT 갱신
 
 
 	// 에릭의 좌표를 카메라 매니저에 넘겨준다.
 	// CAMERAMANAGER->set_Camera_XY(_eric.rc);
-
-
 	// 에릭의 위치가 그라운드이면 
-
 	// 점프가 아니면 픽셀충돌, 점프중에도 픽셀충돌 
+
 	if (_eric.posState == POSSTATE_GROUND)
 	{
 		PixelCollision();
@@ -111,6 +112,7 @@ void playerEric::update()
 			_eric.currentFrameX = 2;
 			_eric.image->setFrameX(_eric.currentFrameX);
 		}
+	}
 	}
 	//  플레이어 사망
 	ericDie();

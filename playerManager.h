@@ -52,5 +52,9 @@ public:
 	void itemKey();
 	void setWorldObjectAddressLink(worldObjects* wo) { _wo = wo; }
 
+
+	void trapColision();
+	void boradColision();
+
 };
 
