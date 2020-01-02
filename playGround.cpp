@@ -43,9 +43,7 @@ HRESULT playGround::init()
 //메모리 해제는 여기다 해라!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 void playGround::release()
 {
-	gameNode::release();
-
-	
+	gameNode::release();	
 }
 
 //연산은 여기다 해라!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -69,7 +67,6 @@ void playGround::render()
 {
 	PatBlt(CAMERAMANAGER->getWorDC(), 0, 0, CAMERAMANAGER->get_WorldSize_X(), CAMERAMANAGER->get_WorldSize_Y(), WHITENESS);
 	//==================================================
-
 
 	TIMEMANAGER->render(getMemDC());
 
