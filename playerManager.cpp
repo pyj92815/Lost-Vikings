@@ -121,9 +121,30 @@ void playerManager::trapColision()
 	}
 }
 
+void playerManager::itemColision()
+{
+	//만들고 있는중 이게 맞는건가? ㅋㅋ
+	for (int i = 0; i < _wo->get_vItem().size(); i++)
+	{
+		if (0 > _wo->get_vItem().size()) break;
+		RECT temp;
+		if (IntersectRect(&temp, &_eric->getEricRect(), &_wo->get_vItem()[i].oneBoom.rc))
+		{
+			if (!_wo->get_vItem()[i].oneBoom.isCollision)
+			{
+				if (_wo->get_vItem()[i].oneBoom.item == ITEM_BOMB)
+				{
+					_wo->setCollision(i);
+					break;
+				}
+			}
+		}
+	}
+}
+
 void playerManager::boradColision()
 {
-	for (int i = 0; i < _wo->get_vTrap().size(); ++i)
+	/*for (int i = 0; i < _wo->get_vTrap().size(); ++i)
 	{
 		if (0 > _wo->get_vTrap().size()) break;
 		if (_wo->get_vTrap()[i].trap == TRAP_BORAD)
@@ -135,5 +156,5 @@ void playerManager::boradColision()
 
 
 		}	
-	}
+	}*/
 }
