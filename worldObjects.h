@@ -39,7 +39,7 @@ public:
 	virtual void render();
 
 	virtual void collision(int x, int y);
-	
+
 	virtual void framework();
 	virtual void move();
 };

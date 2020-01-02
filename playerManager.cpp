@@ -11,12 +11,15 @@ HRESULT playerManager::init()
 
 	_olaf = new PlayerOlaf;
 	_olaf->init(180, 155);
+
 	return S_OK;
 }
 
 void playerManager::update()
 {
-	KILLPlayer();
+
+	KILLPlayer();	// 플레이어를 죽인다
+
 	switch (_playing)
 	{
 	case 0:
@@ -41,7 +44,6 @@ void playerManager::update()
 	_eric->update();
 	_baleog->update();
 	_olaf->update();
-
 }
 
 void playerManager::release()

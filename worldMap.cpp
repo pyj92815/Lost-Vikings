@@ -23,6 +23,7 @@ HRESULT worldMap::init()
 
 	_wo = new worldObjects;
 	_wo->init();
+
 	return S_OK;
 }
 
@@ -46,7 +47,6 @@ void worldMap::render()
 
 //	PatBlt(CAMERAMANAGER->getWorDC(), CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), WINSIZEX, WINSIZEY, BLACKNESS);
 
-
 	IMAGEMANAGER->findImage("Background")->render(CAMERAMANAGER->getWorDC(), 0, 0);
 	_wo->render();
 	if (KEYMANAGER->isStayKeyDown('Q'))
@@ -54,11 +54,7 @@ void worldMap::render()
 		IMAGEMANAGER->findImage("BG")->render(CAMERAMANAGER->getWorDC(), 0, 0);
 	}
 
+
 	IMAGEMANAGER->findImage("BG")->render(CAMERAMANAGER->getWorDC(), 0, 0);
-
-	//IMAGEMANAGER->findImage("OBJECT")->render(CAMERAMANAGER->getWorOBDC(), 0, 0);
-	//worldImage->render(getMemDC(), 0, 0,
-	//	CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
-
 
 }

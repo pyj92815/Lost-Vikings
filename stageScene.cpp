@@ -76,57 +76,57 @@ void stageScene::render()
 void stageScene::posSetting()
 {
 	// 상태 UI 초기화
-	_UI_State[PT_Run].image = new image;
-	_UI_State[PT_Run].image = IMAGEMANAGER->findImage("R_State");
+	_UI_State[PT_ERIC].image = new image;
+	_UI_State[PT_ERIC].image = IMAGEMANAGER->findImage("R_State");
 
-	_UI_State[PT_Attack].image = new image;
-	_UI_State[PT_Attack].image = IMAGEMANAGER->findImage("A_State");
+	_UI_State[PT_BALEOG].image = new image;
+	_UI_State[PT_BALEOG].image = IMAGEMANAGER->findImage("A_State");
 
-	_UI_State[PT_Def].image = new image;
-	_UI_State[PT_Def].image = IMAGEMANAGER->findImage("S_State");
+	_UI_State[PT_OLAF].image = new image;
+	_UI_State[PT_OLAF].image = IMAGEMANAGER->findImage("S_State");
 
 
-	_UI_State[PT_Run].pos.x = 185;
-	_UI_State[PT_Run].pos.y = WINSIZEY - 95;
+	_UI_State[PT_ERIC].pos.x = 185;
+	_UI_State[PT_ERIC].pos.y = WINSIZEY - 95;
 
-	_UI_State[PT_Attack].pos.x = 400;
-	_UI_State[PT_Attack].pos.y = WINSIZEY - 95;
+	_UI_State[PT_BALEOG].pos.x = 400;
+	_UI_State[PT_BALEOG].pos.y = WINSIZEY - 95;
 
-	_UI_State[PT_Def].pos.x = 615;
-	_UI_State[PT_Def].pos.y = WINSIZEY - 95;
+	_UI_State[PT_OLAF].pos.x = 615;
+	_UI_State[PT_OLAF].pos.y = WINSIZEY - 95;
 
-	_UI_State[PT_Run].rc = RectMakeCenter(_UI_State[PT_Run].pos.x, _UI_State[PT_Run].pos.y,
-		_UI_State[PT_Run].image->getFrameWidth(), _UI_State[PT_Run].image->getFrameHeight());
-	_UI_State[PT_Run].rc.left += 2;	// 삐져나온 위치 조정
-	_UI_State[PT_Run].rc.right += 2;
-	_UI_State[PT_Run].rc.top -= 2;
-	_UI_State[PT_Run].rc.bottom -= 2;
+	_UI_State[PT_ERIC].rc = RectMakeCenter(_UI_State[PT_ERIC].pos.x, _UI_State[PT_ERIC].pos.y,
+		_UI_State[PT_ERIC].image->getFrameWidth(), _UI_State[PT_ERIC].image->getFrameHeight());
+	_UI_State[PT_ERIC].rc.left += 2;	// 삐져나온 위치 조정
+	_UI_State[PT_ERIC].rc.right += 2;
+	_UI_State[PT_ERIC].rc.top -= 2;
+	_UI_State[PT_ERIC].rc.bottom -= 2;
 
-	_UI_State[PT_Attack].rc = RectMakeCenter(_UI_State[PT_Attack].pos.x, _UI_State[PT_Attack].pos.y,
-		_UI_State[PT_Attack].image->getFrameWidth(), _UI_State[PT_Attack].image->getFrameHeight());
-	_UI_State[PT_Attack].rc.top -= 2;
-	_UI_State[PT_Attack].rc.bottom -= 2;
+	_UI_State[PT_BALEOG].rc = RectMakeCenter(_UI_State[PT_BALEOG].pos.x, _UI_State[PT_BALEOG].pos.y,
+		_UI_State[PT_BALEOG].image->getFrameWidth(), _UI_State[PT_BALEOG].image->getFrameHeight());
+	_UI_State[PT_BALEOG].rc.top -= 2;
+	_UI_State[PT_BALEOG].rc.bottom -= 2;
 
-	_UI_State[PT_Def].rc = RectMakeCenter(_UI_State[PT_Def].pos.x, _UI_State[PT_Def].pos.y,
-		_UI_State[PT_Def].image->getFrameWidth(), _UI_State[PT_Def].image->getFrameHeight());
-	_UI_State[PT_Def].rc.top -= 2;
-	_UI_State[PT_Def].rc.bottom -= 2;
+	_UI_State[PT_OLAF].rc = RectMakeCenter(_UI_State[PT_OLAF].pos.x, _UI_State[PT_OLAF].pos.y,
+		_UI_State[PT_OLAF].image->getFrameWidth(), _UI_State[PT_OLAF].image->getFrameHeight());
+	_UI_State[PT_OLAF].rc.top -= 2;
+	_UI_State[PT_OLAF].rc.bottom -= 2;
 
 	// 시작 시엔 빨간놈이 선택되어 있다
-	_UI_State[PT_Run].image->setFrameX(1);
+	_UI_State[PT_ERIC].image->setFrameX(1);
 
 
 	// 인벤토리 UI 초기화 (캐릭터마다 4개씩 있다.)
-	
+
 
 	// 쓰레기통 UI 초기화
 	_UI_Garbage.image = IMAGEMANAGER->findImage("GarbageBox");
-	_UI_Garbage.rc = RectMake(764, _UI_State[PT_Run].rc.top, _UI_Garbage.image->getWidth(), _UI_Garbage.image->getHeight());
+	_UI_Garbage.rc = RectMake(764, _UI_State[PT_ERIC].rc.top, _UI_Garbage.image->getWidth(), _UI_Garbage.image->getHeight());
 	_UI_Garbage.pos.x = (_UI_Garbage.rc.left + _UI_Garbage.rc.right) / 2;
 	_UI_Garbage.pos.y = (_UI_Garbage.rc.top + _UI_Garbage.rc.bottom) / 2;
 
-	// 캐릭터 전환 변수 (이 숫자가 바뀌면 그 캐릭터를 바라본다?)  
-	_charNum = PT_Run;
+	// 캐릭터 전환 변수 (이 숫자가 바뀌면 그 캐릭터를 바라본다?)
+	_charNum = PT_ERIC;
 
 }
 
@@ -199,24 +199,24 @@ void stageScene::set_PlayerDead()
 {
 	// 캐릭터의 생존 유무를 받아서 저장한다.
 	// 만약 캐릭터가 죽었다면 상태 이미지는 죽어있게 한다.
-	_UI_State[PT_Run].dead = _pm->getPlayerEric().isDead;
-	_UI_State[PT_Attack].dead = _pm->getPlayerBaleog().isDead;
-	_UI_State[PT_Def].dead = _pm->getPlayerOlaf().isDead;
+	_UI_State[PT_ERIC].dead = _pm->getPlayerEric().isDead;
+	_UI_State[PT_BALEOG].dead = _pm->getPlayerBaleog().isDead;
+	_UI_State[PT_OLAF].dead = _pm->getPlayerOlaf().isDead;
 
 	// 만약 dead값이 true면 캐릭터가 죽었다는 뜻
-	if (_UI_State[PT_Run].dead)
+	if (_UI_State[PT_ERIC].dead)
 	{
-		_UI_State[PT_Run].image->setFrameX(2);		// 이미지는 죽은 이미지로 교체한다.
+		_UI_State[PT_ERIC].image->setFrameX(2);		// 이미지는 죽은 이미지로 교체한다.
 	}
 
-	if (_UI_State[PT_Attack].dead)
+	if (_UI_State[PT_BALEOG].dead)
 	{
-		_UI_State[PT_Attack].image->setFrameX(2);	// 이미지는 죽은 이미지로 교체한다.
+		_UI_State[PT_BALEOG].image->setFrameX(2);	// 이미지는 죽은 이미지로 교체한다.
 	}
 
-	if (_UI_State[PT_Def].dead)
+	if (_UI_State[PT_OLAF].dead)
 	{
-		_UI_State[PT_Def].image->setFrameX(2);		// 이미지는 죽은 이미지로 교체한다.
+		_UI_State[PT_OLAF].image->setFrameX(2);		// 이미지는 죽은 이미지로 교체한다.
 	}
 
 	// 만약 캐릭터가 죽었을 경우에 다음 캐릭터로 바꾸는 기능
@@ -225,7 +225,7 @@ void stageScene::set_PlayerDead()
 		while (true)
 		{
 			// 캐릭터가 모두 죽은 상황은 게임 오버 화면으로 넘어간다.
-			if (_UI_State[PT_Run].dead && _UI_State[PT_Attack].dead && _UI_State[PT_Def].dead)
+			if (_UI_State[PT_ERIC].dead && _UI_State[PT_BALEOG].dead && _UI_State[PT_OLAF].dead)
 			{
 				// 인터벌을 주고 넘어갈지 그냥 넘어갈지 정하고
 				// 게임 오버 씬으로 넘어간다.

@@ -64,7 +64,6 @@ void playerbaleog::update()
 	// 비밀이동키
 	//if (!_baleogAttack) hgKey();
 
-
 	if(_stopControl) if (!_baleogAttack) key();
 
 	_baleog.rc = RectMake(_baleog.x, _baleog.y, _baleog.image->getFrameWidth(), _baleog.image->getFrameHeight());
@@ -72,15 +71,12 @@ void playerbaleog::update()
 	setBaleogState();
 	PixelCollision();
 
-	//CAMERAMANAGER->set_Camera_XY(_baleog.rc);
-
 	//중력
 	if (_baleog.posState = POSSTATE_AIR)
 	{
 		if (_baleog.gravity < 5)	_baleog.gravity += 0.7;
 		_baleog.y += _baleog.gravity;
 	}
-
 
 	//프레임회전
 	_baleog.frameCount++;
@@ -120,7 +116,7 @@ void playerbaleog::update()
 		//벨로그 프레임카운트가 돌아간다
 		if (_baleog.frameCount >= _baleog.frameSpeed)	//프레임카운트가 15를 넘어가면
 		{
-			
+
 			_baleog.image->setFrameX(_baleog.currentFrameX);//이미지 프레임셋은 currentFrameX변수로 셋팅한다
 			//_baleog.currentFrameX++;
 
@@ -186,8 +182,6 @@ void playerbaleog::update()
 	}
 */
 
-	//CAMERAMANAGER->set_Camera_XY(_baleog.rc);
-
 	_ar->update();
 
 }
@@ -223,9 +217,9 @@ void playerbaleog::key()
 	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_RIGHT))
 	{
 		_baleog.state = STATE_IDLE;
-		_baleog.frameCount = 0;
 		_baleog.currentFrameX = 0;
 		_baleog.image->setFrameX(_baleog.currentFrameX);
+		_baleog.frameCount = 0;
 	}
 
 	////이동키 예외처리
@@ -288,66 +282,59 @@ void playerbaleog::key()
 
 void playerbaleog::setBaleogState()
 {
-	
-		switch (_baleog.state)
-		{
-		case STATE_IDLE:
-			_baleog.image = IMAGEMANAGER->findImage("벨로그기본");
-			break;
-		case STATE_MOVE:
-			_baleog.image = IMAGEMANAGER->findImage("벨로그이동");
-			break;
-		case STATE_ERIC_JUMP:
-			break;
-		case STATE_ERIC_HEADBUTT:
-			break;
-		case STATE_OLAF_GUARD:
-			break;
-		case STATE_OLAF_FLY:
-			break;
-		case STATE_BALEOG_ARROW_REDY:
-			_baleog.image = IMAGEMANAGER->findImage("화살준비");
-			break;
-		case STATE_BALEOG_ARROW_FIRE:
-			_baleog.image = IMAGEMANAGER->findImage("화살발사");
-			break;
-		case STATE_BALEOG_SWORD1:
-			_baleog.image = IMAGEMANAGER->findImage("벨로그칼1");
-			break;
-		case STATE_BALEOG_SWORD2:
-			_baleog.image = IMAGEMANAGER->findImage("벨로그칼2");
-			break;
-		case STATE_PUSH:
-			_baleog.image = IMAGEMANAGER->findImage("밀기");
-			break;
-		case STATE_DIE:
-			_baleog.image = IMAGEMANAGER->findImage("죽음");
-			break;
-		case STATE_POISON:
-			_baleog.image = IMAGEMANAGER->findImage("독사");
-			break;
-		case STATE_MIRRA:
-			_baleog.image = IMAGEMANAGER->findImage("미라사");
-			break;
-		case STATE_PRESSDIE:
-			_baleog.image = IMAGEMANAGER->findImage("압사");
-			break;
-		case STATE_TRAPDIE:
-			_baleog.image = IMAGEMANAGER->findImage("관통사");
-			break;
-		case STATE_STEPLADDER:
-			_baleog.image = IMAGEMANAGER->findImage("사다리이동");
-			break;
-		case STATE_STEPLADDEREND:
-			_baleog.image = IMAGEMANAGER->findImage("사다리도착");
-			break;
-		}
-	
-	
-		
-
-
-
+	switch (_baleog.state)
+	{
+	case STATE_IDLE:
+		_baleog.image = IMAGEMANAGER->findImage("벨로그기본");
+		break;
+	case STATE_MOVE:
+		_baleog.image = IMAGEMANAGER->findImage("벨로그이동");
+		break;
+	case STATE_ERIC_JUMP:
+		break;
+	case STATE_ERIC_HEADBUTT:
+		break;
+	case STATE_OLAF_GUARD:
+		break;
+	case STATE_OLAF_FLY:
+		break;
+	case STATE_BALEOG_ARROW_REDY:
+		_baleog.image = IMAGEMANAGER->findImage("화살준비");
+		break;
+	case STATE_BALEOG_ARROW_FIRE:
+		_baleog.image = IMAGEMANAGER->findImage("화살발사");
+		break;
+	case STATE_BALEOG_SWORD1:
+		_baleog.image = IMAGEMANAGER->findImage("벨로그칼1");
+		break;
+	case STATE_BALEOG_SWORD2:
+		_baleog.image = IMAGEMANAGER->findImage("벨로그칼2");
+		break;
+	case STATE_PUSH:
+		_baleog.image = IMAGEMANAGER->findImage("밀기");
+		break;
+	case STATE_DIE:
+		_baleog.image = IMAGEMANAGER->findImage("죽음");
+		break;
+	case STATE_POISON:
+		_baleog.image = IMAGEMANAGER->findImage("독사");
+		break;
+	case STATE_MIRRA:
+		_baleog.image = IMAGEMANAGER->findImage("미라사");
+		break;
+	case STATE_PRESSDIE:
+		_baleog.image = IMAGEMANAGER->findImage("압사");
+		break;
+	case STATE_TRAPDIE:
+		_baleog.image = IMAGEMANAGER->findImage("관통사");
+		break;
+	case STATE_STEPLADDER:
+		_baleog.image = IMAGEMANAGER->findImage("사다리이동");
+		break;
+	case STATE_STEPLADDEREND:
+		_baleog.image = IMAGEMANAGER->findImage("사다리도착");
+		break;
+	}
 }
 
 void playerbaleog::PixelCollision()
@@ -396,7 +383,7 @@ void playerbaleog::PixelCollision()
 		else
 		{
 			_baleog.posState = POSSTATE_AIR;
-		/*	_baleog.image = IMAGEMANAGER->findImage("낙하");*/
+			/*	_baleog.image = IMAGEMANAGER->findImage("낙하");*/
 		}
 	}
 }
