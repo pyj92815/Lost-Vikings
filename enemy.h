@@ -1,7 +1,28 @@
 #pragma once
 #include"gameNode.h"
 
+class Enemy_Bullet :public gameNode
+{
+private:
+	float _x, _y;
+	float _angle;
+	bool _isFire;
 
+public:
+	HRESULT init();
+	void release();
+	void update();
+	void render();
+
+	void bulletFire(float x,float y,float angle);
+	void bulletMove();
+};
+
+//발견한 적의 종류를 확인하는 Enum문
+enum class DISCOVERYPlayer
+{
+	ERIC,BALEOG,OLAF
+};
 
 enum class EnemyState
 {
@@ -20,19 +41,24 @@ enum class EnemyLR
 };
 enum class EnemyType
 {
-	MUMMY,
-	SCORPION,
-	SNAKE,
-	PLAYERMUMMY,
+	MUMMY,		//적의 타입 지정(미라)
+	SCORPION,	//		"	   (전갈)
+	SNAKE,		//		"	   (뱀)
+	PLAYERMUMMY,//      "      (플레이어 미라)
 };
+
 class Enemy : public gameNode
 {
 protected:
-	
+	vector<Enemy_Bullet*> _vEnemy_Bullet;
+	vector<Enemy_Bullet*>::iterator _viEnemy_Bullet;
+
+
 	EnemyState _enemyState;					//적의 상태 및 이미지 방향을 결정할 ENUM문
 	EnemyLR _enemyLR;						//					"
 	EnemyType _enemyType;					//					"
-	
+	DISCOVERYPlayer _discoveryPlayer;		//발견한 플레이어가 어떤 플레이어인지 알아내기 위한 변수
+
 	float _x, _y;							//적의 위치를 지정할 변수
 	RECT _enemyRect;						//적의 렉트를 지정할 변수
 	RECT _enemyAttackRect;					//적의 공격시의 렉트
@@ -40,20 +66,18 @@ protected:
 
 	RECT _cameraRect;						//카메라의 범위 카메라 안에 적이 들어왔는지 판단하기 위함
 
-	image* _image;							//적의 이미지를 지정할 변수
-
+	image* _image;							//적의 이미지를 저정할 변수
+	image* _Attack_image;					//적의 공격 이미지를 저장할 변수
 	int _probeX, _probeY;					//적의 벽,땅 충돌 처리를 위한 탐색 변수
 	int _turn_Num;							//적의 방향을 전환하기 위한 변수
 
 	int _frameX, _frameY;					//적의 프레임 변수
 	int _frameCount;						//적의 프레임 카운트 변수
 
+	int _enemyHP;							//적의 HP
 	
 	bool _turn;								//적의 방향을 바꿔주기 위한 bool변수
 	bool _die;								//적의 사망 상태를 반환하기 위한 함수
-
-	
-
 
 public:
 	RECT _ericRect;							//에릭의 렉트
@@ -68,27 +92,39 @@ public:
 	virtual void update();
 	virtual void render();
 
-	virtual void EnemyAction();				//적의 상태의 따른 행동을 지정하는 함수
-	virtual void Frame();					//적의 프레임을 관리하는 함수
+	virtual void EnemyAction();					//적의 상태의 따른 행동을 지정하는 함수
+	virtual void Frame();						//적의 프레임을 관리하는 함수
 
-	virtual void Move();					//적의 움직임을 담당하는 함수
-	virtual void Scout();					//적의 탐색을 담당하는 함수
+	virtual void Move();						//적의 움직임을 담당하는 함수
+	virtual void Scout();						//적의 탐색을 담당하는 함수
+	virtual void Discovery();					//적을 발견해내는 함수
+	virtual void Tracking();					//적을 쫓는 함수
+	virtual void Attack(EnemyType enemyType);	//적이 사정거리 안에 들어와 공격 상태로 변환하는 함수
+	virtual void Attack();						//실질적으로 적을 공격하는 함수
+
 	//적의 상태를 반환하는 함수(_enemyState)
 	virtual EnemyState getEnemyState() { return _enemyState; }
 	virtual RECT getRect() { return _enemyRect; }
 	virtual bool getDie() { if(_die)return true; else return false; }
 
-	virtual void setPlayerRect(RECT eric,RECT baleog,RECT olaf);
+	virtual void Hit() { _enemyHP--; }
 
+	virtual void setPlayerRect(RECT eric,RECT baleog,RECT olaf);
+	virtual void platformColision();
+	
 	//이미지 추가 함수
 	virtual void imageReset()
 	{
 		IMAGEMANAGER->addFrameImage("Enemy_Mummy", "./image./Enemy/Enemy_Mummy.bmp", 558, 180, 6, 2, true, RGB(255, 0, 255));
 		IMAGEMANAGER->addFrameImage("Enemy_Mummy_Attack", "./image./Enemy/Enemy_Mummy_Attack.bmp", 540, 206, 6, 2, true, RGB(255, 0, 255));
+
+		IMAGEMANAGER->addFrameImage("Enemy_PlayerMummy", "./image./Enemy/Enemy_PlayerMummy.bmp", 558, 180, 6, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("Enemy_PlayerMummy_Attack", "./image./Enemy/Enemy_PlayerMummy_Attack.bmp", 540, 206, 6, 2, true, RGB(255, 0, 255));
+
 		IMAGEMANAGER->addFrameImage("Enemy_Scorpion", "./image./Enemy/Enemy_Scorpion.bmp", 384, 192, 4, 2, true, RGB(255, 0, 255));
 		IMAGEMANAGER->addFrameImage("Enemy_Scorpion_Attack", "./image./Enemy/Enemy_Scorpion_Attack.bmp", 784, 198, 7, 2, true, RGB(255, 0, 255));
-		IMAGEMANAGER->addFrameImage("Enemy_Snake", "./image./Enemy/Enemy_Snake.bmp", 108, 24, 2, 2, true, RGB(255, 0, 255));
-		IMAGEMANAGER->addFrameImage("Enemy_Snake_Attack", "./image./Enemy/Enemy_Snake_Attack", 780, 184, 6, 2, true, RGB(255, 0, 255));
+
+		IMAGEMANAGER->addFrameImage("Enemy_Snake", "./image./Enemy/Enemy_Snake.bmp", 88, 20, 2, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("Enemy_Snake_Attack", "./image./Enemy/Enemy_Snake_Attack", 618, 146, 6, 2, true, RGB(255, 0, 255));
 	}
 };
-
