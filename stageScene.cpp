@@ -23,7 +23,11 @@ HRESULT stageScene::init()
 	_em = new EnemyManager;
 	_em->init();
 
+	_pm->setWorldObjectAddressLink(_wm->getWorldObject());
+	_wm->getWorldObject()->setPlayerManagerAddressLink(_pm);
 	posSetting();	// UI의 좌표를 설정한다. (캐릭터 상태 + 인벤토리)
+
+	
 
 	return S_OK;
 }
