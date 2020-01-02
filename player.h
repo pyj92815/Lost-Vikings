@@ -32,7 +32,6 @@ enum tagPosState  // position state
 	POSSTATE_GROUND,    // 중력을 안받고 
 	POSSTATE_AIR,		// 중력을 받는다 
 	POSSTATE_BORAD,
-	POSSTATE_AIR,		// 중력을 받는다
 	POSSTATE_STEPLADDER,
 	POSSTATE_LADDERFALL
 
