@@ -28,8 +28,9 @@ private:
 	playerbaleog* _baleog;
 	PlayerOlaf* _olaf;
 
+
 	int			_playing;  // 0 eric 1 baleog 2 olaf
-	
+
 	worldObjects* _wo;
 
 public:
@@ -51,6 +52,7 @@ public:
 
 	void set_Playing(int playChar) { _playing = playChar; }
 	void KILLPlayer();
+
 
 	int getPlaying() { return _playing; }
 	void itemKey();
