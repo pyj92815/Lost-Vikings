@@ -112,7 +112,8 @@ void playerEric::update()
 			_eric.image->setFrameX(_eric.currentFrameX);
 		}
 	}
-
+	//  플레이어 사망
+	ericDie();
 }
 
 void playerEric::render()
@@ -148,12 +149,14 @@ void playerEric::key()
 		_eric.frameSpeed = 10;
 		_breathCount = 0;
 		if (_eric.state != STATE_PUSH) _eric.currentFrameY = 0;
+		if (_isSlide && _eric.state != STATE_PUSH)  _isSlideOn = true;		// 슬라이딩을 활성화 시키기 위한 
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 	{
 		_eric.frameSpeed = 10;
 		_breathCount = 0;
 		if(_eric.state != STATE_PUSH) _eric.currentFrameY = 1;
+		if (_isSlide && _eric.state != STATE_PUSH)   _isSlideOn = true;		// 슬라이딩을 활성화 시키기 위한 
 	}
 
 
@@ -199,7 +202,7 @@ void playerEric::key()
 				_eric.x -= _eric.movePower;
 			}
 			// 만약 슬라이딩 이라면 슬라이딩 시켜라 
-			if (_isSlide) _isSlideOn = true;  
+			if (_breathCount > 10 && _eric.state != STATE_PUSH) _isSlide = true;
 		}
 	}
 	// 오른쪽 키를 지속적으로 누르면 
@@ -235,16 +238,13 @@ void playerEric::key()
 				_eric.x += _eric.movePower;	 // 0 이 오른쪽 
 			}
 
-			if (_isSlide)  _isSlideOn = true;
+			if (_breathCount > 10 && _eric.state != STATE_PUSH) _isSlide = true;
 		}
 	}
 
 	//  좌우키를 때면 
 	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_RIGHT))
 	{
-		// 슬라이딩을 활성화 시키기 위한 
-		if (_breathCount > 10 && _eric.state != STATE_PUSH) _isSlide = true;
-	
 		// 숨 카운트가 150이상이면 숨 에릭 이미지를 띄운다 
 		if (_breathCount > 150)
 		{
@@ -755,5 +755,8 @@ void playerEric::isJumpPixelCollision()
 
 void playerEric::ericDie()
 {
-
+	if (_eric.hp == 0)
+	{
+		_eric.state == STATE_DIE;
+	}
 }

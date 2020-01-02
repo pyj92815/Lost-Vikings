@@ -26,13 +26,11 @@ void playerManager::update()
 		_baleog->set_stopKey(false);
 		_olaf->set_stopKey(false);
 		break;
-
 	case 1:
 		_eric->set_stopKey(false);
 		_baleog->set_stopKey(true);
 		_olaf->set_stopKey(false);
 		break;
-
 	case 2:
 		_eric->set_stopKey(false);
 		_baleog->set_stopKey(false);
@@ -43,6 +41,8 @@ void playerManager::update()
 	_eric->update();
 	_baleog->update();
 	_olaf->update();
+
+
 }
 
 void playerManager::release()
@@ -64,7 +64,8 @@ void playerManager::KILLPlayer()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_F1))
 	{
-		_eric->player_Kill();
+		//_eric->player_Kill();
+		_eric->setEricState(STATE_DIE);
 	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F2))
@@ -75,5 +76,13 @@ void playerManager::KILLPlayer()
 	if (KEYMANAGER->isOnceKeyDown(VK_F3))
 	{
 		_olaf->player_Kill();
+	}
+}
+
+void playerManager::itemKey()
+{
+	if (KEYMANAGER->isOnceKeyDown('E'))
+	{
+
 	}
 }
