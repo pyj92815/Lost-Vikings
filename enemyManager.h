@@ -3,8 +3,11 @@
 #include"Enemy_Mummy.h"
 #include"Enemy_Scorpion.h"
 #include"Enemy_Snake.h"
+#include"Enemy_PlayerMummy.h"
 #include<vector>
 using namespace std;
+
+class playerManager;
 
 class EnemyManager : public gameNode
 {
@@ -15,7 +18,7 @@ private:
 	vector<Enemy*>			_vEnemy;
 	vector<Enemy*>::iterator _viEnemy;
 
-	//float _x, _y;
+	playerManager* _playerManager;
 
 
 public:
@@ -27,6 +30,10 @@ public:
 	void update();
 	void render();
 
-	void enemyCreate();
+	void EnemyCreate();
+	void EnemyCreate(float x,float y);
+	void EnemyRemove();
+	
+	playerManager* getPlayerManager() { return _playerManager; }
 };
 

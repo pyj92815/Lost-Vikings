@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "Enemy_Mummy.h"
+#include "Enemy_PlayerMummy.h"
 
-void Enemy_Mummy::EnemyAction()
+void Enemy_PlayerMummy::EnemyAction()
 {
 	_probeY = _y + _image->getFrameHeight() / 2;
 	switch (_enemyState)
@@ -12,7 +12,7 @@ void Enemy_Mummy::EnemyAction()
 		if (IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::SCOUT;
 		break;
 	case EnemyState::SCOUT:
-		
+
 		Scout();				//움직이다 절벽/벽 을 만나면 반대편으로 돌아가도록 하는 함수
 		Move();					//좌우로 움직이게 하는 함수
 
@@ -31,24 +31,18 @@ void Enemy_Mummy::EnemyAction()
 			_enemyState = EnemyState::DISCOVERY;	//플레이어를 발견하면 DISCOVERY상태로 변함
 			_playerRect = _beleogRect;
 		}
+			
+			
 
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 	case EnemyState::DISCOVERY:
 		//적을 추적
-		_player.x = (_playerRect.left + _playerRect.right) / 2;
-		_player.y = (_playerRect.top + _playerRect.bottom) / 2;
-		if (_x > _player.x)
-		{
-			_enemyLR = EnemyLR::LEFT;
-			if (_frameX <= 3)_x -= 3;
-		}
-		else if (_x < _player.x)
-		{
-			_enemyLR = EnemyLR::RIGHT;
-			if (_frameX <= 3)_x += 3;
-		}
-		if (!IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_playerRect))_enemyState = EnemyState::SCOUT;
+		//if(_x>player.x)_x-=
+		//if(_x<_player.x)_x+=
+		//if(플레이어의 렉트가 공격범위 렉트안에 들어오면)_enemyState=EnemyState::ATTACK;
+		//else if(적이 탐색 범위 밖으로 나가면)_enemyState=EnemyState::SCOUT;
+
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 		break;
@@ -93,7 +87,7 @@ void Enemy_Mummy::EnemyAction()
 
 }
 
-void Enemy_Mummy::Frame()
+void Enemy_PlayerMummy::Frame()
 {
 	switch (_enemyState)
 	{

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "EnemyManager.h"
-
+#include"playerManager.h"
 EnemyManager::EnemyManager()
 {
 }
@@ -17,14 +17,14 @@ HRESULT EnemyManager::init()
 
 	}*/
 	//적을 생성하는 함수
-	enemyCreate();
+	EnemyCreate();
 
 	return S_OK;
 }
 
 void EnemyManager::release()
 {
-
+	
 }
 
 void EnemyManager::update()
@@ -34,6 +34,7 @@ void EnemyManager::update()
 	{
 		(*_viEnemy)->update();
 	}
+	EnemyRemove();
 }
 
 void EnemyManager::render()
@@ -44,7 +45,9 @@ void EnemyManager::render()
 	}
 }
 
-void EnemyManager::enemyCreate()
+
+
+void EnemyManager::EnemyCreate()
 {
 	Enemy* Mummy_1;
 	Mummy_1 = new Enemy_Mummy;
@@ -101,6 +104,30 @@ void EnemyManager::enemyCreate()
 	Snake_3->init(EnemyType::SNAKE, 2751, 615);
 	_vEnemy.push_back(Snake_3);
 
+}
+
+void EnemyManager::EnemyCreate(float x, float y)
+{
+	Enemy* PlayerMummy;
+	PlayerMummy = new Enemy_PlayerMummy;
+	PlayerMummy->init(EnemyType::PLAYERMUMMY, x, y);
+	_vEnemy.push_back(PlayerMummy);
+}
+
+void EnemyManager::EnemyRemove()
+{
+	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();)
+	{
+		if ((*_viEnemy)->getDie())
+		{
+			_vEnemy.erase(_viEnemy);
+			break;
+		}
+		else
+		{
+			++_viEnemy;
+		}
+	}
 }
 
 

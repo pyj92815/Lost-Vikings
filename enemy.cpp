@@ -1,10 +1,13 @@
 #include "stdafx.h"
 #include "Enemy.h"
 #include"playerManager.h"
+
 HRESULT Enemy::init(EnemyType enemyType, float x, float y)
 {
 	imageReset();
+	//플레이어와 연동하는 함수
 	_playerManager = new playerManager;
+	playerLink();
 	//프레임 관련 변수 초기화
 	_enemyState = EnemyState::IDLE;
 	_frameX = _frameY = _frameCount = 0;
@@ -18,6 +21,9 @@ HRESULT Enemy::init(EnemyType enemyType, float x, float y)
 		break;
 	case EnemyType::SNAKE:
 		_image = IMAGEMANAGER->findImage("Enemy_Snake");
+		break;
+	case EnemyType::PLAYERMUMMY:
+		_image = IMAGEMANAGER->findImage("Enemy_PlayerMummy");
 		break;
 	default:
 		break;
@@ -39,18 +45,21 @@ void Enemy::release()
 
 void Enemy::update()
 {
-	EnemyAction();
-	Frame();
+	EnemyAction();		//적의 상태의 따른 행동을 지정하는 함수
+	Frame();			//적의 프레임을 관리하는 함수
+	
+	//playerLink();		//플레이어의 렉트를 받아오는 함수
+
 	_cameraRect = RectMake(CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
 	_enemy_DISCOVERY_Rect = RectMakeCenter(_x, _y, 600, 400);
-	//_enemyRect = RectMakeCenter(_x, _y, _image->getFrameWidth(), _image->getFrameHeight());
+	_enemyRect = RectMakeCenter(_x, _y, _image->getFrameWidth(), _image->getFrameHeight());
 }
 
 void Enemy::render()
 {
-	Rectangle(CAMERAMANAGER->getWorDC(), _enemyRect);
+	if(KEYMANAGER->isToggleKey(VK_F1)) Rectangle(CAMERAMANAGER->getWorDC(), _enemyRect);
 	_image->frameRender(CAMERAMANAGER->getWorDC(), _enemyRect.left, _enemyRect.top, _frameX, _frameY);
-	Rectangle(CAMERAMANAGER->getWorDC(), _enemy_DISCOVERY_Rect);
+	//Rectangle(CAMERAMANAGER->getWorDC(), _enemy_DISCOVERY_Rect);
 
 }
 
@@ -209,4 +218,11 @@ void Enemy::Scout()
 	default:
 		break;
 	}
+}
+
+void Enemy::playerLink()
+{
+	_ericRect=_playerManager->getPlayerEric().rc;
+	_olafRect =_playerManager->getPlayerOlaf().rc;
+	_beleogRect=_playerManager->getPlayerBaleog().rc;
 }
