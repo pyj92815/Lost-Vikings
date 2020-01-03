@@ -16,12 +16,12 @@ HRESULT worldObjects::init()
 	_niddle[0].rc = RectMake(240, 2210, 570, 40);
 	_niddle[1].rc = RectMake(1111, 2210, 2385, 40);
 	_niddle[2].rc = RectMake(1686, 38, 180, 39);
-	for (int i = 0;i < 3;i++)
+	for (int i = 0; i < 3; i++)
 	{//함정 타입
 		_niddle[i].trap = TRAP_NIDDLE;
 		_niddle[i].isCollision = false;
 	}//□□□□□□□□□□□□□가시 함정을 벡터에 넣자□□□□□□□□□□□□□□□□□□□
-	for (int i = 0;i < 3;i++) { _vTrap.push_back(_niddle[i]); }
+	for (int i = 0; i < 3; i++) { _vTrap.push_back(_niddle[i]); }
 	//■■■■■■■■■■■■■■■■■독 함정 위치 렉트■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	IMAGEMANAGER->addFrameImage("poision", "./image/ImageCollection/poision.bmp", 130, 56, 5, 1, true, RGB(255, 0, 255));
 	//좌표
@@ -48,7 +48,7 @@ HRESULT worldObjects::init()
 		//함정 타입
 		_poision[i].trap = TRAP_POISION;
 	}//□□□□□□□□□□□□□독 함정을 벡터에 넣자□□□□□□□□□□□□□□□□□□□
-	for (int i = 0;i < 4;i++) { _vTrap.push_back(_poision[i]); }
+	for (int i = 0; i < 4; i++) { _vTrap.push_back(_poision[i]); }
 	//■■■■■■■■■■■■■■■■■폭포 위치 렉트■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	IMAGEMANAGER->addFrameImage("smallWater_Fall", "./image/ImageCollection/water_Fall.bmp", 588, 650, 4, 1, true, RGB(255, 0, 255));
 	for (int i = 0; i < 3; i++)
@@ -87,54 +87,54 @@ HRESULT worldObjects::init()
 	_vTrap.push_back(_breakableWallTwo);
 
 	//■■■■■■■■■■■■■■■■■아이템 위치■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	_Items.oneBoom.image = IMAGEMANAGER->addImage("Boom", "./image/ImageCollection/Boom_Item.bmp", 48, 47, true, RGB(255, 0, 255));
-	_Items.twoBoom.image = IMAGEMANAGER->addImage("Boom", "./image/ImageCollection/Boom_Item.bmp", 48, 47, true, RGB(255, 0, 255));
-	_Items.oneTomato.image = IMAGEMANAGER->addImage("oneTomato", "./image/ImageCollection/item_hp2.bmp", 40, 48, true, RGB(255, 0, 255));
-	_Items.twoTomato.image = IMAGEMANAGER->addImage("twoTomato", "./image/ImageCollection/item_hp2.bmp", 40, 48, true, RGB(255, 0, 255));
-	_Items.blueKey.image = IMAGEMANAGER->addImage("BlueKey", "./image/ImageCollection/BlueKey.bmp", 27, 45, true, RGB(255, 0, 255));
-	_Items.blueLocker.image = IMAGEMANAGER->addImage("BlueLocker", "./image/ImageCollection/BlueKey_Hole.bmp", 48, 48, false, RGB(0, 0, 0));
-	_Items.redKey.image = IMAGEMANAGER->addImage("RedKey", "./image/ImageCollection/RedKey.bmp", 27, 54, true, RGB(255, 0, 255));
-	_Items.redLocker.image = IMAGEMANAGER->addImage("RedLocker", "./image/ImageCollection/RedKey_Hole.bmp", 48, 48, false, RGB(0, 0, 0));
-	//좌표
-	_Items.oneBoom.x = 750;
-	_Items.oneBoom.y = 60;
-	_Items.twoBoom.x = 3600;
-	_Items.twoBoom.y = 665;
-	
-	_Items.oneTomato.x = 1560;
-	_Items.oneTomato.y = 155;
-	_Items.twoTomato.x = 25;
-	_Items.twoTomato.y = 640;
-	
-	_Items.blueKey.x = 2075;
-	_Items.blueKey.y = 955;
-	_Items.blueLocker.x = 3520;
-	_Items.blueLocker.y = 2105;
-	
-	_Items.redKey.x = 1840;
-	_Items.redKey.y = 555;
-	_Items.redLocker.x = 2040;
-	_Items.redLocker.y = 185;
+	_Items[0].image = IMAGEMANAGER->addImage("Boom", "./image/ImageCollection/Boom_Item.bmp", 48, 47, true, RGB(255, 0, 255));
+	_Items[1].image = IMAGEMANAGER->addImage("Boom", "./image/ImageCollection/Boom_Item.bmp", 48, 47, true, RGB(255, 0, 255));
+	_Items[2].image = IMAGEMANAGER->addImage("oneTomato", "./image/ImageCollection/item_hp2.bmp", 40, 48, true, RGB(255, 0, 255));
+	_Items[3].image = IMAGEMANAGER->addImage("twoTomato", "./image/ImageCollection/item_hp2.bmp", 40, 48, true, RGB(255, 0, 255));
+	_Items[4].image = IMAGEMANAGER->addImage("BlueKey", "./image/ImageCollection/BlueKey.bmp", 27, 45, true, RGB(255, 0, 255));
+	_Items[5].image = IMAGEMANAGER->addImage("BlueLocker", "./image/ImageCollection/BlueKey_Hole.bmp", 48, 48, false, RGB(0, 0, 0));
+	_Items[6].image = IMAGEMANAGER->addImage("RedKey", "./image/ImageCollection/RedKey.bmp", 27, 54, true, RGB(255, 0, 255));
+	_Items[7].image = IMAGEMANAGER->addImage("RedLocker", "./image/ImageCollection/RedKey_Hole.bmp", 48, 48, false, RGB(0, 0, 0));
+	//폭탄 좌표
+	_Items[0].x = 750;
+	_Items[0].y = 60;
+	_Items[1].x = 3600;
+	_Items[1].y = 665;
+	//토마토 좌표
+	_Items[2].x = 1560;
+	_Items[2].y = 155;
+	_Items[3].x = 25;
+	_Items[3].y = 640;
+	//파란 열쇠 및 자물쇠 좌표
+	_Items[4].x = 2075;		//파란 열쇠
+	_Items[4].y = 955;
+	_Items[5].x = 3520;		//파란 자물쇠
+	_Items[5].y = 2105;
+	//빨간 열쇠 및 자물쇠 좌표
+	_Items[6].x = 1840;		//빨간 열쇠
+	_Items[6].y = 555;
+	_Items[7].x = 2040;		//빨간 자물쇠
+	_Items[7].y = 185;
 	//렉트
-	_Items.oneBoom.rc = RectMake(750, 40, 40, 38);
-	_Items.twoBoom.rc = RectMake(2790, 615, 40, 48);
-	_Items.oneTomato.rc = RectMake(2790, 615, 40, 48);
-	_Items.twoTomato.rc = RectMake(2790, 615, 40, 48);
-	_Items.blueKey.rc = RectMake(2075, 955, 27, 45);
-	_Items.blueLocker.rc = RectMake(3520, 2105, 48, 48);
-	_Items.redKey.rc = RectMake(1840, 555, 27, 54);
-	_Items.redLocker.rc = RectMake(2040, 185, 48, 48);
+	_Items[0].rc = RectMake(750, 40, 40, 38);		//폭탄
+	_Items[1].rc = RectMake(2790, 615, 40, 48);
+	_Items[2].rc = RectMake(2790, 615, 40, 48);		//토마토
+	_Items[3].rc = RectMake(2790, 615, 40, 48);
+	_Items[4].rc = RectMake(2075, 955, 27, 45);		//파란 열쇠
+	_Items[5].rc = RectMake(3520, 2105, 48, 48);	//파란 자물쇠
+	_Items[6].rc = RectMake(1840, 555, 27, 54);		//빨간 열쇠
+	_Items[7].rc = RectMake(2040, 185, 48, 48);		//빨간 자물쇠
 	//상태
-	_Items.oneBoom.item = ITEM_BOMB;
-	_Items.twoBoom.item = ITEM_BOMB;
-	_Items.oneTomato.item = ITEM_TOMATO;
-	_Items.twoTomato.item = ITEM_TOMATO;
-	_Items.blueKey.item = ITEM_BLUEKEY;
-	_Items.blueLocker.item = ITEM_BLUELOCKER;
-	_Items.redKey.item = ITEM_REDKEY;
-	_Items.redLocker.item = ITEM_REDLOCKER;
+	_Items[0].item = ITEM_BOMB;
+	_Items[1].item = ITEM_BOMB;
+	_Items[2].item = ITEM_TOMATO;
+	_Items[3].item = ITEM_TOMATO;
+	_Items[4].item = ITEM_BLUEKEY;
+	_Items[5].item = ITEM_BLUELOCKER;
+	_Items[6].item = ITEM_REDKEY;
+	_Items[7].item = ITEM_REDLOCKER;
 	//□□□□□□□□□□□□□아이템을 벡터에 넣자□□□□□□□□□□□□□□□□□□□
-	_vItem.push_back(_Items);
+	for (int i = 0; i < 8; i++) { _vItem.push_back(_Items[i]); }
 	//■■■■■■■■■■■■■■■■■■■■여러가지■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	_frameCount = 0;
 	return S_OK;
@@ -146,14 +146,14 @@ void worldObjects::update()
 	move();
 	framework();
 
-	for (_viTrap = _vTrap.begin();_viTrap != _vTrap.end(); ++_viTrap)
+	for (_viTrap = _vTrap.begin(); _viTrap != _vTrap.end(); ++_viTrap)
 	{
 		if (_viTrap->trap == TRAP_POISION)
 		{
-			_viTrap->rc = RectMake(_viTrap->x, _viTrap->y + (_viTrap->image->getFrameHeight()/2)
+			_viTrap->rc = RectMake(_viTrap->x, _viTrap->y + (_viTrap->image->getFrameHeight() / 2)
 				, _viTrap->image->getFrameWidth(), _viTrap->image->getFrameHeight() / 2);
 		}
-		else if(_viTrap->trap == TRAP_BORAD)
+		else if (_viTrap->trap == TRAP_BORAD)
 		{
 			_viTrap->rc = RectMake(_viTrap->x, _viTrap->y, 192, 45);
 		}
@@ -184,15 +184,13 @@ void worldObjects::render()
 	IMAGEMANAGER->findImage("BrownDoor_2")->render(CAMERAMANAGER->getWorDC(), _unbreakableWallTwo.rc.left, _unbreakableWallTwo.rc.top);
 	//IMAGEMANAGER->findImage("Moving_Flatform")->render(CAMERAMANAGER->getWorDC(), _flyingBoard.rc.left, _flyingBoard.rc.top);
 	if (KEYMANAGER->isStayKeyDown('Q'))
-
 	{//■■■■■■■■■■■■■■■■■벽 충돌 렉트 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-
 		Rectangle(CAMERAMANAGER->getWorDC(), _breakableWallOne.rc);
 		Rectangle(CAMERAMANAGER->getWorDC(), _breakableWallTwo.rc);
 		Rectangle(CAMERAMANAGER->getWorDC(), _unbreakableWallOne.rc);
 		Rectangle(CAMERAMANAGER->getWorDC(), _unbreakableWallTwo.rc);
 	}
-	for (_viTrap = _vTrap.begin();_viTrap != _vTrap.end(); ++_viTrap)
+	for (_viTrap = _vTrap.begin(); _viTrap != _vTrap.end(); ++_viTrap)
 	{
 		if (_viTrap->trap == TRAP_POISION)
 		{//■■■■■■■■■■■■■■■■■독 함정 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
@@ -216,45 +214,14 @@ void worldObjects::render()
 	}
 	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
 	{//■■■■■■■■■■■■■■■■■아이템 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-		if (_viItem->oneBoom.item == ITEM_BOMB)
-		{
-			_viItem->oneBoom.image->render(CAMERAMANAGER->getWorDC(), _viItem->oneBoom.x, _viItem->oneBoom.y);
-		}
-		if (_viItem->twoBoom.item == ITEM_BOMB)
-		{
-			_viItem->twoBoom.image->render(CAMERAMANAGER->getWorDC(), _viItem->twoBoom.x, _viItem->twoBoom.y);
-		}
-		if (_viItem->oneTomato.item == ITEM_TOMATO)
-		{
-			_viItem->oneTomato.image->render(CAMERAMANAGER->getWorDC(), _viItem->oneTomato.x, _viItem->oneTomato.y);
-		}
-		if (_viItem->twoTomato.item == ITEM_TOMATO)
-		{
-			_viItem->twoTomato.image->render(CAMERAMANAGER->getWorDC(), _viItem->twoTomato.x, _viItem->twoTomato.y);
-		}
-		if (_viItem->blueKey.item == ITEM_BLUEKEY)
-		{
-			_viItem->blueKey.image->render(CAMERAMANAGER->getWorDC(), _viItem->blueKey.x, _viItem->blueKey.y);
-		}
-		if (_viItem->blueLocker.item == ITEM_BLUELOCKER)
-		{
-			_viItem->blueLocker.image->render(CAMERAMANAGER->getWorDC(), _viItem->blueLocker.x, _viItem->blueLocker.y);
-		}
-		if (_viItem->redKey.item == ITEM_REDKEY)
-		{
-			_viItem->redKey.image->render(CAMERAMANAGER->getWorDC(), _viItem->redKey.x, _viItem->redKey.y);
-		}
-		if (_viItem->redLocker.item == ITEM_REDLOCKER)
-		{
-			_viItem->redLocker.image->render(CAMERAMANAGER->getWorDC(), _viItem->redLocker.x, _viItem->redLocker.y);
-		}
+		_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
 	}
 }
 
 void worldObjects::framework()
 {
 	RECT temp;
-	for (_viTrap = _vTrap.begin();_viTrap != _vTrap.end(); ++_viTrap)
+	for (_viTrap = _vTrap.begin(); _viTrap != _vTrap.end(); ++_viTrap)
 	{
 		if (_frameCount % 2 == 0)
 		{
@@ -263,14 +230,14 @@ void worldObjects::framework()
 				if (!IntersectRect(&temp, &_viTrap->rc, &_niddle[1].rc))
 				{
 					_viTrap->image->setFrameX(_viTrap->frameX);
-					if (_viTrap->frameX >= 0) {	_viTrap->frameX = 0;}
+					if (_viTrap->frameX >= 0) { _viTrap->frameX = 0; }
 				}//■■■■■■■■■■■■■■■■■독이 가시와 충돌했다면 프레임■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-				else if(IntersectRect(&temp, &_viTrap->rc, &_niddle[1].rc))
+				else if (IntersectRect(&temp, &_viTrap->rc, &_niddle[1].rc))
 				{
 					_viTrap->image->setFrameX(_viTrap->frameX);
 					_viTrap->frameX++;
 				}
-				if (_viTrap->frameX > _viTrap->image->getMaxFrameX()) 
+				if (_viTrap->frameX > _viTrap->image->getMaxFrameX())
 				{
 					_viTrap->y = 1150;
 					_viTrap->isCollision = false;
@@ -290,7 +257,7 @@ void worldObjects::framework()
 void worldObjects::move()
 {
 	RECT temp;
-	for (_viTrap = _vTrap.begin();_viTrap != _vTrap.end(); ++_viTrap)
+	for (_viTrap = _vTrap.begin(); _viTrap != _vTrap.end(); ++_viTrap)
 	{
 		if (_viTrap->trap == TRAP_POISION)
 		{//■■■■■■■■■■■■■■■■■독 함정 움직임■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
@@ -304,7 +271,7 @@ void worldObjects::move()
 			if (!_isUpDown)
 			{
 				_viTrap->y += 3;
-				if (_viTrap->y +45 >= 625)
+				if (_viTrap->y + 45 >= 625)
 				{
 					_isUpDown = true;
 				}

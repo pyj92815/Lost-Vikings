@@ -49,7 +49,7 @@ void playerManager::update()
 
 void playerManager::release()
 {
-	
+
 	_eric->release();
 	_baleog->release();
 	_olaf->release();
@@ -196,16 +196,15 @@ void playerManager::trapColision()
 
 void playerManager::itemColision()
 {
-	//만들고 있는중 이게 맞는건가? ㅋㅋ
 	for (int i = 0; i < _wo->get_vItem().size(); i++)
 	{
 		if (0 > _wo->get_vItem().size()) break;
 		RECT temp;
-		if (IntersectRect(&temp, &_eric->getEricRect(), &_wo->get_vItem()[i].oneBoom.rc))
+		if (IntersectRect(&temp, &_eric->getEricRect(), &_wo->get_vItem()[i].rc))
 		{
-			if (!_wo->get_vItem()[i].oneBoom.isCollision)
+			if (!_wo->get_vItem()[i].isCollision)
 			{
-				if (_wo->get_vItem()[i].oneBoom.item == ITEM_BOMB)
+				if (_wo->get_vItem()[i].item == ITEM_BOMB)
 				{
 					_wo->setCollision(i);
 					break;
