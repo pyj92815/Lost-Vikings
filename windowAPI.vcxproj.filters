@@ -187,10 +187,10 @@
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="gameOverScene.h">
-      <Filter>playGround\scene</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="keyAniManager.h">
-      <Filter>2DGameFramework\Manager</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -300,10 +300,10 @@
       <Filter>playGround\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="gameOverScene.cpp">
-      <Filter>playGround\scene</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="keyAniManager.cpp">
-      <Filter>2DGameFramework\Manager</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

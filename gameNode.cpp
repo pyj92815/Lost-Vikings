@@ -104,6 +104,7 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 			{
 				//case VK_ESCAPE:	// ESC를 눌렀을때 프로그램을 종료하게 만든다.
 				case WM_CLOSE:		// 그래서 다른키를 이용했다. (우상단 X버튼, 시스템 메뉴닫기, 알트+F4, 작업 관리자 등으로 종료 가능
+
 					PostQuitMessage(0);
 				break;
 
