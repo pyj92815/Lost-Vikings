@@ -83,11 +83,12 @@ public:
 	virtual void Tracking();					//적을 쫓는 함수
 	virtual void Attack(EnemyType enemyType);	//적이 사정거리 안에 들어와 공격 상태로 변환하는 함수
 	virtual void Attack();						//실질적으로 적을 공격하는 함수
-	virtual void AttackDirection();
-	virtual void UnAttack();
-	
-	//적의 상태를 반환하는 함수(_enemyState)
-	virtual EnemyState getEnemyState() { return _enemyState; }
+	virtual void AttackDirection();				//공격시 공격 방향을 정하는 함수
+	virtual void UnAttack();					//공격상태에서 벗어나게 하는 함수
+	virtual	void platformColision();			//enemy를 바닥에 붙여놓는 함수
+	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■전근자/설정자■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	virtual EnemyType getEnemyType() { return _enemyType; }		//enemyType 반환
+	virtual EnemyState getEnemyState() { return _enemyState; }	//적의 상태를 반환하는 함수(_enemyState)
 	virtual RECT getRect() { return _enemyRect; }
 	virtual RECT getAttackRect() { return _enemyAttackRect; }
 	virtual bool getDie() { if (_die)return true; else return false; }
@@ -100,7 +101,6 @@ public:
 	virtual float getY() { return _y; }
 	virtual image* getImage() { return _Attack_image; }
 	virtual void setPlayerRect(RECT eric, RECT baleog, RECT olaf);
-	virtual void platformColision();
 
 	//이미지 추가 함수
 	virtual void imageReset()
