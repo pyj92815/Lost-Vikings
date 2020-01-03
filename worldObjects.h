@@ -85,7 +85,7 @@ public:
 	}
 	virtual void framework();
 	virtual void move();
-
+	bool getUpDown() { return _isUpDown; }
 	void setPlayerManagerAddressLink(playerManager* pm) { _pm = pm; }
 
 

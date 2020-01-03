@@ -44,7 +44,7 @@ void playerManager::update()
 	_olaf->update();
 
 	trapColision();
-	boradColision();
+
 }
 
 void playerManager::release()
@@ -104,7 +104,7 @@ void playerManager::trapColision()
 					_eric->setEricState(STATE_POISON);
 					_eric->setEricFrame();
 					_wo->setCollision(i);
-					_eric->setEricUnable();
+					_eric->setEricStop();
 					break;
 				}
 				else if (_wo->get_vTrap()[i].trap == TRAP_NIDDLE)
@@ -113,9 +113,83 @@ void playerManager::trapColision()
 					_eric->setEricFrame();
 					_eric->setEricFrameSpeed(25);
 					_wo->setCollision(i);
-					_eric->setEricUnable();
+					_eric->setEricStop();
 					break;
 				}
+				else if (_wo->get_vTrap()[i].trap == TRAP_BORAD)
+				{
+					if ((_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left + 10 &&
+						_eric->getEric().rc.right <= _wo->get_vTrap()[i].rc.right - 10 &&
+						_eric->getEric().rc.bottom >= _wo->get_vTrap()[i].rc.bottom) ||
+						(_eric->getEric().rc.left >= _wo->get_vTrap()[i].rc.left + 10 &&
+							_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right - 10 &&
+							_eric->getEric().rc.bottom >= _wo->get_vTrap()[i].rc.bottom))
+					{
+						
+						if(_eric->getEric().state != STATE_PRESSDIE) _eric->setEricY(_wo->get_vTrap()[i].rc.bottom);
+						if (_eric->getEric().posState == POSSTATE_GROUND)
+						{
+							if (_eric->getEric().state != STATE_PRESSDIE)
+							{
+								_eric->setEricState(STATE_PRESSDIE);
+								_eric->setEricFrame();
+								_eric->setEricFrameSpeed(10);
+								_eric->setEricStop();
+							}
+						}
+					}	
+					else if((_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left &&
+						  	_eric->getEric().rc.right <= _wo->get_vTrap()[i].rc.right  )
+						   	||
+						    (_eric->getEric().rc.left >= _wo->get_vTrap()[i].rc.left  &&
+						   	_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right ))
+					{
+						if (_eric->getEric().state != STATE_PRESSDIE)
+						{
+							_eric->setEricPosState(POSSTATE_GROUND);
+							_eric->setEricJump();
+							_eric->setEricJumpPower();
+							
+							if (_wo->getUpDown())
+							{
+								_eric->setEricY(_wo->get_vTrap()[i].rc.top - _eric->getEric().image->getFrameHeight() + 3);
+							}
+							else
+							{
+								_eric->setEricY(_wo->get_vTrap()[i].rc.top - _eric->getEric().image->getFrameHeight() + 7);
+							}
+						}
+					}
+				}			
+				
+				else if (_wo->get_vTrap()[i].trap == TRAP_WALL)
+				{
+							
+					if (_eric->getEric().state == STATE_ERIC_HEADBUTT && _eric->getEric().currentFrameX > 3)
+					{
+						_eric->setEricState(STATE_ERIC_HEADBUTTEND);
+						_eric->setEricFrame();
+						_eric->setEricFrameSpeed(8);
+						_eric->setEricUnable();
+						_wo->setCollision(i);
+					}
+					else if (!_wo->get_vTrap()[i].isCollision && _eric->getEric().state == STATE_MOVE)
+					{
+						_eric->setEricState(STATE_PUSH);
+						_eric->setEricFrame();
+						_eric->setEricX(_wo->get_vTrap()[i].x - _eric->getEric().image->getFrameWidth()-5);
+					}
+					else if (!_wo->get_vTrap()[i].isCollision && _eric->getEric().state == STATE_ERIC_JUMP)
+					{
+						_eric->setEricX(_wo->get_vTrap()[i].x - _eric->getEric().image->getFrameWidth()-5);
+					}
+					else
+					{
+						_eric->setEricX(_wo->get_vTrap()[i].x - _eric->getEric().image->getFrameWidth() - 5);
+					}
+
+				}
+
 			}
 		}
 	}

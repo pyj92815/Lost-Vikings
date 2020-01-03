@@ -186,6 +186,12 @@
     <ClInclude Include="Enemy_PlayerMummy.h">
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="gameOverScene.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="keyAniManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -292,6 +298,12 @@
     </ClCompile>
     <ClCompile Include="Enemy_PlayerMummy.cpp">
       <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="gameOverScene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="keyAniManager.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

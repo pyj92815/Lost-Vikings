@@ -248,16 +248,19 @@ void stageScene::set_PlayerDead()
 	if (_UI_State[PT_ERIC].dead)
 	{
 		_UI_State[PT_ERIC].image->setFrameX(2);		// 이미지는 죽은 이미지로 교체한다.
+		SCENEMANAGER->set_PlayerLife(PT_ERIC, _pm->getPlayerEric().isDead);		// 200102 PM 11:23 플레이어 죽음 테스트
 	}
 
 	if (_UI_State[PT_BALEOG].dead)
 	{
 		_UI_State[PT_BALEOG].image->setFrameX(2);	// 이미지는 죽은 이미지로 교체한다.
+		SCENEMANAGER->set_PlayerLife(PT_BALEOG, _pm->getPlayerBaleog().isDead);		// 200102 PM 11:23 플레이어 죽음 테스트
 	}
 
 	if (_UI_State[PT_OLAF].dead)
 	{
 		_UI_State[PT_OLAF].image->setFrameX(2);		// 이미지는 죽은 이미지로 교체한다.
+		SCENEMANAGER->set_PlayerLife(PT_OLAF, _pm->getPlayerOlaf().isDead);		// 200102 PM 11:23 플레이어 죽음 테스트
 	}
 
 	// 만약 캐릭터가 죽었을 경우에 다음 캐릭터로 바꾸는 기능
@@ -271,9 +274,10 @@ void stageScene::set_PlayerDead()
 				// 인터벌을 주고 넘어갈지 그냥 넘어갈지 정하고
 				// 게임 오버 씬으로 넘어간다.
 				// 임시로 인트로 씬으로 넘겼음
-				_wm->init();		// 새로 시작하니까 모든 정보를 초기화 해준다.
-				_pm->init();
-				_em->init();
+
+				//_wm->init();		// 새로 시작하니까 모든 정보를 초기화 해준다.
+				//_pm->init();
+				//_em->init();
 
 				// 인터벌을 주고 GiveUp에서 Yes에서 엔터를 누르면 게임오버씬으로 넘어간다.
 				// 만약 No를 눌렀다면 타이틀 화면으로 넘어간다.
@@ -291,6 +295,15 @@ void stageScene::set_PlayerDead()
 
 			if (_charNum == 3)	_charNum = 0;				// 만약 캐릭터의 개수를 초과했다면 다시 0번으로
 		}
+	}
+
+	// 만약 플레이어가 게임 도중에 다시 하고 싶어질때
+	if (KEYMANAGER->isOnceKeyDown(VK_F7))
+	{
+		// 다시 시도할지 안할지 고르는 창을 출력하게 만든다.
+		// YES를 누르면 게임오버 화면으로 이동한다.
+		// NO를 누르면 타이틀 화면으로 이동한다. 200103 AM 12:27 진행중 (미완)
+		SCENEMANAGER->set_SceneState(SS_GAMEOVER);
 	}
 }
 
