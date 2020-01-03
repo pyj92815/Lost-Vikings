@@ -22,9 +22,10 @@ void Enemy_Scorpion::EnemyAction()
 	case EnemyState::ATTACK:
 		UnAttack();				//공격범위 밖으로 나가면 SCOUT
 		AttackDirection();		//공격 방향 플레이어한테 고정
-		if (_frameX > 0)
+		if (_frameX ==6)
 		{
 			_isFire = true;
+			_enemyState = EnemyState::SCOUT;
 		}
 		else
 		{

@@ -2,22 +2,30 @@
 #include "Enemy_Bullet.h"
 
 
-HRESULT Enemy_Bullet::init(float x1, float y1, float x2,float y2 )
+HRESULT Enemy_Bullet::init()
 {
-	_image = IMAGEMANAGER->addImage("Enemy_Bullet", "./image./Enemy./Enemy_Bullet.bmp", 24, 24, true, RGB(255, 0, 255));
-	_x = x1;
-	_y = y2;
-	_probeX = _x;
-	_probeY = _y;
-	_angle = getAngle(_x, _y, x2, y2);
-	_rect = RectMakeCenter(_x, _y, _image->getWidth(), _image->getHeight());
-	_isFire = true;
+	_bulletMax = 10;
+	for (int i = 0;i < _bulletMax;i++)
+	{
+		tagBullet Bullet;
+		ZeroMemory(&Bullet, sizeof(Bullet));
+		Bullet.image = new image;
+		Bullet.image = IMAGEMANAGER->addImage("Enemy_Bullet", "./image./Enemy/Enemy_Bullet.bmp", 24, 24, true, RGB(255, 0, 255));
+		Bullet.isFire = false;
 
+		_vBullet.push_back(Bullet);
+	}
 	return S_OK;
 }
 
 void Enemy_Bullet::release()
 {
+	for (_viBullet = _vBullet.begin(); _viBullet != _vBullet.end(); ++_viBullet)
+	{
+		SAFE_RELEASE(_viBullet->image);
+		SAFE_DELETE(_viBullet->image);
+	}
+	_vBullet.clear();
 }
 
 void Enemy_Bullet::update()
@@ -27,40 +35,89 @@ void Enemy_Bullet::update()
 
 void Enemy_Bullet::render()
 {
-	_image->render(CAMERAMANAGER->getWorDC(), _x, _y);
+	for (_viBullet = _vBullet.begin(); _viBullet != _vBullet.end(); ++_viBullet)
+	{
+		if (!_viBullet->isFire)continue;
+		if (KEYMANAGER->isToggleKey(VK_F1))
+		{
+			Rectangle(getMemDC(), _viBullet->rect);
+		}
+		_viBullet->image->render(CAMERAMANAGER->getWorDC(), _viBullet->rect.left, _viBullet->rect.top);
+	}
+}
+
+void Enemy_Bullet::bulletFire(float x, float y, float angle)
+{
+	for (_viBullet = _vBullet.begin();_viBullet != _vBullet.end();++_viBullet)
+	{
+		if (_viBullet->isFire)continue;
+
+		_viBullet->isFire = true;
+		_viBullet->angle = angle;
+		_viBullet->x =x;
+		_viBullet->y =y;
+		_viBullet->probeX = _viBullet->x;
+		_viBullet->probeY = _viBullet->y;
+		_viBullet->rect = RectMakeCenter(_viBullet->x, _viBullet->y,_viBullet->image->getWidth(),_viBullet->image->getHeight());
+
+		break;
+	}
 }
 
 void Enemy_Bullet::bulletMove()
 {
-	if (_isFire)
+	for (_viBullet = _vBullet.begin(); _viBullet != _vBullet.end(); ++_viBullet)
 	{
-		_x += cosf(_angle) * 3;
-		_y -= sinf(_angle) * 3;
-		_probeX = _x;
+		if (!_viBullet->isFire)continue;
 
-		_probeY = _y;
-		_rect = RectMakeCenter(_x, _y, _image->getWidth(), _image->getHeight());
-		//probe();
+		_viBullet->x += cosf(_viBullet->angle) * 5;
+		_viBullet->y -= sinf(_viBullet->angle) * 5;
+		_viBullet->probeX = _viBullet->x;
+		_viBullet->probeY = _viBullet->y;
+		_viBullet->rect = RectMakeCenter(_viBullet->x, _viBullet->y, _viBullet->image->getWidth(), _viBullet->image->getHeight());
+
+		probe();
 	}
 }
 
+
 void Enemy_Bullet::probe()
 {
-	for (int i = _probeX - _image->getWidth();i < _probeX + _image->getWidth();++i)
+	for (int i = _viBullet->probeX - _viBullet->image->getWidth();i < _viBullet->probeX + _viBullet->image->getWidth();++i)
 	{
-		for (int j = _probeY - _image->getHeight();i < _probeY + _image->getWidth();++j)
-		{
-			COLORREF COLOR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), i, j);
+		
+			COLORREF COLOR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), i, _viBullet->probeY);
 
 			int r = GetRValue(COLOR);
 			int g = GetGValue(COLOR);
 			int b = GetBValue(COLOR);
 
-			if ((r == 255 && g == 255 && b == 00) || (r == 255 && g == 0 && b == 0))
+			if ((r == 255 && g == 255 && b == 0) || (r == 255 && g == 0 && b == 0)||(r==255&&g==255&&b==255)||(r==0&g==0&&b==0))
 			{
-				_isFire = false;
+				_viBullet->isFire = false;
 				break;
 			}
+		
+	}
+	for (int j = _viBullet->probeY - _viBullet->image->getHeight();j < _viBullet->probeY + _viBullet->image->getWidth();++j)
+	{
+		COLORREF COLOR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _viBullet->probeX, j);
+
+		int r = GetRValue(COLOR);
+		int g = GetGValue(COLOR);
+		int b = GetBValue(COLOR);
+
+		if ((r == 255 && g == 255 && b == 0) || (r == 255 && g == 0 && b == 0) || (r == 255 && g == 255 && b == 255) || (r == 0 & g == 0 && b == 0))
+		{
+			_viBullet->isFire = false;
+			break;
 		}
 	}
+
+}
+
+void Enemy_Bullet::removeBullet(int Num)
+{
+	_viBullet = _vBullet.begin() + Num;
+	_viBullet->isFire = false;
 }

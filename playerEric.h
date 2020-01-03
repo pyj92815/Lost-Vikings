@@ -69,5 +69,6 @@ public:
 	void ericDie();
 	void setEricState(tagState state) { _eric.state = state; }	// 상태를 정의해 주는 세터 
 
+	void setEricHit() { _eric.hp--; }
 };
 

@@ -1,30 +1,35 @@
 #pragma once
 #include"gameNode.h"
-class Enemy_Bullet :public gameNode
+#include<vector>
+struct tagBullet
+{
+	float x, y, angle;
+	float probeX, probeY;
+	RECT rect;
+	image* image;
+	bool isFire;
+};
+class Enemy_Bullet:public gameNode
 {
 private:
-	image* _image;
-	float _x, _y;
-	float _angle;
-	RECT _rect;
-	float _probeX, _probeY;
-	
+	vector<tagBullet> _vBullet;
+	vector<tagBullet>::iterator _viBullet;
 
-
+	int _bulletMax;
 
 public:
-	bool _isFire;
-
-	HRESULT init(float x1, float y1, float x2,float y2);
+	HRESULT init();
 	void release();
 	void update();
 	void render();
 
+	void bulletFire(float x,float y,float angle);
 	void bulletMove();
 	void probe();
 
-	bool bulletRemove() { if (!_isFire)return true; else return false; }
+	void removeBullet(int Num);
 
-	RECT getRect() { return _rect; }
+	vector<tagBullet>			getVBullet() { return _vBullet; }
+	vector<tagBullet>::iterator getViBullet() {return _viBullet;}
 };
 

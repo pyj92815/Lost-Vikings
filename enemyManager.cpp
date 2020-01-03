@@ -12,7 +12,8 @@ EnemyManager::~EnemyManager()
 
 HRESULT EnemyManager::init()
 {
-
+	_enemyBullet = new Enemy_Bullet;
+	_enemyBullet->init();
 	EnemyCreate();
 	return S_OK;
 }
@@ -28,10 +29,11 @@ void EnemyManager::update()
 		(*_viEnemy)->update();
 		(*_viEnemy)->setPlayerRect(_playerManager->getPlayerEric().rc, _playerManager->getPlayerBaleog().rc, _playerManager->getPlayerOlaf().rc);
 	}
-	for (_viBullet = _vBullet.begin();_viBullet != _vBullet.end();++_viBullet)
-	{
-		(*_viBullet)->update();
-	}
+	_enemyBullet->update();
+	_ericRect = _playerManager->getPlayerEric().rc;
+	_baleogRect = _playerManager->getPlayerBaleog().rc;
+	_olafRect = _playerManager->getPlayerOlaf().rc;
+	
 	EnemyRemove();
 	bulletFire();
 	Collision();
@@ -43,10 +45,8 @@ void EnemyManager::render()
 	{
 		(*_viEnemy)->render();
 	}
-	for (_viBullet = _vBullet.begin();_viBullet != _vBullet.end();++_viBullet)
-	{
-		(*_viBullet)->render();
-	}
+	_enemyBullet->render();
+	
 }
 
 void EnemyManager::EnemyCreate()
@@ -137,23 +137,37 @@ void EnemyManager::EnemyRemove()
 void EnemyManager::Collision()
 {
 	RECT temp;
-	for (_viEnemy = _vEnemy.begin();_viBullet != _vBullet.end();++_viEnemy)
+	for (_viEnemy = _vEnemy.begin();_viEnemy!=_vEnemy.end();++_viEnemy)
 	{
-		if(IntersectRect(&temp,(*_viEnemy)->getRect(),)
-		(*_viEnemy)->Hit();
+		for (int i = 0;i < _enemyBullet->getVBullet().size();i++)
+		{
+			if ((IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_ericRect)) || (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_ericRect)))
+			{
+				_playerManager->getEric()->setEricHit();
+			}
+			if ((IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_baleogRect)) || (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_baleogRect)))
+			{
+
+			}
+			if ((IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_olafRect)) || (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_olafRect)))
+			{
+
+			}
+		}
 	}
 }
 
 void EnemyManager::bulletFire()
 {
-	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
+	
+	for (_viEnemy = _vEnemy.begin(); _viEnemy != _vEnemy.end(); ++_viEnemy)
 	{
-		for (_viBullet = _vBullet.begin();_viBullet != _vBullet.end();++_viBullet)
+		
+		if ((*_viEnemy)->getisFire())
 		{
-			if ((*_viEnemy)->getisFire())
-			{
-				(*_viBullet)->init((*_viEnemy)->getX(), (*_viEnemy)->getY(), _playerManager->getPlayerEric().x, _playerManager->getPlayerEric().y);
-			}
+			(*_viEnemy)->setisFire(false);
+			_enemyBullet->bulletFire((*_viEnemy)->getX(),(*_viEnemy)->getY()-(*_viEnemy)->getImage()->getFrameHeight()/2,getAngle((*_viEnemy)->getX(), (*_viEnemy)->getY() - (*_viEnemy)->getImage()->getFrameHeight() / 2,_playerManager->getPlayerEric().x, _playerManager->getPlayerEric().y));
+			break;
 		}
 	}
 }

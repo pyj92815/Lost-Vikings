@@ -87,14 +87,15 @@ public:
 	//적의 상태를 반환하는 함수(_enemyState)
 	virtual EnemyState getEnemyState() { return _enemyState; }
 	virtual RECT getRect() { return _enemyRect; }
+	virtual RECT getAttackRect() { return _enemyAttackRect; }
 	virtual bool getDie() { if (_die)return true; else return false; }
 	virtual bool getisFire() { if (_isFire)return true;else return false; }
-	virtual RECT getAttackRect() { return _enemyAttackRect; }
+	virtual void setisFire(bool isFire) { _isFire = isFire; }
 	virtual void Hit() { _enemyHP--; }
 	
 	virtual float getX() { return _x; }
 	virtual float getY() { return _y; }
-
+	virtual image* getImage() { return _Attack_image; }
 	virtual void setPlayerRect(RECT eric, RECT baleog, RECT olaf);
 	virtual void platformColision();
 

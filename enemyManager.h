@@ -15,18 +15,18 @@ class EnemyManager : public gameNode
 private:
 	typedef vector<Enemy*>					vEnemy;
 	typedef vector<Enemy*>::iterator		viEnemy; 
-	typedef vector<Enemy_Bullet*>			vBullet;
-	typedef vector<Enemy_Bullet*>::iterator viBullet;
+
 private:
 	//Enemy클래스 벡터로 선언
 	vEnemy _vEnemy;
 	viEnemy _viEnemy;
-	vBullet _vBullet;
-	viBullet _viBullet;
+	Enemy_Bullet* _enemyBullet;
 	
 
 	playerManager* _playerManager;
-
+	RECT _ericRect;
+	RECT _olafRect;
+	RECT _baleogRect;
 
 public:
 	EnemyManager();
