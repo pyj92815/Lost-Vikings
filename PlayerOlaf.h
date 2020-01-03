@@ -33,7 +33,7 @@ private:
 
 	RECT _testRect;
 	bool _stopControl;
-
+	bool _isItem;
 public:
 	PlayerOlaf();
 	~PlayerOlaf();
@@ -55,4 +55,5 @@ public:
 	void set_stopKey(bool stop) { _stopControl = stop; }
 	void player_Kill() { _olaf.isDead = true; } // 지울 예정
 	tagPlayer getOlaf() { return _olaf; }
+	void setItemKey() { _isItem ? _isItem = false : _isItem = true; }
 };

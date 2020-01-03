@@ -68,7 +68,7 @@ private:
 	arrow* _ar;						//화살 클래스를 포인터로 가리킨다
 
 	bool _stopControl;		// 이값이 true라면 움직일 수 없다.
-
+	bool _isItem;
 
 
 public:
@@ -91,6 +91,7 @@ public:
 	void hgKey();	// 형길이가 쓰는 비밀 이동키
 	void set_stopKey(bool stop) { _stopControl = stop; }
 	void player_Kill() { _baleog.isDead = true; }
+	void setItemKey() { _isItem ? _isItem = false : _isItem = true; }
 };
 
 
