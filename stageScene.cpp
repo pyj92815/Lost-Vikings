@@ -34,6 +34,7 @@ HRESULT stageScene::init()
 	_UI_State[PT_BALEOG].image->setFrameX(0);	// 이미지는 죽은 이미지로 교체한다.
 	_UI_State[PT_OLAF].image->setFrameX(0);	// 이미지는 죽은 이미지로 교체한다.
 
+	_playerAllDeadTimer = 0;
 
 	return S_OK;
 }
@@ -50,6 +51,7 @@ void stageScene::update()
 	_em->update();
 
 	testStateImage();  // 캐릭터 전환 테스트
+	setting_InvenSelectPos();
 }
 
 void stageScene::render()
@@ -93,28 +95,50 @@ void stageScene::render()
 	//}
 
 
-	// 생명력 출력 + 인벤토리
-	for (int i = 0; i < 3; ++i)
+	// 플레이어의 생명력을 출력
+	// 플레이어의 현재 체력의 개수만큼 출력한다.
+	// 플레이어가 체력이 떨어지면 그만큼 줄어든다.
+	for (int i = 0; i < _pm->getPlayerEric().hp; ++i)
 	{
-		Rectangle(getMemDC(), _UI_HP[i].rc);
-
-		if (_pm->getDirection().player == i)
-		{
-			_banjjack++;
-			if (_banjjack <= 20)
-			{
-				IMAGEMANAGER->findImage("Select_Image")->render(getMemDC(), _UI_Inventory[_pm->getDirection().player][_pm->getDirection().invenNumber].rc.left, _UI_Inventory[_pm->getDirection().player][_pm->getDirection().invenNumber].rc.top);
-			}
-			if (_banjjack >= 30)
-			{
-				_banjjack = 0;
-			}
-		}
-		else
-		{
-			IMAGEMANAGER->findImage("Select_Image")->render(getMemDC(), _UI_Inventory[i][0].rc.left, _UI_Inventory[i][0].rc.top);
-		}
+	//	Rectangle(getMemDC(), _UI_HP[i].rc);
+		_UI_HP[PT_ERIC].image->render(getMemDC(), _UI_HP[PT_ERIC].rc.left + (i * 18), _UI_HP[PT_ERIC].rc.top);
 	}
+
+	for (int i = 0; i < _pm->getPlayerBaleog().hp; ++i)
+	{
+		//Rectangle(getMemDC(), _UI_HP[i].rc);
+		_UI_HP[PT_BALEOG].image->render(getMemDC(), _UI_HP[PT_BALEOG].rc.left + (i * 18), _UI_HP[PT_BALEOG].rc.top);
+	}
+
+	for (int i = 0; i < _pm->getPlayerOlaf().hp; ++i)
+	{
+		//Rectangle(getMemDC(), _UI_HP[i].rc);
+		_UI_HP[PT_OLAF].image->render(getMemDC(), _UI_HP[PT_OLAF].rc.left + (i * 18), _UI_HP[PT_OLAF].rc.top);
+	}
+
+	// 인벤토리
+	//for (int i = 0; i < 3; ++i)
+	//{
+	//	if (_charNum == i)
+	//	{
+	//
+	//		_banjjack++;
+	//		if (_banjjack <= 20)
+	//		{
+	//			// 가져온 인벤 위치에 따라 달라진다.
+	//			IMAGEMANAGER->findImage("Select_Image")->render(getMemDC(), _UI_Inventory[_charNum][_player_InvenPos[_charNum]].rc.left, _UI_Inventory[_charNum][_player_InvenPos[_charNum]].rc.top);
+	//		}
+	//		if (_banjjack >= 30)
+	//		{
+	//			_banjjack = 0;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		//IMAGEMANAGER->findImage("Select_Image")->render(getMemDC(), _UI_Inventory[i][0].rc.left, _UI_Inventory[i][0].rc.top);
+	//		IMAGEMANAGER->findImage("Select_Image")->render(getMemDC(), _UI_Inventory[_charNum][_player_InvenPos[_charNum]].rc.left, _UI_Inventory[_charNum][_player_InvenPos[_charNum]].rc.top);
+	//	}
+	//}
 
 	// 아이템 출력
 	for (int i = 0;i < _pm->get_vInven().size(); ++i)
@@ -324,6 +348,7 @@ void stageScene::set_PlayerDead()
 			// 캐릭터가 모두 죽은 상황은 게임 오버 화면으로 넘어간다.
 			if (_UI_State[PT_ERIC].dead && _UI_State[PT_BALEOG].dead && _UI_State[PT_OLAF].dead)
 			{
+				_playerAllDeadTimer++;
 				// 인터벌을 주고 넘어갈지 그냥 넘어갈지 정하고
 				// 게임 오버 씬으로 넘어간다.
 				// 임시로 인트로 씬으로 넘겼음
@@ -334,7 +359,11 @@ void stageScene::set_PlayerDead()
 
 				// 인터벌을 주고 GiveUp에서 Yes에서 엔터를 누르면 게임오버씬으로 넘어간다.
 				// 만약 No를 눌렀다면 타이틀 화면으로 넘어간다.
-				SCENEMANAGER->set_SceneState(SS_GAMEOVER);
+				if (_playerAllDeadTimer >= 100)
+				{
+					SCENEMANAGER->set_SceneState(SS_GAMEOVER);
+				}
+
 				break;
 			}
 
@@ -351,7 +380,7 @@ void stageScene::set_PlayerDead()
 	}
 
 	// 만약 플레이어가 게임 도중에 다시 하고 싶어질때
-	if (KEYMANAGER->isOnceKeyDown(VK_F7))
+	if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
 	{
 		// 다시 시도할지 안할지 고르는 창을 출력하게 만든다.
 		// YES를 누르면 게임오버 화면으로 이동한다.
@@ -363,4 +392,10 @@ void stageScene::set_PlayerDead()
 void stageScene::collisionMIX()
 {
 	
+}
+
+void stageScene::setting_InvenSelectPos()
+{
+	// 플레이어 매니저에서 받아온 인벤 셀렉 위치 정보의 주소를 저장한다.
+	_player_InvenPos = _pm->getItemNum();
 }
