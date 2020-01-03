@@ -16,42 +16,21 @@ void Enemy_PlayerMummy::EnemyAction()
 		Scout();				//움직이다 절벽/벽 을 만나면 반대편으로 돌아가도록 하는 함수
 		Move();					//좌우로 움직이게 하는 함수
 
-		if (IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_ericRect))
-		{
-			_enemyState = EnemyState::DISCOVERY;	//플레이어를 발견하면 DISCOVERY상태로 변함
-			_playerRect = _ericRect;
-		}
-		if (IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_olafRect))
-		{
-			_enemyState = EnemyState::DISCOVERY;	//플레이어를 발견하면 DISCOVERY상태로 변함
-			_playerRect = _olafRect;
-		}
-		if (IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_baleogRect))
-		{
-			_enemyState = EnemyState::DISCOVERY;	//플레이어를 발견하면 DISCOVERY상태로 변함
-			_playerRect = _baleogRect;
-		}
-			
-			
-
+		Discovery();			//적을 발견하는 함수
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 	case EnemyState::DISCOVERY:
-		//적을 추적
-		//if(_x>player.x)_x-=
-		//if(_x<_player.x)_x+=
-		//if(플레이어의 렉트가 공격범위 렉트안에 들어오면)_enemyState=EnemyState::ATTACK;
-		//else if(적이 탐색 범위 밖으로 나가면)_enemyState=EnemyState::SCOUT;
-
+		Tracking();				//적을 쫓는 함수
+		Attack();				//적이 공격범위안에 들어올시 _enemyState를 ATTACK로 변경해주는 함수
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
-		break;
 	case EnemyState::ATTACK:
-		//이미지 = 공격 이미지로 바꾸고
-		//if(공격 판정이 있을만한 이미지에 플레이어가 닿으면 플레이어 사망)
+		UnAttack();				//공격범위 밖으로 나가면 SCOUT
+		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 	case EnemyState::DIE:
 
+		_die = true;
 		break;
 	default:
 		break;
@@ -69,22 +48,7 @@ void Enemy_PlayerMummy::EnemyAction()
 		break;
 	}
 
-	//적을 바닥에 붙여주기 위함
-	for (int i = _probeY - 20; i < _probeY + 200; ++i)
-	{
-		COLORREF getPixel_Bottom = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _x, i);
-
-		int r = GetRValue(getPixel_Bottom);
-		int g = GetGValue(getPixel_Bottom);
-		int b = GetBValue(getPixel_Bottom);
-
-		if (r == 255 && g == 255 && b == 0)
-		{
-			_y = i - _image->getFrameHeight() / 2;
-			break;
-		}
-	}
-
+	platformColision();
 }
 
 void Enemy_PlayerMummy::Frame()
@@ -116,6 +80,14 @@ void Enemy_PlayerMummy::Frame()
 		}
 		break;
 	case EnemyState::ATTACK:
+		_frameCount++;
+		if (_frameCount >= 10)
+		{
+			_frameX++;
+			if (_frameX > 5)
+				_frameX = 0;
+			_frameCount = 0;
+		}
 		break;
 	case EnemyState::DIE:
 		break;

@@ -12,66 +12,34 @@ void Enemy_Mummy::EnemyAction()
 		if (IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::SCOUT;
 		break;
 	case EnemyState::SCOUT:
-		
+
 		Scout();				//움직이다 절벽/벽 을 만나면 반대편으로 돌아가도록 하는 함수
 		Move();					//좌우로 움직이게 하는 함수
 
-		if (IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_ericRect))
-		{
-			_enemyState = EnemyState::DISCOVERY;	//플레이어를 발견하면 DISCOVERY상태로 변함
-			_playerRect = _ericRect;
-		}
-		if (IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_olafRect))
-		{
-			_enemyState = EnemyState::DISCOVERY;	//플레이어를 발견하면 DISCOVERY상태로 변함
-			_playerRect = _olafRect;
-		}
-		if (IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_baleogRect))
-		{
-			_enemyState = EnemyState::DISCOVERY;	//플레이어를 발견하면 DISCOVERY상태로 변함
-			_playerRect = _baleogRect;
-		}
+		Discovery();
 
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 	case EnemyState::DISCOVERY:
-		if (IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_ericRect))
-		{
-			_playerRect = _ericRect;
-		}
-		if (IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_olafRect))
-		{
-			_playerRect = _olafRect;
-		}
-		if (IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_baleogRect))
-		{
-			_playerRect = _baleogRect;
-		}
-		_player.x = (_playerRect.left + _playerRect.right) / 2;
-		if (_x < _player.x)
-		{
-			_enemyLR = EnemyLR::RIGHT;
-			if (_frameX <= 3)
-				_x += 3;
-		}
-		if(_x>_player.x)
-		{
-			_enemyLR = EnemyLR::LEFT;
-			if (_frameX <= 3)
-				_x -= 3;
-		}
-		Scout();
-		//Move();
-
-		if (!IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_playerRect))_enemyState = EnemyState::SCOUT;
+		Tracking();				//적을 추적하는 함수
+		Attack();				//적이 공격범위안에 들어올시 _enemyState를 ATTACK로 변경해주는 함수
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 	case EnemyState::ATTACK:
-		//이미지 = 공격 이미지로 바꾸고
-		//if(공격 판정이 있을만한 이미지에 플레이어가 닿으면 플레이어 사망)
+		UnAttack();				//공격범위 밖으로 나가면 SCOUT
+		if (_frameX >= 3 && _frameX<=5)
+		{
+			_enemyAttackRect = _enemyAttackRangeRect;
+		}
+		else
+		{
+			_enemyAttackRect = RectMakeCenter(0, 0, 0, 0);
+		}
+		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 	case EnemyState::DIE:
 
+		_die = true;
 		break;
 	default:
 		break;
@@ -89,22 +57,7 @@ void Enemy_Mummy::EnemyAction()
 		break;
 	}
 
-	//적을 바닥에 붙여주기 위함
-	for (int i = _probeY - 20; i < _probeY + 200; ++i)
-	{
-		COLORREF getPixel_Bottom = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _x, i);
-
-		int r = GetRValue(getPixel_Bottom);
-		int g = GetGValue(getPixel_Bottom);
-		int b = GetBValue(getPixel_Bottom);
-
-		if (r == 255 && g == 255 && b == 0)
-		{
-			_y = i - _image->getFrameHeight() / 2;
-			break;
-		}
-	}
-
+	platformColision();
 }
 
 void Enemy_Mummy::Frame()
@@ -136,6 +89,14 @@ void Enemy_Mummy::Frame()
 		}
 		break;
 	case EnemyState::ATTACK:
+		_frameCount++;
+		if (_frameCount >= 10)
+		{
+			_frameX++;
+			if (_frameX > 5)
+				_frameX = 0;
+			_frameCount = 0;
+		}
 		break;
 	case EnemyState::DIE:
 		break;

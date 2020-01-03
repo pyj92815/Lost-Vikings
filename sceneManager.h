@@ -60,7 +60,10 @@ public:
 
 	void SceneChange();										// 상태에 따라 씬을 바꿔준다.
 
-	void get_PlayerLife(int type, bool dead) { _YouDie[type] = dead; }
+	void set_PlayerLife(int type, bool dead) { _YouDie[type] = dead; }		// 플레이어 타입, 죽음 여부 (0 = 에릭, 1 = 벨로그, 2 = 올라프)
+																			// 죽었다면 true의 값을 넣어준다.
+	bool* get_PlayerLife() { return _YouDie; }
+	
 
 };
 
