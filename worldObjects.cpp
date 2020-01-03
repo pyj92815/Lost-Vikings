@@ -331,7 +331,8 @@ void worldObjects::frameWork()
 		}
 		if (_frameCount % 6 == 0)
 		{
-			if (_viTrap->trap == TRAP_UNBREAKABLE_WALL)
+			if (_viTrap->trap == TRAP_RED_UNBREAKABLE_WALL || 
+				_viTrap->trap == TRAP_BLUE_UNBREAKABLE_WALL)
 			{
 				if (!_viTrap->isCollision)
 				{//■■■■■■■■■■■■■■■■■안부서지는 벽이 열쇠를 사용하지 않았다면 프레임■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■

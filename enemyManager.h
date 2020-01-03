@@ -10,6 +10,7 @@ using namespace std;
 
 class playerManager;
 
+
 class EnemyManager : public gameNode
 {
 private:

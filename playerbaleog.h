@@ -6,7 +6,6 @@
 #define BALEOG_SPEED 5
 
 
-
 enum ARROWSTATE
 {
 	SHOT,
@@ -21,7 +20,9 @@ struct tagArrow
 	float radius;
 	float speed;
 	float fireX, fireY;
+	float range;
 	bool isFire;
+
 	int count;
 	int direction;
 };
@@ -39,18 +40,22 @@ private:
 public:
 	arrow() {};
 	~arrow() {};
-	virtual HRESULT init(int arrowMax, float range);
+	virtual HRESULT init(int arrowMax);
 	virtual void release();
 	virtual void update();
 	virtual void render();
 
-	void fire(float x, float y, float speed, float angle, int direction);
+	void fire(float x, float y, float speed, float angle, int direction, float range);
+	void blade(float x, float y, float speed, float angle, int direction, float range);
+
+
 	void removeArrow(int arrNum);
 	void arrowMove(bool fire);
 
 	vector<tagArrow> getVArrow() { return _vArrow; }
 	vector<tagArrow>::iterator getViArrow() { return _viArrow; }
-
+	RECT getArrowRect(int num) { return _vArrow[num].rc; }
+	//충돌 위해서 밸로그->화살->화살 렉트나 함수 받아오는거 공부하자
 
 };
 
@@ -64,11 +69,27 @@ private:
 	bool _notMove;					//공격을 할 때 이동을 금지하게 하는 불값			
 
 	float _probeY;
+	float _moveSpeed;
 
 	arrow* _ar;						//화살 클래스를 포인터로 가리킨다
+	
 
 	bool _stopControl;		// 이값이 true라면 움직일 수 없다.
 	bool _isItem;
+	bool _stop;
+	bool _baleogUnable;	//전투불능
+
+	COLORREF getPixel_BC;
+	int r_BC;
+	int g_BC;
+	int b_BC;
+
+	COLORREF getPixel_TC;
+	int r_TC;
+	int g_TC;
+	int b_TC;
+
+	RECT _testRect;
 
 
 public:
@@ -81,9 +102,12 @@ public:
 	virtual void render();
 
 	void key();									//조작키 함수
-	void setBaleogState();						//상태에 이미지 찾아주는 함수
+	void setBaleogState(tagState state) {_baleog.state = state;}						//상태에 이미지 찾아주는 함수
 	void PixelCollision();						//픽셀 충돌 함수
-	void SetBaleogPosState();					//큰범위 상태에 이미지 찾아주는 함수
+	void setBaleogPosState(tagPosState posstate) {_baleog.posState = posstate;}			//큰범위 상태에 이미지 찾아주는 함수
+	void setBaleogImage();
+	void setBaleogPosImage();
+	void baleogDie();
 
 	tagPlayer getBaleog() { return _baleog; }
 
@@ -91,6 +115,23 @@ public:
 	void set_stopKey(bool stop) { _stopControl = stop; }
 	void player_Kill() { _baleog.isDead = true; }
 	void setItemKey() { _isItem ? _isItem = false : _isItem = true; }
+
+	//void PixelCollision();			// Y축 충돌 처리 
+	void PixelRightCollision();		// X축 오른쪽 충돌 처리 
+	void PixelLeftCollision();		// X축 왼쪽   충돌 처리 
+
+	RECT getBaleogRect() { return _baleog.rc; }
+	void setBaleogX(float x) { _baleog.x = x; }
+	void setBaleogY(float y) { _baleog.y = y; }
+	void setBaleogFrame() { _baleog.currentFrameX = 0; }
+	void setBaleogStop() { _stop = true; }
+	void setBaleogFrameSpeed(int speed) { _baleog.frameSpeed = speed; }
+	void setBaleogUnable() { _baleogUnable = true; }
+	
+	void setBaleogHit() { _baleog.hp--; }
+
+	arrow* getVArrow() { return _ar; }
+
 };
 
 

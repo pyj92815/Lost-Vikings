@@ -636,7 +636,7 @@ void playerEric::PixelCollision()
 			}
 			break;
 		}
-		else
+		else 
 		{
 			_eric.posState = POSSTATE_AIR;
 		}
