@@ -138,11 +138,11 @@ void playerManager::trapColision()
 							}
 						}
 					}	
-					else if((_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left &&
-						  	_eric->getEric().rc.right <= _wo->get_vTrap()[i].rc.right  )
+					else if((_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left+10 &&
+						  	_eric->getEric().rc.right <= _wo->get_vTrap()[i].rc.right-10  )
 						   	||
-						    (_eric->getEric().rc.left >= _wo->get_vTrap()[i].rc.left  &&
-						   	_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right ))
+						    (_eric->getEric().rc.left >= _wo->get_vTrap()[i].rc.left+10  &&
+						   	_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right-10 ))
 					{
 						if (_eric->getEric().state != STATE_PRESSDIE)
 						{
