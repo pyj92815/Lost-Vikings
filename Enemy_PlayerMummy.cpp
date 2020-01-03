@@ -20,13 +20,13 @@ void Enemy_PlayerMummy::EnemyAction()
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 	case EnemyState::DISCOVERY:
-		Tracking();		//적을 쫓는 함수
-
+		Tracking();				//적을 쫓는 함수
+		Attack();				//적이 공격범위안에 들어올시 _enemyState를 ATTACK로 변경해주는 함수
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 	case EnemyState::ATTACK:
-		//이미지 = 공격 이미지로 바꾸고
-		//if(공격 판정이 있을만한 이미지에 플레이어가 닿으면 플레이어 사망)
+		UnAttack();				//공격범위 밖으로 나가면 SCOUT
+		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 	case EnemyState::DIE:
 
@@ -80,6 +80,14 @@ void Enemy_PlayerMummy::Frame()
 		}
 		break;
 	case EnemyState::ATTACK:
+		_frameCount++;
+		if (_frameCount >= 10)
+		{
+			_frameX++;
+			if (_frameX > 5)
+				_frameX = 0;
+			_frameCount = 0;
+		}
 		break;
 	case EnemyState::DIE:
 		break;
