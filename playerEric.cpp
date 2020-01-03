@@ -632,7 +632,7 @@ void playerEric::PixelCollision()
 			}
 			break;
 		}
-		else if(_eric.posState != POSSTATE_BORAD)
+		else 
 		{
 			_eric.posState = POSSTATE_AIR;
 		}

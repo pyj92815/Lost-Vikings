@@ -60,6 +60,10 @@ public:
 	void release();
 	void render();
 
+	vector<tagInven>		   get_vInven()		{ return _vInven;    }
+	vector<tagInven>::iterator get_viInven()	{ return _viInven;   }
+	tagInven				   getDirection()   { return _direction; }
+
 	playerEric* getEric() { return _eric; }
 	playerbaleog* getbaleog() { return _baleog;}
 	PlayerOlaf* getOlaf() { return _olaf; }
