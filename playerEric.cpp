@@ -181,14 +181,14 @@ void playerEric::key()
 	{
 		_eric.state = STATE_STEPLADDER;
 		_eric.currentFrameY = 0;
-		_eric.y -= 2;
+		_eric.y -= 2.5;
 		_eric.frameCount += 2;
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_DOWN))
 	{
 		_eric.state = STATE_STEPLADDER;
 		_eric.currentFrameY = 0;
-		_eric.y += 2;
+		_eric.y += 2.5;
 		_eric.frameCount += 2;
 	}
 
