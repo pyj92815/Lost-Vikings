@@ -42,7 +42,7 @@ HRESULT playerbaleog::init(float x, float y)
 	_baleog.currentFrameX = _baleog.currentFrameY = 0;
 
 	_notMove = false;	//활 시위 댕길 때 이동 못하게 하는 것
-	
+
 
 	_baleog.gravity = 0;	//중력
 	_probeY = _baleog.y + _baleog.image->getHeight() / 2;
@@ -50,6 +50,8 @@ HRESULT playerbaleog::init(float x, float y)
 	//화살
 	_ar = new arrow;
 	_ar->init(300, 1800);
+
+	_moveSpeed = 5;
 
 	return S_OK;
 }
@@ -64,13 +66,18 @@ void playerbaleog::update()
 	// 비밀이동키
 	//if (!_baleogAttack) hgKey();
 
-	if(_stopControl)key();
+	if (_stopControl)key();
 
 	_baleog.rc = RectMake(_baleog.x, _baleog.y, _baleog.image->getFrameWidth(), _baleog.image->getFrameHeight());
 
 	setBaleogState();
 	if (_stopControl) PixelCollision();
 	SetBaleogPosState();
+
+	PixelRightCollision();
+	PixelLeftCollision();
+
+
 
 	//중력
 	if (_baleog.posState == POSSTATE_AIR)
@@ -82,9 +89,9 @@ void playerbaleog::update()
 		}
 		else
 		{*/
-			_baleog.currentFrameX = 0;	//낙하하기 직전에 깜빡이는 문제 해결 하기 위해서 프레임 0에서 바로 시작하도록
-			_baleog.image->setFrameX(_baleog.currentFrameX);	//프레임을 셋에 고정하는 예외처리 문장
-		
+		_baleog.currentFrameX = 0;	//낙하하기 직전에 깜빡이는 문제 해결 하기 위해서 프레임 0에서 바로 시작하도록
+		_baleog.image->setFrameX(_baleog.currentFrameX);	//프레임을 셋에 고정하는 예외처리 문장
+
 
 		if (_baleog.gravity < 5)	_baleog.gravity += 0.7;
 		_baleog.y += _baleog.gravity;
@@ -109,7 +116,7 @@ void playerbaleog::update()
 		}
 		if (_baleog.frameCount > _baleog.frameSpeed)
 		{
-			
+
 			_baleog.currentFrameX++;
 			_baleog.image->setFrameX(_baleog.currentFrameX);
 			_notMove = false;
@@ -166,7 +173,7 @@ void playerbaleog::update()
 		{
 			_baleog.currentFrameX++;
 			_baleog.image->setFrameX(_baleog.currentFrameX);
-			
+
 			if (_baleog.currentFrameX > _baleog.image->getMaxFrameX())
 			{
 				if (_baleog.state == STATE_DIE ||
@@ -210,6 +217,8 @@ void playerbaleog::update()
 
 	_ar->update();
 
+	baleogDie();
+
 }
 
 void playerbaleog::render()
@@ -225,28 +234,28 @@ void playerbaleog::render()
 
 void playerbaleog::key()
 {
-	
+
 	//이동
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
 	{
-			if (!_notMove)
-			{
-				_baleog.state = STATE_MOVE;
-				_baleog.x += 3;
-			}
-			_baleog.currentFrameY = 0;
+		if (!_notMove)
+		{
+			_baleog.state = STATE_MOVE;
+			_baleog.x += 3;
+		}
+		_baleog.currentFrameY = 0;
 
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
 	{
-			if (!_notMove)
-			{
-				_baleog.state = STATE_MOVE;
-				_baleog.x -= 3;
-			}
-			_baleog.currentFrameY = 1;
+		if (!_notMove)
+		{
+			_baleog.state = STATE_MOVE;
+			_baleog.x -= 3;
+		}
+		_baleog.currentFrameY = 1;
 	}
-	
+
 	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_RIGHT))
 	{
 		_baleog.state = STATE_IDLE;
@@ -277,19 +286,19 @@ void playerbaleog::key()
 		if (KEYMANAGER->isOnceKeyDown('F'))
 		{
 			_notMove = true;	//칼 쓰는 동안 이동키 금지
-		
+
 			_baleog.currentFrameX = 0;
 			_baleog.image->setFrameX(_baleog.currentFrameX);
-			
+
 			if (!_baleogAttackMotion)
 			{
 				_baleog.state = STATE_BALEOG_SWORD1;
-				
+
 			}
 			if (_baleogAttackMotion)
 			{
 				_baleog.state = STATE_BALEOG_SWORD2;
-				
+
 			}
 		}
 
@@ -319,6 +328,7 @@ void playerbaleog::key()
 		}
 
 	}
+
 }
 
 void playerbaleog::setBaleogState()
@@ -382,59 +392,135 @@ void playerbaleog::setBaleogState()
 		_baleog.image = IMAGEMANAGER->findImage("사다리도착");
 		break;
 	}
+
+
 }
 
 void playerbaleog::PixelCollision()
-{
-	_probeY = _baleog.y + _baleog.image->getHeight() / 2;
-	// 플레이어 왼쪽 영역 픽셀 검색
-	COLORREF getPixel_Left = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _baleog.rc.left, _baleog.rc.top);
-	int r_left = GetRValue(getPixel_Left);
-	int g_left = GetGValue(getPixel_Left);
-	int b_left = GetBValue(getPixel_Left);
+{/*
+	_probeY = _baleog.y + _baleog.image->getHeight() / 2;*/
+	//// 플레이어 왼쪽 영역 픽셀 검색
+	//COLORREF getPixel_Left = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _baleog.rc.left, _baleog.rc.top);
+	//int r_left = GetRValue(getPixel_Left);
+	//int g_left = GetGValue(getPixel_Left);
+	//int b_left = GetBValue(getPixel_Left);
 
-	// 플레이어 오른쪽 영역 픽셀 검색
-	COLORREF getPixel_Right = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _baleog.rc.right, _baleog.rc.top);
-	int r_right = GetRValue(getPixel_Right);
-	int g_right = GetGValue(getPixel_Right);
-	int b_right = GetBValue(getPixel_Right);
+	//// 플레이어 오른쪽 영역 픽셀 검색
+	//COLORREF getPixel_Right = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _baleog.rc.right, _baleog.rc.top);
+	//int r_right = GetRValue(getPixel_Right);
+	//int g_right = GetGValue(getPixel_Right);
+	//int b_right = GetBValue(getPixel_Right);
 
-	// 플레이어 위쪽 영역 픽셀 검색
-	COLORREF getPixel_Top = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_baleog.rc.right + _baleog.rc.left) / 2, _baleog.rc.top);
-	int r_top = GetRValue(getPixel_Top);
-	int g_top = GetGValue(getPixel_Top);
-	int b_top = GetBValue(getPixel_Top);
+	//// 플레이어 위쪽 영역 픽셀 검색
+	//COLORREF getPixel_Top = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_baleog.rc.right + _baleog.rc.left) / 2, _baleog.rc.top);
+	//int r_top = GetRValue(getPixel_Top);
+	//int g_top = GetGValue(getPixel_Top);
+	//int b_top = GetBValue(getPixel_Top);
 
-	// 플레이어 아래 영역 픽셀 검색
-	for (int i = _probeY - 4; i < _probeY + 10; ++i)
+	//// 플레이어 아래 영역 픽셀 검색
+	//for (int i = _probeY - 4; i < _probeY + 10; ++i)
+	//{
+	//	COLORREF getPixel_Bottom = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_baleog.rc.right + _baleog.rc.left) / 2, i);
+	//	int r_bottom = GetRValue(getPixel_Bottom);
+	//	int g_bottom = GetGValue(getPixel_Bottom);
+	//	int b_bottom = GetBValue(getPixel_Bottom);
+
+	//	if (!(r_bottom == 255 && g_bottom == 0 && b_bottom == 255))//마젠타가 아니면 중력 0으로 해서 멈춰주기
+	//	{
+	//		if (_baleog.gravity > 0)
+	//		{
+	//			_baleog.y -= (_baleog.gravity - 1);
+	//			_baleog.gravity = 0;
+	//		}
+
+	//		_baleog.y = i - _baleog.image->getHeight() / 2;
+	//		_baleog.posState = POSSTATE_GROUND;
+
+	//		break;
+	//	}
+	//	else
+	//	{
+	//		_baleog.posState = POSSTATE_AIR;
+	//		/*	_baleog.image = IMAGEMANAGER->findImage("낙하");*/
+	//	}
+	//}
+
+	//=========================================================================
+	_baleog.probeY = _baleog.y + _baleog.image->getFrameHeight();
+
+	for (int i = _baleog.probeY - 6; i < _baleog.probeY + 10; ++i)
 	{
-		COLORREF getPixel_Bottom = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_baleog.rc.right + _baleog.rc.left) / 2, i);
-		int r_bottom = GetRValue(getPixel_Bottom);
-		int g_bottom = GetGValue(getPixel_Bottom);
-		int b_bottom = GetBValue(getPixel_Bottom);
+		COLORREF getPixel_Bottom = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_baleog.rc.left + _baleog.rc.right) / 2, i);
 
-		if (!(r_bottom == 255 && g_bottom == 0 && b_bottom == 255))//마젠타가 아니면 중력 0으로 해서 멈춰주기
+		int r = GetRValue(getPixel_Bottom);
+		int g = GetGValue(getPixel_Bottom);
+		int b = GetBValue(getPixel_Bottom);
+
+		if (!(r == 255 && g == 0 && b == 255))
 		{
+			_baleog.y = i - _baleog.image->getFrameHeight();
+			_baleog.posState = POSSTATE_GROUND;
 			if (_baleog.gravity > 0)
 			{
-				_baleog.y -= (_baleog.gravity - 1);
 				_baleog.gravity = 0;
 			}
-
-			_baleog.y = i - _baleog.image->getHeight() / 2;
-			_baleog.posState = POSSTATE_GROUND;
-
 			break;
 		}
 		else
 		{
 			_baleog.posState = POSSTATE_AIR;
-			/*	_baleog.image = IMAGEMANAGER->findImage("낙하");*/
 		}
 	}
+}
 
-	//=========================================================================
+void playerbaleog::PixelRightCollision()
+{
+	_baleog.probeX = _baleog.x + _baleog.image->getFrameWidth(); // _eric.right  
 
+	COLORREF getPixel_RIGHT = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _baleog.probeX + 2, _baleog.y);
+
+	int r = GetRValue(getPixel_RIGHT);
+	int g = GetGValue(getPixel_RIGHT);
+	int b = GetBValue(getPixel_RIGHT);
+
+	if (!(r == 255 && g == 0 && b == 255))
+	{
+		if (_baleog.posState == POSSTATE_GROUND)
+		{
+			if (_baleog.state != STATE_PUSH)
+			{
+				_baleog.state = STATE_PUSH;
+				_baleog.currentFrameX = 0;
+				_baleog.image->setFrameX(0);
+			}
+		}
+		_baleog.x = _baleog.probeX - _baleog.image->getFrameWidth();
+	}
+}
+
+void playerbaleog::PixelLeftCollision()
+{
+	_baleog.probeX = _baleog.x - 3;
+
+	COLORREF getPixel_LEFT = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _baleog.probeX, _baleog.y);
+
+	int r = GetRValue(getPixel_LEFT);
+	int g = GetGValue(getPixel_LEFT);
+	int b = GetBValue(getPixel_LEFT);
+
+	if (!(r == 255 && g == 0 && b == 255))
+	{
+		if (_baleog.posState == POSSTATE_GROUND)
+		{
+			if (_baleog.state != STATE_PUSH)
+			{
+				_baleog.state = STATE_PUSH;
+				_baleog.currentFrameX = 0;
+				_baleog.image->setFrameX(0);
+			}
+		}
+		_baleog.x = _baleog.probeX + 6;
+	}
 }
 
 void playerbaleog::SetBaleogPosState()
@@ -447,6 +533,23 @@ void playerbaleog::SetBaleogPosState()
 	case POSSTATE_AIR:
 		_baleog.image = IMAGEMANAGER->findImage("낙하");
 		break;
+
+	case POSSTATE_STEPLADDER:
+		_baleog.image = IMAGEMANAGER->findImage("사다리이동");
+		break;
+
+	case POSSTATE_LADDERFALL:
+		_baleog.image = IMAGEMANAGER->findImage("사다리도착");
+		break;
+	}
+
+}
+
+void playerbaleog::baleogDie()
+{
+	if (_baleog.hp == 0)
+	{
+		_baleog.state = STATE_DIE;
 	}
 
 }
