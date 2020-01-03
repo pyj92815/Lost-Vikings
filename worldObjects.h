@@ -80,6 +80,7 @@ public:
 
 	vector<tagObjects> get_vItem() { return _vItem; }
 	vector<tagObjects>::iterator get_viItem() { return _viItem; }
+
 	void setCollision(int arrNum)
 	{
 		_vTrap[arrNum].isCollision = true;
@@ -88,6 +89,8 @@ public:
 	virtual void move();
 	bool getUpDown() { return _isUpDown; }
 	void setPlayerManagerAddressLink(playerManager* pm) { _pm = pm; }
+
+	tagObjects getWaterFall() { return _waterFall[3]; }
 
 
 };
