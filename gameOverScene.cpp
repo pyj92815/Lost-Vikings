@@ -111,9 +111,9 @@ void gameOverScene::render()
 		{
 			_SelectCnt++;
 
-			_tryPos[0].image->render(getMemDC(), _tryPos[0].rc.left, _tryPos[0].rc.top);
-			_tryPos[1].image->frameRender(getMemDC(), _tryPos[1].rc.left, _tryPos[1].rc.top, _changeLight, 0);
-			_tryPos[2].image->render(getMemDC(), _tryPos[2].rc.left, _tryPos[2].rc.top);
+			_tryPos[T_CENTER].image->render(getMemDC(), _tryPos[T_CENTER].rc.left, _tryPos[T_CENTER].rc.top);
+			_tryPos[T_YES].image->frameRender(getMemDC(), _tryPos[T_YES].rc.left, _tryPos[T_YES].rc.top, _changeLight, 0);
+			_tryPos[T_NO].image->render(getMemDC(), _tryPos[T_NO].rc.left, _tryPos[2].rc.top);
 
 			if (_SelectCnt >= 10)
 			{
@@ -126,9 +126,9 @@ void gameOverScene::render()
 		{
 			_SelectCnt++;
 
-			_tryPos[0].image->render(getMemDC(), _tryPos[0].rc.left, _tryPos[0].rc.top);
-			_tryPos[1].image->render(getMemDC(), _tryPos[1].rc.left, _tryPos[1].rc.top);
-			_tryPos[2].image->frameRender(getMemDC(), _tryPos[2].rc.left, _tryPos[2].rc.top, _changeLight, 0);
+			_tryPos[T_CENTER].image->render(getMemDC(), _tryPos[T_CENTER].rc.left, _tryPos[T_CENTER].rc.top);
+			_tryPos[T_YES].image->render(getMemDC(), _tryPos[T_YES].rc.left, _tryPos[1].rc.top);
+			_tryPos[T_NO].image->frameRender(getMemDC(), _tryPos[T_NO].rc.left, _tryPos[2].rc.top, _changeLight, 0);
 
 			if (_SelectCnt >= 10)
 			{

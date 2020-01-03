@@ -229,10 +229,10 @@ void introScene::Select_Key()
 	// 씬 넘버가 4일때만 실행한다. (_introScene.input_Pass는 패스워드 입력을 누르지 않은 상태)
 	if (_introScene.scene_Number == 4 && !_introScene.input_Pass && !_passMiss)
 	{
-		
+
 		if (KEYMANAGER->isOnceKeyDown(VK_UP) || KEYMANAGER->isOnceKeyDown('W'))
 		{
-			if (!_introScene.scene_Change_pos)	
+			if (!_introScene.scene_Change_pos)
 			{
 				_introScene.scene_Select_Image->setX(_introScene.scene_Select_rc[SS_GAME_PASSWORD].left);
 				_introScene.scene_Select_Image->setY(_introScene.scene_Select_rc[SS_GAME_PASSWORD].top);
@@ -282,7 +282,7 @@ void introScene::Select_Key()
 		}
 	}
 
-		// true의 값을 가지고 있다면
+	// true의 값을 가지고 있다면
 	if (_introScene.input_Pass && !_passMiss)
 	{
 		// 틀린 비밀번호를 입력하면 틀렸다는 메시지가 출력된다.
@@ -405,7 +405,7 @@ void introScene::Select_Key()
 	{
 		_introScene.fade_In -= 5;
 	}
-		
+
 }
 
 void introScene::Input_Key()
