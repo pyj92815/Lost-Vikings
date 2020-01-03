@@ -41,6 +41,7 @@ private:
 	_tagStateUI		_UI_HP[3];					// HP 정보
 
 	int				_charNum;					// 캐릭터를 가리키는 번호
+	int				_banjjack;
 
 	worldMap* _wm;
 	playerManager* _pm;

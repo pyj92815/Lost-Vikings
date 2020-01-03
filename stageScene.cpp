@@ -82,23 +82,49 @@ void stageScene::render()
 			_UI_State[i].image->getFrameX(), 0);
 	}
 
-	// 인벤토리 렉트 출력
-	for (int i = 0; i < 3; ++i)
-	{
-		for (int j = 0; j < 4; ++j)
-		{
-			//Rectangle(getMemDC(), _UI_Inventory[i][j].rc);
-			IMAGEMANAGER->findImage("Select_Image")->render(getMemDC(), _UI_Inventory[i][j].rc.left, _UI_Inventory[i][j].rc.top);
-		}
-	}
+	//// 인벤토리 렉트 출력
+	//for (int i = 0; i < 3; ++i)
+	//{
+	//	for (int j = 0; j < 4; ++j)
+	//	{
+	//		//Rectangle(getMemDC(), _UI_Inventory[i][j].rc);
+	//		IMAGEMANAGER->findImage("Select_Image")->render(getMemDC(), _UI_Inventory[i][j].rc.left, _UI_Inventory[i][j].rc.top);
+	//	}
+	//}
 
 
-	// 생명력 출력
+	// 생명력 출력 + 인벤토리
 	for (int i = 0; i < 3; ++i)
 	{
 		Rectangle(getMemDC(), _UI_HP[i].rc);
+
+		if (_pm->getDirection().player == i)
+		{
+			_banjjack++;
+			if (_banjjack <= 20)
+			{
+				IMAGEMANAGER->findImage("Select_Image")->render(getMemDC(), _UI_Inventory[_pm->getDirection().player][_pm->getDirection().invenNumber].rc.left, _UI_Inventory[_pm->getDirection().player][_pm->getDirection().invenNumber].rc.top);
+			}
+			if (_banjjack >= 30)
+			{
+				_banjjack = 0;
+			}
+		}
+		else
+		{
+			IMAGEMANAGER->findImage("Select_Image")->render(getMemDC(), _UI_Inventory[i][0].rc.left, _UI_Inventory[i][0].rc.top);
+		}
 	}
 
+	// 아이템 출력
+	for (int i = 0;i < _pm->get_vInven().size(); ++i)
+	{
+		if (0 > i) break;
+		_pm->get_vInven()[i].image->render(getMemDC(), _UI_Inventory[_pm->get_vInven()[i].player][_pm->get_vInven()[i].invenNumber].rc.left, _UI_Inventory[_pm->get_vInven()[i].player][_pm->get_vInven()[i].invenNumber].rc.top);
+	}
+	
+	
+	
 }
 
 void stageScene::posSetting()
