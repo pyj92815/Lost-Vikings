@@ -101,11 +101,11 @@ void playerManager::itemKey()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_UP))
 	{
-		if (_direction[_playing] == 2 || _direction[_playing] == 3) _direction[_playing] += 2;
+		if (_direction[_playing] == 2 || _direction[_playing] == 3) _direction[_playing] -= 2;
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 	{
-		if (_direction[_playing] == 0 || _direction[_playing] == 1) _direction[_playing] -= 2;
+		if (_direction[_playing] == 0 || _direction[_playing] == 1) _direction[_playing] += 2;
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 	{
