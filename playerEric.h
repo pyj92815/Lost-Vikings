@@ -29,7 +29,7 @@ private:
 
 	bool  _stopControl;		// 이값이 true라면 움직일 수 없다.
 	bool _stop;
-
+	bool _isItem;	 // 인벤 사용한다면  
 public:
 	playerEric();
 	~playerEric();
@@ -57,7 +57,7 @@ public:
 	void PixelRightCollision();		// X축 오른쪽 충돌 처리 
 	void PixelLeftCollision();		// X축 왼쪽   충돌 처리 
 	void isJumpPixelCollision();	// 점프시 충돌 처리 
-
+	void setEricHP() { _eric.hp++; }
 	void set_stopKey(bool stop) { _stopControl = stop; }
 	void player_Kill() { _eric.isDead = true; } // 지울 예정 
 	void setEricUnable() { _ericUnable = true;	}
@@ -69,6 +69,12 @@ public:
 	void ericDie();
 	void setEricState(tagState state) { _eric.state = state; }	// 상태를 정의해 주는 세터 
 
+
 	void setEricHit() { _eric.hp--; }
+
+	void setItemKey() { _isItem ? _isItem = false : _isItem = true; }
+
+	bool getItem() { return _isItem; }
+
 };
 

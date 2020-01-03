@@ -38,7 +38,14 @@ private:
 	_tagStateUI		_UI_Inventory[3][4];		// 캐릭터마다 인벤토리가 있다. 각각 4칸씩
 	_tagStateUI		_UI_Garbage;				// 휴지통 이미지 위치
 	_tagStateUI		_UI_GiveUp[3];				// 기브업 UI의 정보
+	_tagStateUI		_UI_HP[3];					// HP 정보
+
 	int				_charNum;					// 캐릭터를 가리키는 번호
+	int				_banjjack;					// 반짝반짝
+
+	int				_playerAllDeadTimer;		// 플레이어가 모두 죽었을때 일정 시간 뒤에 게임오버 창으로 넘어간다.
+
+	int*			_player_InvenPos;			// 현재 가리키는 인벤 위치
 
 	worldMap* _wm;
 	playerManager* _pm;
@@ -61,6 +68,7 @@ public:
 	void set_PlayerDead();
 
 	void collisionMIX();		// 혼돈의 충돌함수
+	void setting_InvenSelectPos();	// 인벤토리가 현재 가리키는 위치를 저장해둔다.
 
 };
 

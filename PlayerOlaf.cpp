@@ -30,6 +30,8 @@ HRESULT PlayerOlaf::init(float x, float y)
 	_testRect = RectMake(_olaf.x + 110, _olaf.y + 124, _olaf.image->getFrameWidth() - 4, 524);
 	_olafStateTemp = (int)_olaf.state;
 	_olafPosStateTemp = (int)_olaf.posState;
+
+	_isItem = false;
 	return S_OK;
 }
 
@@ -40,11 +42,14 @@ void PlayerOlaf::release()
 
 void PlayerOlaf::update()
 {
-	if (_stopControl) KeyControl();
-	SetOlafState();
-	SetOlafPosState();
-	PixelCollision();
-	UpdateFrame();
+	if (!_isItem)
+	{
+		if (_stopControl) KeyControl();
+		SetOlafState();
+		SetOlafPosState();
+		PixelCollision();
+		UpdateFrame();
+	}
 }
 
 void PlayerOlaf::render()
@@ -133,7 +138,7 @@ void PlayerOlaf::KeyControl()
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
 	{
-		if (_olaf.posState == POSSTATE_GROUND) 
+		if (_olaf.posState == POSSTATE_GROUND)
 		{
 			_olaf.state = STATE_MOVE;
 		}
@@ -172,35 +177,35 @@ void PlayerOlaf::SetOlafState()
 {
 	switch (_olaf.state)
 	{
-		case STATE_IDLE:
-			if (!_isShieldUp)
-				_olaf.image = IMAGEMANAGER->findImage("Olaf_Idle_ShieldForward");
-			else
-				_olaf.image = IMAGEMANAGER->findImage("Olaf_Idle_ShieldUp");
-			break;
+	case STATE_IDLE:
+		if (!_isShieldUp)
+			_olaf.image = IMAGEMANAGER->findImage("Olaf_Idle_ShieldForward");
+		else
+			_olaf.image = IMAGEMANAGER->findImage("Olaf_Idle_ShieldUp");
+		break;
 
-		case STATE_MOVE:
-			if (!_isShieldUp)
-				_olaf.image = IMAGEMANAGER->findImage("Olaf_Move_ShieldForward");
-			else
-				_olaf.image = IMAGEMANAGER->findImage("Olaf_Move_ShieldUp");
-			break;
-		case STATE_DIE:
-			break;
+	case STATE_MOVE:
+		if (!_isShieldUp)
+			_olaf.image = IMAGEMANAGER->findImage("Olaf_Move_ShieldForward");
+		else
+			_olaf.image = IMAGEMANAGER->findImage("Olaf_Move_ShieldUp");
+		break;
+	case STATE_DIE:
+		break;
 
-		case STATE_POISON:
-			break;
+	case STATE_POISON:
+		break;
 
-		case STATE_MIRRA:
-			break;
+	case STATE_MIRRA:
+		break;
 
-		case STATE_PRESSDIE:
-			break;
+	case STATE_PRESSDIE:
+		break;
 
-		case STATE_TRAPDIE:
-			break;
-		default:
-			break;
+	case STATE_TRAPDIE:
+		break;
+	default:
+		break;
 	}
 }
 
@@ -208,45 +213,45 @@ void PlayerOlaf::SetOlafPosState()
 {
 	switch (_olaf.posState)
 	{
-		case POSSTATE_GROUND:
-			ResetAnimation1();
-			break;
+	case POSSTATE_GROUND:
+		ResetAnimation1();
+		break;
 
-		case POSSTATE_AIR:
-			ResetAnimation1();
-			if (!_isShieldUp)
-			{
-				_olaf.image = IMAGEMANAGER->findImage("Olaf_Fall");
-				_olaf.gravity += GRAVITY;
-				_olaf.y += _olaf.gravity;
-			}
-			else
-			{
-				_olaf.image = IMAGEMANAGER->findImage("Olaf_SlowFall");
-				_olaf.gravity = 2;
-				_olaf.y += _olaf.gravity;
-			}
-			break;
+	case POSSTATE_AIR:
+		ResetAnimation1();
+		if (!_isShieldUp)
+		{
+			_olaf.image = IMAGEMANAGER->findImage("Olaf_Fall");
+			_olaf.gravity += GRAVITY;
+			_olaf.y += _olaf.gravity;
+		}
+		else
+		{
+			_olaf.image = IMAGEMANAGER->findImage("Olaf_SlowFall");
+			_olaf.gravity = 2;
+			_olaf.y += _olaf.gravity;
+		}
+		break;
 
-		case POSSTATE_STEPLADDER:
-			ResetAnimation1();
-			break;
+	case POSSTATE_STEPLADDER:
+		ResetAnimation1();
+		break;
 
-		case POSSTATE_LADDERFALL:
-			ResetAnimation1();
-			if (!_isShieldUp)
-			{
-				_olaf.image = IMAGEMANAGER->findImage("Olaf_Fall");
-				_olaf.gravity += GRAVITY;
-				_olaf.y += _olaf.gravity;
-			}
-			else
-			{
-				_olaf.image = IMAGEMANAGER->findImage("Olaf_SlowFall");
-				_olaf.gravity = 2;
-				_olaf.y += _olaf.gravity;
-			}
-			break;
+	case POSSTATE_LADDERFALL:
+		ResetAnimation1();
+		if (!_isShieldUp)
+		{
+			_olaf.image = IMAGEMANAGER->findImage("Olaf_Fall");
+			_olaf.gravity += GRAVITY;
+			_olaf.y += _olaf.gravity;
+		}
+		else
+		{
+			_olaf.image = IMAGEMANAGER->findImage("Olaf_SlowFall");
+			_olaf.gravity = 2;
+			_olaf.y += _olaf.gravity;
+		}
+		break;
 	}
 }
 
@@ -272,7 +277,7 @@ void PlayerOlaf::PixelCollision()
 	int r_RB = GetRValue(getPixel_RB);
 	int g_RB = GetGValue(getPixel_RB);
 	int b_RB = GetBValue(getPixel_RB);
-	
+
 	// 왼쪽 영역 처리
 	if (_olaf.posState == POSSTATE_GROUND && _olaf.posState != POSSTATE_STEPLADDER) // 땅에 있을때
 	{
@@ -343,7 +348,7 @@ void PlayerOlaf::PixelCollision()
 			_olaf.posState = POSSTATE_GROUND;
 			break;
 		}
-		else if(r_BC == 255 && g_BC == 0 && b_BC == 255) // 땅이 아니라면
+		else if (r_BC == 255 && g_BC == 0 && b_BC == 255) // 땅이 아니라면
 		{
 			_olaf.posState = POSSTATE_AIR;
 		}

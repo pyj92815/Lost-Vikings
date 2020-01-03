@@ -102,6 +102,7 @@ void sceneManager::SceneChange()
 	case SS_STAGE:
 		// 스테이지 씬을 출력한다.
 		SCENEMANAGER->changeScene("Stage");
+		_scene.state = SS_RESTART;
 		break;
 
 	case SS_GAMEOVER:

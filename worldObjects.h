@@ -16,6 +16,8 @@ enum tagTypeTrap
 	TRAP_POISION,
 	TRAP_NIDDLE,
 	TRAP_WALL,
+	TRAP_RED_UNBREAKABLE_WALL,
+	TRAP_BLUE_UNBREAKABLE_WALL,
 	TRAP_BORAD,
 };
 struct tagObjects
@@ -79,15 +81,14 @@ public:
 
 	vector<tagObjects> get_vItem() { return _vItem; }
 	vector<tagObjects>::iterator get_viItem() { return _viItem; }
-	void setCollision(int arrNum)
-	{
-		_vTrap[arrNum].isCollision = true;
-	}
+
+	void setTrapCollision(int arrNum){_vTrap[arrNum].isCollision = true;}
+	void setItemCollision(int arrNum) { _vItem[arrNum].isCollision = true; }
+
 	virtual void framework();
 	virtual void move();
 	bool getUpDown() { return _isUpDown; }
 	void setPlayerManagerAddressLink(playerManager* pm) { _pm = pm; }
-
 
 };
 
