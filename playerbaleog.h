@@ -85,7 +85,6 @@ public:
 	void PixelCollision();						//픽셀 충돌 함수
 	void SetBaleogPosState();					//큰범위 상태에 이미지 찾아주는 함수
 
-
 	tagPlayer getBaleog() { return _baleog; }
 
 	void hgKey();	// 형길이가 쓰는 비밀 이동키

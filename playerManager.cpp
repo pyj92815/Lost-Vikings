@@ -15,12 +15,12 @@ HRESULT playerManager::init()
 	_olaf = new PlayerOlaf;
 	_olaf->init(180, 155);
 
-	for (int i = 0;i <3;i++)
+	for (int i = 0;i < 3;i++)
 	{
 		_itemCount[i] = 0;
 		_direction[i] = 0;
 	}
-
+	_trade = false;
 	return S_OK;
 }
 
@@ -59,6 +59,10 @@ void playerManager::update()
 	if (_eric->getItem())
 	{
 		itemKey();
+	}
+	if (KEYMANAGER->isOnceKeyDown('E'))
+	{
+		itemUse();
 	}
 	trapColision();
 	itemColision();
@@ -101,21 +105,147 @@ void playerManager::KILLPlayer()
 
 void playerManager::itemKey()
 {
-	if (KEYMANAGER->isOnceKeyDown(VK_UP))
+	if (!_trade)
 	{
-		if (_direction[_playing] == 2 || _direction[_playing] == 3) _direction[_playing] -= 2;
+		if (KEYMANAGER->isOnceKeyDown(VK_UP))
+		{
+			if (_direction[_playing] == 2 || _direction[_playing] == 3) _direction[_playing] -= 2;
+		}
+		if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
+		{
+			if (_direction[_playing] == 0 || _direction[_playing] == 1) _direction[_playing] += 2;
+		}
+		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+		{
+			if (_direction[_playing] == 1 || _direction[_playing] == 3) _direction[_playing] -= 1;
+		}
+		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+		{
+			if (_direction[_playing] == 0 || _direction[_playing] == 2) _direction[_playing] += 1;
+		}
+		if (KEYMANAGER->isOnceKeyDown('F'))
+		{
+			_trade ? _trade = false : _trade = true;
+			for (int i = 0; i < _vInven.size(); ++i)
+			{
+				if (0 > _vInven.size()) break;
+				if (_vInven[i].player == _playing && _vInven[i].invenNumber == _direction[_playing])
+				{
+					_vInven[i].choice = true;
+				}
+			}
+		}
 	}
-	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
+	else
 	{
-		if (_direction[_playing] == 0 || _direction[_playing] == 1) _direction[_playing] += 2;
+		for (int i = 0; i < _vInven.size(); ++i)
+		{
+			if (0 > _vInven.size()) break;
+			if (_vInven[i].choice)
+			{
+				if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+				{
+					if (_vInven[i].player > 0) _vInven[i].player--;
+				}
+				if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+				{
+					if (_vInven[i].player < 3)_vInven[i].player++;
+				}
+				if (KEYMANAGER->isOnceKeyDown('F'))
+				{
+					_trade ? _trade = false : _trade = true;
+					_vInven[i].choice = false;
+					if (_vInven[i].player == 3)
+					{
+						this->removeInven(i);
+					}
+				}
+			}
+			else
+			{
+				if (KEYMANAGER->isOnceKeyDown('F'))
+				{
+					_trade ? _trade = false : _trade = true;
+				}
+			}
+		}
 	}
-	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+}
+
+void playerManager::itemUse()
+{
+	for (int i = 0; i < _vInven.size(); ++i)
 	{
-		if (_direction[_playing] == 1 || _direction[_playing] == 3) _direction[_playing] -= 1;
-	}
-	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
-	{
-		if (_direction[_playing] == 0 || _direction[_playing] == 2) _direction[_playing] += 1;
+		if (0 > _vInven.size()) break;
+		if (_vInven[i].player == _playing && _vInven[i].invenNumber == _direction[_playing])
+		{
+			switch (_vInven[i].typeItem)
+			{
+			case ITEM_BOMB:
+
+				break;
+			case ITEM_TOMATO:
+				if (_playing == 0)
+				{
+					_eric->setEricHP();
+				}
+				else if (_playing == 1)
+				{
+
+				}
+				else if (_playing == 2)
+				{
+
+				}
+				this->removeInven(i);
+				break;
+			case ITEM_REDKEY:
+				RECT temp;
+				for (int j = 0; j < _wo->get_vItem().size(); ++j)
+				{
+					if (IntersectRect(&temp, &_eric->getEricRect(), &_wo->get_vItem()[j].rc))
+					{
+						if (_wo->get_vItem()[j].item == ITEM_REDLOCKER)
+						{
+							for (int k = 0; k < _wo->get_vTrap().size(); ++k)
+							{
+								if (_wo->get_vTrap()[k].trap == TRAP_RED_UNBREAKABLE_WALL)
+								{
+									_wo->setTrapCollision(k);
+									this->removeInven(i);
+								}
+							}
+						}
+					}
+				}	
+				break;
+			case ITEM_REDLOCKER:
+				break;
+			case ITEM_BLUEKEY:
+				RECT temp2;
+				for (int j = 0; j < _wo->get_vItem().size(); ++j)
+				{
+					if (IntersectRect(&temp2, &_eric->getEricRect(), &_wo->get_vItem()[j].rc))
+					{
+						if (_wo->get_vItem()[j].item == ITEM_BLUELOCKER)
+						{
+							for (int k = 0; k < _wo->get_vTrap().size(); ++k)
+							{
+								if (_wo->get_vTrap()[k].trap == TRAP_BLUE_UNBREAKABLE_WALL)
+								{
+									_wo->setTrapCollision(k);
+									this->removeInven(i);
+								}
+							}
+						}
+					}
+				}
+				break;
+			case ITEM_BLUELOCKER:
+				break;
+			}
+			break;
+		}
 	}
 }
 
@@ -155,8 +285,8 @@ void playerManager::trapColision()
 							_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right - 10 &&
 							_eric->getEric().rc.bottom >= _wo->get_vTrap()[i].rc.bottom))
 					{
-						
-						if(_eric->getEric().state != STATE_PRESSDIE) _eric->setEricY(_wo->get_vTrap()[i].rc.bottom);
+
+						if (_eric->getEric().state != STATE_PRESSDIE) _eric->setEricY(_wo->get_vTrap()[i].rc.bottom);
 						if (_eric->getEric().posState == POSSTATE_GROUND)
 						{
 							if (_eric->getEric().state != STATE_PRESSDIE)
@@ -167,19 +297,19 @@ void playerManager::trapColision()
 								_eric->setEricStop();
 							}
 						}
-					}	
-					else if((_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left+10 &&
-						  	_eric->getEric().rc.right <= _wo->get_vTrap()[i].rc.right-10  )
-						   	||
-						    (_eric->getEric().rc.left >= _wo->get_vTrap()[i].rc.left+10  &&
-						   	_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right-10 ))
+					}
+					else if ((_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left + 10 &&
+						_eric->getEric().rc.right <= _wo->get_vTrap()[i].rc.right - 10)
+						||
+						(_eric->getEric().rc.left >= _wo->get_vTrap()[i].rc.left + 10 &&
+							_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right - 10))
 					{
 						if (_eric->getEric().state != STATE_PRESSDIE)
 						{
 							_eric->setEricPosState(POSSTATE_GROUND);
 							_eric->setEricJump();
 							_eric->setEricJumpPower();
-							
+
 							if (_wo->getUpDown())
 							{
 								_eric->setEricY(_wo->get_vTrap()[i].rc.top - _eric->getEric().image->getFrameHeight() + 3);
@@ -190,11 +320,11 @@ void playerManager::trapColision()
 							}
 						}
 					}
-				}			
-				
+				}
+
 				else if (_wo->get_vTrap()[i].trap == TRAP_WALL)
 				{
-							
+
 					if (_eric->getEric().state == STATE_ERIC_HEADBUTT && _eric->getEric().currentFrameX > 3)
 					{
 						_eric->setEricState(STATE_ERIC_HEADBUTTEND);
@@ -207,11 +337,11 @@ void playerManager::trapColision()
 					{
 						_eric->setEricState(STATE_PUSH);
 						_eric->setEricFrame();
-						_eric->setEricX(_wo->get_vTrap()[i].x - _eric->getEric().image->getFrameWidth()-5);
+						_eric->setEricX(_wo->get_vTrap()[i].x - _eric->getEric().image->getFrameWidth() - 5);
 					}
 					else if (!_wo->get_vTrap()[i].isCollision && _eric->getEric().state == STATE_ERIC_JUMP)
 					{
-						_eric->setEricX(_wo->get_vTrap()[i].x - _eric->getEric().image->getFrameWidth()-5);
+						_eric->setEricX(_wo->get_vTrap()[i].x - _eric->getEric().image->getFrameWidth() - 5);
 					}
 					else
 					{
@@ -219,7 +349,16 @@ void playerManager::trapColision()
 					}
 
 				}
-
+				else if (_wo->get_vTrap()[i].trap == TRAP_RED_UNBREAKABLE_WALL ||
+					_wo->get_vTrap()[i].trap == TRAP_BLUE_UNBREAKABLE_WALL)
+				{
+					if (!_wo->get_vTrap()[i].isCollision && _eric->getEric().state == STATE_MOVE)
+					{
+						_eric->setEricState(STATE_PUSH);
+						_eric->setEricFrame();
+					}
+						_eric->setEricX(_wo->get_vTrap()[i].x - _eric->getEric().image->getFrameWidth() - 5);
+				}
 			}
 		}
 	}
@@ -239,6 +378,7 @@ void playerManager::itemColision()
 			{
 				tagInven inven;
 				inven.image = _wo->get_vItem()[i].image;
+				inven.typeItem = _wo->get_vItem()[i].item;
 				inven.player = _playing;
 				_itemCount[_playing] = 0;
 				for (_viInven = _vInven.begin(); _viInven != _vInven.end(); ++_viInven)
@@ -246,7 +386,7 @@ void playerManager::itemColision()
 					if (_viInven->player == _playing) _itemCount[_playing]++;
 				}
 				inven.invenNumber = _itemCount[_playing]; // 순차적으로 아이템을 넣는다.
-				if (_itemCount[_playing] < 4) 
+				if (_itemCount[_playing] < 4)
 				{
 					_vInven.push_back(inven);
 					_wo->setItemCollision(i);

@@ -74,11 +74,8 @@ void playerEric::update()
 {
 	if (!_isItem)
 	{
-
-
-
-		ericFrameCount();				// 이미지 프레임 증가 
-		setEricImage();					// image 세팅 
+		ericFrameCount();				  // 이미지 프레임 증가 
+		setEricImage();				      // image 세팅 
 		if (_ericUnable) ericAttackMove();		// 공격하면 튕겨나오는 함수 
 		if (!_stop)
 		{

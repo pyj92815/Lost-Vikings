@@ -3,6 +3,8 @@
 #include "playerEric.h"
 #include "playerbaleog.h"
 #include "PlayerOlaf.h"
+#include "worldObjects.h"
+
 
 #ifdef UNICODE
 #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
@@ -30,9 +32,10 @@ enum tagTypeDie
 struct tagInven
 {
 	image* image;
-
+	tagTypeItem typeItem;
 	int player;			  // 0 1 2 값으로 사용자를 판단 
 	int invenNumber;	  // 0 1 2 3 (4 = 쓰레기통)
+	bool choice;
 };
 
 class playerManager : public gameNode
@@ -45,10 +48,12 @@ private:
 	vector<tagInven>::iterator _viInven;
 
 	int _direction[3];  // player, invenNumber 
-
+	int _itemNum;
 	int	_playing;  // 0 eric 1 baleog 2 olaf
 	int _itemCount[3]; // 0 1 2
 	worldObjects* _wo;
+
+	bool _trade;
 
 public:
 	playerManager() {}
@@ -79,10 +84,11 @@ public:
 	void itemKey();
 	void setWorldObjectAddressLink(worldObjects* wo) { _wo = wo; }
 
-
+	void itemUse();
 	void trapColision();
 	void itemColision();
 	void boradColision();
+	void removeInven(int Num) { _vInven.erase(_vInven.begin() + Num); }
 
 };
 
