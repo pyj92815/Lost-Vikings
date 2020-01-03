@@ -28,11 +28,7 @@ private:
 	playerbaleog* _baleog;
 	PlayerOlaf* _olaf;
 
-
-
 	int	_playing;  // 0 eric 1 baleog 2 olaf
-
-
 
 	worldObjects* _wo;
 
@@ -61,10 +57,7 @@ public:
 	void itemKey();
 	void setWorldObjectAddressLink(worldObjects* wo) { _wo = wo; }
 
-
 	void trapColision();
 	void itemColision();
 	void boradColision();
-
 };
-

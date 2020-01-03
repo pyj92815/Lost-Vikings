@@ -287,13 +287,15 @@ void stageScene::set_PlayerDead()
 
 			_charNum++;
 
+			if (_charNum == 3)	_charNum = 0;				// 만약 캐릭터의 개수를 초과했다면 다시 0번으로
+
 			if (!_UI_State[_charNum].dead)
 			{
 				_UI_State[_charNum].image->setFrameX(1);	// 캐릭터가 살이있으니까 캐릭터를 켜준다.
 				break;										// 만약 다음 캐릭터가 죽지 않았다면 와일문 나가기
 			}
 
-			if (_charNum == 3)	_charNum = 0;				// 만약 캐릭터의 개수를 초과했다면 다시 0번으로
+			//if (_charNum == 3)	_charNum = 0;				// 만약 캐릭터의 개수를 초과했다면 다시 0번으로
 		}
 	}
 

@@ -58,11 +58,11 @@
     <Filter Include="playGround\characters">
       <UniqueIdentifier>{e7f04b4f-28b5-4fad-bbe9-28066b77042e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="playGround\Scene_Manager">
-      <UniqueIdentifier>{673f8783-a194-4030-a62e-7657b3c793a7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="playGround\Enemy">
       <UniqueIdentifier>{0db7d735-5cb5-4f74-bab8-ffe946dd806b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\scene\Scene_Manager">
+      <UniqueIdentifier>{673f8783-a194-4030-a62e-7657b3c793a7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -157,7 +157,7 @@
       <Filter>playGround\characters</Filter>
     </ClInclude>
     <ClInclude Include="scene_Manager.h">
-      <Filter>playGround\Scene_Manager</Filter>
+      <Filter>playGround\scene\Scene_Manager</Filter>
     </ClInclude>
     <ClInclude Include="enemy.h">
       <Filter>playGround\Enemy</Filter>
@@ -270,7 +270,7 @@
       <Filter>playGround\characters</Filter>
     </ClCompile>
     <ClCompile Include="scene_Manager.cpp">
-      <Filter>playGround\Scene_Manager</Filter>
+      <Filter>playGround\scene\Scene_Manager</Filter>
     </ClCompile>
     <ClCompile Include="enemy.cpp">
       <Filter>playGround\Enemy</Filter>
