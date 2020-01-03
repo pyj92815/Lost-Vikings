@@ -12,7 +12,7 @@ EnemyManager::~EnemyManager()
 
 HRESULT EnemyManager::init()
 {
-	
+
 	EnemyCreate();
 	return S_OK;
 }
@@ -28,7 +28,12 @@ void EnemyManager::update()
 		(*_viEnemy)->update();
 		(*_viEnemy)->setPlayerRect(_playerManager->getPlayerEric().rc, _playerManager->getPlayerBaleog().rc, _playerManager->getPlayerOlaf().rc);
 	}
+	for (_viBullet = _vBullet.begin();_viBullet != _vBullet.end();++_viBullet)
+	{
+		(*_viBullet)->update();
+	}
 	EnemyRemove();
+	bulletFire();
 }
 
 void EnemyManager::render()
@@ -37,9 +42,11 @@ void EnemyManager::render()
 	{
 		(*_viEnemy)->render();
 	}
+	for (_viBullet = _vBullet.begin();_viBullet != _vBullet.end();++_viBullet)
+	{
+		(*_viBullet)->render();
+	}
 }
-
-
 
 void EnemyManager::EnemyCreate()
 {
@@ -129,4 +136,18 @@ void EnemyManager::EnemyRemove()
 void EnemyManager::Collision()
 {
 
+}
+
+void EnemyManager::bulletFire()
+{
+	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
+	{
+		for (_viBullet = _vBullet.begin();_viBullet != _vBullet.end();++_viBullet)
+		{
+			if ((*_viEnemy)->getisFire())
+			{
+				(*_viBullet)->init((*_viEnemy)->getX(), (*_viEnemy)->getY(), _playerManager->getPlayerEric().x, _playerManager->getPlayerEric().y);
+			}
+		}
+	}
 }

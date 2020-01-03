@@ -3,6 +3,13 @@
 #include "playerEric.h"
 #include "playerbaleog.h"
 #include "PlayerOlaf.h"
+
+#ifdef UNICODE
+#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
+#else
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#endif
+
 class worldObjects;
 // 플레이어의 타입
 enum PLAYER_TYPE
@@ -20,6 +27,12 @@ enum tagTypeDie
 	TYPE_POISION,	 // 독
 };
 
+struct tagInven
+{
+	image* image;
+	int player;			  // 0 1 2 값으로 사용자를 판단 
+	int invenNumber;	  // 0 1 2 3 (4 = 쓰레기통)
+};
 
 class playerManager : public gameNode
 {
@@ -27,13 +40,15 @@ private:
 	playerEric* _eric;
 	playerbaleog* _baleog;
 	PlayerOlaf* _olaf;
+	vector<tagInven>		    _vInven;
+	vector<tagInven>::iterator _viInven;
+
+	tagInven _direction;  // player, invenNumber 
 
 
 
 	int	_playing;  // 0 eric 1 baleog 2 olaf
-
-
-
+	int _itemCount[3]; // 0 1 2
 	worldObjects* _wo;
 
 public:
@@ -44,6 +59,10 @@ public:
 	void update();
 	void release();
 	void render();
+
+	vector<tagInven>		   get_vInven()		{ return _vInven;    }
+	vector<tagInven>::iterator get_viInven()	{ return _viInven;   }
+	tagInven				   getDirection()   { return _direction; }
 
 	playerEric* getEric() { return _eric; }
 	playerbaleog* getbaleog() { return _baleog;}

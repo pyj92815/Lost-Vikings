@@ -26,7 +26,16 @@ void Enemy_Mummy::EnemyAction()
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 	case EnemyState::ATTACK:
-		//if(공격 판정이 있을만한 이미지에 플레이어가 닿으면 플레이어 사망)
+		UnAttack();				//공격범위 밖으로 나가면 SCOUT
+		if (_frameX >= 3 && _frameX<=5)
+		{
+			_enemyAttackRect = _enemyAttackRangeRect;
+		}
+		else
+		{
+			_enemyAttackRect = RectMakeCenter(0, 0, 0, 0);
+		}
+		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 	case EnemyState::DIE:
 
@@ -80,6 +89,14 @@ void Enemy_Mummy::Frame()
 		}
 		break;
 	case EnemyState::ATTACK:
+		_frameCount++;
+		if (_frameCount >= 10)
+		{
+			_frameX++;
+			if (_frameX > 5)
+				_frameX = 0;
+			_frameCount = 0;
+		}
 		break;
 	case EnemyState::DIE:
 		break;

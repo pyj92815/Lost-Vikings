@@ -116,14 +116,14 @@ HRESULT worldObjects::init()
 	_Items[7].x = 2040;		//ปกฐฃ ภฺนฐผ่
 	_Items[7].y = 185;
 	//ทบฦฎ
-	_Items[0].rc = RectMake(750, 40, 40, 38);		//ฦ๘ลบ
-	_Items[1].rc = RectMake(2790, 615, 40, 48);
-	_Items[2].rc = RectMake(2790, 615, 40, 48);		//ลไธถลไ
-	_Items[3].rc = RectMake(2790, 615, 40, 48);
-	_Items[4].rc = RectMake(2075, 955, 27, 45);		//ฦฤถ๕ ฟญผ่
-	_Items[5].rc = RectMake(3520, 2105, 48, 48);	//ฦฤถ๕ ภฺนฐผ่
-	_Items[6].rc = RectMake(1840, 555, 27, 54);		//ปกฐฃ ฟญผ่
-	_Items[7].rc = RectMake(2040, 185, 48, 48);		//ปกฐฃ ภฺนฐผ่
+	//_Items[0].rc = RectMake(750, 40, 40, 38);		//ฦ๘ลบ
+	//_Items[1].rc = RectMake(3600, 665, 40, 48);
+	//_Items[2].rc = RectMake(2790, 615, 40, 48);		//ลไธถลไ
+	//_Items[3].rc = RectMake(2790, 615, 40, 48);
+	//_Items[4].rc = RectMake(2075, 955, 27, 45);		//ฦฤถ๕ ฟญผ่
+	//_Items[5].rc = RectMake(3520, 2105, 48, 48);	//ฦฤถ๕ ภฺนฐผ่
+	//_Items[6].rc = RectMake(1840, 555, 27, 54);		//ปกฐฃ ฟญผ่
+	//_Items[7].rc = RectMake(2040, 185, 48, 48);		//ปกฐฃ ภฺนฐผ่
 	//ป๓ลย
 	_Items[0].item = ITEM_BOMB;
 	_Items[1].item = ITEM_BOMB;
@@ -134,7 +134,12 @@ HRESULT worldObjects::init()
 	_Items[6].item = ITEM_REDKEY;
 	_Items[7].item = ITEM_REDLOCKER;
 	//กเกเกเกเกเกเกเกเกเกเกเกเกเพฦภฬลÛภป บคลอฟก ณึภฺกเกเกเกเกเกเกเกเกเกเกเกเกเกเกเกเกเกเกเ
-	for (int i = 0; i < 8; i++) { _vItem.push_back(_Items[i]); }
+	for (int i = 0; i < 8; i++) 
+	{ 
+		_Items[i].rc = RectMake(_Items[i].x, _Items[i].y, _Items->image->getWidth(), _Items->image->getHeight());
+		_Items[i].isCollision = false;
+		_vItem.push_back(_Items[i]);
+	}
 	//กแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแฟฉทฏฐกม๖กแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแ
 	_frameCount = 0;
 	return S_OK;
@@ -214,7 +219,14 @@ void worldObjects::render()
 	}
 	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
 	{//กแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแพฦภฬลÛ ภฬนฬม๖ รโทยกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแ
-		_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
+		if (!_viItem->isCollision)
+		{
+			_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
+			if (KEYMANAGER->isStayKeyDown('Q'))
+			{
+				Rectangle(CAMERAMANAGER->getWorDC(), _viItem->rc);
+			}
+		}
 	}
 }
 
