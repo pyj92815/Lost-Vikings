@@ -96,9 +96,47 @@ void gameOverScene::render()
 		}
 	}
 
-	//_goEric.image->aniRender(getMemDC(), _goEric.rc.left, _goEric.rc.top, _goEric.ani);
-	//_goBaleog.image->aniRender(getMemDC(), _goBaleog.rc.left, _goBaleog.rc.top, _goBaleog.ani);
-	//_goOlaf.image->aniRender(getMemDC(), _goOlaf.rc.left, _goOlaf.rc.top, _goOlaf.ani);
+
+	// 테스트 트라이 창
+	//Rectangle(getMemDC(), _tryPos[0].rc);
+
+	//Rectangle(getMemDC(), _tryPos[1].rc);
+
+	//Rectangle(getMemDC(), _tryPos[2].rc);
+
+
+	if (_ResetTimer >= 200)
+	{
+		if (!_SelectMove)	// 셀렉트가 YES에 있을때 YES가 반짝여야한다.
+		{
+			_SelectCnt++;
+
+			_tryPos[0].image->render(getMemDC(), _tryPos[0].rc.left, _tryPos[0].rc.top);
+			_tryPos[1].image->frameRender(getMemDC(), _tryPos[1].rc.left, _tryPos[1].rc.top, _changeLight, 0);
+			_tryPos[2].image->render(getMemDC(), _tryPos[2].rc.left, _tryPos[2].rc.top);
+
+			if (_SelectCnt >= 10)
+			{
+				_changeLight = !_changeLight;
+				_SelectCnt = 0;
+			}
+		}
+
+		if (_SelectMove)	// 셀렉트가 NO에 있을때 NO가 반짝여야한다.
+		{
+			_SelectCnt++;
+
+			_tryPos[0].image->render(getMemDC(), _tryPos[0].rc.left, _tryPos[0].rc.top);
+			_tryPos[1].image->render(getMemDC(), _tryPos[1].rc.left, _tryPos[1].rc.top);
+			_tryPos[2].image->frameRender(getMemDC(), _tryPos[2].rc.left, _tryPos[2].rc.top, _changeLight, 0);
+
+			if (_SelectCnt >= 10)
+			{
+				_changeLight = !_changeLight;
+				_SelectCnt = 0;
+			}
+		}
+	}
 }
 
 void gameOverScene::setting_Image()
@@ -108,9 +146,9 @@ void gameOverScene::setting_Image()
 	IMAGEMANAGER->addFrameImage("GO_Player", "./image/UI/GameOver/GameOver_Player.bmp", 600, 300, 3, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("GO_Ship", "./image/UI/GameOver/GameOver_Ship_Image.bmp", 600, 178, 5, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("GO_LightNing", "./image/UI/GameOver/GameOver_LightNing.bmp", 1200, 550, 9, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("Try_Center", "./image/UI/Try/Try_Center.bmp", 188, 68, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Try_Yes", "./image/UI/Try/Try_Yes.bmp", 100, 15, 2, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Try_No", "./image/UI/Try/Try_No.bmp", 100, 15, 2, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("Try_Center", "./image/UI/GameOver/Try_Center.bmp", 350, 127, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Try_Yes", "./image/UI/GameOver/Try_Yes.bmp", 200, 30, 2, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Try_No", "./image/UI/GameOver/Try_No.bmp", 200, 30, 2, 1, true, RGB(255, 0, 255));
 
 	// 이미지 사진을 넣어준다.
 	_bg.image = new image;
@@ -129,15 +167,6 @@ void gameOverScene::setting_Image()
 	_goPlayer.image = IMAGEMANAGER->findImage("GO_Player");
 
 
-	//_goEric.image = new image;
-	//_goEric.image = IMAGEMANAGER->findImage("GO_Eric");
-	//
-	//_goBaleog.image = new image;
-	//_goBaleog.image = IMAGEMANAGER->findImage("GO_Baleog");
-	//
-	//_goOlaf.image = new image;
-	//_goOlaf.image = IMAGEMANAGER->findImage("GO_Olaf");
-
 	int GO_BackGround[] = { 0,1,2,3,4,5,6 };
 	// 애니 키값, 이미지 키값, 배열, 배열길이, 프레임속도, 루프여부
 	KEYANIMANAGER->addArrayFrameAnimation("Ani_background", "GO_BG", GO_BackGround, 7, 5, true);
@@ -148,14 +177,6 @@ void gameOverScene::setting_Image()
 	int GO_LightNing[] = { 0,1,2,3,4,5,6,7,8 };
 	KEYANIMANAGER->addArrayFrameAnimation("Ani_LightNing", "GO_LightNing", GO_LightNing, 9, 7, false);
 
-	//int GO_P_Eric[] = { 0,1,2,3,4,5,6,7,8 };
-	//KEYANIMANAGER->addArrayFrameAnimation("Ani_eric", "GO_Eric", GO_P_Eric, 9, 6, true);
-	//
-	//int GO_P_Baleog[] = { 0,1,2,3,4,5,6,7 };
-	//KEYANIMANAGER->addArrayFrameAnimation("Ani_baleog", "GO_Baleog", GO_P_Baleog, 8, 6, true);
-	//
-	//int GO_P_Olaf[] = { 0,1,2,3,4,5,6,7,8 };
-	//KEYANIMANAGER->addArrayFrameAnimation("Ani_olaf", "GO_Olaf", GO_P_Olaf, 9, 6, true);
 
 	// 애니메이션 값을 넣어준다.
 	_bg.ani = KEYANIMANAGER->findAnimation("Ani_background");
@@ -167,29 +188,50 @@ void gameOverScene::setting_Image()
 		_lightNing[i].ani = KEYANIMANAGER->findAnimation("Ani_LightNing");
 	}
 
-	//_goEric.ani = KEYANIMANAGER->findAnimation("Ani_eric");
-	//
-	//_goBaleog.ani = KEYANIMANAGER->findAnimation("Ani_baleog");
-	//
-	//_goOlaf.ani = KEYANIMANAGER->findAnimation("Ani_olaf");
 
 	_bg.ani->start();			// 백 그라운드 애니메이션을 움직이도록 한다.
 	_ship.ani->start();			// 배의 애니메이션을 움직이도록 한다.
-	//_goEric.ani->start();
-	//_goBaleog.ani->start();
-	//_goOlaf.ani->start();
+
+
+	// 트라이 이미지를 초기화 한다.
+	for (int i = 0; i < 3; ++i)
+	{
+		_tryPos[i].image = new image;
+	}
+
+	_tryPos[T_CENTER].image = IMAGEMANAGER->findImage("Try_Center");
+	_tryPos[T_YES].image = IMAGEMANAGER->findImage("Try_Yes");
+	_tryPos[T_NO].image = IMAGEMANAGER->findImage("Try_No");
 }
 
 void gameOverScene::setting_Pos()
 {
 	_bg.rc = RectMake(0, 0, WINSIZEX, WINSIZEY);							// 백그라운드 위치 초기화
 	_ship.rc = RectMake(WINSIZEX / 2 - 30, WINSIZEY / 2 - 80, 430, 128);	// 배의 위치 초기화
+
 	_goPlayerRC[GOP_Eric] = RectMake(45, WINSIZEY / 2 - 200, 100, 337);		// 플레이어 위치 초기화
 	_goPlayerRC[GOP_Baleog] = RectMake(150, WINSIZEY / 2 - 150, 100, 337);
 	_goPlayerRC[GOP_Olaf] = RectMake(300, WINSIZEY / 2 - 140, 100, 337);
-	//_goEric.rc = RectMake(45, WINSIZEY/2 - 200, 100,337);
-	//_goBaleog.rc = RectMake(150, WINSIZEY/2 - 150, 100, 337);
-	//_goOlaf.rc = RectMake(250, WINSIZEY / 2 - 100, 100, 337);
+
+	// 트라이 메시지의 위치
+	_tryPos[T_CENTER].rc = RectMake(WINSIZEX / 2 - 150, WINSIZEY / 2 - 100, 300, 127);
+
+	_tryPos[T_YES].rc = RectMake(WINSIZEX / 2 - 120, WINSIZEY / 2 - 20, _tryPos[T_YES].image->getFrameWidth(), _tryPos[T_YES].image->getFrameHeight());
+	_tryPos[T_YES].pos.x = (_tryPos[T_YES].rc.left + _tryPos[T_YES].rc.right) / 2;
+	_tryPos[T_YES].pos.y = (_tryPos[T_YES].rc.top + _tryPos[T_YES].rc.bottom) / 2;
+	
+	_tryPos[T_NO].rc = RectMake(WINSIZEX / 2 + 60, WINSIZEY / 2 - 20, _tryPos[T_NO].image->getFrameWidth(), _tryPos[T_NO].image->getFrameHeight());
+	_tryPos[T_NO].pos.x = (_tryPos[T_NO].rc.left + _tryPos[T_NO].rc.right) / 2;
+	_tryPos[T_NO].pos.y = (_tryPos[T_NO].rc.top + _tryPos[T_NO].rc.bottom) / 2;
+
+	// 트라이 셀렉 위치
+	_trySelect.pos.x = _tryPos[T_YES].pos.x;
+	_trySelect.pos.y = _tryPos[T_YES].pos.y;
+	_trySelect.rc = RectMake(_trySelect.pos.x, _trySelect.pos.y, 10, 10);
+
+	_ReStartGame.Re_Eric = false;
+	_ReStartGame.Re_Baleog = false;
+	_ReStartGame.Re_Olaf = false;
 }
 
 void gameOverScene::letsGo_Ship()
@@ -255,4 +297,50 @@ void gameOverScene::restart_Select()
 	}
 
 	// 스테이지로 이동할지 타이틀로 이동할지 선택하는 화면 필요
+	// 캐릭터가 모두 살아 있다면 일정 시간이 지난 뒤 선택 이미지가 나온다.
+	if (_ReStartGame.Re_Eric && _ReStartGame.Re_Baleog && _ReStartGame.Re_Olaf)
+	{
+		RECT temp;
+
+		if (!_SelectMove)	// 셀렉 렉트와 YES 렉트가 충돌 상태라면
+		{
+			//_trySelect.Collision = false;
+
+			// 만약 엔터를 누르면 아직 화면에 뜨지 않은 트라이창 YES가 눌러지고 스테이지로 이동
+			if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
+			{
+				SCENEMANAGER->set_SceneState(SS_STAGE);
+				init();
+			}
+
+		}
+
+		if (_SelectMove)
+		{
+			//_trySelect.Collision = true;
+
+			// 만약 엔터를 누르면 아직 화면에 뜨지 않은 트라이창 YES가 눌러지고 스테이지로 이동
+			if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
+			{
+				SCENEMANAGER->set_SceneState(SS_INTRO);
+				init();
+			}
+		}
+
+		// 왼쪽 키
+		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+		{
+			_SelectMove = !_SelectMove;
+		}
+
+		// 오른쪽 키
+		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+		{
+			_SelectMove = !_SelectMove;
+		}
+
+	
+
+		_ResetTimer++;	// 캐릭터가 모두 살아나도 일정 시간 뒤에 트라이 메시지 출력
+	}
 }

@@ -38,6 +38,8 @@ private:
 	_tagStateUI		_UI_Inventory[3][4];		// 캐릭터마다 인벤토리가 있다. 각각 4칸씩
 	_tagStateUI		_UI_Garbage;				// 휴지통 이미지 위치
 	_tagStateUI		_UI_GiveUp[3];				// 기브업 UI의 정보
+	_tagStateUI		_UI_HP[3];					// HP 정보
+
 	int				_charNum;					// 캐릭터를 가리키는 번호
 
 	worldMap* _wm;

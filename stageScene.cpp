@@ -30,7 +30,10 @@ HRESULT stageScene::init()
 
 	posSetting();	// UI의 좌표를 설정한다. (캐릭터 상태 + 인벤토리)
 
-	
+	_UI_State[PT_ERIC].image->setFrameX(1);	// 이미지는 죽은 이미지로 교체한다.
+	_UI_State[PT_BALEOG].image->setFrameX(0);	// 이미지는 죽은 이미지로 교체한다.
+	_UI_State[PT_OLAF].image->setFrameX(0);	// 이미지는 죽은 이미지로 교체한다.
+
 
 	return S_OK;
 }
@@ -41,6 +44,7 @@ void stageScene::release()
 
 void stageScene::update()
 {
+
 	_wm->update();
 	_pm->update();
 	_em->update();
@@ -86,6 +90,13 @@ void stageScene::render()
 			//Rectangle(getMemDC(), _UI_Inventory[i][j].rc);
 			IMAGEMANAGER->findImage("Select_Image")->render(getMemDC(), _UI_Inventory[i][j].rc.left, _UI_Inventory[i][j].rc.top);
 		}
+	}
+
+
+	// 생명력 출력
+	for (int i = 0; i < 3; ++i)
+	{
+		Rectangle(getMemDC(), _UI_HP[i].rc);
 	}
 
 }
@@ -166,6 +177,21 @@ void stageScene::posSetting()
 	_UI_GiveUp[GU_YES];
 	_UI_GiveUp[GU_NO];
 
+
+	// 캐릭터 생명 위치 초기화
+	_UI_HP[PT_ERIC].image = new image;
+	_UI_HP[PT_ERIC].image = IMAGEMANAGER->findImage("Life");
+
+	_UI_HP[PT_BALEOG].image = new image;
+	_UI_HP[PT_BALEOG].image = IMAGEMANAGER->findImage("Life");
+
+	_UI_HP[PT_OLAF].image = new image;
+	_UI_HP[PT_OLAF].image = IMAGEMANAGER->findImage("Life");
+
+	_UI_HP[PT_ERIC].rc = RectMake(_UI_State[PT_ERIC].rc.left , _UI_State[PT_ERIC].rc.bottom+1, 12, 12);
+	_UI_HP[PT_BALEOG].rc = RectMake(_UI_State[PT_BALEOG].rc.left , _UI_State[PT_BALEOG].rc.bottom+1, 12, 12);
+	_UI_HP[PT_OLAF].rc = RectMake(_UI_State[PT_OLAF].rc.left , _UI_State[PT_OLAF].rc.bottom+1, 12, 12);
+
 }
 
 void stageScene::addStageImage()
@@ -182,6 +208,7 @@ void stageScene::addStageImage()
 	IMAGEMANAGER->addImage("Give_Center", "./image/UI/GiveUp/GiveUp.bmp", 156, 68, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("Give_Yes", "./image/UI/GiveUp/GiveUp.bmp", 100, 15, 2, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("Give_No", "./image/UI/GiveUp/GiveUp.bmp", 100, 15, 2, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("Life", "./image/UI/UI_Inventory/Life_Point.bmp", 12, 12, true, RGB(255, 0, 255));
 }
 
 void stageScene::testStateImage()
