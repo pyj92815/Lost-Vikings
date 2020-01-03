@@ -59,6 +59,7 @@ protected:
 	bool _die;								//적의 사망 상태를 반환하기 위한 함수
 
 	bool _isFire;
+	bool _wall;
 public:
 	RECT _ericRect;							//에릭의 렉트
 	RECT _olafRect;							//올라프의 렉트
@@ -93,7 +94,8 @@ public:
 	virtual bool getisFire() { if (_isFire)return true;else return false; }
 	virtual void setisFire(bool isFire) { _isFire = isFire; }
 	virtual void Hit() { _enemyHP--; }
-	
+	virtual void setTurn() { _turn_Num++; }
+	virtual void setWall() { _wall = true; }
 	virtual float getX() { return _x; }
 	virtual float getY() { return _y; }
 	virtual image* getImage() { return _Attack_image; }

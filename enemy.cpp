@@ -299,7 +299,7 @@ void Enemy::Tracking()
 	{
 	case DISCOVERYPlayer::ERIC:
 		//플레이어가 오른쪽에 있을때(에릭)
-		if (_x < (_ericRect.left + _ericRect.right) / 2 && !_turn)
+		if (_x < (_ericRect.left + _ericRect.right) / 2&& !_wall)
 		{
 			_turn = true;
 			_enemyLR = EnemyLR::RIGHT;
@@ -307,7 +307,7 @@ void Enemy::Tracking()
 				_x += 3;
 		}
 		//플레이어가 왼쪽에 있을때(에릭)
-		if (_x > (_ericRect.left + _ericRect.right) / 2 && !_turn)
+		if (_x > (_ericRect.left + _ericRect.right) / 2 && !_wall)
 		{
 			_turn = true;
 			_enemyLR = EnemyLR::LEFT;
@@ -318,7 +318,7 @@ void Enemy::Tracking()
 		break;
 	case DISCOVERYPlayer::BALEOG:
 		//플레이어가 오른쪽에 있을때(벨로그)
-		if (_x < (_baleogRect.left + _baleogRect.right) / 2 && !_turn)
+		if (_x < (_baleogRect.left + _baleogRect.right) / 2 && !_turn && !_wall)
 		{
 			_turn = true;
 			_enemyLR = EnemyLR::RIGHT;
@@ -326,7 +326,7 @@ void Enemy::Tracking()
 				_x += 3;
 		}
 		//플레이어가 왼쪽에 있을때(벨로그)
-		if (_x > (_baleogRect.left + _baleogRect.right) / 2 && !_turn)
+		if (_x > (_baleogRect.left + _baleogRect.right) / 2 && !_turn && !_wall)
 		{
 			_turn = true;
 			_enemyLR = EnemyLR::LEFT;
@@ -337,7 +337,7 @@ void Enemy::Tracking()
 		if (!IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_baleogRect))_enemyState = EnemyState::SCOUT;	//플레이어(벨로그)가 탐지범위 밖으로 나가면  SCOUT상태로 변함
 	case DISCOVERYPlayer::OLAF:
 		//플레이어가 오른쪽에 있을때(올라프)
-		if (_x < (_olafRect.left + _olafRect.right) / 2 && !_turn)
+		if (_x < (_olafRect.left + _olafRect.right) / 2 && !_turn && !_wall)
 		{
 			_turn = true;
 			_enemyLR = EnemyLR::RIGHT;
@@ -345,7 +345,7 @@ void Enemy::Tracking()
 				_x += 3;
 		}
 		//플레이어가 왼쪽에 있을때(올라프)
-		if (_x > (_olafRect.left + _olafRect.right) / 2 && !_turn)
+		if (_x > (_olafRect.left + _olafRect.right) / 2 && !_turn && !_wall)
 		{
 			_turn = true;
 			_enemyLR = EnemyLR::LEFT;
