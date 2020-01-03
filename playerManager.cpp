@@ -609,15 +609,25 @@ void playerManager::enemyColision()
 				_em->getVEnemy()[i]->Hit();
 
 
-				//충돌한 화살 삭제할 코드
-				
+				//충돌한 화살 삭제할 코드	
 				break;
-				
-
 			}
-
-
 		}
+		// 에너미 vs 에릭 충돌
+		RECT temp2;
+		if (IntersectRect(&temp2, &_eric->getEricRect(), &_em->getVEnemy()[i]->getRect()))
+		{
+			if (_eric->getEric().state == STATE_ERIC_HEADBUTT && _eric->getEric().currentFrameX > 3)
+			{
+				_em->EnemyRemove(i);
+				_eric->setEricState(STATE_ERIC_HEADBUTTEND);
+				_eric->setEricFrame();
+				_eric->setEricFrameSpeed(8);
+				_eric->setEricUnable();
+				break;
+			}
+		}
+
 
 	}
 }
