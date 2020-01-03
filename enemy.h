@@ -1,6 +1,7 @@
 #pragma once
 #include"gameNode.h"
 //발견한 적의 종류를 확인하는 Enum문
+
 enum class DISCOVERYPlayer
 {
 	ERIC, BALEOG, OLAF
@@ -8,7 +9,6 @@ enum class DISCOVERYPlayer
 
 enum class EnemyState
 {
-
 	IDLE,		//카메라 밖에 있을때 가만히 있는 상태
 	SCOUT,		//카메라 안에 들어와서 플레이어를 찾아 정찰하는 상태
 	DISCOVERY,	//플레이어가 정찰 범위 안에 들어와 플레이어를 추적하는 상태
@@ -21,6 +21,7 @@ enum class EnemyLR
 	LEFT,		//적의 이미지 방향을 결정하기 위한 ENUM 
 	RIGHT		//				"
 };
+
 enum class EnemyType
 {
 	MUMMY,		//적의 타입 지정(미라)

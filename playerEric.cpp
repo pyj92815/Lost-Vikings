@@ -765,7 +765,7 @@ void playerEric::isJumpPixelCollision()
 
 void playerEric::ericDie()
 {
-	if (_eric.hp == 0)
+	if (_eric.hp <= 0)
 	{
 		_eric.state == STATE_DIE;
 	}
