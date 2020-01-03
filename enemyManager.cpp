@@ -144,9 +144,13 @@ void EnemyManager::Collision()
 			if ((IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_ericRect)) || (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_ericRect)))
 			{
 				_enemyBullet->removeBullet(i);
-				_playerManager->getEric()->setHit();
-				_playerManager->getEric()->setEricHit();
+				if (!_playerManager->getEric()->getHit())
+				{
+					_playerManager->getEric()->setHit();
+					_playerManager->getEric()->setEricHit();
+				}
 				
+	
 				break;
 			}
 			if ((IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_baleogRect)) || (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_baleogRect)))
