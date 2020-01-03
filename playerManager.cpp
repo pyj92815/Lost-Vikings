@@ -251,12 +251,14 @@ void playerManager::itemUse()
 	}
 }
 
-void playerManager::trapColision()
+void playerManager::trapColision() // 함정과 충돌 시
 {
 	for (int i = 0; i < _wo->get_vTrap().size(); ++i)
 	{
 		if (0 > _wo->get_vTrap().size()) break;
 		RECT temp;
+
+		// 에릭과 함정 충돌처리
 		if (IntersectRect(&temp, &_eric->getEricRect(), &_wo->get_vTrap()[i].rc))
 		{
 			if (!_wo->get_vTrap()[i].isCollision)
@@ -299,12 +301,12 @@ void playerManager::trapColision()
 								_eric->setEricStop();
 							}
 						}
-					}
-					else if ((_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left + 10 &&
-						_eric->getEric().rc.right <= _wo->get_vTrap()[i].rc.right - 10)
-						||
-						(_eric->getEric().rc.left >= _wo->get_vTrap()[i].rc.left + 10 &&
-							_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right - 10))
+					}	
+					else if ((_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left+10 &&
+						  	_eric->getEric().rc.right <= _wo->get_vTrap()[i].rc.right-10  )
+						   	||
+						    (_eric->getEric().rc.left >= _wo->get_vTrap()[i].rc.left+10  &&
+						   	_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right-10 ))
 					{
 						if (_eric->getEric().state != STATE_PRESSDIE)
 						{
@@ -456,8 +458,31 @@ void playerManager::trapColision()
 
 			}
 		}
-	}
 
+		RECT temp2;
+		if (IntersectRect(&temp2, &_olaf->GetOlafRC(), &_wo->get_vTrap()[i].rc))
+		{
+			if (!_wo->get_vTrap()[i].isCollision)
+			{
+				if (_wo->get_vTrap()[i].trap == TRAP_POISION)
+				{
+					_olaf->ResetAnimation2();
+					_wo->setTrapCollision(i);
+					_olaf->Set_OlafState(STATE_POISON);
+					//_eric->setEricStop();
+					break;
+				}
+				else if (_wo->get_vTrap()[i].trap == TRAP_NIDDLE)
+				{
+					_olaf->ResetAnimation2();
+					_wo->setTrapCollision(i);
+					_olaf->Set_OlafState(STATE_TRAPDIE);
+					//_eric->setEricStop();
+					break;
+				}
+			}
+		}
+	}
 
 }
 

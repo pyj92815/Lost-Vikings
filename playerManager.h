@@ -62,8 +62,6 @@ private:
 	bool _trade;
 
 	EnemyManager* _em;
-
-
 public:
 	playerManager() {}
 	~playerManager() {}
@@ -93,6 +91,7 @@ public:
 	int getPlaying() { return _playing; }
 	void itemKey();
 	void setWorldObjectAddressLink(worldObjects* wo) { _wo = wo; }
+
 	void itemUse();
 	void setMemoryAddressLink(EnemyManager* em) { _em = em; }
 	void trapColision();

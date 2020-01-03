@@ -23,16 +23,21 @@ enum tagState			// 이미지의 상태값
 	STATE_MIRRA,		// 미라사
 	STATE_PRESSDIE,		// 압축사
 	STATE_TRAPDIE,		// 뿔에 찔려 죽는사
+	STATE_DROWNED,		// 익사
 	STATE_STEPLADDER,
-	STATE_STEPLADDEREND
+	STATE_STEPLADDEREND,
+	STATE_FALLHIT
 };
 
 enum tagPosState  // position state
 {
 	POSSTATE_GROUND,    // 중력을 안받고 
 	POSSTATE_AIR,		// 중력을 받는다 
-	POSSTATE_STEPLADDER,
+	POSSTATE_BORAD,
+	POSSTATE_STEPLADDER, // 사다리 타고 내려갈때
+	POSSTATE_LADDERUP, // 사다리 타고 올라갈때
 	POSSTATE_LADDERFALL,
+	POSSTATE_LADDEREXIT
 };
 
 struct tagPlayer
@@ -56,6 +61,7 @@ struct tagPlayer
 	int frameSpeed;
 	int hp;	   // 3개 
 	bool isDead;				// 살았는지 죽었는지
+	bool isHit;
 };
 
 
