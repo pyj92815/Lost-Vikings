@@ -100,18 +100,18 @@ HRESULT worldObjects::init()
 	_Items[5].x = 3520;		//ÆÄ¶õ ÀÚ¹°¼è
 	_Items[5].y = 2105;
 	//»¡°£ ¿­¼è ¹× ÀÚ¹°¼è ÁÂÇ¥
-	_Items[6].x = 1840;			//»¡°£ ¿­¼è
+	_Items[6].x = 1840;		//»¡°£ ¿­¼è
 	_Items[6].y = 555;
 	_Items[7].x = 2040;		//»¡°£ ÀÚ¹°¼è
 	_Items[7].y = 185;
 	//·ºÆ®
-	_Items[0].rc = RectMake(750, 40, 40, 38);			//ÆøÅº
+	_Items[0].rc = RectMake(750, 40, 40, 38);		//ÆøÅº
 	_Items[1].rc = RectMake(2790, 615, 40, 48);
 	_Items[2].rc = RectMake(2790, 615, 40, 48);		//Åä¸¶Åä
 	_Items[3].rc = RectMake(2790, 615, 40, 48);
 	_Items[4].rc = RectMake(2075, 955, 27, 45);		//ÆÄ¶õ ¿­¼è
 	_Items[5].rc = RectMake(3520, 2105, 48, 48);	//ÆÄ¶õ ÀÚ¹°¼è
-	_Items[6].rc = RectMake(1840, 555, 27, 54);			//»¡°£ ¿­¼è
+	_Items[6].rc = RectMake(1840, 555, 27, 54);		//»¡°£ ¿­¼è
 	_Items[7].rc = RectMake(2040, 185, 48, 48);		//»¡°£ ÀÚ¹°¼è
 	//»óÅÂ
 	_Items[0].item = ITEM_BOMB;
@@ -203,38 +203,7 @@ void worldObjects::render()
 	}
 	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
 	{//¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¾ÆÀÌÅÛ ÀÌ¹ÌÁö Ãâ·Â¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á
-		if (_viItem->item == ITEM_BOMB)
-		{
-			_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
-		}
-		if (_viItem->item == ITEM_BOMB)
-		{
-			_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
-		}
-		if (_viItem->item == ITEM_TOMATO)
-		{
-			_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
-		}
-		if (_viItem->item == ITEM_TOMATO)
-		{
-			_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
-		}
-		if (_viItem->item == ITEM_BLUEKEY)
-		{
-			_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
-		}
-		if (_viItem->item == ITEM_BLUELOCKER)
-		{
-			_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
-		}
-		if (_viItem->item == ITEM_REDKEY)
-		{
-			_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
-		}
-		if (_viItem->item == ITEM_REDLOCKER)
-		{
-			_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
-		}
+		_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
 	}
 }
 
