@@ -47,13 +47,16 @@ HRESULT worldObjects::init()
 		_poision[i].isCollision = false;
 		//함정 타입
 		_poision[i].trap = TRAP_POISION;
+		_poision[i].trap = TRAP_POISION;
 	}//□□□□□□□□□□□□□독 함정을 벡터에 넣자□□□□□□□□□□□□□□□□□□□
 	for (int i = 0; i < 4; i++) { _vTrap.push_back(_poision[i]); }
 	//■■■■■■■■■■■■■■■■■폭포 위치 렉트■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	IMAGEMANAGER->addFrameImage("smallWater_Fall", "./image/ImageCollection/water_Fall.bmp", 564, 602, 4, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Water_Fall", "./image/ImageCollection/water_Fall.bmp", 564, 602, 4, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("long_Water_Fall", "./image/ImageCollection/long_Water_Fall.bmp", 1152, 1467, 4, 1, true, RGB(255, 0, 255));
-	_waterFall[0].image = IMAGEMANAGER->findImage("smallWater_Fall");
+	IMAGEMANAGER->addFrameImage("short_Water_Fall", "./image/ImageCollection/short_Water_Fall.bmp", 564, 622, 4, 1, true, RGB(255, 0, 255));
+	_waterFall[0].image = IMAGEMANAGER->findImage("Water_Fall");
 	_waterFall[1].image = IMAGEMANAGER->findImage("long_Water_Fall");
+	_waterFall[2].image = IMAGEMANAGER->findImage("short_Water_Fall");
 	for (int i = 0; i < 3; i++)
 	{
 		_waterFall[i].frameX = 0;
@@ -63,8 +66,8 @@ HRESULT worldObjects::init()
 	_isUpDown = false;
 	_breakableWallOne.image = IMAGEMANAGER->addFrameImage("Stone_Door_5", "./image/ImageCollection/Stone_Door_5.bmp", 384, 240, 8, 1, true, RGB(255, 0, 255));
 	_breakableWallTwo.image = IMAGEMANAGER->addFrameImage("Stone_Door_4", "./image/ImageCollection/Stone_Door_4.bmp", 336, 192, 7, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("BrownDoor_1", "./image/ImageCollection/BrownDoor.bmp", 45, 195, false, RGB(0, 0, 0));
-	IMAGEMANAGER->addImage("BrownDoor_2", "./image/ImageCollection/BrownDoor.bmp", 45, 195, false, RGB(0, 0, 0));
+	_unbreakableWallOne.image = IMAGEMANAGER->addFrameImage("BrownDoor_1", "./image/ImageCollection/BrownDoor.bmp", 315, 195, 7, 1, true, RGB(255, 0, 255));
+	_unbreakableWallTwo.image = IMAGEMANAGER->addFrameImage("BrownDoor_2", "./image/ImageCollection/BrownDoor.bmp", 315, 195, 7, 1, true, RGB(255, 0, 255));
 	_flyingBoard.image = IMAGEMANAGER->addImage("Moving_Flatform", "./image/ImageCollection/Moving_Flatform.bmp", 192, 45, false, RGB(0, 0, 0));
 	_flyingBoard.rc = RectMake(1679, 325, 192, 45);
 	//발판 좌표
@@ -115,13 +118,13 @@ HRESULT worldObjects::init()
 	_vTrap.push_back(_unbreakableWallOne);
 	_vTrap.push_back(_unbreakableWallTwo);
 	//■■■■■■■■■■■■■■■■■아이템 위치■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	_Items[0].image = IMAGEMANAGER->addImage("Boom", "./image/ImageCollection/Boom_Item.bmp", 48, 47, true, RGB(255, 0, 255));
-	_Items[1].image = IMAGEMANAGER->addImage("Boom", "./image/ImageCollection/Boom_Item.bmp", 48, 47, true, RGB(255, 0, 255));
-	_Items[2].image = IMAGEMANAGER->addImage("oneTomato", "./image/ImageCollection/item_hp2.bmp", 40, 48, true, RGB(255, 0, 255));
-	_Items[3].image = IMAGEMANAGER->addImage("twoTomato", "./image/ImageCollection/item_hp2.bmp", 40, 48, true, RGB(255, 0, 255));
-	_Items[4].image = IMAGEMANAGER->addImage("BlueKey", "./image/ImageCollection/BlueKey.bmp", 27, 45, true, RGB(255, 0, 255));
+	_Items[0].image = IMAGEMANAGER->addImage("Boom", "./image/ImageCollection/Boom_Item.bmp", 50, 50, true, RGB(255, 0, 255));
+	_Items[1].image = IMAGEMANAGER->addImage("Boom", "./image/ImageCollection/Boom_Item.bmp", 50, 50, true, RGB(255, 0, 255));
+	_Items[2].image = IMAGEMANAGER->addImage("oneTomato", "./image/ImageCollection/item_hp2.bmp", 50, 50, true, RGB(255, 0, 255));
+	_Items[3].image = IMAGEMANAGER->addImage("twoTomato", "./image/ImageCollection/item_hp2.bmp", 50, 50, true, RGB(255, 0, 255));
+	_Items[4].image = IMAGEMANAGER->addImage("BlueKey", "./image/ImageCollection/BlueKey.bmp", 50, 50, true, RGB(255, 0, 255));
 	_Items[5].image = IMAGEMANAGER->addImage("BlueLocker", "./image/ImageCollection/BlueKey_Hole.bmp", 48, 48, false, RGB(0, 0, 0));
-	_Items[6].image = IMAGEMANAGER->addImage("RedKey", "./image/ImageCollection/RedKey.bmp", 27, 54, true, RGB(255, 0, 255));
+	_Items[6].image = IMAGEMANAGER->addImage("RedKey", "./image/ImageCollection/RedKey.bmp", 50, 50, true, RGB(255, 0, 255));
 	_Items[7].image = IMAGEMANAGER->addImage("RedLocker", "./image/ImageCollection/RedKey_Hole.bmp", 48, 48, false, RGB(0, 0, 0));
 	//폭탄 좌표
 	_Items[0].x = 750;
@@ -134,12 +137,12 @@ HRESULT worldObjects::init()
 	_Items[3].x = 25;
 	_Items[3].y = 640;
 	//파란 열쇠 및 자물쇠 좌표
-	_Items[4].x = 2075;		//파란 열쇠
-	_Items[4].y = 955;
+	_Items[4].x = 2085;		//파란 열쇠
+	_Items[4].y = 995;
 	_Items[5].x = 3520;		//파란 자물쇠
 	_Items[5].y = 2105;
 	//빨간 열쇠 및 자물쇠 좌표
-	_Items[6].x = 1840;		//빨간 열쇠
+	_Items[6].x = 1820;		//빨간 열쇠
 	_Items[6].y = 555;
 	_Items[7].x = 2040;		//빨간 자물쇠
 	_Items[7].y = 185;
@@ -179,7 +182,7 @@ void worldObjects::update()
 {
 	_frameCount++;
 	move();
-	framework();
+	frameWork();
 
 	for (_viTrap = _vTrap.begin(); _viTrap != _vTrap.end(); ++_viTrap)
 	{
@@ -206,6 +209,17 @@ void worldObjects::release()
 
 void worldObjects::render()
 {
+	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
+	{//■■■■■■■■■■■■■■■■■아이템 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+		if (!_viItem->isCollision)
+		{
+			_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
+			if (KEYMANAGER->isStayKeyDown('Q'))
+			{
+				Rectangle(CAMERAMANAGER->getWorDC(), _viItem->rc);
+			}
+		}
+	}
 	//■■■■■■■■■■■■■■■■■가시 함정 렉트출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	for (int i = 0; i < 3; i++)
 	{
@@ -215,13 +229,15 @@ void worldObjects::render()
 		}
 	}
 	//■■■■■■■■■■■■■■■■■폭포 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	IMAGEMANAGER->findImage("smallWater_Fall")->frameRender(CAMERAMANAGER->getWorDC(),
+	IMAGEMANAGER->findImage("Water_Fall")->frameRender(CAMERAMANAGER->getWorDC(),
 		1150, 148, _waterFall[0].frameX, _waterFall[0].frameY);
 	IMAGEMANAGER->findImage("long_Water_Fall")->frameRender(CAMERAMANAGER->getWorDC(),
 		815, 832, _waterFall[1].frameX, _waterFall[1].frameY);
+	IMAGEMANAGER->findImage("short_Water_Fall")->frameRender(CAMERAMANAGER->getWorDC(),
+		3263, -60, _waterFall[2].frameX, _waterFall[2].frameY);
 	//■■■■■■■■■■■■■■■■■벽 및 발판 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	IMAGEMANAGER->findImage("BrownDoor_1")->render(CAMERAMANAGER->getWorDC(), _unbreakableWallOne.rc.left, _unbreakableWallOne.rc.top);
-	IMAGEMANAGER->findImage("BrownDoor_2")->render(CAMERAMANAGER->getWorDC(), _unbreakableWallTwo.rc.left, _unbreakableWallTwo.rc.top);
+	IMAGEMANAGER->findImage("BrownDoor_1")->frameRender(CAMERAMANAGER->getWorDC(), _unbreakableWallOne.rc.left, _unbreakableWallOne.rc.top);
+	IMAGEMANAGER->findImage("BrownDoor_2")->frameRender(CAMERAMANAGER->getWorDC(), _unbreakableWallTwo.rc.left, _unbreakableWallTwo.rc.top);
 	//IMAGEMANAGER->findImage("Moving_Flatform")->render(CAMERAMANAGER->getWorDC(), _flyingBoard.rc.left, _flyingBoard.rc.top);
 	if (KEYMANAGER->isStayKeyDown('Q'))
 	{//■■■■■■■■■■■■■■■■■벽 충돌 렉트 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
@@ -260,14 +276,13 @@ void worldObjects::render()
 			_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
 			if (KEYMANAGER->isStayKeyDown('Q'))
 			{
-				Rectangle(CAMERAMANAGER->getWorDC(), _Items[7].rc);
-				//Rectangle(CAMERAMANAGER->getWorDC(), _viItem->rc);
+				Rectangle(CAMERAMANAGER->getWorDC(), _viItem->rc);
 			}
 		}
 	}
 }
 
-void worldObjects::framework()
+void worldObjects::frameWork()
 {
 	RECT temp;
 	for (_viTrap = _vTrap.begin(); _viTrap != _vTrap.end(); ++_viTrap)
@@ -314,9 +329,30 @@ void worldObjects::framework()
 				}
 			}
 		}
-	}
+		if (_frameCount % 6 == 0)
+		{
+			if (_viTrap->trap == TRAP_UNBREAKABLE_WALL)
+			{
+				if (!_viTrap->isCollision)
+				{//■■■■■■■■■■■■■■■■■안부서지는 벽이 열쇠를 사용하지 않았다면 프레임■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+					_viTrap->image->setFrameX(_viTrap->frameX);
+					if (_viTrap->frameX >= 0) { _viTrap->frameX = 0; }
+				}
+				else if (_viTrap->isCollision)
+				{//■■■■■■■■■■■■■■■■■안부서지는 벽이 열쇠를 사용했다면 프레임■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+					_viTrap->image->setFrameX(_viTrap->frameX);
+					_viTrap->frameX++;
+					if (_viTrap->frameX > _viTrap->image->getMaxFrameX())
+					{
+						_viTrap->y = -300;
+						_viTrap->isCollision = false;
+					}
+				}
+			}
+		}
+	}   
 	//■■■■■■■■■■■■■■■■■폭포 프레임■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		if (_frameCount % 4 == 0)
 		{
