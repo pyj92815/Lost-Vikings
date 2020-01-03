@@ -117,28 +117,28 @@ void stageScene::render()
 	}
 
 	// 인벤토리
-	//for (int i = 0; i < 3; ++i)
-	//{
-	//	if (_charNum == i)
-	//	{
-	//
-	//		_banjjack++;
-	//		if (_banjjack <= 20)
-	//		{
-	//			// 가져온 인벤 위치에 따라 달라진다.
-	//			IMAGEMANAGER->findImage("Select_Image")->render(getMemDC(), _UI_Inventory[_charNum][_player_InvenPos[_charNum]].rc.left, _UI_Inventory[_charNum][_player_InvenPos[_charNum]].rc.top);
-	//		}
-	//		if (_banjjack >= 30)
-	//		{
-	//			_banjjack = 0;
-	//		}
-	//	}
-	//	else
-	//	{
-	//		//IMAGEMANAGER->findImage("Select_Image")->render(getMemDC(), _UI_Inventory[i][0].rc.left, _UI_Inventory[i][0].rc.top);
-	//		IMAGEMANAGER->findImage("Select_Image")->render(getMemDC(), _UI_Inventory[_charNum][_player_InvenPos[_charNum]].rc.left, _UI_Inventory[_charNum][_player_InvenPos[_charNum]].rc.top);
-	//	}
-	//}
+	for (int i = 0; i < 3; ++i)
+	{
+		if (_charNum == i)
+		{
+	
+			_banjjack++;
+			if (_banjjack <= 20)
+			{
+				// 가져온 인벤 위치에 따라 달라진다.
+				IMAGEMANAGER->findImage("Select_Image")->render(getMemDC(), _UI_Inventory[_charNum][_player_InvenPos[_charNum]].rc.left, _UI_Inventory[_charNum][_player_InvenPos[_charNum]].rc.top);
+			}
+			if (_banjjack >= 30)
+			{
+				_banjjack = 0;
+			}
+		}
+		else
+		{
+			//IMAGEMANAGER->findImage("Select_Image")->render(getMemDC(), _UI_Inventory[i][0].rc.left, _UI_Inventory[i][0].rc.top);
+			IMAGEMANAGER->findImage("Select_Image")->render(getMemDC(), _UI_Inventory[i][_player_InvenPos[i]].rc.left, _UI_Inventory[i][_player_InvenPos[i]].rc.top);
+		}
+	}
 
 	// 아이템 출력
 	for (int i = 0;i < _pm->get_vInven().size(); ++i)

@@ -37,11 +37,11 @@ HRESULT playerEric::init(float x, float y)
 	_eric.x = x;															 // x 
 	_eric.y = y;															 // y
 	_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());   // RECT
-	
-	_eric.hp = 3;		
+
+	_eric.hp = 3;
 	_eric.isDead = false;// 체력 
 	//========================== 점프 관련 ==================================//
-	_ericJump = false;					
+	_ericJump = false;
 	_eric.jumpPower = 15;
 	_eric.gravity = 0.3;
 	//========================== 이동 관련 ==================================//
@@ -53,12 +53,13 @@ HRESULT playerEric::init(float x, float y)
 	//========================== 특이 상황 관련 =============================//
 	_breathCount = 0;
 	_breathFrameCount = 0;
-	
-
 	_gravity = 0;			// ERIC AIR 상태일 때 중력 
 	_slidePower = 7;		// 
 	_isSlide = false;		// 슬라이딩 
 	_stop = false;
+	_isItem = false;
+
+
 	//========================== 충돌처리 초기화 ============================//
 	_eric.probeX = _eric.x + _eric.image->getFrameWidth() / 2;
 	_eric.probeY = _eric.y + _eric.image->getFrameHeight() / 2;
@@ -71,54 +72,59 @@ void playerEric::release()
 
 void playerEric::update()
 {
-
-	if (_stopControl)				// 케릭터 선택 BOOL값
-	{
-		if (!_ericUnable) key();	// 전투 불능 상태가 아니면 key값 
-	}	
-	ericFrameCount();				// 이미지 프레임 증가 
-	setEricImage();					// image 세팅 
-	if (!_stop)
+	if (!_isItem)
 	{
 
 
-	ericJump();						// 점프 
-	ericHit();						// 맞을 때 이미지 
-		//======================구현 예정==================//
-	ericAttack();							// 공격 
-	if (_ericUnable) ericAttackMove();		// 공격하면 튕겨나오는 함수 
 
-
-
-	// 에릭의 좌표를 카메라 매니저에 넘겨준다.
-	// CAMERAMANAGER->set_Camera_XY(_eric.rc);
-	// 에릭의 위치가 그라운드이면 
-	// 점프가 아니면 픽셀충돌, 점프중에도 픽셀충돌 
-
-	if (_eric.posState == POSSTATE_AIR)
-	{
-		isJumpPixelCollision();
-
-		// 중력값 
-		if (_gravity < 5)	 _gravity += 0.7;
-		_eric.y += _gravity;
-		if (_eric.state != STATE_ERIC_JUMP) // 떨어질 때 점프하면서 떨어지기 위한 
+		ericFrameCount();				// 이미지 프레임 증가 
+		setEricImage();					// image 세팅 
+		if (_ericUnable) ericAttackMove();		// 공격하면 튕겨나오는 함수 
+		if (!_stop)
 		{
-			_eric.state = STATE_ERIC_JUMP;
-			_eric.currentFrameX = 2;
-			_eric.image->setFrameX(_eric.currentFrameX);
+			if (_stopControl)				// 케릭터 선택 BOOL값
+			{
+				if (!_ericUnable) key();	// 전투 불능 상태가 아니면 key값 
+			}
+
+
+			ericJump();								// 점프 
+			ericHit();								// 맞을 때 이미지 
+				//======================구현 예정==================//
+			ericAttack();							// 공격 
+
+
+
+			// 에릭의 좌표를 카메라 매니저에 넘겨준다.
+			// CAMERAMANAGER->set_Camera_XY(_eric.rc);
+			// 에릭의 위치가 그라운드이면 
+			// 점프가 아니면 픽셀충돌, 점프중에도 픽셀충돌 
+			if (_eric.posState == POSSTATE_AIR)
+			{
+				isJumpPixelCollision();
+				_isSlide = false;
+				// 중력값 
+				if (_gravity < 5)	 _gravity += 0.7;
+				_eric.y += _gravity;
+				if (_eric.state != STATE_ERIC_JUMP) // 떨어질 때 점프하면서 떨어지기 위한 
+				{
+					_eric.state = STATE_ERIC_JUMP;
+					_eric.currentFrameX = 2;
+					_eric.image->setFrameX(_eric.currentFrameX);
+				}
+			}
+			else if (_eric.posState == POSSTATE_GROUND)// 에릭의 위치가 공기중이면 
+			{
+				PixelCollision();
+			}
+
 		}
-	}
-	else if(_eric.posState == POSSTATE_GROUND)// 에릭의 위치가 공기중이면 
-	{
-		PixelCollision();
+		//  플레이어 사망
+		ericDie();
+		//렉트갱신
+		_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());   // RECT 갱신
 	}
 
-
-	} // unable
-	//  플레이어 사망
-	ericDie();
-	_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());   // RECT 갱신
 }
 
 void playerEric::render()
@@ -160,7 +166,7 @@ void playerEric::key()
 	{
 		_eric.frameSpeed = 10;
 		_breathCount = 0;
-		if(_eric.state != STATE_PUSH) _eric.currentFrameY = 1;
+		if (_eric.state != STATE_PUSH) _eric.currentFrameY = 1;
 		if (_isSlide && _eric.state != STATE_PUSH)   _isSlideOn = true;		// 슬라이딩을 활성화 시키기 위한 
 	}
 
@@ -182,7 +188,7 @@ void playerEric::key()
 		{
 			_breathCount++;						 // 오래 뛰면 숨 이미지가 나타남 
 			//==========이동 관련된 코드 =========//
-			_eric.movePowerCount++;				 
+			_eric.movePowerCount++;
 			if (_eric.movePower <= 8)
 			{
 				if (_eric.movePowerCount > 4)
@@ -344,6 +350,7 @@ void playerEric::key()
 	}
 }
 
+
 void playerEric::ericFrameCount()
 {
 	_eric.frameCount++; // 프레임 카운터 증가 
@@ -419,8 +426,8 @@ void playerEric::ericFrameCount()
 		{
 			_eric.currentFrameX++;
 			_eric.image->setFrameX(_eric.currentFrameX);
-	
-			
+
+
 			if (_eric.currentFrameX > _eric.image->getMaxFrameX())
 			{
 				//죽는 상태라면 
@@ -434,7 +441,7 @@ void playerEric::ericFrameCount()
 				}
 				else
 				{
-					_eric.currentFrameX = 0;	
+					_eric.currentFrameX = 0;
 				}
 				//숨쉬기 위한 
 				if (_eric.state == STATE_BREATH) _breathFrameCount++;
@@ -493,7 +500,7 @@ void playerEric::ericAttack()
 		RECT temp;
 		if (IntersectRect(&temp, &_eric.rc, &_test))
 		{
-		// 벽을 부딪히면 에릭의 위치는 
+		// 벽을 부딪히면 에릭의 위치는
 			_eric.state = STATE_ERIC_HEADBUTTEND;
 			_eric.currentFrameX = 0;
 			_eric.image->setFrameX(0);
@@ -554,57 +561,57 @@ void playerEric::setEricImage()
 	}
 	switch (_eric.state)
 	{
-		case STATE_IDLE:
+	case STATE_IDLE:
 		_eric.image = IMAGEMANAGER->findImage("eric_idle");
 		break;
-		case STATE_MOVE:
+	case STATE_MOVE:
 		_eric.image = IMAGEMANAGER->findImage("eric_move");
 		break;
-		case STATE_ERIC_JUMP:
+	case STATE_ERIC_JUMP:
 		_eric.image = IMAGEMANAGER->findImage("eric_jump");
 		break;
-		case STATE_ERIC_HEADBUTT:
+	case STATE_ERIC_HEADBUTT:
 		_eric.image = IMAGEMANAGER->findImage("eric_headbutt");
 		break;
-		case STATE_ERIC_HEADBUTTEND:
+	case STATE_ERIC_HEADBUTTEND:
 		_eric.image = IMAGEMANAGER->findImage("eric_headbuttend");
 		break;
-		case STATE_OLAF_GUARD:
+	case STATE_OLAF_GUARD:
 		break;
-		case STATE_OLAF_FLY:
+	case STATE_OLAF_FLY:
 		break;
-		case STATE_BALEOG_ARROW:
+	case STATE_BALEOG_ARROW:
 		break;
-		case STATE_BALEOG_SWORD:
+	case STATE_BALEOG_SWORD:
 		break;
-		case STATE_BREATH:
+	case STATE_BREATH:
 		_eric.image = IMAGEMANAGER->findImage("eric_breath");
 		break;
-		case STATE_HIT:
+	case STATE_HIT:
 		_eric.image = IMAGEMANAGER->findImage("eric_hitState");
 		break;
-		case STATE_PUSH:
+	case STATE_PUSH:
 		_eric.image = IMAGEMANAGER->findImage("eric_push");
 		break;
-		case STATE_DIE:
+	case STATE_DIE:
 		_eric.image = IMAGEMANAGER->findImage("eric_die");
 		break;
-		case STATE_POISON:
+	case STATE_POISON:
 		_eric.image = IMAGEMANAGER->findImage("eric_poison");
 		break;
-		case STATE_MIRRA:
+	case STATE_MIRRA:
 		_eric.image = IMAGEMANAGER->findImage("eric_mirra");
 		break;
-		case STATE_PRESSDIE:
+	case STATE_PRESSDIE:
 		_eric.image = IMAGEMANAGER->findImage("eric_pressdie");
 		break;
-		case STATE_TRAPDIE:
+	case STATE_TRAPDIE:
 		_eric.image = IMAGEMANAGER->findImage("eric_trapdie");
 		break;
-		case STATE_STEPLADDER:
+	case STATE_STEPLADDER:
 		_eric.image = IMAGEMANAGER->findImage("eric_stepladder");
 		break;
-		case STATE_STEPLADDEREND:
+	case STATE_STEPLADDEREND:
 		_eric.image = IMAGEMANAGER->findImage("eric_stepladderend");
 		break;
 	}
@@ -632,11 +639,11 @@ void playerEric::PixelCollision()
 			}
 			break;
 		}
-		else 
+		else
 		{
 			_eric.posState = POSSTATE_AIR;
 		}
-	}	
+	}
 }
 
 
@@ -692,39 +699,39 @@ void playerEric::PixelLeftCollision()
 
 void playerEric::isJumpPixelCollision()
 {
-		// 점프 중일 떄 왼쪽아래 모서리 픽셀 충돌 
-		_eric.probeX = _eric.x - 3;
+	// 점프 중일 떄 왼쪽아래 모서리 픽셀 충돌 
+	_eric.probeX = _eric.x - 3;
 
-		COLORREF getPixel_AIR2 = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _eric.probeX, _eric.y + _eric.image->getFrameHeight());
+	COLORREF getPixel_AIR2 = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _eric.probeX, _eric.y + _eric.image->getFrameHeight());
 
-		int r2 = GetRValue(getPixel_AIR2);
-		int g2 = GetGValue(getPixel_AIR2);
-		int b2 = GetBValue(getPixel_AIR2);
+	int r2 = GetRValue(getPixel_AIR2);
+	int g2 = GetGValue(getPixel_AIR2);
+	int b2 = GetBValue(getPixel_AIR2);
 
-		if (!(r2 == 255 && g2 == 0 && b2 == 255))
+	if (!(r2 == 255 && g2 == 0 && b2 == 255))
+	{
+		if (_eric.posState == POSSTATE_AIR)
 		{
-			if (_eric.posState == POSSTATE_AIR)
-			{
 			_eric.x = _eric.probeX + 8;
-			}
 		}
-	
-		// 점프 중일 떄 오른쪽아래 모서리 픽셀 충돌 
-		_eric.probeX = _eric.x + _eric.image->getFrameWidth(); // _eric.right  
+	}
 
-		COLORREF getPixel_AIR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _eric.probeX + 8, _eric.y + _eric.image->getFrameHeight());
+	// 점프 중일 떄 오른쪽아래 모서리 픽셀 충돌 
+	_eric.probeX = _eric.x + _eric.image->getFrameWidth(); // _eric.right  
 
-		int r = GetRValue(getPixel_AIR);
-		int g = GetGValue(getPixel_AIR);
-		int b = GetBValue(getPixel_AIR);
+	COLORREF getPixel_AIR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _eric.probeX + 8, _eric.y + _eric.image->getFrameHeight());
 
-		if (!(r == 255 && g == 0 && b == 255))
+	int r = GetRValue(getPixel_AIR);
+	int g = GetGValue(getPixel_AIR);
+	int b = GetBValue(getPixel_AIR);
+
+	if (!(r == 255 && g == 0 && b == 255))
+	{
+		if (_eric.posState == POSSTATE_AIR)
 		{
-			if (_eric.posState == POSSTATE_AIR)
-			{
-				_eric.x = _eric.probeX - _eric.image->getFrameWidth() - 8;
-			}
+			_eric.x = _eric.probeX - _eric.image->getFrameWidth() - 8;
 		}
+	}
 
 
 	// 점프 중일 때 픽셀 충돌 (Y축)

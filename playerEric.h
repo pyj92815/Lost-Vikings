@@ -29,7 +29,7 @@ private:
 
 	bool  _stopControl;		// 이값이 true라면 움직일 수 없다.
 	bool _stop;
-
+	bool _isItem;	 // 인벤 사용한다면  
 public:
 	playerEric();
 	~playerEric();
@@ -69,5 +69,8 @@ public:
 	void ericDie();
 	void setEricState(tagState state) { _eric.state = state; }	// 상태를 정의해 주는 세터 
 
+	void setItemKey() { _isItem ? _isItem = false : _isItem = true; }
+
+	bool getItem() { return _isItem; }
 };
 
