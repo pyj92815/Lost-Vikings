@@ -79,21 +79,20 @@ void EnemyManager::EnemyCreate()
 	Mummy_5->init(EnemyType::MUMMY, 3390, 1240);
 	_vEnemy.push_back(Mummy_5);
 
+	//Enemy* Scorpion_1;
+	//Scorpion_1 = new Enemy_Scorpion;
+	//Scorpion_1->init(EnemyType::SCORPION, 1440, 375);
+	//_vEnemy.push_back(Scorpion_1);
 
-	Enemy* Scorpion_1;
-	Scorpion_1 = new Enemy_Scorpion;
-	Scorpion_1->init(EnemyType::SCORPION, 1440, 375);
-	_vEnemy.push_back(Scorpion_1);
+	//Enemy* Scorpion_2;
+	//Scorpion_2 = new Enemy_Scorpion;
+	//Scorpion_2->init(EnemyType::SCORPION, 2063, 950);
+	//_vEnemy.push_back(Scorpion_2);
 
-	Enemy* Scorpion_2;
-	Scorpion_2 = new Enemy_Scorpion;
-	Scorpion_2->init(EnemyType::SCORPION, 2063, 950);
-	_vEnemy.push_back(Scorpion_2);
-
-	Enemy* Scorpion_3;
-	Scorpion_3 = new Enemy_Scorpion;
-	Scorpion_3->init(EnemyType::SCORPION, 3246, 1245);
-	_vEnemy.push_back(Scorpion_3);
+	//Enemy* Scorpion_3;
+	//Scorpion_3 = new Enemy_Scorpion;
+	//Scorpion_3->init(EnemyType::SCORPION, 3246, 1245);
+	//_vEnemy.push_back(Scorpion_3);
 
 	Enemy* Snake_1;
 	Snake_1 = new Enemy_Snake;
@@ -151,8 +150,6 @@ void EnemyManager::Collision()
 					_playerManager->getEric()->setHit();
 					_playerManager->getEric()->setEricHit();
 				}
-				
-	
 				break;
 			}
 			if ((IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_baleogRect)) || (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_baleogRect)))
@@ -161,7 +158,7 @@ void EnemyManager::Collision()
 			}
 			if ((IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_olafRect)) || (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_olafRect)))
 			{
-
+				_enemyBullet->removeBullet(i);
 			}
 		}
 	}
