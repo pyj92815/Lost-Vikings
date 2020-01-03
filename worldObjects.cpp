@@ -106,8 +106,8 @@ HRESULT worldObjects::init()
 	_unbreakableWallTwo.frameX = 0;
 	_unbreakableWallTwo.frameY = 0;
 	//안부셔지는 벽 타입
-	_unbreakableWallOne.trap = TRAP_UNBREAKABLE_WALL;
-	_unbreakableWallTwo.trap = TRAP_UNBREAKABLE_WALL;
+	_unbreakableWallOne.trap = TRAP_RED_UNBREAKABLE_WALL;
+	_unbreakableWallTwo.trap = TRAP_BLUE_UNBREAKABLE_WALL;
 	//안부셔지는 벽 렉트
 	_unbreakableWallOne.rc = RectMake(_unbreakableWallOne.x, _unbreakableWallOne.y, 45, 195);
 	_unbreakableWallTwo.rc = RectMake(_unbreakableWallTwo.x, _unbreakableWallTwo.y, 45, 195);
@@ -115,6 +115,8 @@ HRESULT worldObjects::init()
 	_vTrap.push_back(_flyingBoard);
 	_vTrap.push_back(_breakableWallOne);
 	_vTrap.push_back(_breakableWallTwo);
+	_vTrap.push_back(_unbreakableWallOne);
+	_vTrap.push_back(_unbreakableWallTwo);
 	//■■■■■■■■■■■■■■■■■아이템 위치■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	_Items[0].image = IMAGEMANAGER->addImage("Boom", "./image/ImageCollection/Boom_Item.bmp", 50, 50, true, RGB(255, 0, 255));
 	_Items[1].image = IMAGEMANAGER->addImage("Boom", "./image/ImageCollection/Boom_Item.bmp", 50, 50, true, RGB(255, 0, 255));
@@ -144,15 +146,6 @@ HRESULT worldObjects::init()
 	_Items[6].y = 555;
 	_Items[7].x = 2040;		//빨간 자물쇠
 	_Items[7].y = 185;
-	//렉트
-	//_Items[0].rc = RectMake(750, 40, 40, 38);		//폭탄
-	//_Items[1].rc = RectMake(3600, 665, 40, 48);
-	//_Items[2].rc = RectMake(2790, 615, 40, 48);		//토마토
-	//_Items[3].rc = RectMake(2790, 615, 40, 48);
-	//_Items[4].rc = RectMake(2075, 955, 27, 45);		//파란 열쇠
-	//_Items[5].rc = RectMake(3520, 2105, 48, 48);	//파란 자물쇠
-	//_Items[6].rc = RectMake(1840, 555, 27, 54);		//빨간 열쇠
-	//_Items[7].rc = RectMake(2040, 185, 48, 48);		//빨간 자물쇠
 	//상태
 	_Items[0].item = ITEM_BOMB;
 	_Items[1].item = ITEM_BOMB;
@@ -169,14 +162,21 @@ HRESULT worldObjects::init()
 		_Items[i].isCollision = false;
 		_vItem.push_back(_Items[i]);
 	}
+	//_vTrap.push_back(_Items[5]);
+	//_vTrap.push_back(_Items[7]);
+	//■■■■■■■■■■■■■■■■■■■■폭탄이 터진다!■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	_BOOM.image = IMAGEMANAGER->addFrameImage("BOOM", "./image/ImageCollection/Boom.bmp", 264, 84, 3, 1, true, RGB(255, 0, 255));
+	_BOOM.frameX = 0;
 	//■■■■■■■■■■■■■■■■■■■■여러가지■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	_frameCount = 0;
+	_boomCount = 0;
 	return S_OK;
 }
 
 void worldObjects::update()
 {
 	_frameCount++;
+	_boomCount++;
 	move();
 	frameWork();
 
@@ -232,9 +232,6 @@ void worldObjects::render()
 	IMAGEMANAGER->findImage("short_Water_Fall")->frameRender(CAMERAMANAGER->getWorDC(),
 		3263, -60, _waterFall[2].frameX, _waterFall[2].frameY);
 	//■■■■■■■■■■■■■■■■■벽 및 발판 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	IMAGEMANAGER->findImage("BrownDoor_1")->frameRender(CAMERAMANAGER->getWorDC(), _unbreakableWallOne.rc.left, _unbreakableWallOne.rc.top);
-	IMAGEMANAGER->findImage("BrownDoor_2")->frameRender(CAMERAMANAGER->getWorDC(), _unbreakableWallTwo.rc.left, _unbreakableWallTwo.rc.top);
-	//IMAGEMANAGER->findImage("Moving_Flatform")->render(CAMERAMANAGER->getWorDC(), _flyingBoard.rc.left, _flyingBoard.rc.top);
 	if (KEYMANAGER->isStayKeyDown('Q'))
 	{//■■■■■■■■■■■■■■■■■벽 충돌 렉트 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 		Rectangle(CAMERAMANAGER->getWorDC(), _breakableWallOne.rc);
@@ -263,6 +260,23 @@ void worldObjects::render()
 			_viTrap->image->frameRender(CAMERAMANAGER->getWorDC(), _viTrap->x, _viTrap->y, _viTrap->frameX, _viTrap->frameY);
 			//부셔지는 벽 렉트 출력
 			if (KEYMANAGER->isStayKeyDown('Q')) { Rectangle(CAMERAMANAGER->getWorDC(), _viTrap->rc); }
+		}
+		else if (_viTrap->trap == TRAP_RED_UNBREAKABLE_WALL || _viTrap->trap == TRAP_BLUE_UNBREAKABLE_WALL)
+		{//■■■■■■■■■■■■■■■■■부셔지는 벽 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+			_viTrap->image->frameRender(CAMERAMANAGER->getWorDC(), _viTrap->x, _viTrap->y, _viTrap->frameX, _viTrap->frameY);
+			//부셔지는 벽 렉트 출력
+			if (KEYMANAGER->isStayKeyDown('Q')) { Rectangle(CAMERAMANAGER->getWorDC(), _viTrap->rc); }
+		}
+	}
+	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
+	{//■■■■■■■■■■■■■■■■■아이템 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+		if (!_viItem->isCollision)
+		{
+			_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
+			if (KEYMANAGER->isStayKeyDown('Q'))
+			{
+				Rectangle(CAMERAMANAGER->getWorDC(), _viItem->rc);
+			}
 		}
 	}
 }
@@ -316,7 +330,7 @@ void worldObjects::frameWork()
 		}
 		if (_frameCount % 6 == 0)
 		{
-			if (_viTrap->trap == TRAP_UNBREAKABLE_WALL)
+			if (_viTrap->trap == TRAP_RED_UNBREAKABLE_WALL || _viTrap->trap == TRAP_BLUE_UNBREAKABLE_WALL)
 			{
 				if (!_viTrap->isCollision)
 				{//■■■■■■■■■■■■■■■■■안부서지는 벽이 열쇠를 사용하지 않았다면 프레임■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
@@ -335,7 +349,24 @@ void worldObjects::frameWork()
 				}
 			}
 		}
-	}   
+	}
+	//■■■■■■■■■■■■■■■■■폭탄 프레임■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	if (_boomCount <= 300)
+	{
+		if (_frameCount % 6 == 0)
+		{
+			_BOOM.image->setFrameX(_BOOM.frameX);
+			_BOOM.frameX++;
+			if (_BOOM.frameX > 1) { _BOOM.frameX = 0; }
+		}
+	}
+	if (_boomCount > 300)
+	{
+		_BOOM.image->setFrameX(_BOOM.frameX);
+		_BOOM.frameX++;
+		if (_BOOM.frameX > 2) { _BOOM.frameX = 2; }
+		_boomCount = 0;
+	}
 	//■■■■■■■■■■■■■■■■■폭포 프레임■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	for (int i = 0; i < 3; i++)
 	{

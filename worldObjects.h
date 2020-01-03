@@ -16,7 +16,8 @@ enum tagTypeTrap
 	TRAP_POISION,
 	TRAP_NIDDLE,
 	TRAP_WALL,
-	TRAP_UNBREAKABLE_WALL,
+	TRAP_RED_UNBREAKABLE_WALL,
+	TRAP_BLUE_UNBREAKABLE_WALL,
 	TRAP_BORAD,
 };
 struct tagObjects
@@ -64,8 +65,10 @@ private:
 private:
 	//■■■■■■■■■■■아이템■■■■■■■■■■■■■■■■■■■■■■
 	tagObjects _Items[8];
+	tagObjects _BOOM;
 private:
-	int _frameCount;
+	int _frameCount;			//프레임 카운터
+	int _boomCount;				//폭탄사용후 폭탄이 터지는카운터
 public:
 	worldObjects();
 	~worldObjects();

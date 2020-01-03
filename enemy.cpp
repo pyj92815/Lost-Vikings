@@ -142,10 +142,10 @@ void Enemy::Scout()
 	switch (_enemyLR)
 	{
 	case EnemyLR::LEFT:
-		for (int i = _x - _image->getFrameWidth() / 2; i > _x - _image->getFrameWidth() / 2 - 70;--i)
+		for (int i = _x - _image->getFrameWidth() / 2; i > _x - _image->getFrameWidth() / 2 - 30;--i)
 		{
 			//바닥에 색상을 구해온다
-			COLORREF platformCOLOR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), i, _probeY + 50);
+			COLORREF platformCOLOR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), i, _probeY + 20);
 			//벽에 색상을 구해온다
 			COLORREF wallCOLOR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), i, _y - _image->getFrameHeight());
 
@@ -537,22 +537,22 @@ void Enemy::UnAttack()
 			switch (_enemyType)
 			{
 			case EnemyType::MUMMY:
-				if (_frameX >= 5)
+				if (_frameX ==0)
 					_enemyState = EnemyState::SCOUT;	//플레이어가 공격범위 밖으로 나가면 SCOUT상태로 변함
 					//_frameX = 0;
 				break;
 			case EnemyType::SCORPION:
-				if (_frameX >= 6)
+				if (_frameX ==0)
 					_enemyState = EnemyState::SCOUT;	//플레이어가 공격범위 밖으로 나가면 SCOUT상태로 변함
 					_frameX = 0;
 				break;
 			case EnemyType::SNAKE:
-				if (_frameX >= 5)
+				if (_frameX ==0)
 					_enemyState = EnemyState::SCOUT;	//플레이어가 공격범위 밖으로 나가면 SCOUT상태로 변함
 					//_frameX = 0;
 				break;
 			case EnemyType::PLAYERMUMMY:
-				if (_frameX >= 5)
+				if (_frameX ==0)
 					_enemyState = EnemyState::SCOUT;	//플레이어가 공격범위 밖으로 나가면 SCOUT상태로 변함
 					//_frameX = 0;
 				break;
