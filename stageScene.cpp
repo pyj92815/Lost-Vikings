@@ -98,12 +98,12 @@ void stageScene::render()
 	{
 		Rectangle(getMemDC(), _UI_HP[i].rc);
 
-		if (_pm->getDirection().player == i)
+		if (_charNum == i)
 		{
 			_banjjack++;
 			if (_banjjack <= 20)
 			{
-				IMAGEMANAGER->findImage("Select_Image")->render(getMemDC(), _UI_Inventory[_pm->getDirection().player][_pm->getDirection().invenNumber].rc.left, _UI_Inventory[_pm->getDirection().player][_pm->getDirection().invenNumber].rc.top);
+				IMAGEMANAGER->findImage("Select_Image")->render(getMemDC(), _UI_Inventory[_charNum][0].rc.left, _UI_Inventory[_charNum][0].rc.top);
 			}
 			if (_banjjack >= 30)
 			{

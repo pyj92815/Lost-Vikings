@@ -18,14 +18,18 @@ HRESULT playerManager::init()
 	for (int i = 0;i <3;i++)
 	{
 		_itemCount[i] = 0;
+		_direction[i] = 0;
 	}
-	_direction.player = 0;			// 초기값 
-	_direction.invenNumber = 0;
+
 	return S_OK;
 }
 
 void playerManager::update()
 {
+	if (KEYMANAGER->isOnceKeyDown(VK_TAB))
+	{
+		_eric->setItemKey();
+	}
 	KILLPlayer();	// 플레이어를 죽인다
 
 	switch (_playing)
@@ -50,7 +54,10 @@ void playerManager::update()
 	_eric->update();
 	_baleog->update();
 	_olaf->update();
-
+	if (_eric->getItem())
+	{
+		itemKey();
+	}
 	trapColision();
 	itemColision();
 }
@@ -68,7 +75,6 @@ void playerManager::render()
 	_olaf->render();
 	_baleog->render();
 	_eric->render();
-
 
 }
 
@@ -93,9 +99,21 @@ void playerManager::KILLPlayer()
 
 void playerManager::itemKey()
 {
-	if (KEYMANAGER->isOnceKeyDown('E'))
+	if (KEYMANAGER->isOnceKeyDown(VK_UP))
 	{
-
+		if (_direction[_playing] == 2 || _direction[_playing] == 3) _direction[_playing] += 2;
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
+	{
+		if (_direction[_playing] == 0 || _direction[_playing] == 1) _direction[_playing] -= 2;
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+	{
+		if (_direction[_playing] == 1 || _direction[_playing] == 3) _direction[_playing] -= 1;
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+	{
+		if (_direction[_playing] == 0 || _direction[_playing] == 2) _direction[_playing] += 1;
 	}
 }
 
@@ -207,7 +225,6 @@ void playerManager::trapColision()
 
 void playerManager::itemColision()
 {
-	_direction.player = _playing; // 계속 갱신 
 	for (int i = 0; i < _wo->get_vItem().size(); ++i)
 	{
 		if (0 > _wo->get_vItem().size()) break;

@@ -30,6 +30,7 @@ enum tagTypeDie
 struct tagInven
 {
 	image* image;
+
 	int player;			  // 0 1 2 값으로 사용자를 판단 
 	int invenNumber;	  // 0 1 2 3 (4 = 쓰레기통)
 };
@@ -43,9 +44,7 @@ private:
 	vector<tagInven>		    _vInven;
 	vector<tagInven>::iterator _viInven;
 
-	tagInven _direction;  // player, invenNumber 
-
-
+	int _direction[3];  // player, invenNumber 
 
 	int	_playing;  // 0 eric 1 baleog 2 olaf
 	int _itemCount[3]; // 0 1 2
@@ -62,7 +61,7 @@ public:
 
 	vector<tagInven>		   get_vInven()		{ return _vInven;    }
 	vector<tagInven>::iterator get_viInven()	{ return _viInven;   }
-	tagInven				   getDirection()   { return _direction; }
+	int*				   getItemNum()  { return _direction; }
 
 	playerEric* getEric() { return _eric; }
 	playerbaleog* getbaleog() { return _baleog;}
