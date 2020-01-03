@@ -34,6 +34,7 @@ void EnemyManager::update()
 	}
 	EnemyRemove();
 	bulletFire();
+	Collision();
 }
 
 void EnemyManager::render()
@@ -135,7 +136,12 @@ void EnemyManager::EnemyRemove()
 
 void EnemyManager::Collision()
 {
-
+	RECT temp;
+	for (_viEnemy = _vEnemy.begin();_viBullet != _vBullet.end();++_viEnemy)
+	{
+		if(IntersectRect(&temp,(*_viEnemy)->getRect(),)
+		(*_viEnemy)->Hit();
+	}
 }
 
 void EnemyManager::bulletFire()

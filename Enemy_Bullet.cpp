@@ -37,6 +37,7 @@ void Enemy_Bullet::bulletMove()
 		_x += cosf(_angle) * 3;
 		_y -= sinf(_angle) * 3;
 		_probeX = _x;
+
 		_probeY = _y;
 		_rect = RectMakeCenter(_x, _y, _image->getWidth(), _image->getHeight());
 		//probe();
