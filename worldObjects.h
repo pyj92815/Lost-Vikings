@@ -16,6 +16,7 @@ enum tagTypeTrap
 	TRAP_POISION,
 	TRAP_NIDDLE,
 	TRAP_WALL,
+	TRAP_UNBREAKABLE_WALL,
 	TRAP_BORAD,
 };
 struct tagObjects
