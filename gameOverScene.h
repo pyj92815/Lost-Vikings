@@ -1,6 +1,12 @@
 #pragma once
 #include "gameNode.h"
 
+#ifdef UNICODE
+#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
+#else
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#endif
+
 enum tagGOPlayer
 {
 	GOP_Eric,
@@ -64,6 +70,7 @@ public:
 
 	void setting_Image();		// 필요한 이미지를 세팅한다.
 	void setting_Pos();			// 위치 세팅을 한다.
+	void setting_init();		// 변수 초기화
 	void letsGo_Ship();			// 배는 이동한다.
 	void restart_Select();		// 새로 시작할지 연산
 

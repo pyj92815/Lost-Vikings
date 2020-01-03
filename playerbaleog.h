@@ -132,6 +132,8 @@ public:
 
 	arrow* getVArrow() { return _ar; }
 
+
+	void setBaleogDead(bool dead) { _baleog.isDead = dead; }	// 형길 추가
 };
 
 

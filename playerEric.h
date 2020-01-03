@@ -78,6 +78,6 @@ public:
 	void setItemKey() { _isItem ? _isItem = false : _isItem = true; }
 
 	bool getItem() { return _isItem; }
-
+	void setEricDead(bool dead) { _eric.isDead = dead; }	// 형길 추가
 };
 
