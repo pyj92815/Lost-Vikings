@@ -12,7 +12,7 @@ EnemyManager::~EnemyManager()
 
 HRESULT EnemyManager::init()
 {
-	_enemy = new Enemy;
+	
 	EnemyCreate();
 	return S_OK;
 }
