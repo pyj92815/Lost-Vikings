@@ -2,6 +2,8 @@
 #include "playerManager.h"
 #include "worldObjects.h"
 
+
+
 HRESULT playerManager::init()
 {
 	_eric = new playerEric;
@@ -13,6 +15,12 @@ HRESULT playerManager::init()
 	_olaf = new PlayerOlaf;
 	_olaf->init(180, 155);
 
+	for (int i = 0;i <3;i++)
+	{
+		_itemCount[i] = 0;
+	}
+	_direction.player = 0;			// 초기값 
+	_direction.invenNumber = 0;
 	return S_OK;
 }
 
@@ -44,7 +52,7 @@ void playerManager::update()
 	_olaf->update();
 
 	trapColision();
-
+	itemColision();
 }
 
 void playerManager::release()
@@ -60,6 +68,8 @@ void playerManager::render()
 	_olaf->render();
 	_baleog->render();
 	_eric->render();
+
+
 }
 
 void playerManager::KILLPlayer()
@@ -103,7 +113,7 @@ void playerManager::trapColision()
 				{
 					_eric->setEricState(STATE_POISON);
 					_eric->setEricFrame();
-					_wo->setCollision(i);
+					_wo->setTrapCollision(i);
 					_eric->setEricStop();
 					break;
 				}
@@ -112,7 +122,7 @@ void playerManager::trapColision()
 					_eric->setEricState(STATE_TRAPDIE);
 					_eric->setEricFrame();
 					_eric->setEricFrameSpeed(25);
-					_wo->setCollision(i);
+					_wo->setTrapCollision(i);
 					_eric->setEricStop();
 					break;
 				}
@@ -171,7 +181,7 @@ void playerManager::trapColision()
 						_eric->setEricFrame();
 						_eric->setEricFrameSpeed(8);
 						_eric->setEricUnable();
-						_wo->setCollision(i);
+						_wo->setTrapCollision(i);
 					}
 					else if (!_wo->get_vTrap()[i].isCollision && _eric->getEric().state == STATE_MOVE)
 					{
@@ -197,19 +207,40 @@ void playerManager::trapColision()
 
 void playerManager::itemColision()
 {
-	for (int i = 0; i < _wo->get_vItem().size(); i++)
+	_direction.player = _playing; // 계속 갱신 
+	for (int i = 0; i < _wo->get_vItem().size(); ++i)
 	{
 		if (0 > _wo->get_vItem().size()) break;
 		RECT temp;
 		if (IntersectRect(&temp, &_eric->getEricRect(), &_wo->get_vItem()[i].rc))
 		{
+			if (_wo->get_vItem()[i].item == ITEM_BLUELOCKER ||
+				_wo->get_vItem()[i].item == ITEM_REDLOCKER) continue;
 			if (!_wo->get_vItem()[i].isCollision)
 			{
-				if (_wo->get_vItem()[i].item == ITEM_BOMB)
+				tagInven inven;
+				inven.image = _wo->get_vItem()[i].image;
+				inven.player = _playing;
+				_itemCount[_playing] = 0;
+				for (_viInven = _vInven.begin(); _viInven != _vInven.end(); ++_viInven)
 				{
-					_wo->setCollision(i);
-					break;
+					if (_viInven->player == _playing) _itemCount[_playing]++;
 				}
+				inven.invenNumber = _itemCount[_playing]; // 순차적으로 아이템을 넣는다.
+				if (_itemCount[_playing] < 4) 
+				{
+					_vInven.push_back(inven);
+					_wo->setItemCollision(i);
+				}
+				for (_viInven = _vInven.begin(); _viInven != _vInven.end(); ++_viInven)
+				{
+					cout << "=========================================================" << endl;
+					cout << "인벤 image 높이 :" << _viInven->image->getHeight() << endl;
+					cout << "플레이어 숫자 :" << _viInven->player << endl;
+					cout << "아이템 넘버 :" << _viInven->invenNumber << endl;
+
+				}
+				break;
 			}
 		}
 	}
