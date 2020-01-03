@@ -49,9 +49,12 @@ HRESULT playerbaleog::init(float x, float y)
 
 	//화살
 	_ar = new arrow;
-	_ar->init(300, 1800);
+	_ar->init(300);
+	/*_ar->init(300, 10);*/
 
 	_moveSpeed = 5;
+
+	_stop = false;
 
 	return S_OK;
 }
@@ -65,17 +68,26 @@ void playerbaleog::update()
 
 	// 비밀이동키
 	//if (!_baleogAttack) hgKey();
+	setBaleogImage();
+	setBaleogPosImage();
 
-	if (_stopControl)key();
+	if (!_stop)
+	{
+		if (_stopControl)key();
+		if (_stopControl) PixelCollision();
+
+		PixelRightCollision();
+		PixelLeftCollision();
+	}
 
 	_baleog.rc = RectMake(_baleog.x, _baleog.y, _baleog.image->getFrameWidth(), _baleog.image->getFrameHeight());
 
-	setBaleogState();
-	if (_stopControl) PixelCollision();
-	SetBaleogPosState();
+	
+	
+	/*setBaleogState();
+	setBaleogPosState();*/
 
-	PixelRightCollision();
-	PixelLeftCollision();
+	
 
 
 
@@ -104,27 +116,37 @@ void playerbaleog::update()
 	//이구문 
 	if (_baleog.state == STATE_BALEOG_SWORD1 || _baleog.state == STATE_BALEOG_SWORD2)
 	{
+
 		if (_baleog.state == STATE_BALEOG_SWORD1)
 		{
 			_baleogAttackMotion = true;
+			
 
 		}
 		else
 		{
 			_baleogAttackMotion = false;
+			
 
 		}
-		if (_baleog.frameCount > _baleog.frameSpeed)
+		if (_baleog.frameCount > _baleog.frameSpeed - 5)
 		{
 
 			_baleog.currentFrameX++;
 			_baleog.image->setFrameX(_baleog.currentFrameX);
-			_notMove = false;
-			if (_baleog.image->getMaxFrameX() < _baleog.currentFrameX)
+			
+			if (_baleog.image->getMaxFrameX() <= _baleog.currentFrameX)
 			{
 				_baleog.state = STATE_IDLE;
 				_baleog.currentFrameX = 0;
 				_baleog.image->setFrameX(_baleog.currentFrameX);
+				_notMove = false;
+			}
+
+			if (_baleog.currentFrameX >= 1)//프레임 1이 넘어가면 칼질의 참격이 적용됌
+			{
+				_ar->blade(_baleog.x + _baleog.image->getFrameWidth() / 2,
+					_baleog.y + _baleog.image->getFrameHeight() / 2, 20.f, _baleog.currentFrameY * PI, _baleog.currentFrameY, 40);
 			}
 			_baleog.frameCount = 0;
 		}
@@ -132,7 +154,7 @@ void playerbaleog::update()
 	else if (_baleog.state == STATE_BALEOG_ARROW_REDY)//활을 준비하면
 	{
 		//벨로그 프레임카운트가 돌아간다
-		if (_baleog.frameCount >= _baleog.frameSpeed)	//프레임카운트가 15를 넘어가면
+		if (_baleog.frameCount >= _baleog.frameSpeed-5)	//프레임카운트가 15를 넘어가면
 		{
 
 			_baleog.image->setFrameX(_baleog.currentFrameX);//이미지 프레임셋은 currentFrameX변수로 셋팅한다
@@ -154,7 +176,7 @@ void playerbaleog::update()
 	else if (_baleog.state == STATE_BALEOG_ARROW_FIRE)//활을 쏘고나면
 	{
 		//벨로그 프레임카운트가 돌아간다
-		if (_baleog.frameCount >= _baleog.frameSpeed)	//프레임카운트가 15를 넘어가면
+		if (_baleog.frameCount >= _baleog.frameSpeed-5)	//프레임카운트가 15를 넘어가면
 		{
 
 			_baleog.image->setFrameX(_baleog.currentFrameX);//이미지 프레임셋은 currentFrameX변수로 셋팅한다
@@ -241,7 +263,7 @@ void playerbaleog::key()
 		if (!_notMove)
 		{
 			_baleog.state = STATE_MOVE;
-			_baleog.x += 3;
+			_baleog.x += 5;
 		}
 		_baleog.currentFrameY = 0;
 
@@ -251,7 +273,7 @@ void playerbaleog::key()
 		if (!_notMove)
 		{
 			_baleog.state = STATE_MOVE;
-			_baleog.x -= 3;
+			_baleog.x -= 5;
 		}
 		_baleog.currentFrameY = 1;
 	}
@@ -286,9 +308,16 @@ void playerbaleog::key()
 		if (KEYMANAGER->isOnceKeyDown('F'))
 		{
 			_notMove = true;	//칼 쓰는 동안 이동키 금지
+			
 
 			_baleog.currentFrameX = 0;
 			_baleog.image->setFrameX(_baleog.currentFrameX);
+
+			/*if (_baleog.currentFrameX >= 2)
+			{
+				_ar->blade(_baleog.x + _baleog.image->getFrameWidth() / 2,
+					_baleog.y + _baleog.image->getFrameHeight() / 2, 20.f, _baleog.currentFrameY * PI, _baleog.currentFrameY, 40);
+			}*/
 
 			if (!_baleogAttackMotion)
 			{
@@ -322,7 +351,7 @@ void playerbaleog::key()
 
 
 			_ar->fire(_baleog.x + _baleog.image->getFrameWidth() / 2,
-				_baleog.y + _baleog.image->getFrameHeight() / 2, 10.f, _baleog.currentFrameY * PI, _baleog.currentFrameY);
+				_baleog.y + _baleog.image->getFrameHeight() / 2, 10.f, _baleog.currentFrameY * PI, _baleog.currentFrameY,1800);
 
 
 		}
@@ -330,71 +359,71 @@ void playerbaleog::key()
 	}
 
 }
-
-void playerbaleog::setBaleogState()
-{
-	if (_baleog.hp == 0)
-	{
-		_baleog.state = STATE_DIE;
-	}
-
-
-	switch (_baleog.state)
-	{
-	case STATE_IDLE:
-		_baleog.image = IMAGEMANAGER->findImage("벨로그기본");
-		break;
-	case STATE_MOVE:
-		_baleog.image = IMAGEMANAGER->findImage("벨로그이동");
-		break;
-	case STATE_ERIC_JUMP:
-		break;
-	case STATE_ERIC_HEADBUTT:
-		break;
-	case STATE_OLAF_GUARD:
-		break;
-	case STATE_OLAF_FLY:
-		break;
-	case STATE_BALEOG_ARROW_REDY:
-		_baleog.image = IMAGEMANAGER->findImage("화살준비");
-		break;
-	case STATE_BALEOG_ARROW_FIRE:
-		_baleog.image = IMAGEMANAGER->findImage("화살발사");
-		break;
-	case STATE_BALEOG_SWORD1:
-		_baleog.image = IMAGEMANAGER->findImage("벨로그칼1");
-		break;
-	case STATE_BALEOG_SWORD2:
-		_baleog.image = IMAGEMANAGER->findImage("벨로그칼2");
-		break;
-	case STATE_PUSH:
-		_baleog.image = IMAGEMANAGER->findImage("밀기");
-		break;
-	case STATE_DIE:
-		_baleog.image = IMAGEMANAGER->findImage("죽음");
-		break;
-	case STATE_POISON:
-		_baleog.image = IMAGEMANAGER->findImage("독사");
-		break;
-	case STATE_MIRRA:
-		_baleog.image = IMAGEMANAGER->findImage("미라사");
-		break;
-	case STATE_PRESSDIE:
-		_baleog.image = IMAGEMANAGER->findImage("압사");
-		break;
-	case STATE_TRAPDIE:
-		_baleog.image = IMAGEMANAGER->findImage("관통사");
-		break;
-	case STATE_STEPLADDER:
-		_baleog.image = IMAGEMANAGER->findImage("사다리이동");
-		break;
-	case STATE_STEPLADDEREND:
-		_baleog.image = IMAGEMANAGER->findImage("사다리도착");
-		break;
-	}
-
-
-}
+//
+//void playerbaleog::setBaleogState()
+//{
+//	if (_baleog.hp == 0)
+//	{
+//		_baleog.state = STATE_DIE;
+//	}
+//
+//
+//	switch (_baleog.state)
+//	{
+//	case STATE_IDLE:
+//		_baleog.image = IMAGEMANAGER->findImage("벨로그기본");
+//		break;
+//	case STATE_MOVE:
+//		_baleog.image = IMAGEMANAGER->findImage("벨로그이동");
+//		break;
+//	case STATE_ERIC_JUMP:
+//		break;
+//	case STATE_ERIC_HEADBUTT:
+//		break;
+//	case STATE_OLAF_GUARD:
+//		break;
+//	case STATE_OLAF_FLY:
+//		break;
+//	case STATE_BALEOG_ARROW_REDY:
+//		_baleog.image = IMAGEMANAGER->findImage("화살준비");
+//		break;
+//	case STATE_BALEOG_ARROW_FIRE:
+//		_baleog.image = IMAGEMANAGER->findImage("화살발사");
+//		break;
+//	case STATE_BALEOG_SWORD1:
+//		_baleog.image = IMAGEMANAGER->findImage("벨로그칼1");
+//		break;
+//	case STATE_BALEOG_SWORD2:
+//		_baleog.image = IMAGEMANAGER->findImage("벨로그칼2");
+//		break;
+//	case STATE_PUSH:
+//		_baleog.image = IMAGEMANAGER->findImage("밀기");
+//		break;
+//	case STATE_DIE:
+//		_baleog.image = IMAGEMANAGER->findImage("죽음");
+//		break;
+//	case STATE_POISON:
+//		_baleog.image = IMAGEMANAGER->findImage("독사");
+//		break;
+//	case STATE_MIRRA:
+//		_baleog.image = IMAGEMANAGER->findImage("미라사");
+//		break;
+//	case STATE_PRESSDIE:
+//		_baleog.image = IMAGEMANAGER->findImage("압사");
+//		break;
+//	case STATE_TRAPDIE:
+//		_baleog.image = IMAGEMANAGER->findImage("관통사");
+//		break;
+//	case STATE_STEPLADDER:
+//		_baleog.image = IMAGEMANAGER->findImage("사다리이동");
+//		break;
+//	case STATE_STEPLADDEREND:
+//		_baleog.image = IMAGEMANAGER->findImage("사다리도착");
+//		break;
+//	}
+//
+//
+//}
 
 void playerbaleog::PixelCollision()
 {/*
@@ -473,10 +502,94 @@ void playerbaleog::PixelCollision()
 	}
 }
 
+void playerbaleog::setBaleogImage()
+{
+	if (_baleog.hp == 0)
+	{
+		_baleog.state = STATE_DIE;
+		_stop = true;
+	}
+
+
+	switch (_baleog.state)
+	{
+	case STATE_IDLE:
+		_baleog.image = IMAGEMANAGER->findImage("벨로그기본");
+		break;
+	case STATE_MOVE:
+		_baleog.image = IMAGEMANAGER->findImage("벨로그이동");
+		break;
+	case STATE_ERIC_JUMP:
+		break;
+	case STATE_ERIC_HEADBUTT:
+		break;
+	case STATE_OLAF_GUARD:
+		break;
+	case STATE_OLAF_FLY:
+		break;
+	case STATE_BALEOG_ARROW_REDY:
+		_baleog.image = IMAGEMANAGER->findImage("화살준비");
+		break;
+	case STATE_BALEOG_ARROW_FIRE:
+		_baleog.image = IMAGEMANAGER->findImage("화살발사");
+		break;
+	case STATE_BALEOG_SWORD1:
+		_baleog.image = IMAGEMANAGER->findImage("벨로그칼1");
+		break;
+	case STATE_BALEOG_SWORD2:
+		_baleog.image = IMAGEMANAGER->findImage("벨로그칼2");
+		break;
+	case STATE_PUSH:
+		_baleog.image = IMAGEMANAGER->findImage("밀기");
+		break;
+	case STATE_DIE:
+		_baleog.image = IMAGEMANAGER->findImage("죽음");
+		break;
+	case STATE_POISON:
+		_baleog.image = IMAGEMANAGER->findImage("독사");
+		break;
+	case STATE_MIRRA:
+		_baleog.image = IMAGEMANAGER->findImage("미라사");
+		break;
+	case STATE_PRESSDIE:
+		_baleog.image = IMAGEMANAGER->findImage("압사");
+		break;
+	case STATE_TRAPDIE:
+		_baleog.image = IMAGEMANAGER->findImage("관통사");
+		break;
+	case STATE_STEPLADDER:
+		_baleog.image = IMAGEMANAGER->findImage("사다리이동");
+		break;
+	case STATE_STEPLADDEREND:
+		_baleog.image = IMAGEMANAGER->findImage("사다리도착");
+		break;
+	}
+}
+
+void playerbaleog::setBaleogPosImage()
+{
+	switch (_baleog.posState)
+	{
+	case POSSTATE_GROUND:
+
+		break;
+	case POSSTATE_AIR:
+		_baleog.image = IMAGEMANAGER->findImage("낙하");
+		break;
+
+	case POSSTATE_STEPLADDER:
+		_baleog.image = IMAGEMANAGER->findImage("사다리이동");
+		break;
+
+	case POSSTATE_LADDERFALL:
+		_baleog.image = IMAGEMANAGER->findImage("사다리도착");
+		break;
+	}
+}
+
 void playerbaleog::PixelRightCollision()
 {
-	_baleog.probeX = _baleog.x + _baleog.image->getFrameWidth(); // _eric.right  
-
+	_baleog.probeX = _baleog.x + _baleog.image->getFrameWidth(); 
 	COLORREF getPixel_RIGHT = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _baleog.probeX + 2, _baleog.y);
 
 	int r = GetRValue(getPixel_RIGHT);
@@ -523,27 +636,28 @@ void playerbaleog::PixelLeftCollision()
 	}
 }
 
-void playerbaleog::SetBaleogPosState()
-{
-	switch (_baleog.posState)
-	{
-	case POSSTATE_GROUND:
-
-		break;
-	case POSSTATE_AIR:
-		_baleog.image = IMAGEMANAGER->findImage("낙하");
-		break;
-
-	case POSSTATE_STEPLADDER:
-		_baleog.image = IMAGEMANAGER->findImage("사다리이동");
-		break;
-
-	case POSSTATE_LADDERFALL:
-		_baleog.image = IMAGEMANAGER->findImage("사다리도착");
-		break;
-	}
-
-}
+//
+//void playerbaleog::setBaleogPosState()
+//{
+//	switch (_baleog.posState)
+//	{
+//	case POSSTATE_GROUND:
+//
+//		break;
+//	case POSSTATE_AIR:
+//		_baleog.image = IMAGEMANAGER->findImage("낙하");
+//		break;
+//
+//	case POSSTATE_STEPLADDER:
+//		_baleog.image = IMAGEMANAGER->findImage("사다리이동");
+//		break;
+//
+//	case POSSTATE_LADDERFALL:
+//		_baleog.image = IMAGEMANAGER->findImage("사다리도착");
+//		break;
+//	}
+//
+//}
 
 void playerbaleog::baleogDie()
 {
@@ -555,10 +669,10 @@ void playerbaleog::baleogDie()
 }
 
 
-HRESULT arrow::init(int arrowMax, float range)
+HRESULT arrow::init(int arrowMax)
 {
 	_arrowMax = arrowMax;
-	_range = range;
+
 	return S_OK;
 }
 
@@ -595,7 +709,7 @@ void arrow::render()
 	}
 }
 
-void arrow::fire(float x, float y, float speed, float angle, int direction)
+void arrow::fire(float x, float y, float speed, float angle, int direction, float range)
 {
 
 	if (_arrowMax < _vArrow.size())return;
@@ -606,6 +720,28 @@ void arrow::fire(float x, float y, float speed, float angle, int direction)
 	arrow.arrowImage->init("./image/Characters/화살1.bmp", 0, 0, 126, 28, 3, 2, true, RGB(255, 0, 255));
 	arrow.speed = speed;
 	arrow.angle = angle;
+	arrow.range = range;
+	arrow.x = arrow.fireX = x;
+	arrow.y = arrow.fireY = y;
+	arrow.rc = RectMakeCenter(arrow.x, arrow.y,
+		arrow.arrowImage->getFrameWidth(),
+		arrow.arrowImage->getFrameHeight());
+	arrow.direction = direction;
+
+	_vArrow.push_back(arrow);
+}
+
+void arrow::blade(float x, float y, float speed, float angle, int direction, float range)
+{
+	if (_arrowMax < _vArrow.size())return;
+	tagArrow arrow;
+	ZeroMemory(&arrow, sizeof(arrow));
+
+	arrow.arrowImage = new image;
+	arrow.arrowImage->init("./image/Characters/화살1.bmp", 0, 0, 126, 28, 3, 2, true, RGB(255, 0, 255));
+	arrow.speed = speed;
+	arrow.angle = angle;
+	arrow.range = range;
 	arrow.x = arrow.fireX = x;
 	arrow.y = arrow.fireY = y;
 	arrow.rc = RectMakeCenter(arrow.x, arrow.y,
@@ -618,7 +754,7 @@ void arrow::fire(float x, float y, float speed, float angle, int direction)
 
 void arrow::removeArrow(int arrNum)
 {
-	_vArrow[arrNum].arrowImage->release();
+	//_vArrow[arrNum].arrowImage->release();
 	_vArrow.erase(_vArrow.begin() + arrNum);
 }
 
@@ -634,7 +770,7 @@ void arrow::arrowMove(bool fire)
 			_viArrow->rc = RectMakeCenter(_viArrow->x, _viArrow->y,
 				_viArrow->arrowImage->getFrameWidth(),
 				_viArrow->arrowImage->getFrameHeight());
-			if (_range < getDistance(_viArrow->x, _viArrow->y, _viArrow->fireX,
+			if (_viArrow->range < getDistance(_viArrow->x, _viArrow->y, _viArrow->fireX,
 				_viArrow->fireY))
 			{
 				SAFE_RELEASE(_viArrow->arrowImage);
@@ -647,3 +783,4 @@ void arrow::arrowMove(bool fire)
 
 	}
 }
+

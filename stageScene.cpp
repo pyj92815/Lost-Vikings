@@ -27,6 +27,7 @@ HRESULT stageScene::init()
 	_wm->getWorldObject()->setPlayerManagerAddressLink(_pm);
 
 	_em->AddressLink(_pm);
+	_pm->setMemoryAddressLink(_em);
 
 	posSetting();	// UI의 좌표를 설정한다. (캐릭터 상태 + 인벤토리)
 

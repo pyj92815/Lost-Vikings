@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "playerManager.h"
 #include "worldObjects.h"
+#include "EnemyManager.h"
 
 
 
@@ -53,6 +54,7 @@ void playerManager::update()
 
 	trapColision();
 	itemColision();
+	enemyColision();
 }
 
 void playerManager::release()
@@ -203,6 +205,101 @@ void playerManager::trapColision()
 			}
 		}
 	}
+
+	///=========================
+	//발레오그 충돌
+	for (int i = 0; i < _wo->get_vTrap().size(); ++i)
+	{
+		if (0 > _wo->get_vTrap().size()) break;
+		RECT temp;
+		if (IntersectRect(&temp, &_baleog->getBaleogRect(), &_wo->get_vTrap()[i].rc))
+		{
+			if (!_wo->get_vTrap()[i].isCollision)
+			{
+				if (_wo->get_vTrap()[i].trap == TRAP_POISION)
+				{
+					_baleog->setBaleogState(STATE_POISON);
+					_baleog->setBaleogFrame();
+					_wo->setTrapCollision(i);
+					_baleog->setBaleogStop();
+					break;
+				}
+				else if (_wo->get_vTrap()[i].trap == TRAP_NIDDLE)
+				{
+					_baleog->setBaleogState(STATE_TRAPDIE);
+					_baleog->setBaleogFrame();
+					_baleog->setBaleogFrameSpeed(25);
+					_wo->setTrapCollision(i);
+					_baleog->setBaleogStop();
+					break;
+				}
+				else if (_wo->get_vTrap()[i].trap == TRAP_BORAD)
+				{
+					if ((_baleog->getBaleog().rc.right >= _wo->get_vTrap()[i].rc.left + 10 &&
+						_baleog->getBaleog().rc.right <= _wo->get_vTrap()[i].rc.right - 10 &&
+						_baleog->getBaleog().rc.bottom >= _wo->get_vTrap()[i].rc.bottom) ||
+						(_baleog->getBaleog().rc.left >= _wo->get_vTrap()[i].rc.left + 10 &&
+							_baleog->getBaleog().rc.left <= _wo->get_vTrap()[i].rc.right - 10 &&
+							_baleog->getBaleog().rc.bottom >= _wo->get_vTrap()[i].rc.bottom))
+					{
+
+						if (_baleog->getBaleog().state != STATE_PRESSDIE) _baleog->setBaleogY(_wo->get_vTrap()[i].rc.bottom);
+						if (_baleog->getBaleog().posState == POSSTATE_GROUND)
+						{
+							if (_baleog->getBaleog().state != STATE_PRESSDIE)
+							{
+								_baleog->setBaleogState(STATE_PRESSDIE);
+								_baleog->setBaleogFrame();
+								_baleog->setBaleogFrameSpeed(10);
+								_baleog->setBaleogStop();
+							}
+						}
+					}
+					else if ((_baleog->getBaleog().rc.right >= _wo->get_vTrap()[i].rc.left + 10 &&
+						_baleog->getBaleog().rc.right <= _wo->get_vTrap()[i].rc.right - 10)
+						||
+						(_baleog->getBaleog().rc.left >= _wo->get_vTrap()[i].rc.left + 10 &&
+							_baleog->getBaleog().rc.left <= _wo->get_vTrap()[i].rc.right - 10))
+					{
+						if (_baleog->getBaleog().state != STATE_PRESSDIE)
+						{
+							_baleog->setBaleogPosState(POSSTATE_GROUND);
+
+							if (_wo->getUpDown())
+							{
+								_baleog->setBaleogY(_wo->get_vTrap()[i].rc.top - _baleog->getBaleog().image->getFrameHeight() + 3);
+							}
+							else
+							{
+								_baleog->setBaleogY(_wo->get_vTrap()[i].rc.top - _baleog->getBaleog().image->getFrameHeight() + 7);
+							}
+						}
+					}
+				}
+
+				else if (_wo->get_vTrap()[i].trap == TRAP_WALL)
+				{
+
+					
+					if (!_wo->get_vTrap()[i].isCollision && _baleog->getBaleog().state == STATE_MOVE)
+					{
+						_baleog->setBaleogState(STATE_PUSH);
+						_baleog->setBaleogFrame();
+						_baleog->setBaleogX(_wo->get_vTrap()[i].x - _baleog->getBaleog().image->getFrameWidth() - 5);
+					}
+					
+					else
+					{
+						_baleog->setBaleogX(_wo->get_vTrap()[i].x - _baleog->getBaleog().image->getFrameWidth() - 5);
+					}
+
+				}
+
+			}
+		}
+	}
+
+
 }
 
 void playerManager::itemColision()
@@ -244,6 +341,50 @@ void playerManager::itemColision()
 			}
 		}
 	}
+
+	//=============================
+	//발레오그 충돌
+
+	for (int i = 0; i < _wo->get_vItem().size(); ++i)
+	{
+		if (0 > _wo->get_vItem().size()) break;
+		RECT temp;
+		if (IntersectRect(&temp, &_baleog->getBaleogRect(), &_wo->get_vItem()[i].rc))
+		{
+			if (_wo->get_vItem()[i].item == ITEM_BLUELOCKER ||
+				_wo->get_vItem()[i].item == ITEM_REDLOCKER) continue;
+			if (!_wo->get_vItem()[i].isCollision)
+			{
+				tagInven inven;
+				inven.image = _wo->get_vItem()[i].image;
+				inven.player = _playing;
+				_itemCount[_playing] = 0;
+				for (_viInven = _vInven.begin(); _viInven != _vInven.end(); ++_viInven)
+				{
+					if (_viInven->player == _playing) _itemCount[_playing]++;
+				}
+				inven.invenNumber = _itemCount[_playing]; // 순차적으로 아이템을 넣는다.
+				if (_itemCount[_playing] < 4)
+				{
+					_vInven.push_back(inven);
+					_wo->setItemCollision(i);
+				}
+				for (_viInven = _vInven.begin(); _viInven != _vInven.end(); ++_viInven)
+				{
+					cout << "=========================================================" << endl;
+					cout << "인벤 image 높이 :" << _viInven->image->getHeight() << endl;
+					cout << "플레이어 숫자 :" << _viInven->player << endl;
+					cout << "아이템 넘버 :" << _viInven->invenNumber << endl;
+
+				}
+				break;
+			}
+		}
+	}
+
+
+
+
 }
 
 
@@ -263,4 +404,38 @@ void playerManager::boradColision()
 		}
 	}*/
 }
+
+void playerManager::enemyColision()
+{
+	for (int i = 0; i < _em->getVEnemy().size(); i++)
+	{
+
+		for (int j = 0; j < _baleog->getVArrow()->getVArrow().size(); j++)
+		{
+			/*if (0 > _arrow->getVArrow().size()) break;*/
+			//충돌용 RECT
+			RECT temp;
+
+			//arrow와 enemy가 충돌했을 때(&temp,&arrow렉트
+			if (IntersectRect(&temp, &_baleog->getVArrow()->getArrowRect(j), &_em->getVEnemy()[i]->getRect()))
+			{
+				//여기에 적 HP를 깍아줄 코드
+				_baleog->getVArrow()->removeArrow(j);
+
+				_em->getVEnemy()[i]->Hit();
+
+
+				//충돌한 화살 삭제할 코드
+				
+				break;
+				
+
+			}
+
+
+		}
+
+	}
+}
+
 

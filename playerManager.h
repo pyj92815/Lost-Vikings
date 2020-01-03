@@ -4,12 +4,14 @@
 #include "playerbaleog.h"
 #include "PlayerOlaf.h"
 
+
 #ifdef UNICODE
 #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
 #else
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 #endif
 
+class EnemyManager;
 class worldObjects;
 // 플레이어의 타입
 enum PLAYER_TYPE
@@ -40,6 +42,9 @@ private:
 	playerEric* _eric;
 	playerbaleog* _baleog;
 	PlayerOlaf* _olaf;
+
+	arrow* _arrow;
+
 	vector<tagInven>		    _vInven;
 	vector<tagInven>::iterator _viInven;
 
@@ -50,6 +55,9 @@ private:
 	int	_playing;  // 0 eric 1 baleog 2 olaf
 	int _itemCount[3]; // 0 1 2
 	worldObjects* _wo;
+
+	EnemyManager* _em;
+
 
 public:
 	playerManager() {}
@@ -68,18 +76,21 @@ public:
 	tagPlayer getPlayerBaleog() { return _baleog->getBaleog(); }
 	tagPlayer getPlayerOlaf() { return _olaf->getOlaf(); }
 
+	arrow* arrowOne() {	return _arrow;}
+
 	void set_Playing(int playChar) { _playing = playChar; }
 	void KILLPlayer();
-
 
 	int getPlaying() { return _playing; }
 	void itemKey();
 	void setWorldObjectAddressLink(worldObjects* wo) { _wo = wo; }
-
+	void setMemoryAddressLink(EnemyManager* em) { _em = em; }
 
 	void trapColision();
 	void itemColision();
 	void boradColision();
+
+	void enemyColision();
 
 };
 
