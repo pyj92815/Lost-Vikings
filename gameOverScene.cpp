@@ -229,7 +229,7 @@ void gameOverScene::restart_Select()
 	// 만약 죽어있을때 엔터를 눌렀다면 살리는 작업을 시작한다.
 	if (_goPLife[GOP_Eric] && !_ReStartGame.Re_Eric)
 	{
-		if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
+		if (KEYMANAGER->isOnceKeyDown(VK_RETURN) && !_PlayerRE[GOP_Eric])
 		{
 			_PlayerRE[GOP_Eric] = true;
 			_lightNing[GOP_Eric].ani->start();	// 라이트닝의 애니메이션을 움직이도록 한다.
@@ -238,7 +238,7 @@ void gameOverScene::restart_Select()
 
 	else if (_goPLife[GOP_Baleog] && !_ReStartGame.Re_Baleog)
 	{
-		if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
+		if (KEYMANAGER->isOnceKeyDown(VK_RETURN) && !_PlayerRE[GOP_Baleog])
 		{
 			_PlayerRE[GOP_Baleog] = true;
 			_lightNing[GOP_Baleog].ani->start();	// 라이트닝의 애니메이션을 움직이도록 한다.
@@ -247,7 +247,7 @@ void gameOverScene::restart_Select()
 
 	else if (_goPLife[GOP_Olaf] && !_ReStartGame.Re_Olaf)
 	{
-		if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
+		if (KEYMANAGER->isOnceKeyDown(VK_RETURN) && !_PlayerRE[GOP_Olaf])
 		{
 			_PlayerRE[GOP_Olaf] = true;
 			_lightNing[GOP_Olaf].ani->start();	// 라이트닝의 애니메이션을 움직이도록 한다.
