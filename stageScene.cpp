@@ -35,6 +35,7 @@ HRESULT stageScene::init()
 	_UI_State[PT_OLAF].image->setFrameX(0);	// 이미지는 죽은 이미지로 교체한다.
 
 	_playerAllDeadTimer = 0;
+	_giveUpStart = false;
 
 	return S_OK;
 }
@@ -45,10 +46,13 @@ void stageScene::release()
 
 void stageScene::update()
 {
-
-	_wm->update();
-	_pm->update();
-	_em->update();
+	// 기브업 메시지를 보고 있을땐 멈춰있는다.
+	if (!_giveUpStart)
+	{
+		_wm->update();
+		_pm->update();
+		_em->update();
+	}
 
 	testStateImage();  // 캐릭터 전환 테스트
 	setting_InvenSelectPos();
@@ -98,22 +102,31 @@ void stageScene::render()
 	// 플레이어의 생명력을 출력
 	// 플레이어의 현재 체력의 개수만큼 출력한다.
 	// 플레이어가 체력이 떨어지면 그만큼 줄어든다.
-	for (int i = 0; i < _pm->getPlayerEric().hp; ++i)
+	if (!_pm->getPlayerEric().isDead)
 	{
-	//	Rectangle(getMemDC(), _UI_HP[i].rc);
-		_UI_HP[PT_ERIC].image->render(getMemDC(), _UI_HP[PT_ERIC].rc.left + (i * 18), _UI_HP[PT_ERIC].rc.top);
+		for (int i = 0; i < _pm->getPlayerEric().hp; ++i)
+		{
+			//	Rectangle(getMemDC(), _UI_HP[i].rc);
+			_UI_HP[PT_ERIC].image->render(getMemDC(), _UI_HP[PT_ERIC].rc.left + (i * 18), _UI_HP[PT_ERIC].rc.top);
+		}
 	}
 
-	for (int i = 0; i < _pm->getPlayerBaleog().hp; ++i)
+	if (!_pm->getPlayerBaleog().isDead)
 	{
-		//Rectangle(getMemDC(), _UI_HP[i].rc);
-		_UI_HP[PT_BALEOG].image->render(getMemDC(), _UI_HP[PT_BALEOG].rc.left + (i * 18), _UI_HP[PT_BALEOG].rc.top);
+		for (int i = 0; i < _pm->getPlayerBaleog().hp; ++i)
+		{
+			//Rectangle(getMemDC(), _UI_HP[i].rc);
+			_UI_HP[PT_BALEOG].image->render(getMemDC(), _UI_HP[PT_BALEOG].rc.left + (i * 18), _UI_HP[PT_BALEOG].rc.top);
+		}
 	}
 
-	for (int i = 0; i < _pm->getPlayerOlaf().hp; ++i)
+	if (!_pm->getPlayerOlaf().isDead)
 	{
-		//Rectangle(getMemDC(), _UI_HP[i].rc);
-		_UI_HP[PT_OLAF].image->render(getMemDC(), _UI_HP[PT_OLAF].rc.left + (i * 18), _UI_HP[PT_OLAF].rc.top);
+		for (int i = 0; i < _pm->getPlayerOlaf().hp; ++i)
+		{
+			//Rectangle(getMemDC(), _UI_HP[i].rc);
+			_UI_HP[PT_OLAF].image->render(getMemDC(), _UI_HP[PT_OLAF].rc.left + (i * 18), _UI_HP[PT_OLAF].rc.top);
+		}
 	}
 
 	// 인벤토리
@@ -148,6 +161,31 @@ void stageScene::render()
 	}
 	
 	
+	// 기브업 출력 테스트
+
+	//_UI_GiveUpPOS[0].image->render(getMemDC(), _UI_GiveUpPOS[0].rc.left, _UI_GiveUpPOS[0].rc.top);
+	//_UI_GiveUpPOS[1].image->render(getMemDC(), _UI_GiveUpPOS[1].rc.left, _UI_GiveUpPOS[1].rc.top);
+	//_UI_GiveUpPOS[2].image->render(getMemDC(), _UI_GiveUpPOS[2].rc.left, _UI_GiveUpPOS[2].rc.top);
+
+	if (_giveUpStart)
+	{
+		// 기브업 센터 이미지는 계속 출력이 되고 있는다.
+		_UI_GiveUpPOS[0].image->render(getMemDC(), _UI_GiveUpPOS[0].rc.left, _UI_GiveUpPOS[0].rc.top);
+
+		if (!_giveUpSelect)	
+		{
+			_UI_GiveUpPOS[1].image->frameRender(getMemDC(), _UI_GiveUpPOS[1].rc.left, _UI_GiveUpPOS[1].rc.top, _gBanZZank, 0);
+			_UI_GiveUpPOS[2].image->render(getMemDC(), _UI_GiveUpPOS[2].rc.left, _UI_GiveUpPOS[2].rc.top);
+			_gBanZZank = !_gBanZZank;
+		}
+
+		if (_giveUpSelect)	
+		{
+			_UI_GiveUpPOS[1].image->render(getMemDC(), _UI_GiveUpPOS[1].rc.left, _UI_GiveUpPOS[1].rc.top);
+			_UI_GiveUpPOS[2].image->frameRender(getMemDC(), _UI_GiveUpPOS[2].rc.left, _UI_GiveUpPOS[2].rc.top, _gBanZZank, 0);
+			_gBanZZank = !_gBanZZank;
+		}
+	}
 	
 }
 
@@ -201,7 +239,7 @@ void stageScene::posSetting()
 		{
 			_UI_Inventory[i][j].image = new image;
 			if (j < 2)
-				_UI_Inventory[i][j].rc = RectMake(238 + (j * 48) + (i * 213), WINSIZEY - 138, 49, 48);		// 인벤토리 렉트
+				_UI_Inventory[i][j].rc = RectMake(238 + (j * 48) + (i * 213), WINSIZEY - 138, 49, 48);			// 인벤토리 렉트
 			else if (j < 4)
 				_UI_Inventory[i][j].rc = RectMake(238 + ((j - 2) * 48) + (i * 213), WINSIZEY - 90, 49, 48);		// 인벤토리 렉트
 			_UI_Inventory[i][j].pos.x = (_UI_Inventory[i][j].rc.left + _UI_Inventory[i][j].rc.right) / 2;		// 인벤토리 중심좌표
@@ -223,9 +261,7 @@ void stageScene::posSetting()
 	// GiveUP 메뉴에 관한 내용
 	// 캐릭터가 모두 죽었거나, Esc를 눌렀을때 들어가는 옵션이다.
 	// 위치 초기화
-	_UI_GiveUp[GU_CENTER];
-	_UI_GiveUp[GU_YES];
-	_UI_GiveUp[GU_NO];
+	setting_GiveUpPos();
 
 
 	// 캐릭터 생명 위치 초기화
@@ -255,9 +291,9 @@ void stageScene::addStageImage()
 	IMAGEMANAGER->addImage("GarbageBox", "./image/UI/UI_Inventory/Garbage_Box.bmp", 46, 47, false, RGB(0, 0, 0));
 	IMAGEMANAGER->addImage("Select_Image", "./image/UI/UI_Inventory/Select_Point.bmp", 50, 50, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("UI_Image", "./image/UI/UI_Inventory/UI_Image.bmp", 960, 185, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("Give_Center", "./image/UI/GiveUp/GiveUp.bmp", 156, 68, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Give_Yes", "./image/UI/GiveUp/GiveUp.bmp", 100, 15, 2, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Give_No", "./image/UI/GiveUp/GiveUp.bmp", 100, 15, 2, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("Give_Center", "./image/UI/GiveUp/GiveUp_Center.bmp", 350, 153, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Give_Yes", "./image/UI/GiveUp/GiveUp_Yes.bmp", 200, 30, 2, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Give_No", "./image/UI/GiveUp/GiveUp_No.bmp", 200, 30, 2, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("Life", "./image/UI/UI_Inventory/Life_Point.bmp", 12, 12, true, RGB(255, 0, 255));
 }
 
@@ -368,6 +404,7 @@ void stageScene::set_PlayerDead()
 			}
 
 			_charNum++;
+			if (_charNum == 3)	_charNum = 0;				// 만약 캐릭터의 개수를 초과했다면 다시 0번으로
 
 			if (!_UI_State[_charNum].dead)
 			{
@@ -375,27 +412,119 @@ void stageScene::set_PlayerDead()
 				break;										// 만약 다음 캐릭터가 죽지 않았다면 와일문 나가기
 			}
 
-			if (_charNum == 3)	_charNum = 0;				// 만약 캐릭터의 개수를 초과했다면 다시 0번으로
 		}
 	}
 
 	// 만약 플레이어가 게임 도중에 다시 하고 싶어질때
 	if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
 	{
+		// ESC키를 눌러서 켰다 껐다 할 수 있다.
+		// _giveUpStart가 true라면 기브업 메시지가 출력되고 다른것들이 멈춘다.
+		_giveUpStart = !_giveUpStart;
+
 		// 다시 시도할지 안할지 고르는 창을 출력하게 만든다.
 		// YES를 누르면 게임오버 화면으로 이동한다.
 		// NO를 누르면 타이틀 화면으로 이동한다. 200103 AM 12:27 진행중 (미완)
-		SCENEMANAGER->set_SceneState(SS_GAMEOVER);
+		
+		//SCENEMANAGER->set_SceneState(SS_GAMEOVER);
 	}
-}
 
-void stageScene::collisionMIX()
-{
-	
+	// 만약 ESC를 눌렀을 경우에는 기브업 메뉴 선택을 사용 가능하다.
+	if (_giveUpStart)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+		{
+			_giveUpSelect = !_giveUpSelect;
+		}
+
+		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+		{
+			_giveUpSelect = !_giveUpSelect;
+		}
+
+		// false값이면 YES으로 렉트의 위치를 옴겨준다.
+		if (!_giveUpSelect)
+		{
+			_UI_GiveSelectPos.pos.x = _UI_GiveUpPOS[GU_YES].pos.x;
+			_UI_GiveSelectPos.pos.y = _UI_GiveUpPOS[GU_YES].pos.y;
+		}
+
+		// true값이면 NO으로 렉트의 위치를 옴겨준다.
+		if (_giveUpSelect)
+		{
+			_UI_GiveSelectPos.pos.x = _UI_GiveUpPOS[GU_NO].pos.x;
+			_UI_GiveSelectPos.pos.y = _UI_GiveUpPOS[GU_NO].pos.y;
+		}
+
+		_UI_GiveSelectPos.rc = RectMake(_UI_GiveSelectPos.pos.x, _UI_GiveSelectPos.pos.y, 10, 10);
+
+		// YES나 NO랑 충돌 되어 있을때 엔터를 누르면 해당 명령을 실행을 한다.
+		RECT temp;
+		if (IntersectRect(&temp, &_UI_GiveSelectPos.rc, &_UI_GiveUpPOS[GU_YES].rc))
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
+			{
+				SCENEMANAGER->set_SceneState(SS_GAMEOVER);
+			}
+		}
+
+		if (IntersectRect(&temp, &_UI_GiveSelectPos.rc, &_UI_GiveUpPOS[GU_NO].rc))
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
+			{
+				SCENEMANAGER->set_SceneState(SS_INTRO);
+			}
+		}
+	}
+
 }
 
 void stageScene::setting_InvenSelectPos()
 {
 	// 플레이어 매니저에서 받아온 인벤 셀렉 위치 정보의 주소를 저장한다.
 	_player_InvenPos = _pm->getItemNum();
+}
+
+void stageScene::setting_GiveUpPos()
+{
+	//_tryPos[T_CENTER].rc = RectMake(WINSIZEX / 2 - 150, WINSIZEY / 2 - 100, 300, 127);
+	//
+	//_tryPos[T_YES].rc = RectMake(WINSIZEX / 2 - 120, WINSIZEY / 2 - 20, _tryPos[T_YES].image->getFrameWidth(), _tryPos[T_YES].image->getFrameHeight());
+	//_tryPos[T_YES].pos.x = (_tryPos[T_YES].rc.left + _tryPos[T_YES].rc.right) / 2;
+	//_tryPos[T_YES].pos.y = (_tryPos[T_YES].rc.top + _tryPos[T_YES].rc.bottom) / 2;
+	//
+	//_tryPos[T_NO].rc = RectMake(WINSIZEX / 2 + 60, WINSIZEY / 2 - 20, _tryPos[T_NO].image->getFrameWidth(), _tryPos[T_NO].image->getFrameHeight());
+	//_tryPos[T_NO].pos.x = (_tryPos[T_NO].rc.left + _tryPos[T_NO].rc.right) / 2;
+	//_tryPos[T_NO].pos.y = (_tryPos[T_NO].rc.top + _tryPos[T_NO].rc.bottom) / 2;
+	//
+	//// 트라이 셀렉 위치
+	//_trySelect.pos.x = _tryPos[T_YES].pos.x;
+	//_trySelect.pos.y = _tryPos[T_YES].pos.y;
+	//_trySelect.rc = RectMake(_trySelect.pos.x, _trySelect.pos.y, 10, 10);
+
+	// 기브업 이미지를 저장한다.
+	_UI_GiveUpPOS[GU_CENTER].image = new image;
+	_UI_GiveUpPOS[GU_CENTER].image = IMAGEMANAGER->findImage("Give_Center");
+
+	_UI_GiveUpPOS[GU_YES].image = new image;;
+	_UI_GiveUpPOS[GU_YES].image = IMAGEMANAGER->findImage("Give_Yes");
+
+	_UI_GiveUpPOS[GU_NO].image = new image;;
+	_UI_GiveUpPOS[GU_NO].image = IMAGEMANAGER->findImage("Give_No");
+
+	_UI_GiveUpPOS[GU_CENTER].rc = RectMake(WINSIZEX / 2 - 150, WINSIZEY / 2 - 100, 300, 127);
+
+	_UI_GiveUpPOS[GU_YES].rc = RectMake(WINSIZEX / 2 - 120, WINSIZEY / 2 - 10, _UI_GiveUpPOS[GU_YES].image->getFrameWidth(), _UI_GiveUpPOS[GU_YES].image->getFrameHeight());
+	_UI_GiveUpPOS[GU_YES].pos.x = (_UI_GiveUpPOS[GU_YES].rc.left + _UI_GiveUpPOS[GU_YES].rc.right) / 2;
+	_UI_GiveUpPOS[GU_YES].pos.y = (_UI_GiveUpPOS[GU_YES].rc.top + _UI_GiveUpPOS[GU_YES].rc.bottom) / 2;
+	
+	_UI_GiveUpPOS[GU_NO].rc = RectMake(WINSIZEX / 2 + 60, WINSIZEY / 2 - 10, _UI_GiveUpPOS[GU_NO].image->getFrameWidth(), _UI_GiveUpPOS[GU_NO].image->getFrameHeight());
+	_UI_GiveUpPOS[GU_NO].pos.x = (_UI_GiveUpPOS[GU_NO].rc.left + _UI_GiveUpPOS[GU_NO].rc.right) / 2;
+	_UI_GiveUpPOS[GU_NO].pos.y = (_UI_GiveUpPOS[GU_NO].rc.top + _UI_GiveUpPOS[GU_NO].rc.bottom) / 2;
+	
+	//// 트라이 셀렉 위치
+	_UI_GiveSelectPos.pos.x = _UI_GiveUpPOS[GU_YES].pos.x;
+	_UI_GiveSelectPos.pos.y = _UI_GiveUpPOS[GU_YES].pos.y;
+	_UI_GiveSelectPos.rc = RectMake(_UI_GiveSelectPos.pos.x, _UI_GiveSelectPos.pos.y, 10, 10);
+
 }
