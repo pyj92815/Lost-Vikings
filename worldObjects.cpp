@@ -50,16 +50,19 @@ HRESULT worldObjects::init()
 	}//□□□□□□□□□□□□□독 함정을 벡터에 넣자□□□□□□□□□□□□□□□□□□□
 	for (int i = 0; i < 4; i++) { _vTrap.push_back(_poision[i]); }
 	//■■■■■■■■■■■■■■■■■폭포 위치 렉트■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	IMAGEMANAGER->addFrameImage("smallWater_Fall", "./image/ImageCollection/water_Fall.bmp", 588, 650, 4, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("smallWater_Fall", "./image/ImageCollection/water_Fall.bmp", 564, 602, 4, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("long_Water_Fall", "./image/ImageCollection/long_Water_Fall.bmp", 1152, 1467, 4, 1, true, RGB(255, 0, 255));
+	_waterFall[0].image = IMAGEMANAGER->findImage("smallWater_Fall");
+	_waterFall[1].image = IMAGEMANAGER->findImage("long_Water_Fall");
 	for (int i = 0; i < 3; i++)
 	{
 		_waterFall[i].frameX = 0;
-		_waterFall[i].image = IMAGEMANAGER->findImage("smallWater_Fall");
+		_waterFall[i].frameY = 0;
 	}
 	//■■■■■■■■■■■■■■■■■벽 및 발판 위치■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	_isUpDown = false;
-	IMAGEMANAGER->addImage("Stone_Door_5", "./image/ImageCollection/Stone_Door_5.bmp", 48, 243, false, RGB(0, 0, 0));
-	IMAGEMANAGER->addImage("Stone_Door_4", "./image/ImageCollection/Stone_Door_4.bmp", 48, 192, false, RGB(0, 0, 0));
+	_breakableWallOne.image = IMAGEMANAGER->addFrameImage("Stone_Door_5", "./image/ImageCollection/Stone_Door_5.bmp", 384, 240, 8, 1, true, RGB(255, 0, 255));
+	_breakableWallTwo.image = IMAGEMANAGER->addFrameImage("Stone_Door_4", "./image/ImageCollection/Stone_Door_4.bmp", 336, 192, 7, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("BrownDoor_1", "./image/ImageCollection/BrownDoor.bmp", 45, 195, false, RGB(0, 0, 0));
 	IMAGEMANAGER->addImage("BrownDoor_2", "./image/ImageCollection/BrownDoor.bmp", 45, 195, false, RGB(0, 0, 0));
 	_flyingBoard.image = IMAGEMANAGER->addImage("Moving_Flatform", "./image/ImageCollection/Moving_Flatform.bmp", 192, 45, false, RGB(0, 0, 0));
@@ -69,23 +72,46 @@ HRESULT worldObjects::init()
 	_flyingBoard.y = 325;
 	//발판타입
 	_flyingBoard.trap = TRAP_BORAD;
-	_breakableWallOne.trap = TRAP_WALL;
-	_breakableWallTwo.trap = TRAP_WALL;
+	//부셔지는 벽 좌표 및 충돌
 	_breakableWallOne.x = 1324;
-	_breakableWallOne.y = 225;
+	_breakableWallOne.y = 235;
 	_breakableWallOne.isCollision = false;
 	_breakableWallTwo.x = 3055;
 	_breakableWallTwo.y = 85;
 	_breakableWallTwo.isCollision = false;
+	//부셔지는 벽 프레임 시작;
+	_breakableWallOne.frameX = 0;
+	_breakableWallOne.frameY = 0;
+	_breakableWallTwo.frameX = 0;
+	_breakableWallTwo.frameY = 0;
+	//부셔지는 벽 타입
+	_breakableWallOne.trap = TRAP_WALL;
+	_breakableWallTwo.trap = TRAP_WALL;
+	//부셔지는 벽 렉트
 	_breakableWallOne.rc = RectMake(_breakableWallOne.x, _breakableWallOne.y, 48, 243);
 	_breakableWallTwo.rc = RectMake(_breakableWallTwo.x, _breakableWallTwo.y, 48, 192);
-	_unbreakableWallOne.rc = RectMake(2090, 85, 45, 195);
-	_unbreakableWallTwo.rc = RectMake(3695, 2055, 45, 195);
+	//안부셔지는 벽 좌표 및 충돌
+	_unbreakableWallOne.x = 2090;
+	_unbreakableWallOne.y = 85;
+	_unbreakableWallOne.isCollision = false;
+	_unbreakableWallTwo.x = 3695;
+	_unbreakableWallTwo.y = 2055;
+	_unbreakableWallTwo.isCollision = false;
+	//안	부셔지는 벽 프레임 시작;
+	_unbreakableWallOne.frameX = 0;
+	_unbreakableWallOne.frameY = 0;
+	_unbreakableWallTwo.frameX = 0;
+	_unbreakableWallTwo.frameY = 0;
+	//안부셔지는 벽 타입
+	_unbreakableWallOne.trap = TRAP_UNBREAKABLE_WALL;
+	_unbreakableWallTwo.trap = TRAP_UNBREAKABLE_WALL;
+	//안부셔지는 벽 렉트
+	_unbreakableWallOne.rc = RectMake(_unbreakableWallOne.x, _unbreakableWallOne.y, 45, 195);
+	_unbreakableWallTwo.rc = RectMake(_unbreakableWallTwo.x, _unbreakableWallTwo.y, 45, 195);
 	//□□□□□□□□□□□□□발판을 벡터에 넣자□□□□□□□□□□□□□□□□□□□
 	_vTrap.push_back(_flyingBoard);
 	_vTrap.push_back(_breakableWallOne);
 	_vTrap.push_back(_breakableWallTwo);
-
 	//■■■■■■■■■■■■■■■■■아이템 위치■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	_Items[0].image = IMAGEMANAGER->addImage("Boom", "./image/ImageCollection/Boom_Item.bmp", 48, 47, true, RGB(255, 0, 255));
 	_Items[1].image = IMAGEMANAGER->addImage("Boom", "./image/ImageCollection/Boom_Item.bmp", 48, 47, true, RGB(255, 0, 255));
@@ -155,12 +181,17 @@ void worldObjects::update()
 	{
 		if (_viTrap->trap == TRAP_POISION)
 		{
-			_viTrap->rc = RectMake(_viTrap->x, _viTrap->y + (_viTrap->image->getFrameHeight() / 2)
-				, _viTrap->image->getFrameWidth(), _viTrap->image->getFrameHeight() / 2);
+			_viTrap->rc = RectMake(_viTrap->x, _viTrap->y + (_viTrap->image->getFrameHeight() / 2), 
+				_viTrap->image->getFrameWidth(), _viTrap->image->getFrameHeight() / 2);
 		}
 		else if (_viTrap->trap == TRAP_BORAD)
 		{
 			_viTrap->rc = RectMake(_viTrap->x, _viTrap->y, 192, 45);
+		}
+		else if (_viTrap->trap == TRAP_WALL)
+		{
+			_viTrap->rc = RectMake(_viTrap->x, _viTrap->y, 
+				_viTrap->image->getFrameWidth(), _viTrap->image->getFrameHeight());
 		}
 	}
 }
@@ -181,10 +212,10 @@ void worldObjects::render()
 	}
 	//■■■■■■■■■■■■■■■■■폭포 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	IMAGEMANAGER->findImage("smallWater_Fall")->frameRender(CAMERAMANAGER->getWorDC(),
-		1150, 132, _waterFall[0].frameX, _waterFall[0].frameY);
+		1150, 148, _waterFall[0].frameX, _waterFall[0].frameY);
+	IMAGEMANAGER->findImage("long_Water_Fall")->frameRender(CAMERAMANAGER->getWorDC(),
+		815, 832, _waterFall[1].frameX, _waterFall[1].frameY);
 	//■■■■■■■■■■■■■■■■■벽 및 발판 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	IMAGEMANAGER->findImage("Stone_Door_5")->render(CAMERAMANAGER->getWorDC(), _breakableWallOne.rc.left, _breakableWallOne.rc.top);
-	IMAGEMANAGER->findImage("Stone_Door_4")->render(CAMERAMANAGER->getWorDC(), _breakableWallTwo.rc.left, _breakableWallTwo.rc.top);
 	IMAGEMANAGER->findImage("BrownDoor_1")->render(CAMERAMANAGER->getWorDC(), _unbreakableWallOne.rc.left, _unbreakableWallOne.rc.top);
 	IMAGEMANAGER->findImage("BrownDoor_2")->render(CAMERAMANAGER->getWorDC(), _unbreakableWallTwo.rc.left, _unbreakableWallTwo.rc.top);
 	//IMAGEMANAGER->findImage("Moving_Flatform")->render(CAMERAMANAGER->getWorDC(), _flyingBoard.rc.left, _flyingBoard.rc.top);
@@ -200,21 +231,22 @@ void worldObjects::render()
 		if (_viTrap->trap == TRAP_POISION)
 		{//■■■■■■■■■■■■■■■■■독 함정 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 			if (!_viTrap->isCollision)
-			{
-				if (KEYMANAGER->isStayKeyDown('Q'))
-				{//■■■■■■■■■■■■■■■■■독 함정 렉트 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-					Rectangle(CAMERAMANAGER->getWorDC(), _viTrap->rc);
-				}
+			{//■■■■■■■■■■■■■■■■■독 함정 렉트 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+				if (KEYMANAGER->isStayKeyDown('Q')) { Rectangle(CAMERAMANAGER->getWorDC(), _viTrap->rc); }
 				_viTrap->image->frameRender(CAMERAMANAGER->getWorDC(), _viTrap->x, _viTrap->y, _viTrap->frameX, _viTrap->frameY);
 			}
-		}//■■■■■■■■■■■■■■■■■발판 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+		}
 		else if (_viTrap->trap == TRAP_BORAD)
-		{
+		{//■■■■■■■■■■■■■■■■■발판 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 			_viTrap->image->render(CAMERAMANAGER->getWorDC(), _viTrap->x, _viTrap->y);
-			if (KEYMANAGER->isStayKeyDown('Q'))
-			{
-				Rectangle(CAMERAMANAGER->getWorDC(), _viTrap->rc);
-			}
+			//발판 렉트 출력
+			if (KEYMANAGER->isStayKeyDown('Q')) { Rectangle(CAMERAMANAGER->getWorDC(), _viTrap->rc); }
+		}
+		else if (_viTrap->trap == TRAP_WALL)
+		{//■■■■■■■■■■■■■■■■■부셔지는 벽 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+			_viTrap->image->frameRender(CAMERAMANAGER->getWorDC(), _viTrap->x, _viTrap->y, _viTrap->frameX, _viTrap->frameY);
+			//부셔지는 벽 렉트 출력
+			if (KEYMANAGER->isStayKeyDown('Q')) { Rectangle(CAMERAMANAGER->getWorDC(), _viTrap->rc); }
 		}
 	}
 	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
@@ -256,13 +288,37 @@ void worldObjects::framework()
 				}
 			}
 		}
+		if (_frameCount % 6 == 0)
+		{
+			if (_viTrap->trap == TRAP_WALL)
+			{
+				if (!_viTrap->isCollision)
+				{//■■■■■■■■■■■■■■■■■부서지는 벽이 플레이어의 특정 키와 충돌하지 않았다면 프레임■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+					_viTrap->image->setFrameX(_viTrap->frameX);
+					if (_viTrap->frameX >= 0) { _viTrap->frameX = 0; }
+				}
+				else if (_viTrap->isCollision)
+				{//■■■■■■■■■■■■■■■■■부서지는 벽이 플레이어의 특정 키와 충돌했다면 프레임■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+					_viTrap->image->setFrameX(_viTrap->frameX);
+					_viTrap->frameX++;
+					if (_viTrap->frameX > _viTrap->image->getMaxFrameX())
+					{
+						_viTrap->y = -300;
+						_viTrap->isCollision = false;
+					}
+				}
+			}
+		}
 	}
 	//■■■■■■■■■■■■■■■■■폭포 프레임■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	if (_frameCount % 3 == 0)
+	for (int i = 0; i < 2; i++)
 	{
-		_waterFall[0].image->setFrameX(_waterFall[0].frameX);
-		_waterFall[0].frameX++;
-		if (_waterFall[0].frameX > _waterFall[0].image->getMaxFrameX()) { _waterFall[0].frameX = 0; }
+		if (_frameCount % 4 == 0)
+		{
+			_waterFall[i].image->setFrameX(_waterFall[i].frameX);
+			_waterFall[i].frameX++;
+			if (_waterFall[i].frameX > _waterFall[i].image->getMaxFrameX()) { _waterFall[i].frameX = 0; }
+		}
 	}
 }
 
