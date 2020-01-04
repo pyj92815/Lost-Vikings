@@ -25,6 +25,8 @@ struct tagArrow
 
 	int count;
 	int direction;
+
+	float probeX;
 };
 
 class arrow : public gameNode				//화살 클래스
@@ -51,6 +53,8 @@ public:
 
 	void removeArrow(int arrNum);
 	void arrowMove(bool fire);
+	void arrowPixelCollision();
+
 
 	vector<tagArrow> getVArrow() { return _vArrow; }
 	vector<tagArrow>::iterator getViArrow() { return _viArrow; }
@@ -147,6 +151,7 @@ public:
 
 	void setBaleogDead(bool dead) { _baleog.isDead = dead; }	// 형길 추가
 	void setBaleogHP() { _baleog.hp++; if (_baleog.hp >= 3) _baleog.hp = 3; }
+
 
 };
 

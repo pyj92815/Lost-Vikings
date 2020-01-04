@@ -190,6 +190,12 @@ void EnemyManager::Collision()
 		{
 			//발레오그 상대정의
 			//
+			if (_playerManager->getPlayerBaleog().state != STATE_MIRRA)
+			{
+				_playerManager->getbaleog()->setBaleogState(STATE_MIRRA);
+				_playerManager->getbaleog()->setBaleogFrame();
+				_playerManager->getbaleog()->setBaleogStop();
+			}
 			if (!_playerMirra)
 			{
 				EnemyCreate(_playerManager->getPlayerBaleog().x + 30, _playerManager->getPlayerBaleog().y);

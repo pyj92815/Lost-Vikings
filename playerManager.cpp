@@ -111,6 +111,7 @@ void playerManager::KILLPlayer()
 
 void playerManager::itemKey()
 {
+	//거래중이지 않으면
 	if (!_trade)
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_UP))
@@ -143,7 +144,7 @@ void playerManager::itemKey()
 			_trade ? _trade = false : _trade = true;
 		}
 	}
-	else
+	else // 거래중이면 
 	{
 		for (int i = 0; i < _vInven.size(); ++i)
 		{
@@ -180,7 +181,6 @@ void playerManager::itemKey()
 		}
 	}
 }
-
 //아이템 사용하는 기능
 void playerManager::itemUse()
 {
@@ -213,11 +213,11 @@ void playerManager::itemUse()
 				}
 				else if (_playing == 1)
 				{
-
+					_baleog->setBaleogHP();
 				}
 				else if (_playing == 2)
 				{
-
+					_olaf->setOlagHP();
 				}
 				this->removeInven(i);
 				break;
@@ -284,7 +284,7 @@ void playerManager::itemUse()
 					}
 				}
 				break;
-			case ITEM_REDLOCKER:
+			case ITEM_REDLOCKER: // 사용안함 
 				break;
 			case ITEM_BLUEKEY:
 				RECT temp2;
@@ -349,15 +349,14 @@ void playerManager::itemUse()
 					}
 				}
 				break;
-			case ITEM_BLUELOCKER:
+			case ITEM_BLUELOCKER: // 사용안함 
 				break;
 			}
 			break;
 		}
 	}
 }
-
-
+//인벤토리의 위치를 판단하는 함수 
 int playerManager::itemConnect(int playing)
 {
 	list<int> num;
@@ -381,7 +380,7 @@ int playerManager::itemConnect(int playing)
 	}
 
 	if (num.empty()) return 0;
-	num.sort();
+	num.sort(); // 정렬
 
 	for (inum = num.begin(); inum != num.end();)
 	{
@@ -605,6 +604,22 @@ void playerManager::trapColision() // 함정과 충돌 시
 
 			}
 		}
+		//화살 벽돌
+		for (int j = 0; j < _baleog->getVArrow()->getVArrow().size(); j++)
+		{
+			//충돌용 RECT
+			RECT temp2;
+
+			if (IntersectRect(&temp2, &_baleog->getVArrow()->getArrowRect(j), &_wo->get_vTrap()[i].rc))
+			{
+
+				_baleog->getVArrow()->removeArrow(j); //충돌한 화살 삭제할 코드	
+
+
+			}
+		}
+
+
 
 		RECT temp2;
 		if (IntersectRect(&temp2, &_olaf->GetOlafRC(), &_wo->get_vTrap()[i].rc))
@@ -736,24 +751,8 @@ void playerManager::itemColision()
 			}
 		}
 	}
-
-
 }
-
-
-void playerManager::boradColision()
-{
-	/*for (int i = 0; i < _wo->get_vTrap().size(); ++i)
-	{
-		if (0 > _wo->get_vTrap().size()) break;
-		if (_wo->get_vTrap()[i].trap == TRAP_BORAD)
-		{
-			if(_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left &&
-				_eric->getEric().x+)
-		}
-	}*/
-}
-
+//에너미 콜리젼 
 void playerManager::enemyColision()
 {
 	for (int i = 0; i < _em->getVEnemy().size(); i++)
@@ -764,7 +763,6 @@ void playerManager::enemyColision()
 			/*if (0 > _arrow->getVArrow().size()) break;*/
 			//충돌용 RECT
 			RECT temp;
-
 			//arrow와 enemy가 충돌했을 때(&temp,&arrow렉트
 			if (IntersectRect(&temp, &_baleog->getVArrow()->getArrowRect(j), &_em->getVEnemy()[i]->getRect()))
 			{
@@ -792,3 +790,5 @@ void playerManager::enemyColision()
 		}
 	}
 }
+
+
