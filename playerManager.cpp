@@ -130,15 +130,16 @@ void playerManager::itemKey()
 		}
 		if (KEYMANAGER->isOnceKeyDown('F'))
 		{
-			_trade ? _trade = false : _trade = true;
 			for (int i = 0; i < _vInven.size(); ++i)
 			{
 				if (0 > _vInven.size()) break;
 				if (_vInven[i].player == _playing && _vInven[i].invenNumber == _direction[_playing])
 				{
 					_vInven[i].choice = true;
+					cout << _vInven[i].choice << endl;
 				}
 			}
+			_trade ? _trade = false : _trade = true;
 		}
 	}
 	else
@@ -146,38 +147,32 @@ void playerManager::itemKey()
 		for (int i = 0; i < _vInven.size(); ++i)
 		{
 			if (0 > _vInven.size()) break;
+			if (!_vInven[i].choice) continue;
 			if (_vInven[i].choice)
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 				{
 					if (_vInven[i].player > 0)
 					{
+						_vInven[i].invenNumber = itemConnect(_vInven[i].player-1);
 						_vInven[i].player--;
-						//_vInven[i].invenNumber = itemConnect(_vInven[i].player);
 					}
 				}
 				if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 				{
 					if (_vInven[i].player < 3)
 					{
+						_vInven[i].invenNumber = itemConnect(_vInven[i].player+1);
 						_vInven[i].player++;
-						//_vInven[i].invenNumber = itemConnect(_vInven[i].player);
 					}
 				}
 				if (KEYMANAGER->isOnceKeyDown('F'))
 				{
-					_trade ? _trade = false : _trade = true;
 					_vInven[i].choice = false;
 					if (_vInven[i].player == 3)
 					{
 						this->removeInven(i);
 					}
-				}
-			}
-			else
-			{
-				if (KEYMANAGER->isOnceKeyDown('F'))
-				{
 					_trade ? _trade = false : _trade = true;
 				}
 			}
@@ -572,6 +567,7 @@ void playerManager::itemColision()
 					cout << "인벤 image 높이 :" << _viInven->image->getHeight() << endl;
 					cout << "플레이어 숫자 :" << _viInven->player << endl;
 					cout << "아이템 넘버 :" << _viInven->invenNumber << endl;
+					cout << "BOOL :" << _viInven->choice << endl;
 
 				}
 				break;

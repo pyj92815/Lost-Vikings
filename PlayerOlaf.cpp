@@ -45,7 +45,6 @@ void PlayerOlaf::release()
 
 void PlayerOlaf::update()
 {
-
 	if (!_isItem)
 	{
 		if (_stopControl) KeyControl();

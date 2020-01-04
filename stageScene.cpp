@@ -56,12 +56,7 @@ void stageScene::update()
 		SCENEMANAGER->clear_YouDie();
 		SCENEMANAGER->playerDead_Reset_END();
 	}
-	cout << "플레이어의 상태" << endl;
-	cout << "에릭 : " << _pm->getPlayerEric().isDead << endl;
-	cout << "블렌 : " << _pm->getPlayerBaleog().isDead << endl;
-	cout << "올랖 : " << _pm->getPlayerOlaf().isDead << endl;
-	cout << "============================================" << endl;
-
+	
 	// 기브업 메시지를 보고 있을땐 멈춰있는다.
 	if (!_giveUpStart && !CAMERAMANAGER->get_Camera_Move())
 	{
