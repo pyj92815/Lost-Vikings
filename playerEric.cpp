@@ -107,10 +107,8 @@ void playerEric::update()
 				PixelCollision();
 			}
 		}
-		//  플레이어 사망
-		ericDie();
-		//렉트갱신
-		_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());   // RECT 갱신
+		ericDie(); 	//  플레이어 사망
+	
 	}
 
 }
@@ -166,6 +164,7 @@ void playerEric::key()
 	{
 		if (_eric.state != STATE_STEPLADDER)	_eric.currentFrameY = 0;
 	}
+
 	if (KEYMANAGER->isStayKeyDown(VK_UP))
 	{
 		_eric.state = STATE_STEPLADDER;
@@ -306,6 +305,7 @@ void playerEric::key()
 			{
 				_eric.x += _slidePower;
 			}
+
 			if (_slidePower >= 0)
 			{
 				_slidePower -= 0.1;
@@ -359,6 +359,7 @@ void playerEric::key()
 void playerEric::ericFrameCount()
 {
 	_eric.frameCount++; // 프레임 카운터 증가 
+	_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());   // RECT 갱신
 
 	// 상태가 만약 공격 상태
 	if (_eric.state == STATE_ERIC_HEADBUTT)
@@ -397,7 +398,7 @@ void playerEric::ericFrameCount()
 			_eric.currentFrameX++;
 			_eric.image->setFrameX(_eric.currentFrameX);
 
-			if (_eric.currentFrameX > _eric.image->getMaxFrameX()) // 조금 느리게 하고 싶음 
+			if (_eric.currentFrameX > _eric.image->getMaxFrameX()) // 조금 느리게 하고 싶음
 			{
 				_ericUnable = false;
 				_eric.currentFrameX = 0;

@@ -181,6 +181,7 @@ void playerManager::itemKey()
 	}
 }
 
+//아이템 사용하는 기능
 void playerManager::itemUse()
 {
 	for (int i = 0; i < _vInven.size(); ++i)
@@ -356,6 +357,7 @@ void playerManager::itemUse()
 		}
 	}
 }
+
 
 int playerManager::itemConnect(int playing)
 {
@@ -681,13 +683,16 @@ void playerManager::itemColision()
 			{
 				tagInven inven;
 				inven.image = _wo->get_vItem()[i].image;
+				inven.typeItem = _wo->get_vItem()[i].item;
 				inven.player = _playing;
+				inven.choice = false;
 				_itemCount[_playing] = 0;
 				for (_viInven = _vInven.begin(); _viInven != _vInven.end(); ++_viInven)
 				{
 					if (_viInven->player == _playing) _itemCount[_playing]++;
 				}
-				inven.invenNumber = _itemCount[_playing]; // 순차적으로 아이템을 넣는다.
+				//inven.invenNumber = _itemCount[_playing]; // 순차적으로 아이템을 넣는다.
+				inven.invenNumber = itemConnect(_playing);
 				if (_itemCount[_playing] < 4)
 				{
 					_vInven.push_back(inven);
@@ -713,13 +718,16 @@ void playerManager::itemColision()
 			{
 				tagInven inven;
 				inven.image = _wo->get_vItem()[i].image;
+				inven.typeItem = _wo->get_vItem()[i].item;
 				inven.player = _playing;
+				inven.choice = false;
 				_itemCount[_playing] = 0;
 				for (_viInven = _vInven.begin(); _viInven != _vInven.end(); ++_viInven)
 				{
 					if (_viInven->player == _playing) _itemCount[_playing]++;
 				}
-				inven.invenNumber = _itemCount[_playing]; // 순차적으로 아이템을 넣는다.
+				//inven.invenNumber = _itemCount[_playing]; // 순차적으로 아이템을 넣는다.
+				inven.invenNumber = itemConnect(_playing);
 				if (_itemCount[_playing] < 4)
 				{
 					_vInven.push_back(inven);
