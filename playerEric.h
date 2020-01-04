@@ -47,7 +47,6 @@ public:
 
 	void ericFrameCount();
 	void ericJump();
-	void ericAttack();
 	void ericAttackMove();
 	void ericHit();
 	void setEricImage();
@@ -64,7 +63,7 @@ public:
 	void setEricY(float y)		 { _eric.y = y; }        // ERIC Y
 	void setHit()			     { _isHit = true; }      // ERIC 맞을 때 BOOL값
 	bool getHit()		         { return _isHit; }
-	void setEricHP()			 { _eric.hp++; }		 // ERIC HP++
+	void setEricHP()			 { if(_eric.hp<3) _eric.hp++; }		 // ERIC HP++
 	void setEricHit()			 { _eric.hp--; }		 //		 HP--
 	
 
