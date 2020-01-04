@@ -585,10 +585,8 @@ void playerManager::trapColision() // 함정과 충돌 시
 						}
 					}
 				}
-
 				else if (_wo->get_vTrap()[i].trap == TRAP_WALL)
 				{
-
 
 					if (!_wo->get_vTrap()[i].isCollision && _baleog->getBaleog().state == STATE_MOVE)
 					{
@@ -628,10 +626,68 @@ void playerManager::trapColision() // 함정과 충돌 시
 					//_eric->setEricStop();
 					break;
 				}
+				else if (_wo->get_vTrap()[i].trap == TRAP_BORAD)
+				{
+					if ((_olaf->getOlaf().rc.right >= _wo->get_vTrap()[i].rc.left + 10 &&
+						_olaf->getOlaf().rc.right <= _wo->get_vTrap()[i].rc.right - 10 &&
+						_olaf->getOlaf().rc.bottom >= _wo->get_vTrap()[i].rc.bottom) ||
+						(_olaf->getOlaf().rc.left >= _wo->get_vTrap()[i].rc.left + 10 &&
+							_olaf->getOlaf().rc.left <= _wo->get_vTrap()[i].rc.right - 10 &&
+							_olaf->getOlaf().rc.bottom >= _wo->get_vTrap()[i].rc.bottom))
+					{
+						if (_olaf->getOlaf().state != STATE_PRESSDIE) _olaf->setOlafY(_wo->get_vTrap()[i].rc.bottom);
+						if (_olaf->getOlaf().posState == POSSTATE_GROUND)
+						{
+							if (_olaf->getOlaf().state != STATE_PRESSDIE)
+							{
+								_olaf->Set_OlafState(STATE_PRESSDIE);
+								_olaf->ResetAnimation1();
+								_olaf->setOlafFrameSpeed(10);
+							}
+
+						}
+					}
+
+					else if ((_olaf->getOlaf().rc.right >= _wo->get_vTrap()[i].rc.left + 10 &&
+						_olaf->getOlaf().rc.right <= _wo->get_vTrap()[i].rc.right - 10)
+						||
+						(_olaf->getOlaf().rc.left >= _wo->get_vTrap()[i].rc.left + 10 &&
+							_olaf->getOlaf().rc.left <= _wo->get_vTrap()[i].rc.right - 10))
+					{
+						if (_olaf->getOlaf().state != STATE_PRESSDIE)
+						{
+							_olaf->Set_OlafPosState(POSSTATE_GROUND);
+							//_olaf->setEricJump();
+							//_olaf->setEricJumpPower();
+
+							if (_wo->getUpDown())
+							{
+								_olaf->setOlafY(_wo->get_vTrap()[i].rc.top - _olaf->getOlaf().image->getFrameHeight() + 3);
+							}
+							else
+							{
+								_olaf->setOlafY(_wo->get_vTrap()[i].rc.top - _olaf->getOlaf().image->getFrameHeight() + 7);
+							}
+						}
+					}
+				}
+				else if (_wo->get_vTrap()[i].trap == TRAP_WALL)
+				{
+
+					if (!_wo->get_vTrap()[i].isCollision && _olaf->getOlaf().state == STATE_MOVE)
+					{
+						_olaf->Set_OlafState(STATE_PUSH);
+						_olaf->ResetAnimation1();
+						_olaf->setOlafX(_wo->get_vTrap()[i].x - _olaf->getOlaf().image->getFrameWidth() - 5);
+					}
+					else
+					{
+						_olaf->setOlafX(_wo->get_vTrap()[i].x - _olaf->getOlaf().image->getFrameWidth() - 5);
+					}
+				}
 			}
 		}
 	}
-
 }
 
 void playerManager::itemColision()

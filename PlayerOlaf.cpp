@@ -264,18 +264,32 @@ void PlayerOlaf::SetOlafState()
 		// 올라프 기본 움직임들
 		case STATE_IDLE:
 			if (!_isShieldUp)
+			{
 				_olaf.image = IMAGEMANAGER->findImage("Olaf_Idle_ShieldForward");
+				_currentPosstate = 1;
+			}
 			else
+			{
 				_olaf.image = IMAGEMANAGER->findImage("Olaf_Idle_ShieldUp");
+				_currentPosstate = 2;
+			}
 			ResetAnimation1();
+			ResetAnimation4();
 			break;
 
 		case STATE_MOVE:
 			if (!_isShieldUp)
+			{
 				_olaf.image = IMAGEMANAGER->findImage("Olaf_Move_ShieldForward");
+				_currentPosstate = 3;
+			}
 			else
+			{
 				_olaf.image = IMAGEMANAGER->findImage("Olaf_Move_ShieldUp");
+				_currentPosstate = 4;
+			}
 			ResetAnimation1();
+			ResetAnimation4();
 			break;
 
 		// 올라프 죽는 조건들
@@ -347,7 +361,9 @@ void PlayerOlaf::SetOlafPosState()
 					_olaf.y -= (_olaf.gravity - 1);
 					_olaf.gravity = 0;
 				}
+				_currentPosstate = 5;
 			}
+			ResetAnimation4();
 			ResetAnimation1();
 			break;
 
@@ -608,5 +624,15 @@ void PlayerOlaf::ResetAnimation3()
 		_olaf.frameCount = 0;
 	}
 	_beforeLadderState = _currentLadderState;
+}
+void PlayerOlaf::ResetAnimation4()
+{
+	if (_currentPosstate != _beforePosstate)
+	{
+		_olaf.currentFrameX = 0;
+		_olaf.image->setFrameX(0);
+		_olaf.frameCount = 0;
+	}
+	_beforePosstate = _currentPosstate;
 }
 // 문제점 : 어떻게하면 검사해야하는 부분을 줄일 수 있을까? 지금 조건이 너무 많아서 이대로 가단 유지보수가 엄청 어려워 질수 있음. + 렉도 발생함
