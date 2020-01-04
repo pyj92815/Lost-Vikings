@@ -147,11 +147,19 @@ void playerManager::itemKey()
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 				{
-					if (_vInven[i].player > 0) _vInven[i].player--;
+					if (_vInven[i].player > 0)
+					{
+						_vInven[i].player--;
+						//_vInven[i].invenNumber = itemConnect(_vInven[i].player);
+					}
 				}
 				if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 				{
-					if (_vInven[i].player < 3)_vInven[i].player++;
+					if (_vInven[i].player < 3)
+					{
+						_vInven[i].player++;
+						//_vInven[i].invenNumber = itemConnect(_vInven[i].player);
+					}
 				}
 				if (KEYMANAGER->isOnceKeyDown('F'))
 				{
@@ -249,6 +257,44 @@ void playerManager::itemUse()
 			break;
 		}
 	}
+}
+
+int playerManager::itemConnect(int playing)
+{
+	list<int> num;
+	list<int>::iterator inum;
+	invenNum = 0;
+
+	if (_vInven.empty()) return 0;
+
+	for (int i = 0; i < _vInven.size();++i)
+	{
+		if (_vInven[i].player == playing)
+		{
+			for (int j = 0; j < 4; ++j)
+			{
+				if (_vInven[i].invenNumber == j)
+				{
+					num.push_back(j);
+				}
+			}
+		}
+	}
+
+	if (num.empty()) return 0;
+	num.sort();
+
+	for (inum = num.begin(); inum!= num.end();)
+	{
+		if (*inum == invenNum)
+		{
+			inum++;
+			invenNum++;
+		}
+		else break;
+	}
+	return invenNum;
+
 }
 
 void playerManager::trapColision() // 함정과 충돌 시
@@ -509,7 +555,8 @@ void playerManager::itemColision()
 				{
 					if (_viInven->player == _playing) _itemCount[_playing]++;
 				}
-				inven.invenNumber = _itemCount[_playing]; // 순차적으로 아이템을 넣는다.
+				//inven.invenNumber = _itemCount[_playing]; // 순차적으로 아이템을 넣는다.
+				inven.invenNumber = itemConnect(_playing);
 				if (_itemCount[_playing] < 4)
 				{
 					_vInven.push_back(inven);
@@ -629,8 +676,6 @@ void playerManager::enemyColision()
 				break;
 			}
 		}
-
-
 	}
 }
 

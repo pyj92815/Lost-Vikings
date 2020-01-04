@@ -4,8 +4,7 @@
 #include "playerbaleog.h"
 #include "PlayerOlaf.h"
 #include "worldObjects.h"
-
-
+#include <list>
 
 #ifdef UNICODE
 #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
@@ -56,6 +55,9 @@ private:
 	int _itemNum;
 	int	_playing;  // 0 eric 1 baleog 2 olaf
 	int _itemCount[3]; // 0 1 2
+
+
+	int invenNum;
 	worldObjects* _wo;
 
 
@@ -93,6 +95,7 @@ public:
 	void setWorldObjectAddressLink(worldObjects* wo) { _wo = wo; }
 
 	void itemUse();
+	int itemConnect(int playing);
 	void setMemoryAddressLink(EnemyManager* em) { _em = em; }
 	void trapColision();
 	void itemColision();
