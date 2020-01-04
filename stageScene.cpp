@@ -535,7 +535,9 @@ void stageScene::set_PlayerDead()
 		{
 			if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
 			{
-				SCENEMANAGER->set_SceneState(SS_INTRO);
+				//SCENEMANAGER->set_SceneState(SS_INTRO);
+				_giveUpStart = false;
+				_giveUpSelect = !_giveUpSelect;
 			}
 		}
 	}
