@@ -86,6 +86,7 @@ void Enemy_Snake::Frame()
 			_frameX++;
 			if (_frameX > 10)
 				_die = true;
+			_frameCount = 0;
 		}
 		break;
 	default:

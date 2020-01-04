@@ -64,7 +64,6 @@ void stageScene::update()
 		_pm->update();
 		_em->update();
 	}
-
 	testStateImage();  // 캐릭터 전환 테스트
 	setting_InvenSelectPos();
 }
@@ -222,7 +221,6 @@ void stageScene::render()
 		}
 		
 	}
-	
 }
 
 void stageScene::posSetting()
