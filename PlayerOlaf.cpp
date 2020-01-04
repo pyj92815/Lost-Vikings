@@ -278,6 +278,10 @@ void PlayerOlaf::SetOlafState()
 			break;
 
 		case STATE_MOVE:
+			if (_olaf.state == STATE_PUSH)
+			{
+				break;
+			}
 			if (!_isShieldUp)
 			{
 				_olaf.image = IMAGEMANAGER->findImage("Olaf_Move_ShieldForward");
@@ -328,6 +332,10 @@ void PlayerOlaf::SetOlafState()
 			_olaf.image = IMAGEMANAGER->findImage("Olaf_FallHit");
 			ResetAnimation1();
 			break;
+
+		case STATE_PUSH:
+			_olaf.image = IMAGEMANAGER->findImage("Olaf_Push");
+			ResetAnimation1();
 
 		default:
 			break;
