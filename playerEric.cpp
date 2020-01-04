@@ -37,7 +37,6 @@ HRESULT playerEric::init(float x, float y)
 	_eric.x = x;															 // x 
 	_eric.y = y;															 // y
 	_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());   // RECT
-
 	_eric.hp = 3;
 	_eric.isDead = false;// 체력 
 	//========================== 점프 관련 ==================================//
@@ -72,13 +71,12 @@ void playerEric::release()
 
 void playerEric::update()
 {
-
-	if (!_isItem)
+	if (!_isItem)  // 아이템을 사용하면 전부 멈춘다 
 	{
-		ericFrameCount();				  // 이미지 프레임 증가 
-		setEricImage();				      // image 세팅 
+		ericFrameCount();				    // image frame 증가 
+		setEricImage();				        // image 세팅 
 
-		if (!_stop)
+		if (!_stop)	  // 죽는거 표시하기 위해서 
 		{
 			if (_stopControl)				// 케릭터 선택 BOOL값
 			{
@@ -88,22 +86,15 @@ void playerEric::update()
 
 			ericJump();								// 점프 
 			ericHit();								// 맞을 때 이미지 
-				//======================구현 예정==================//
 			ericAttack();							// 공격 
 
-
-
-			// 에릭의 좌표를 카메라 매니저에 넘겨준다.
-			// CAMERAMANAGER->set_Camera_XY(_eric.rc);
-			// 에릭의 위치가 그라운드이면 
 			// 점프가 아니면 픽셀충돌, 점프중에도 픽셀충돌 
 			if (_eric.posState == POSSTATE_AIR)
 			{
 				isJumpPixelCollision();
 				_isSlide = false;
-				// 중력값 
-				if (_gravity < 5)	 _gravity += 0.7;
 				_eric.y += _gravity;
+				if (_gravity < 5)	_gravity += 0.7;
 				if (_eric.state != STATE_ERIC_JUMP) // 떨어질 때 점프하면서 떨어지기 위한 
 				{
 					_eric.state = STATE_ERIC_JUMP;
@@ -115,7 +106,6 @@ void playerEric::update()
 			{
 				PixelCollision();
 			}
-
 		}
 		//  플레이어 사망
 		ericDie();

@@ -99,9 +99,12 @@ void Enemy_PlayerMummy::Frame()
 		_frameCount++;
 		if (_frameCount >= 10)
 		{
-			_frameX++;
-			if (_frameX > 10)
-				_die = true;
+			if (_frameX < 10)
+			{
+				_frameX++;
+				//_die = true;
+			}
+			_frameCount = 0;
 		}
 		break;
 	default:

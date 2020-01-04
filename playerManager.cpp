@@ -16,6 +16,7 @@ HRESULT playerManager::init()
 	_olaf = new PlayerOlaf;
 	_olaf->init(180, 185);
 
+	EFFECTMANAGER->addEffect("적죽음", "Enemy_Die", 891, 73, 11, 1, 60, 5, NULL);
 	for (int i = 0;i < 3;i++)
 	{
 		_itemCount[i] = 0;
@@ -211,30 +212,71 @@ void playerManager::itemUse()
 				}
 				else if (_playing == 1)
 				{
-					_baleog->setBaleogHP();
+
 				}
 				else if (_playing == 2)
 				{
-					_olaf->setOlagHP();
+
 				}
 				this->removeInven(i);
 				break;
 			case ITEM_REDKEY:
 				RECT temp;
-				for (int j = 0; j < _wo->get_vItem().size(); ++j)
+				if (_playing == 0)
 				{
-					if (IntersectRect(&temp, &_eric->getEricRect(), &_wo->get_vItem()[j].rc) ||
-						IntersectRect(&temp, &_baleog->getBaleogRect(), &_wo->get_vItem()[j].rc) ||
-							IntersectRect(&temp, &_olaf->GetOlafRC(), &_wo->get_vItem()[j].rc))
+					for (int j = 0; j < _wo->get_vItem().size(); ++j)
 					{
-						if (_wo->get_vItem()[j].item == ITEM_REDLOCKER)
+						if (IntersectRect(&temp, &_eric->getEricRect(), &_wo->get_vItem()[j].rc))
 						{
-							for (int k = 0; k < _wo->get_vTrap().size(); ++k)
+							if (_wo->get_vItem()[j].item == ITEM_REDLOCKER)
 							{
-								if (_wo->get_vTrap()[k].trap == TRAP_RED_UNBREAKABLE_WALL)
+								for (int k = 0; k < _wo->get_vTrap().size(); ++k)
 								{
-									_wo->setTrapCollision(k);
-									this->removeInven(i);
+									if (_wo->get_vTrap()[k].trap == TRAP_RED_UNBREAKABLE_WALL)
+									{
+										_wo->setTrapCollision(k);
+										this->removeInven(i);
+									}
+								}
+							}
+						}
+					}
+				}
+				else if (_playing == 1)
+				{
+					for (int j = 0; j < _wo->get_vItem().size(); ++j)
+					{
+						if (IntersectRect(&temp, &_baleog->getBaleogRect(), &_wo->get_vItem()[j].rc))
+						{
+							if (_wo->get_vItem()[j].item == ITEM_REDLOCKER)
+							{
+								for (int k = 0; k < _wo->get_vTrap().size(); ++k)
+								{
+									if (_wo->get_vTrap()[k].trap == TRAP_RED_UNBREAKABLE_WALL)
+									{
+										_wo->setTrapCollision(k);
+										this->removeInven(i);
+									}
+								}
+							}
+						}
+					}
+				}
+				else if (_playing == 2)
+				{
+					for (int j = 0; j < _wo->get_vItem().size(); ++j)
+					{
+						if (IntersectRect(&temp, &_olaf->GetOlafRC(), &_wo->get_vItem()[j].rc))
+						{
+							if (_wo->get_vItem()[j].item == ITEM_REDLOCKER)
+							{
+								for (int k = 0; k < _wo->get_vTrap().size(); ++k)
+								{
+									if (_wo->get_vTrap()[k].trap == TRAP_RED_UNBREAKABLE_WALL)
+									{
+										_wo->setTrapCollision(k);
+										this->removeInven(i);
+									}
 								}
 							}
 						}
@@ -245,20 +287,61 @@ void playerManager::itemUse()
 				break;
 			case ITEM_BLUEKEY:
 				RECT temp2;
-				for (int j = 0; j < _wo->get_vItem().size(); ++j)
+				if (_playing == 0)
 				{
-					if (IntersectRect(&temp2, &_eric->getEricRect(), &_wo->get_vItem()[j].rc) ||
-						IntersectRect(&temp2, &_baleog->getBaleogRect(), &_wo->get_vItem()[j].rc) ||
-						IntersectRect(&temp2, &_olaf->GetOlafRC(), &_wo->get_vItem()[j].rc))
+					for (int j = 0; j < _wo->get_vItem().size(); ++j)
 					{
-						if (_wo->get_vItem()[j].item == ITEM_BLUELOCKER)
+						if (IntersectRect(&temp2, &_eric->getEricRect(), &_wo->get_vItem()[j].rc))
 						{
-							for (int k = 0; k < _wo->get_vTrap().size(); ++k)
+							if (_wo->get_vItem()[j].item == ITEM_BLUELOCKER)
 							{
-								if (_wo->get_vTrap()[k].trap == TRAP_BLUE_UNBREAKABLE_WALL)
+								for (int k = 0; k < _wo->get_vTrap().size(); ++k)
 								{
-									_wo->setTrapCollision(k);
-									this->removeInven(i);
+									if (_wo->get_vTrap()[k].trap == TRAP_BLUE_UNBREAKABLE_WALL)
+									{
+										_wo->setTrapCollision(k);
+										this->removeInven(i);
+									}
+								}
+							}
+						}
+					}
+				}
+				else if (_playing == 1)
+				{
+					for (int j = 0; j < _wo->get_vItem().size(); ++j)
+					{
+						if (IntersectRect(&temp2, &_baleog->getBaleogRect(), &_wo->get_vItem()[j].rc))
+						{
+							if (_wo->get_vItem()[j].item == ITEM_BLUELOCKER)
+							{
+								for (int k = 0; k < _wo->get_vTrap().size(); ++k)
+								{
+									if (_wo->get_vTrap()[k].trap == TRAP_BLUE_UNBREAKABLE_WALL)
+									{
+										_wo->setTrapCollision(k);
+										this->removeInven(i);
+									}
+								}
+							}
+						}
+					}
+				}
+				else if (_playing == 2)
+				{
+					for (int j = 0; j < _wo->get_vItem().size(); ++j)
+					{
+						if (IntersectRect(&temp2, &_olaf->GetOlafRC(), &_wo->get_vItem()[j].rc))
+						{
+							if (_wo->get_vItem()[j].item == ITEM_BLUELOCKER)
+							{
+								for (int k = 0; k < _wo->get_vTrap().size(); ++k)
+								{
+									if (_wo->get_vTrap()[k].trap == TRAP_BLUE_UNBREAKABLE_WALL)
+									{
+										_wo->setTrapCollision(k);
+										this->removeInven(i);
+									}
 								}
 							}
 						}
@@ -577,15 +660,6 @@ void playerManager::itemColision()
 					_vInven.push_back(inven);
 					_wo->setItemCollision(i);
 				}
-				for (_viInven = _vInven.begin(); _viInven != _vInven.end(); ++_viInven)
-				{
-					cout << "=========================================================" << endl;
-					cout << "인벤 image 높이 :" << _viInven->image->getHeight() << endl;
-					cout << "플레이어 숫자 :" << _viInven->player << endl;
-					cout << "아이템 넘버 :" << _viInven->invenNumber << endl;
-					cout << "BOOL :" << _viInven->choice << endl;
-
-				}
 				break;
 			}
 		}
@@ -618,14 +692,6 @@ void playerManager::itemColision()
 					_vInven.push_back(inven);
 					_wo->setItemCollision(i);
 				}
-				for (_viInven = _vInven.begin(); _viInven != _vInven.end(); ++_viInven)
-				{
-					cout << "=========================================================" << endl;
-					cout << "인벤 image 높이 :" << _viInven->image->getHeight() << endl;
-					cout << "플레이어 숫자 :" << _viInven->player << endl;
-					cout << "아이템 넘버 :" << _viInven->invenNumber << endl;
-
-				}
 				break;
 			}
 		}
@@ -657,14 +723,6 @@ void playerManager::itemColision()
 				{
 					_vInven.push_back(inven);
 					_wo->setItemCollision(i);
-				}
-				for (_viInven = _vInven.begin(); _viInven != _vInven.end(); ++_viInven)
-				{
-					cout << "=========================================================" << endl;
-					cout << "인벤 image 높이 :" << _viInven->image->getHeight() << endl;
-					cout << "플레이어 숫자 :" << _viInven->player << endl;
-					cout << "아이템 넘버 :" << _viInven->invenNumber << endl;
-
 				}
 				break;
 			}
@@ -708,10 +766,7 @@ void playerManager::enemyColision()
 			{
 				//여기에 적 HP를 깍아줄 코드
 				_baleog->getVArrow()->removeArrow(j);
-
 				_em->getVEnemy()[i]->Hit();
-
-
 				//충돌한 화살 삭제할 코드	
 				break;
 			}
@@ -722,7 +777,8 @@ void playerManager::enemyColision()
 		{
 			if (_eric->getEric().state == STATE_ERIC_HEADBUTT && _eric->getEric().currentFrameX > 3)
 			{
-				_em->EnemyRemove(i);
+				_em->getVEnemy()[i]->Hit();
+				//_em->EnemyRemove(i);
 				_eric->setEricState(STATE_ERIC_HEADBUTTEND);
 				_eric->setEricFrame();
 				_eric->setEricFrameSpeed(8);
