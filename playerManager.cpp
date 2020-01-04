@@ -16,6 +16,7 @@ HRESULT playerManager::init()
 	_olaf = new PlayerOlaf;
 	_olaf->init(180, 185);
 
+	EFFECTMANAGER->addEffect("적죽음", "Enemy_Die", 891, 73, 11, 1, 60, 5, NULL);
 	for (int i = 0;i < 3;i++)
 	{
 		_itemCount[i] = 0;
@@ -666,7 +667,6 @@ void playerManager::enemyColision()
 			{
 				//여기에 적 HP를 깍아줄 코드
 				_baleog->getVArrow()->removeArrow(j);
-
 				_em->getVEnemy()[i]->Hit();
 
 
@@ -680,7 +680,8 @@ void playerManager::enemyColision()
 		{
 			if (_eric->getEric().state == STATE_ERIC_HEADBUTT && _eric->getEric().currentFrameX > 3)
 			{
-				_em->EnemyRemove(i);
+				_em->getVEnemy()[i]->Hit();
+				//_em->EnemyRemove(i);
 				_eric->setEricState(STATE_ERIC_HEADBUTTEND);
 				_eric->setEricFrame();
 				_eric->setEricFrameSpeed(8);

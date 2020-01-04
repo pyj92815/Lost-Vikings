@@ -111,7 +111,7 @@ void Enemy::render()
 	}
 	if (_enemyState == EnemyState::DIE)
 	{
-		_die_Image->frameRender(CAMERAMANAGER->getWorDC(), _enemyRect.left, _enemyRect.top, _frameX, _frameY);
+		_die_Image->frameRender(CAMERAMANAGER->getWorDC(), _enemyRect.left, _enemyRect.top + 30, _frameX, _frameY);
 	}
 }
 
@@ -641,9 +641,10 @@ void Enemy::die()
 {
 	if (_enemyHP <= 0 && !_RIP)
 	{
-		/*_RIP = true;
+	/*	_RIP = true;
 		_frameX = 0;*/
 		_enemyState = EnemyState::DIE;
+		
 	}
 }
 

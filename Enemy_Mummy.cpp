@@ -99,9 +99,7 @@ void Enemy_Mummy::Frame()
 		_frameCount++;
 		if (_frameCount >= 10)
 		{
-			_frameX++;
-			if (_frameX > 10)
-				_frameX = 0;
+			if (_frameX < 10) _frameX++;
 			_frameCount = 0;
 		}
 		break;

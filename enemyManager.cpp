@@ -132,11 +132,12 @@ void EnemyManager::EnemyCreate(float x, float y)
 
 void EnemyManager::EnemyRemove()
 {
-	/*for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();)
+	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();)
 	{
 		if ((*_viEnemy)->getDie())
 		{
-			EFFECTMANAGER->play("Enemy_Die", (*_viEnemy)->getX(), (*_viEnemy)->getY());
+			EFFECTMANAGER->play("ÀûÁ×À½", (*_viEnemy)->getX(), (*_viEnemy)->getY());
+			//EFFECTMANAGER->play("Enemy_Die", (*_viEnemy)->getX(), (*_viEnemy)->getY());
 			_vEnemy.erase(_viEnemy);
 			break;
 		}
@@ -144,7 +145,7 @@ void EnemyManager::EnemyRemove()
 		{
 			++_viEnemy;
 		}
-	}*/
+	}
 }
 
 
