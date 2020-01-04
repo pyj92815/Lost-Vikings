@@ -24,7 +24,7 @@ HRESULT playerEric::init(float x, float y)
 	IMAGEMANAGER->addFrameImage("eric_hitState", "./image/Characters/eric_hitState.bmp", 93, 192, 1, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("eric_pressdie", "./image/Characters/eric_pressdie.bmp", 384, 192, 4, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("eric_headbutt", "./image/Characters/eric_headbutt.bmp", 888, 192, 8, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("eric_mirra.bmp", "./image/Characters/eric_mirraddie.bmp", 216, 180, 3, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("eric_mirra", "./image/Characters/eric_mirraddie.bmp", 216, 180, 3, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("eric_stepladder", "./image/Characters/eric_stepladder.bmp", 336, 105, 4, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("eric_headbuttend", "./image/Characters/eric_headbuttend.bmp", 990, 186, 11, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("eric_stepladderend", "./image/Characters/eric_stepladderend.bmp", 186, 78, 2, 1, true, RGB(255, 0, 255));
@@ -467,6 +467,8 @@ void playerEric::ericFrameCount()
 					_eric.state == STATE_TRAPDIE)
 				{
 					_eric.isDead = true;
+					_eric.x = -1000;
+					_eric.y = -1000;
 				}
 				else
 				{

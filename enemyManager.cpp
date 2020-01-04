@@ -155,10 +155,19 @@ void EnemyManager::Collision()
 				(*_viEnemy)->setFalseWall();
 			}
 		}
-
+		// 에릭 미라 생성 
 		if (IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_ericRect))
 		{
-			EnemyCreate(_playerManager->getPlayerEric().x, _playerManager->getPlayerEric().y);
+			if (_playerManager->getPlayerEric().state != STATE_MIRRA)
+			{
+				_playerManager->getEric()->setEricState(STATE_MIRRA);
+				_playerManager->getEric()->setEricFrame();
+			}
+			
+			if (!_playerManager->getPlayerEric().isDead && _playerManager->getPlayerEric().currentFrameX >= _playerManager->getPlayerEric().image->getMaxFrameX())
+			{
+				EnemyCreate(_playerManager->getPlayerEric().x, _playerManager->getPlayerEric().y);
+			}
 			break;
 		}
 
