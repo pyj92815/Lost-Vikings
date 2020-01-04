@@ -14,9 +14,8 @@ PlayerOlaf::~PlayerOlaf()
 
 HRESULT PlayerOlaf::init(float x, float y)
 {
-	init_SettingOlafImg();
-
 	// 올라프 이미지, 좌표, 렉트, HP, 프레임 카운트, 상태, 프레임 스피드, 쉴드 상태 선언
+	init_SettingOlafImg();
 	_olaf.image = IMAGEMANAGER->findImage("Olaf_Idle_ShieldForward");
 	_olaf.x = x;
 	_olaf.y = y;
@@ -30,11 +29,12 @@ HRESULT PlayerOlaf::init(float x, float y)
 	_olaf.isHit = false;
 	_isShieldUp = false;
 
-	_testRect = RectMake(_olaf.x + 110, _olaf.y + 124, _olaf.image->getFrameWidth() - 4, 524);
 	_olafStateTemp = (int)_olaf.state;
 	_olafPosStateTemp = (int)_olaf.posState;
+	_selectedLadderIdx = 0;
 
 	_isItem = false;
+	init_SetLadder();
 	return S_OK;
 }
 
@@ -45,7 +45,6 @@ void PlayerOlaf::release()
 
 void PlayerOlaf::update()
 {
-
 	if (!_isItem)
 	{
 		if (_stopControl) KeyControl();
@@ -53,26 +52,7 @@ void PlayerOlaf::update()
 		SetOlafPosState();
 		PixelCollision();
 		UpdateFrame();
-	
-
-	if (_olaf.isHit)
-	{
-		--_olaf.hp;
-		_olaf.isHit = false;
 	}
-	if (_olaf.hp <= 0)
-	{
-		ResetAnimation2();
-		_olaf.state == STATE_DIE;
-	}
-
-	if (_stopControl) KeyControl();
-	SetOlafState();
-	SetOlafPosState();
-	PixelCollision();
-	UpdateFrame();
-	}
-
 }
 
 void PlayerOlaf::render()
@@ -81,7 +61,10 @@ void PlayerOlaf::render()
 	{
 		if (KEYMANAGER->isToggleKey('T'))
 		{
-			Rectangle(CAMERAMANAGER->getWorDC(), _testRect);
+			for (int i = 0; i < 9; ++i)
+			{
+				Rectangle(CAMERAMANAGER->getWorDC(), _ladderRect[i]);
+			}
 			Rectangle(CAMERAMANAGER->getWorDC(), _olaf.rc);
 
 			char checkRGB_BC[256];
@@ -137,25 +120,57 @@ void PlayerOlaf::init_SettingOlafImg()
 	IMAGEMANAGER->addFrameImage("Olaf_Hit", "image/Characters/Olaf_Hit.bmp", 94, 187, 1, 2, true, RGB(255, 0, 255));
 }
 
+void PlayerOlaf::init_SetLadder()
+{
+	_ladderRect[0] = RectMake(290, 279, 92, 524);
+	_ladderRect[1] = RectMake(721, 615, 93, 528);
+	_ladderRect[2] = RectMake(1057, 903, 93, 480);
+	_ladderRect[3] = RectMake(1394, 1191, 93, 336);
+	_ladderRect[4] = RectMake(1776, 1047, 93, 528);
+	_ladderRect[5] = RectMake(2255, 1479, 93, 288);
+	_ladderRect[6] = RectMake(2649, 279, 78, 432);
+	_ladderRect[7] = RectMake(2737, 1479, 93, 432);
+	_ladderRect[8] = RectMake(3600, 1335, 93, 864);
+}
+
 void PlayerOlaf::UpdateFrame()
 {
 	// 픽셀 충돌을 위한 선언
 	_olaf.frameCount++;
-	_olaf.rc = RectMake(_olaf.x, _olaf.y, _olaf.image->getFrameWidth(), _olaf.image->getFrameHeight());
+	if (!(r_BC == 255 && g_BC == 0 && b_BC == 0)) // 사다리 픽셀인 경우
+		_olaf.rc = RectMake(_olaf.x, _olaf.y, _olaf.image->getFrameWidth(), _olaf.image->getFrameHeight());
+	else
+		_olaf.rc = RectMake(_olaf.x, _olaf.y, _olaf.image->getFrameWidth(), _olaf.image->getFrameHeight() + 10);
+
 	if (_olaf.frameCount > _olaf.frameSpeed)
 	{
-		_olaf.currentFrameX++;
+		if (_olaf.posState != POSSTATE_STEPLADDER)
+		{
+			_olaf.currentFrameX++;
+		}
+		else
+		{
+			if (KEYMANAGER->isStayKeyDown(VK_UP) || KEYMANAGER->isStayKeyDown(VK_DOWN))
+			{
+				_olaf.currentFrameX++;
+			}
+		}
 		_olaf.image->setFrameX(_olaf.currentFrameX);
 		if (_olaf.currentFrameX > _olaf.image->getMaxFrameX())
 		{
 			if (_olaf.state == STATE_DIE || _olaf.state == STATE_POISON || _olaf.state == STATE_MIRRA ||
 				_olaf.state == STATE_PRESSDIE || _olaf.state == STATE_TRAPDIE || _olaf.state == STATE_DROWNED)
 			{
+				_olaf.isHit = false;
 				_olaf.isDead = true;
 			}
 			if (_olaf.state == STATE_FALLHIT)
 			{
-				_olaf.isHit = true;
+				_olaf.isHit = false;
+				if (_olaf.hp != 0)
+				{
+					_olaf.state = STATE_IDLE;
+				}
 			}
 			_olaf.currentFrameX = 0;
 		}
@@ -202,8 +217,6 @@ void PlayerOlaf::KeyControl()
 				_olaf.state = STATE_IDLE;
 			}
 		}
-	
-
 		if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
 		{
 			if (_olaf.posState == POSSTATE_GROUND)
@@ -292,10 +305,19 @@ void PlayerOlaf::SetOlafPosState()
 			{
 				if (_olaf.gravity >= 13)
 				{
-					_olaf.state = STATE_FALLHIT;
+					--_olaf.hp;
 					_olaf.y -= (_olaf.gravity - 1);
-					ResetAnimation2();
 					_olaf.gravity = 0;
+					if (_olaf.hp > 0)
+					{
+						_olaf.state = STATE_FALLHIT;
+					}
+					else
+					{
+						_olaf.state = STATE_DIE;
+					}
+					_olaf.isHit = true;
+					ResetAnimation2();
 				}
 				else if (_olaf.gravity < 13)
 				{
@@ -335,7 +357,14 @@ void PlayerOlaf::SetOlafPosState()
 
 		case POSSTATE_STEPLADDER:
 			ResetAnimation1();
-			_olaf.image = IMAGEMANAGER->findImage("Olaf_Climing_Start");
+			if (_olaf.rc.top > _ladderRect[_selectedLadderIdx].top || _olaf.rc.bottom < _ladderRect[_selectedLadderIdx].top)
+			{
+				_olaf.image = IMAGEMANAGER->findImage("Olaf_Climing");
+			}
+			else
+			{
+				_olaf.image = IMAGEMANAGER->findImage("Olaf_Climing_Start");
+			}
 			break;
 
 		case POSSTATE_LADDERFALL:
@@ -438,33 +467,45 @@ void PlayerOlaf::PixelCollision()
 		}
 		else if (r_BC == 255 && g_BC == 0 && b_BC == 0) // 사다리 픽셀인 경우
 		{
-			if (_olaf.posState == POSSTATE_AIR)
+			if (!_olaf.isHit)
 			{
-				_olaf.posState = POSSTATE_GROUND;
-				_olaf.y = i - _olaf.image->getHeight() / 2;
-			}
-			else if (_olaf.posState == POSSTATE_GROUND)
-			{
-				if (KEYMANAGER->isStayKeyDown(VK_DOWN))
+				if (_olaf.posState == POSSTATE_AIR)
 				{
-					_olaf.posState = POSSTATE_STEPLADDER;
+					_olaf.posState = POSSTATE_GROUND;
+					_olaf.y = i - _olaf.image->getHeight() / 2;
 				}
-			}
-			else if (_olaf.posState == POSSTATE_STEPLADDER)
-			{
-				_olaf.gravity = 0;
-				if ((_testRect.bottom - _olaf.rc.bottom) >= 0)
+				else if (_olaf.posState == POSSTATE_GROUND)
 				{
-					_olaf.x = (_testRect.right + _testRect.left) / 2 - _olaf.image->getCenterX();
-					if (KEYMANAGER->isStayKeyDown(VK_DOWN))
+					for (int i = 0; i < 9; ++i)
 					{
-						_olaf.y += PLAYER_SPEED;
-						break;
+						RECT temp;
+						if (IntersectRect(&temp, &_olaf.rc, &_ladderRect[i]))
+						{
+							if (KEYMANAGER->isStayKeyDown(VK_DOWN))
+							{
+								_olaf.posState = POSSTATE_STEPLADDER;
+							}
+							_selectedLadderIdx = i;
+							break;
+						}
 					}
-					else if (KEYMANAGER->isStayKeyDown(VK_UP))
+				}
+				else if (_olaf.posState == POSSTATE_STEPLADDER)
+				{
+					_olaf.gravity = 0;
+					if ((_ladderRect[_selectedLadderIdx].bottom - _olaf.rc.bottom) >= 0)
 					{
-						_olaf.y -= PLAYER_SPEED;
-						break;
+						_olaf.x = (_ladderRect[_selectedLadderIdx].right + _ladderRect[_selectedLadderIdx].left) / 2 - _olaf.image->getCenterX();
+						if (KEYMANAGER->isStayKeyDown(VK_DOWN))
+						{
+							_olaf.y += PLAYER_SPEED;
+							break;
+						}
+						else if (KEYMANAGER->isStayKeyDown(VK_UP))
+						{
+							_olaf.y -= PLAYER_SPEED;
+							break;
+						}
 					}
 				}
 			}
@@ -481,12 +522,24 @@ void PlayerOlaf::PixelCollision()
 
 		if ((r_TC == 255 && g_TC == 0 && b_TC == 0))
 		{
-			if (KEYMANAGER->isOnceKeyDown(VK_UP) && _olaf.posState != POSSTATE_STEPLADDER)
+			if (!_olaf.isHit)
 			{
-				ResetAnimation1();
-				_olaf.y -= PLAYER_SPEED * 3;
-				_olaf.x = (_testRect.right + _testRect.left) / 2 - _olaf.image->getCenterX();
-				_olaf.posState = POSSTATE_STEPLADDER;
+				for (int i = 0; i < 9; ++i)
+				{
+					RECT temp;
+					if (IntersectRect(&temp, &_olaf.rc, &_ladderRect[i]))
+					{
+						if (KEYMANAGER->isOnceKeyDown(VK_UP) && _olaf.posState != POSSTATE_STEPLADDER)
+						{
+							ResetAnimation1();
+							_selectedLadderIdx = i;
+							_olaf.y -= PLAYER_SPEED * 3;
+							_olaf.x = (_ladderRect[i].right + _ladderRect[i].left) / 2 - _olaf.image->getCenterX();
+							_olaf.posState = POSSTATE_STEPLADDER;
+						}
+						break;
+					}
+				}
 			}
 		}
 		break;

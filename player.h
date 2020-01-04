@@ -80,4 +80,3 @@ public:
 	virtual void move();
 	virtual void key();
 };
-
