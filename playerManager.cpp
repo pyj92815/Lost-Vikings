@@ -14,7 +14,7 @@ HRESULT playerManager::init()
 	_baleog->init(100, 185);
 
 	_olaf = new PlayerOlaf;
-	_olaf->init(180, 155);
+	_olaf->init(180, 185);
 
 	for (int i = 0;i < 3;i++)
 	{

@@ -11,6 +11,8 @@ private:
 	tagPlayer _olaf;
 	int _olafStateTemp;
 	int _olafPosStateTemp;
+	int _currentLadderState;
+	int _beforeLadderState;
 
 	float _probeX_FixRange; // 사다리 탈 상황에 검색 길이 값 조정하기 위한 변수
 	float _probeY_FixRange;
@@ -53,6 +55,7 @@ public:
 	void PixelCollision();
 	void ResetAnimation1();
 	void ResetAnimation2();
+	void ResetAnimation3();
 
 	void set_stopKey(bool stop) { _stopControl = stop; }
 	void player_Kill() { _olaf.isDead = true; } // 지울 예정
