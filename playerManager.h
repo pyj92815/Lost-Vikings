@@ -6,12 +6,6 @@
 #include "worldObjects.h"
 #include <list>
 
-#ifdef UNICODE
-#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
-#else
-#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
-#endif
-
 class EnemyManager;
 class worldObjects;
 // 플레이어의 타입
