@@ -212,11 +212,11 @@ void playerManager::itemUse()
 				}
 				else if (_playing == 1)
 				{
-
+					_baleog->setBaleogHP();
 				}
 				else if (_playing == 2)
 				{
-
+					_olaf->setOlagHP();
 				}
 				this->removeInven(i);
 				break;
@@ -660,15 +660,6 @@ void playerManager::itemColision()
 					_vInven.push_back(inven);
 					_wo->setItemCollision(i);
 				}
-				for (_viInven = _vInven.begin(); _viInven != _vInven.end(); ++_viInven)
-				{
-					cout << "=========================================================" << endl;
-					cout << "인벤 image 높이 :" << _viInven->image->getHeight() << endl;
-					cout << "플레이어 숫자 :" << _viInven->player << endl;
-					cout << "아이템 넘버 :" << _viInven->invenNumber << endl;
-					cout << "BOOL :" << _viInven->choice << endl;
-
-				}
 				break;
 			}
 		}
@@ -701,20 +692,42 @@ void playerManager::itemColision()
 					_vInven.push_back(inven);
 					_wo->setItemCollision(i);
 				}
-				for (_viInven = _vInven.begin(); _viInven != _vInven.end(); ++_viInven)
-				{
-					cout << "=========================================================" << endl;
-					cout << "인벤 image 높이 :" << _viInven->image->getHeight() << endl;
-					cout << "플레이어 숫자 :" << _viInven->player << endl;
-					cout << "아이템 넘버 :" << _viInven->invenNumber << endl;
-
-				}
 				break;
 			}
 		}
 	}
 
+	//=============================
+	//올라프 충돌
 
+	for (int i = 0; i < _wo->get_vItem().size(); ++i)
+	{
+		if (0 > _wo->get_vItem().size()) break;
+		RECT temp;
+		if (IntersectRect(&temp, &_olaf->GetOlafRC(), &_wo->get_vItem()[i].rc))
+		{
+			if (_wo->get_vItem()[i].item == ITEM_BLUELOCKER ||
+				_wo->get_vItem()[i].item == ITEM_REDLOCKER) continue;
+			if (!_wo->get_vItem()[i].isCollision)
+			{
+				tagInven inven;
+				inven.image = _wo->get_vItem()[i].image;
+				inven.player = _playing;
+				_itemCount[_playing] = 0;
+				for (_viInven = _vInven.begin(); _viInven != _vInven.end(); ++_viInven)
+				{
+					if (_viInven->player == _playing) _itemCount[_playing]++;
+				}
+				inven.invenNumber = _itemCount[_playing]; // 순차적으로 아이템을 넣는다.
+				if (_itemCount[_playing] < 4)
+				{
+					_vInven.push_back(inven);
+					_wo->setItemCollision(i);
+				}
+				break;
+			}
+		}
+	}
 
 
 }
