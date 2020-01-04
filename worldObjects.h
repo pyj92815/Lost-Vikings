@@ -5,7 +5,7 @@ class playerManager;
 enum tagTypeItem
 {
 	ITEM_BOMB,
-	ITEM_BOOB,
+	ITEM_BOOM,
 	ITEM_TOMATO,
 	ITEM_REDKEY,
 	ITEM_REDLOCKER,
@@ -28,11 +28,13 @@ struct tagObjects
 	RECT rc;				//오브젝트(함정/맵 장식 등)
 	image* image;
 	bool isCollision;		//함정과 플레이어가 만났는지 아닌지
-	bool isKeyToOpen;		//플레이어가 키를 사용하면 아닌지
+	bool isUse;				//아이템을 사용했다면
 	float x, y;				//오브젝트 좌표
 	//프레임 x,y 값
 	int frameX;
 	int frameY;
+	// 페이드 인
+	int fadeIn;
 };
 class worldObjects : public gameNode
 {
@@ -69,6 +71,7 @@ private:
 private:
 	int _frameCount;			//프레임 카운터
 	int _boomCount;				//폭탄사용후 폭탄이 터지는카운터
+	bool _isBoomShow;
 public:
 	worldObjects();
 	~worldObjects();
@@ -90,6 +93,7 @@ public:
 	virtual void frameWork();
 	virtual void move();
 	bool getUpDown() { return _isUpDown; }
+	bool getIsBoomShow() { return _isBoomShow; }
 	void setPlayerManagerAddressLink(playerManager* pm) { _pm = pm; }
 
 };
