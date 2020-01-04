@@ -95,7 +95,7 @@ public:
 	virtual EnemyState getEnemyState() { return _enemyState; }	//적의 상태를 반환하는 함수(_enemyState)
 	virtual RECT getRect() { return _enemyRect; }
 	virtual RECT getAttackRect() { return _enemyAttackRect; }
-	virtual bool getDie() { if (_die)return true; else return false; }
+	virtual bool getDie() { return _die; }
 	virtual bool getisFire() { if (_isFire)return true;else return false; }
 	virtual void setisFire(bool isFire) { _isFire = isFire; }
 	virtual void Hit() { _enemyHP--; }

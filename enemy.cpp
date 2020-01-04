@@ -37,7 +37,7 @@ HRESULT Enemy::init(EnemyType enemyType, float x, float y)
 	}
 	_die_Image = IMAGEMANAGER->findImage("Enemy_Die");
 
-	_enemyHP = 4;
+	_enemyHP = 3;
 
 	_x = x;
 	_y = y;
@@ -107,6 +107,7 @@ void Enemy::render()
 	if (_enemyState == EnemyState::ATTACK)
 	{
 		_Attack_image->frameRender(CAMERAMANAGER->getWorDC(), _enemyRect.left, _enemyRect.top, _frameX, _frameY);
+		//_die_Image->frameRender(CAMERAMANAGER->getWorDC(), _enemyRect.left, _enemyRect.top, _frameX, _frameY);
 	}
 	if (_enemyState == EnemyState::DIE)
 	{
