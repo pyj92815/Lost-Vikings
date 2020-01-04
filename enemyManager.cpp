@@ -88,7 +88,7 @@ void EnemyManager::EnemyCreate()
 
 	Enemy* Mummy_5;
 	Mummy_5 = new Enemy_Mummy;
-	Mummy_5->init(EnemyType::MUMMY, 1100, 380);
+	Mummy_5->init(EnemyType::MUMMY, 3470, 1300);
 	_vEnemy.push_back(Mummy_5);
 
 	//Enemy* Scorpion_1;
@@ -106,10 +106,10 @@ void EnemyManager::EnemyCreate()
 	//Scorpion_3->init(EnemyType::SCORPION, 3246, 1245);
 	//_vEnemy.push_back(Scorpion_3);
 
-	/*Enemy* Snake_1;
+	Enemy* Snake_1;
 	Snake_1 = new Enemy_Snake;
 	Snake_1->init(EnemyType::SNAKE, 1100, 380);
-	_vEnemy.push_back(Snake_1);*/
+	_vEnemy.push_back(Snake_1);
 
 	Enemy* Snake_2;
 	Snake_2 = new Enemy_Snake;
@@ -176,14 +176,12 @@ void EnemyManager::Collision()
 			    _playerManager->getEric()->setEricFrame();
 				_playerManager->getEric()->setEricStop();
 			}
-
 			if (!_playerMirra && _playerManager->getPlayerEric().currentFrameX > _playerManager->getPlayerEric().image->getMaxFrameX()-1)
 			{
 				EnemyCreate(_playerManager->getPlayerEric().x + 30, _playerManager->getPlayerEric().y + 45);
 				_playerMirra = true;
 			}
 			break;
-
 		}
 		//발레오그 미라 생성
 		if (IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_baleogRect))
@@ -195,7 +193,6 @@ void EnemyManager::Collision()
 				EnemyCreate(_playerManager->getPlayerBaleog().x + 30, _playerManager->getPlayerBaleog().y);
 				_playerMirra = true;
 			}
-
 			break;
 		}
 

@@ -99,6 +99,7 @@ void Enemy::render()
 		Rectangle(CAMERAMANAGER->getWorDC(), _enemyRect);
 	}
 	//Rectangle(CAMERAMANAGER->getWorDC(), _enemyAttackRect);
+
 	//상태가 IDLE,SCOUT,DISCOVERY상태면 요거 실행
 	if (_enemyState != EnemyState::DIE && _enemyState != EnemyState::ATTACK)
 	{
