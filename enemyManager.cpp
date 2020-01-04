@@ -148,8 +148,8 @@ void EnemyManager::Collision()
 				_enemyBullet->removeBullet(i);
 				if (!_playerManager->getEric()->getHit())
 				{
-					_playerManager->getEric()->setHit();
-					_playerManager->getEric()->setEricHit();
+					//_playerManager->getEric()->setHit();
+				//	_playerManager->getEric()->setEricHit();
 				}
 				
 	

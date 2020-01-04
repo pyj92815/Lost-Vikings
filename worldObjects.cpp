@@ -156,7 +156,7 @@ HRESULT worldObjects::init()
 	_Items[5].item = ITEM_BLUELOCKER;
 	_Items[6].item = ITEM_REDKEY;
 	_Items[7].item = ITEM_REDLOCKER;
-	_Items[8].item = ITEM_BOOB;
+	_Items[8].item = ITEM_BOOM;
 	//□□□□□□□□□□□□□아이템을 벡터에 넣자□□□□□□□□□□□□□□□□□□□
 	for (int i = 0; i < 9; i++) 
 	{ 
@@ -164,13 +164,14 @@ HRESULT worldObjects::init()
 		_Items[8].frameY = 0;
 		_Items[i].rc = RectMake(_Items[i].x, _Items[i].y, _Items->image->getWidth(), _Items->image->getHeight());
 		_Items[i].isCollision = false;
+		_Items[i].isUse = false;
 		_vItem.push_back(_Items[i]);
 	}
 	//_vTrap.push_back(_Items[5]);
 	//_vTrap.push_back(_Items[7]);
 	//■■■■■■■■■■■■■■■■■■■■여러가지■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	_frameCount = 0;
-	_boomCount = 0;
+	_frameCount = _boomCount = 0;
+	_isBoomShow = false;
 	return S_OK;
 }
 
@@ -206,8 +207,23 @@ void worldObjects::release()
 
 void worldObjects::render()
 {
-	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
-	{//■■■■■■■■■■■■■■■■■아이템 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	if (!_isBoomShow)
+	{
+		for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
+		{//■■■■■■■■■■■■■■■■■아이템 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+			if (_viItem->item == ITEM_BOOM) { continue; }
+			if (!_viItem->isCollision)
+			{
+				_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
+				if (KEYMANAGER->isStayKeyDown('Q'))
+				{
+					Rectangle(CAMERAMANAGER->getWorDC(), _viItem->rc);
+				}
+			}
+		}
+	}
+	if (_isBoomShow)
+	{
 		if (!_viItem->isCollision)
 		{
 			_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
@@ -320,7 +336,8 @@ void worldObjects::frameWork()
 		}
 		if (_frameCount % 6 == 0)
 		{
-			if (_viTrap->trap == TRAP_RED_UNBREAKABLE_WALL || _viTrap->trap == TRAP_BLUE_UNBREAKABLE_WALL)
+			if (_viTrap->trap == TRAP_RED_UNBREAKABLE_WALL || 
+				_viTrap->trap == TRAP_BLUE_UNBREAKABLE_WALL)
 			{
 				if (!_viTrap->isCollision)
 				{//■■■■■■■■■■■■■■■■■안부서지는 벽이 열쇠를 사용하지 않았다면 프레임■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
@@ -334,32 +351,35 @@ void worldObjects::frameWork()
 					if (_viTrap->frameX > _viTrap->image->getMaxFrameX())
 					{
 						_viTrap->y = -300;
-						_viTrap->isCollision = false;
+						//_viTrap->isCollision = false;
 					}
 				}
 			}
 		}
 	}
 	//■■■■■■■■■■■■■■■■■폭탄 프레임■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
+	if (_isBoomShow)
 	{
-		if (_viItem->item == ITEM_BOOB)
+		for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
 		{
-			if (_boomCount <= 300)
+			if (_viItem->item == ITEM_BOOM && _viItem->isUse)
 			{
-				if (_frameCount % 6 == 0)
+				if (_boomCount <= 300)
+				{
+					if (_frameCount % 6 == 0)
+					{
+						_viItem->image->setFrameX(_viItem->frameX);
+						_viItem->frameX++;
+						if (_viItem->frameX > 1) { _viItem->frameX = 0; }
+					}
+				}
+				if (_boomCount > 300)
 				{
 					_viItem->image->setFrameX(_viItem->frameX);
 					_viItem->frameX++;
-					if (_viItem->frameX > 1) { _viItem->frameX = 0; }
+					if (_viItem->frameX > 2) { _viItem->frameX = 2; }
+					_boomCount = 0;
 				}
-			}
-			if (_boomCount > 300)
-			{
-				_viItem->image->setFrameX(_viItem->frameX);
-				_viItem->frameX++;
-				if (_viItem->frameX > 2) { _viItem->frameX = 2; }
-				_boomCount = 0;
 			}
 		}
 	}

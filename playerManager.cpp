@@ -356,12 +356,15 @@ void playerManager::trapColision() // 함정과 충돌 시
 				else if (_wo->get_vTrap()[i].trap == TRAP_RED_UNBREAKABLE_WALL ||
 					_wo->get_vTrap()[i].trap == TRAP_BLUE_UNBREAKABLE_WALL)
 				{
-					if (!_wo->get_vTrap()[i].isCollision && _eric->getEric().state == STATE_MOVE)
+					if (!_wo->get_vTrap()[i].isCollision)
 					{
+						if (_eric->getEric().state == STATE_MOVE || _eric->getEric().state == STATE_ERIC_JUMP)
+						{
 						_eric->setEricState(STATE_PUSH);
 						_eric->setEricFrame();
-					}
 						_eric->setEricX(_wo->get_vTrap()[i].x - _eric->getEric().image->getFrameWidth() - 5);
+						}
+					}
 				}
 			}
 		}
@@ -403,7 +406,6 @@ void playerManager::trapColision() // 함정과 충돌 시
 							_baleog->getBaleog().rc.left <= _wo->get_vTrap()[i].rc.right - 10 &&
 							_baleog->getBaleog().rc.bottom >= _wo->get_vTrap()[i].rc.bottom))
 					{
-
 						if (_baleog->getBaleog().state != STATE_PRESSDIE) _baleog->setBaleogY(_wo->get_vTrap()[i].rc.bottom);
 						if (_baleog->getBaleog().posState == POSSTATE_GROUND)
 						{
@@ -609,15 +611,25 @@ void playerManager::enemyColision()
 				_em->getVEnemy()[i]->Hit();
 
 
-				//충돌한 화살 삭제할 코드
-				
+				//충돌한 화살 삭제할 코드	
 				break;
-				
-
 			}
-
-
 		}
+		// 에너미 vs 에릭 충돌
+		RECT temp2;
+		if (IntersectRect(&temp2, &_eric->getEricRect(), &_em->getVEnemy()[i]->getRect()))
+		{
+			if (_eric->getEric().state == STATE_ERIC_HEADBUTT && _eric->getEric().currentFrameX > 3)
+			{
+				_em->EnemyRemove(i);
+				_eric->setEricState(STATE_ERIC_HEADBUTTEND);
+				_eric->setEricFrame();
+				_eric->setEricFrameSpeed(8);
+				_eric->setEricUnable();
+				break;
+			}
+		}
+
 
 	}
 }

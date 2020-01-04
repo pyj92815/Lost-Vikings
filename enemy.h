@@ -100,6 +100,8 @@ public:
 	virtual void setPlayerRect(RECT eric, RECT baleog, RECT olaf);
 	virtual void platformColision();
 
+
+
 	//이미지 추가 함수
 	virtual void imageReset()
 	{

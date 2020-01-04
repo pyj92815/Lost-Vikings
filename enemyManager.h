@@ -41,7 +41,7 @@ public:
 	void EnemyCreate();
 	void EnemyCreate(float x, float y);
 	void EnemyRemove();
-
+	void EnemyRemove(int Num) {	_vEnemy.erase(_vEnemy.begin() + Num);}
 	void Collision();
 	void AddressLink(playerManager* pm) { _playerManager = pm; }
 	
