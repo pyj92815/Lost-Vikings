@@ -200,8 +200,12 @@ void EnemyManager::bulletFire()
 
 		if ((*_viEnemy)->getisFire())
 		{
+			
+			if(DISCOVERYPlayer::BALEOG==(*_viEnemy)->getDiscoveryPlayer())_enemyBullet->bulletFire((*_viEnemy)->getX(), (*_viEnemy)->getY() - (*_viEnemy)->getImage()->getFrameHeight() / 2, getAngle((*_viEnemy)->getX(), (*_viEnemy)->getY() - (*_viEnemy)->getImage()->getFrameHeight() / 2, _playerManager->getPlayerBaleog().x, _playerManager->getPlayerBaleog().y+50));
+			if(DISCOVERYPlayer::ERIC== (*_viEnemy)->getDiscoveryPlayer())_enemyBullet->bulletFire((*_viEnemy)->getX(), (*_viEnemy)->getY() - (*_viEnemy)->getImage()->getFrameHeight() / 2, getAngle((*_viEnemy)->getX(), (*_viEnemy)->getY() - (*_viEnemy)->getImage()->getFrameHeight() / 2, _playerManager->getPlayerEric().x, _playerManager->getPlayerEric().y+50));
+			if (DISCOVERYPlayer::OLAF == (*_viEnemy)->getDiscoveryPlayer())_enemyBullet->bulletFire((*_viEnemy)->getX(), (*_viEnemy)->getY() - (*_viEnemy)->getImage()->getFrameHeight() / 2, getAngle((*_viEnemy)->getX(), (*_viEnemy)->getY() - (*_viEnemy)->getImage()->getFrameHeight() / 2, _playerManager->getPlayerOlaf().x, _playerManager->getPlayerOlaf().y+50));
+			
 			(*_viEnemy)->setisFire(false);
-			_enemyBullet->bulletFire((*_viEnemy)->getX(), (*_viEnemy)->getY() - (*_viEnemy)->getImage()->getFrameHeight() / 2, getAngle((*_viEnemy)->getX(), (*_viEnemy)->getY() - (*_viEnemy)->getImage()->getFrameHeight() / 2, _playerManager->getPlayerEric().x, _playerManager->getPlayerEric().y));
 			break;
 		}
 	}

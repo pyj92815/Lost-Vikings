@@ -47,6 +47,7 @@ protected:
 
 	image* _image;							//적의 이미지를 저정할 변수
 	image* _Attack_image;					//적의 공격 이미지를 저장할 변수
+	image* _die_Image;
 	int _probeX, _probeY;					//적의 벽,땅 충돌 처리를 위한 탐색 변수
 	int _turn_Num;							//적의 방향을 전환하기 위한 변수
 
@@ -60,6 +61,8 @@ protected:
 
 	bool _isFire;
 	bool _wall;
+
+	bool _RIP;
 public:
 	RECT _ericRect;							//에릭의 렉트
 	RECT _olafRect;							//올라프의 렉트
@@ -85,6 +88,7 @@ public:
 	virtual void Attack();						//실질적으로 적을 공격하는 함수
 	virtual void AttackDirection();				//공격시 공격 방향을 정하는 함수
 	virtual void UnAttack();					//공격상태에서 벗어나게 하는 함수
+	virtual void die();
 	virtual	void platformColision();			//enemy를 바닥에 붙여놓는 함수
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■전근자/설정자■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	virtual EnemyType getEnemyType() { return _enemyType; }		//enemyType 반환
@@ -101,6 +105,7 @@ public:
 	virtual float getX() { return _x; }
 	virtual float getY() { return _y; }
 	virtual image* getImage() { return _Attack_image; }
+	virtual DISCOVERYPlayer getDiscoveryPlayer() { return _discoveryPlayer; }
 	virtual void setPlayerRect(RECT eric, RECT baleog, RECT olaf);
 
 
@@ -119,5 +124,7 @@ public:
 
 		IMAGEMANAGER->addFrameImage("Enemy_Snake", "./image./Enemy/Enemy_Snake.bmp", 88, 20, 2, 2, true, RGB(255, 0, 255));
 		IMAGEMANAGER->addFrameImage("Enemy_Snake_Attack", "./image./Enemy/Enemy_Snake_Attack.bmp", 618, 146, 6, 2, true, RGB(255, 0, 255));
+
+		IMAGEMANAGER->addFrameImage("Enemy_Die", "./image./Enemy/Enemy_Die.bmp", 891, 73, 11, 1, true, RGB(255, 0, 255));
 	}
 };

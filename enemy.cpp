@@ -35,6 +35,7 @@ HRESULT Enemy::init(EnemyType enemyType, float x, float y)
 	default:
 		break;
 	}
+	_die_Image = IMAGEMANAGER->findImage("Enemy_Die");
 
 	_enemyHP = 4;
 
@@ -62,7 +63,7 @@ void Enemy::update()
 {
 	EnemyAction();		//적의 상태의 따른 행동을 지정하는 함수
 	Frame();			//적의 프레임을 관리하는 함수
-	if (_enemyHP <= 0)_enemyState = EnemyState::DIE;
+	die();
 	//playerLink();		//플레이어의 렉트를 받아오는 함수
 	switch (_enemyType)
 	{
@@ -97,7 +98,8 @@ void Enemy::render()
 		Rectangle(CAMERAMANAGER->getWorDC(), _enemy_DISCOVERY_Rect);
 		Rectangle(CAMERAMANAGER->getWorDC(), _enemyRect);
 	}
-	Rectangle(CAMERAMANAGER->getWorDC(), _enemyAttackRect);
+	//Rectangle(CAMERAMANAGER->getWorDC(), _enemyAttackRect);
+	//상태가 IDLE,SCOUT,DISCOVERY상태면 요거 실행
 	if (_enemyState != EnemyState::DIE && _enemyState != EnemyState::ATTACK)
 	{
 		_image->frameRender(CAMERAMANAGER->getWorDC(), _enemyRect.left, _enemyRect.top, _frameX, _frameY);
@@ -108,7 +110,7 @@ void Enemy::render()
 	}
 	if (_enemyState == EnemyState::DIE)
 	{
-
+		_die_Image->frameRender(CAMERAMANAGER->getWorDC(), _enemyRect.left, _enemyRect.top, _frameX, _frameY);
 	}
 }
 
@@ -631,6 +633,16 @@ void Enemy::UnAttack()
 		break;
 	default:
 		break;
+	}
+}
+
+void Enemy::die()
+{
+	if (_enemyHP <= 0 && !_RIP)
+	{
+		_RIP = true;
+		_frameX = 0;
+		_enemyState = EnemyState::DIE;
 	}
 }
 
