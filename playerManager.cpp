@@ -111,7 +111,6 @@ void playerManager::KILLPlayer()
 
 void playerManager::itemKey()
 {
-	//거래중이지 않으면
 	if (!_trade)
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_UP))
@@ -144,7 +143,7 @@ void playerManager::itemKey()
 			_trade ? _trade = false : _trade = true;
 		}
 	}
-	else // 거래중이면 
+	else
 	{
 		for (int i = 0; i < _vInven.size(); ++i)
 		{
@@ -181,6 +180,7 @@ void playerManager::itemKey()
 		}
 	}
 }
+
 //아이템 사용하는 기능
 void playerManager::itemUse()
 {
@@ -213,11 +213,12 @@ void playerManager::itemUse()
 				}
 				else if (_playing == 1)
 				{
-					_baleog->setBaleogHP();
+
+
 				}
 				else if (_playing == 2)
 				{
-					_olaf->setOlagHP();
+
 				}
 				this->removeInven(i);
 				break;
@@ -284,7 +285,7 @@ void playerManager::itemUse()
 					}
 				}
 				break;
-			case ITEM_REDLOCKER: // 사용안함 
+			case ITEM_REDLOCKER:
 				break;
 			case ITEM_BLUEKEY:
 				RECT temp2;
@@ -349,14 +350,15 @@ void playerManager::itemUse()
 					}
 				}
 				break;
-			case ITEM_BLUELOCKER: // 사용안함 
+			case ITEM_BLUELOCKER:
 				break;
 			}
 			break;
 		}
 	}
 }
-//인벤토리의 위치를 판단하는 함수 
+
+
 int playerManager::itemConnect(int playing)
 {
 	list<int> num;
@@ -380,7 +382,7 @@ int playerManager::itemConnect(int playing)
 	}
 
 	if (num.empty()) return 0;
-	num.sort(); // 정렬
+	num.sort();
 
 	for (inum = num.begin(); inum != num.end();)
 	{
@@ -583,10 +585,8 @@ void playerManager::trapColision() // 함정과 충돌 시
 						}
 					}
 				}
-
 				else if (_wo->get_vTrap()[i].trap == TRAP_WALL)
 				{
-
 
 					if (!_wo->get_vTrap()[i].isCollision && _baleog->getBaleog().state == STATE_MOVE)
 					{
@@ -604,22 +604,6 @@ void playerManager::trapColision() // 함정과 충돌 시
 
 			}
 		}
-		//화살 벽돌
-		for (int j = 0; j < _baleog->getVArrow()->getVArrow().size(); j++)
-		{
-			//충돌용 RECT
-			RECT temp2;
-
-			if (IntersectRect(&temp2, &_baleog->getVArrow()->getArrowRect(j), &_wo->get_vTrap()[i].rc))
-			{
-
-				_baleog->getVArrow()->removeArrow(j); //충돌한 화살 삭제할 코드	
-
-
-			}
-		}
-
-
 
 		RECT temp2;
 		if (IntersectRect(&temp2, &_olaf->GetOlafRC(), &_wo->get_vTrap()[i].rc))
@@ -642,10 +626,68 @@ void playerManager::trapColision() // 함정과 충돌 시
 					//_eric->setEricStop();
 					break;
 				}
+				else if (_wo->get_vTrap()[i].trap == TRAP_BORAD)
+				{
+					if ((_olaf->getOlaf().rc.right >= _wo->get_vTrap()[i].rc.left + 10 &&
+						_olaf->getOlaf().rc.right <= _wo->get_vTrap()[i].rc.right - 10 &&
+						_olaf->getOlaf().rc.bottom >= _wo->get_vTrap()[i].rc.bottom) ||
+						(_olaf->getOlaf().rc.left >= _wo->get_vTrap()[i].rc.left + 10 &&
+							_olaf->getOlaf().rc.left <= _wo->get_vTrap()[i].rc.right - 10 &&
+							_olaf->getOlaf().rc.bottom >= _wo->get_vTrap()[i].rc.bottom))
+					{
+						if (_olaf->getOlaf().state != STATE_PRESSDIE) _olaf->setOlafY(_wo->get_vTrap()[i].rc.bottom);
+						if (_olaf->getOlaf().posState == POSSTATE_GROUND)
+						{
+							if (_olaf->getOlaf().state != STATE_PRESSDIE)
+							{
+								_olaf->Set_OlafState(STATE_PRESSDIE);
+								_olaf->ResetAnimation1();
+								_olaf->setOlafFrameSpeed(10);
+							}
+
+						}
+					}
+
+					else if ((_olaf->getOlaf().rc.right >= _wo->get_vTrap()[i].rc.left + 10 &&
+						_olaf->getOlaf().rc.right <= _wo->get_vTrap()[i].rc.right - 10)
+						||
+						(_olaf->getOlaf().rc.left >= _wo->get_vTrap()[i].rc.left + 10 &&
+							_olaf->getOlaf().rc.left <= _wo->get_vTrap()[i].rc.right - 10))
+					{
+						if (_olaf->getOlaf().state != STATE_PRESSDIE)
+						{
+							_olaf->Set_OlafPosState(POSSTATE_GROUND);
+							//_olaf->setEricJump();
+							//_olaf->setEricJumpPower();
+
+							if (_wo->getUpDown())
+							{
+								_olaf->setOlafY(_wo->get_vTrap()[i].rc.top - _olaf->getOlaf().image->getFrameHeight() + 3);
+							}
+							else
+							{
+								_olaf->setOlafY(_wo->get_vTrap()[i].rc.top - _olaf->getOlaf().image->getFrameHeight() + 7);
+							}
+						}
+					}
+				}
+				else if (_wo->get_vTrap()[i].trap == TRAP_WALL)
+				{
+
+					if (!_wo->get_vTrap()[i].isCollision && _olaf->getOlaf().state == STATE_MOVE)
+					{
+						_olaf->Set_OlafState(STATE_PUSH);
+						_olaf->ResetAnimation1();
+						_olaf->setOlafX(_wo->get_vTrap()[i].x - _olaf->getOlaf().image->getFrameWidth() - 5);
+					}
+					else
+					{
+						_olaf->setOlafX(_wo->get_vTrap()[i].x - _olaf->getOlaf().image->getFrameWidth() - 5);
+					}
+				}
 			}
 		}
 	}
-
 }
 
 void playerManager::itemColision()
@@ -751,8 +793,28 @@ void playerManager::itemColision()
 			}
 		}
 	}
+
+
 }
-//에너미 콜리젼 
+
+
+void playerManager::boradColision()
+{
+	/*for (int i = 0; i < _wo->get_vTrap().size(); ++i)
+	{
+		if (0 > _wo->get_vTrap().size()) break;
+		if (_wo->get_vTrap()[i].trap == TRAP_BORAD)
+		{
+			if(_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left &&
+				_eric->getEric().x+)
+
+
+
+
+		}
+	}*/
+}
+
 void playerManager::enemyColision()
 {
 	for (int i = 0; i < _em->getVEnemy().size(); i++)
@@ -763,6 +825,7 @@ void playerManager::enemyColision()
 			/*if (0 > _arrow->getVArrow().size()) break;*/
 			//충돌용 RECT
 			RECT temp;
+
 			//arrow와 enemy가 충돌했을 때(&temp,&arrow렉트
 			if (IntersectRect(&temp, &_baleog->getVArrow()->getArrowRect(j), &_em->getVEnemy()[i]->getRect()))
 			{
