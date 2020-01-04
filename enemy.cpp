@@ -641,8 +641,8 @@ void Enemy::die()
 {
 	if (_enemyHP <= 0 && !_RIP)
 	{
-		_RIP = true;
-		_frameX = 0;
+		/*_RIP = true;
+		_frameX = 0;*/
 		_enemyState = EnemyState::DIE;
 	}
 }

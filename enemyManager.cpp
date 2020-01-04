@@ -14,7 +14,7 @@ EnemyManager::~EnemyManager()
 
 HRESULT EnemyManager::init()
 {
-	EFFECTMANAGER->addEffect("Enemy_Die", "Enemy_Die.bmp", 891, 73, 81, 73, 1.0f, 1.0f, 50);
+	
 	_enemyBullet = new Enemy_Bullet;
 	_enemyBullet->init();
 	_worldObjects = new worldObjects;
@@ -123,7 +123,7 @@ void EnemyManager::EnemyCreate(float x, float y)
 
 void EnemyManager::EnemyRemove()
 {
-	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();)
+	/*for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();)
 	{
 		if ((*_viEnemy)->getDie())
 		{
@@ -135,7 +135,7 @@ void EnemyManager::EnemyRemove()
 		{
 			++_viEnemy;
 		}
-	}
+	}*/
 }
 
 
@@ -160,20 +160,20 @@ void EnemyManager::Collision()
 
 		if (IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_ericRect))
 		{
-			EnemyCreate(_playerManager->getPlayerEric().x, _playerManager->getPlayerEric().y);
+			/*EnemyCreate(_playerManager->getPlayerEric().x, _playerManager->getPlayerEric().y);
 			_playerManager->getEric()->setEricHit();
 			_playerManager->getEric()->setEricHit();
 			_playerManager->getEric()->setEricHit();
-			break;
+			break;*/
 		}
 		if (IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_baleogRect))
 		{
 			EnemyCreate(_playerManager->getPlayerBaleog().x, _playerManager->getPlayerBaleog().y);
 
+			/*_playerManager->getbaleog()->setBaleogHit();
 			_playerManager->getbaleog()->setBaleogHit();
 			_playerManager->getbaleog()->setBaleogHit();
-			_playerManager->getbaleog()->setBaleogHit();
-			break;
+			break;*/
 		}
 
 		for (int i = 0;i < _enemyBullet->getVBullet().size();i++)
