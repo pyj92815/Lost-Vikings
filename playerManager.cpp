@@ -29,9 +29,12 @@ void playerManager::update()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_TAB))
 	{
-		_eric->setItemKey();
-		_baleog->setItemKey();
-		_olaf->setItemKey();
+		if (!_trade)
+		{
+			_eric->setItemKey();
+			_baleog->setItemKey();
+			_olaf->setItemKey();
+		}
 	}
 	KILLPlayer();	// 플레이어를 죽인다
 
