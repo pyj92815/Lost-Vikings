@@ -24,7 +24,12 @@ struct tagInven
 	int		 invenNumber;	 // 인벤토리 위치 : 0~3, (4 = 쓰레기통)
 	bool		  choice;    // 선택한건지 안한건지를 판단하는 변수 
 };
-
+struct arrowBreakTag
+{
+	image* breakImage;
+	int frameX;
+	int timeCount;
+};
 class playerManager : public gameNode
 {
 private:
@@ -38,6 +43,8 @@ private:
 
 	vector<tagInven>		    _vInven;		// 인벤토리 백터 
 	vector<tagInven>::iterator _viInven;		// 인벤토리 이터레이터 
+
+	vector<arrowBreakTag*> _vArrowBreakTag;
 
 	//인벤토리 관련 변수  // 0 = ERIC, 1 = BALEOG, 2 = OLAF
 	int _direction[3];  // player, invenNumber 
