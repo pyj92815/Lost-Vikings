@@ -77,7 +77,7 @@ void playerEric::update()
 	{
 		ericFrameCount();				  // 이미지 프레임 증가 
 		setEricImage();				      // image 세팅 
-		
+
 		if (!_stop)
 		{
 			if (_stopControl)				// 케릭터 선택 BOOL값
@@ -143,7 +143,6 @@ void playerEric::render()
 	char str[100];
 	sprintf_s(str, "%d", _breathCount);
 	TextOut(getMemDC(), WINSIZEX / 2, WINSIZEY / 2, str, strlen(str));
-
 }
 
 void playerEric::move()
@@ -171,11 +170,11 @@ void playerEric::key()
 	// 사다리타기 구현
 	if (KEYMANAGER->isOnceKeyDown(VK_UP))
 	{
-		_eric.currentFrameY = 0;
+		if (_eric.state != STATE_STEPLADDER)	_eric.currentFrameY = 0;
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 	{
-		_eric.currentFrameY = 0;
+		if (_eric.state != STATE_STEPLADDER)	_eric.currentFrameY = 0;
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_UP))
 	{
@@ -307,22 +306,25 @@ void playerEric::key()
 	// 만약 슬라이딩이 켜지면 
 	if (_isSlideOn)
 	{
-		if (_eric.currentFrameY == 0)
+		if (_eric.state == STATE_MOVE)
 		{
-			_eric.x -= _slidePower;
-		}
-		else
-		{
-			_eric.x += _slidePower;
-		}
-		if (_slidePower >= 0)
-		{
-			_slidePower -= 0.1;
-		}
-		else
-		{
-			_slidePower = 7;
-			_isSlideOn = false;
+			if (_eric.currentFrameY == 0)
+			{
+				_eric.x -= _slidePower;
+			}
+			else
+			{
+				_eric.x += _slidePower;
+			}
+			if (_slidePower >= 0)
+			{
+				_slidePower -= 0.1;
+			}
+			else
+			{
+				_slidePower = 7;
+				_isSlideOn = false;
+			}
 		}
 	}
 	// 공격 구분 
@@ -652,7 +654,7 @@ void playerEric::PixelCollision()
 	{
 		COLORREF getPixel_Bottom = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_eric.rc.left + _eric.rc.right) / 2, i);
 
-		COLORREF getPixel_TOP= GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_eric.rc.left + _eric.rc.right) / 2, _eric.y);
+		COLORREF getPixel_TOP = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_eric.rc.left + _eric.rc.right) / 2, _eric.y);
 
 		int r = GetRValue(getPixel_Bottom);
 		int g = GetGValue(getPixel_Bottom);
@@ -666,20 +668,20 @@ void playerEric::PixelCollision()
 		{
 			if (!(r_top == 255 && g_top == 0 && b_top == 0))
 			{
-				if (_eric.state != STATE_STEPLADDER)
+				if (!(_eric.state == STATE_STEPLADDER || _eric.state == STATE_STEPLADDEREND))
 				{
 
-				_eric.y = i - _eric.image->getFrameHeight();
-				_eric.posState = POSSTATE_GROUND;
-				if (_gravity > 0)
-				{
-					_gravity = 0;
-				}
-				break;
+					_eric.y = i - _eric.image->getFrameHeight();
+					_eric.posState = POSSTATE_GROUND;
+					if (_gravity > 0)
+					{
+						_gravity = 0;
+					}
+					break;
 				}
 			}
 		}
-		else 
+		else
 		{
 			_eric.posState = POSSTATE_AIR;
 		}
@@ -722,7 +724,7 @@ void playerEric::PixelLeftCollision()
 	int g = GetGValue(getPixel_LEFT);
 	int b = GetBValue(getPixel_LEFT);
 
-	if (!((r == 255 && g == 0 && b == 0) || (r == 255 && g == 0 && b ==255)))
+	if (!((r == 255 && g == 0 && b == 0) || (r == 255 && g == 0 && b == 255)))
 	{
 		if (_eric.posState == POSSTATE_GROUND)
 		{

@@ -403,7 +403,6 @@ void playerManager::trapColision() // 함정과 충돌 시
 							_baleog->getBaleog().rc.left <= _wo->get_vTrap()[i].rc.right - 10 &&
 							_baleog->getBaleog().rc.bottom >= _wo->get_vTrap()[i].rc.bottom))
 					{
-
 						if (_baleog->getBaleog().state != STATE_PRESSDIE) _baleog->setBaleogY(_wo->get_vTrap()[i].rc.bottom);
 						if (_baleog->getBaleog().posState == POSSTATE_GROUND)
 						{
