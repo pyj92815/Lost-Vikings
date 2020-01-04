@@ -62,7 +62,7 @@ void stageScene::update()
 	{
 		_wm->update();
 		_pm->update();
-		//_em->update();
+		_em->update();
 	}
 	testStateImage();  // 캐릭터 전환 테스트
 	setting_InvenSelectPos();
@@ -75,7 +75,7 @@ void stageScene::render()
 
 	//CAMERAMANAGER->get_WorImage()->render(getMemDC(), 0, 0);
 	_wm->render();
-	//_em->render();
+	_em->render();
 	_pm->render();
 
 	CAMERAMANAGER->get_WorImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(),

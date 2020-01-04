@@ -742,10 +742,6 @@ void playerManager::boradColision()
 		{
 			if(_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left &&
 				_eric->getEric().x+)
-
-
-
-
 		}
 	}*/
 }
@@ -788,5 +784,3 @@ void playerManager::enemyColision()
 		}
 	}
 }
-
-
