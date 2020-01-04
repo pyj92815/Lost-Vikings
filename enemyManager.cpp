@@ -172,13 +172,14 @@ void EnemyManager::Collision()
 			if (_playerManager->getPlayerEric().state != STATE_MIRRA)
 			{
 				_playerManager->getEric()->setEricState(STATE_MIRRA);
-				_playerManager->getEric()->setEricFrame();
-			
-				if (!_playerMirra && _playerManager->getPlayerEric().currentFrameX >_playerManager->getPlayerEric().image->getFrameX())
-				{
-					EnemyCreate(_playerManager->getPlayerEric().x + 30, _playerManager->getPlayerEric().y + 45);
-					_playerMirra = true;
-				}
+			    _playerManager->getEric()->setEricFrame();
+				_playerManager->getEric()->setEricStop();
+			}
+
+			if (!_playerMirra && _playerManager->getPlayerEric().currentFrameX > _playerManager->getPlayerEric().image->getMaxFrameX()-1)
+			{
+				EnemyCreate(_playerManager->getPlayerEric().x + 30, _playerManager->getPlayerEric().y + 45);
+				_playerMirra = true;
 			}
 			break;
 

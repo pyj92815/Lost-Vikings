@@ -469,7 +469,6 @@ void playerEric::ericFrameCount()
 					_eric.isDead = true;
 					_eric.x = -1000;
 					_eric.y = -1000;
-					_eric.currentFrameX++;
 				}
 				else
 				{

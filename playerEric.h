@@ -12,24 +12,28 @@ class playerEric : public player
 {
 private:
 	tagPlayer _eric;
-	bool _ericAttack;
-	bool _ericJump;
-	bool _ericUnable;		// 전투 불능 상태
+
+	int _hitCount;				// 맞았을 때 인터벌 
+	int _breathCount;			// 숨 카운터 
+	int _breathFrameCount;	    // 숨 프레임 카운터 
+	int _slideCount;			// 슬라이딩 카운트 
+
+	float _jumpStart;		    // 점프 시작점 
+	float _gravity;				// 중력값
+	float _slidePower;			// 슬라이딩 파워 
+
+	bool _ericAttack;		    // 에릭 공격중 
+	bool _ericJump;				// 에릭 점프중
+	bool _ericUnable;			// 전투 불능
 	bool _isHit;
 	bool _isBreath;
 	bool _isSlide;
 	bool _isSlideOn;
-	int _hitCount;
-	int _breathCount;
-	int _breathFrameCount;
-	int _slideCount; // 슬라이딩 카운트 
-	float _jumpStart;
-	float _gravity;
-	float _slidePower;
-
 	bool  _stopControl;		// 이값이 true라면 움직일 수 없다.
 	bool _stop;
 	bool _isItem;	 // 인벤 사용한다면  
+
+
 public:
 	playerEric();
 	~playerEric();
