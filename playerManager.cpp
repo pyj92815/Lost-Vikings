@@ -553,6 +553,7 @@ void playerManager::itemColision()
 				inven.image = _wo->get_vItem()[i].image;
 				inven.typeItem = _wo->get_vItem()[i].item;
 				inven.player = _playing;
+				inven.choice = false;
 				_itemCount[_playing] = 0;
 				for (_viInven = _vInven.begin(); _viInven != _vInven.end(); ++_viInven)
 				{

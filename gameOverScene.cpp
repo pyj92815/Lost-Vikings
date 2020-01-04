@@ -14,6 +14,7 @@ HRESULT gameOverScene::init()
 {
 	setting_Image();		// 필요한 이미지를 세팅한다.
 	setting_Pos();
+	setting_init();
 
 	return S_OK;
 }
@@ -36,7 +37,7 @@ void gameOverScene::render()
 
 	if (_ReStartGame.Re_Eric)	// 에릭이 살아있다면 false의 값을 갖는다.
 	{
-		_goPlayer.image->frameRender(getMemDC(), _goPlayerRC[GOP_Eric].left, _goPlayerRC[GOP_Eric].top, GOP_Eric, 0);
+		_goPlayer.image->frameRender(getMemDC(), _goPlayerRC[GOP_Eric].left, _goPlayerRC[GOP_Eric].top, 1, 0);
 	}
 
 	if (!_ReStartGame.Re_Eric && _PlayerRE[GOP_Eric])		// 에릭이 죽어있다면 ture의 값을 갖는다. 엔터를 누르기 전까지는 출력하면 안된다.
@@ -49,7 +50,7 @@ void gameOverScene::render()
 		if (_goPCnt == 50)
 		{
 			// 인터벌을 주고 그 후에 에릭이 그자리에 나타난다.
-			_goPlayer.image->frameRender(getMemDC(), _goPlayerRC[GOP_Eric].left, _goPlayerRC[GOP_Eric].top, GOP_Eric, 0);
+			_goPlayer.image->frameRender(getMemDC(), _goPlayerRC[GOP_Eric].left, _goPlayerRC[GOP_Eric].top, 1, 0);
 			_ReStartGame.Re_Eric = true;	// 에릭이 살아났다는 표시
 			_PlayerRE[GOP_Eric] = false;
 			_goPCnt = 0;
@@ -58,7 +59,7 @@ void gameOverScene::render()
 
 	if (_ReStartGame.Re_Baleog)	// 벨로그가 살아있다면 false의 값을 갖는다.
 	{
-		_goPlayer.image->frameRender(getMemDC(), _goPlayerRC[GOP_Baleog].left, _goPlayerRC[GOP_Baleog].top, GOP_Baleog, 0);
+		_goPlayer.image->frameRender(getMemDC(), _goPlayerRC[GOP_Baleog].left, _goPlayerRC[GOP_Baleog].top, 2, 0);
 	}
 	
 	if (!_ReStartGame.Re_Baleog && _PlayerRE[GOP_Baleog])	// 벨로그가 죽어있다면 true의 값을 갖는다. 엔터가 누르기 전까지는 출력하면 안된다.
@@ -69,7 +70,7 @@ void gameOverScene::render()
 
 		if (_goPCnt == 50)
 		{
-			_goPlayer.image->frameRender(getMemDC(), _goPlayerRC[GOP_Baleog].left, _goPlayerRC[GOP_Baleog].top, GOP_Baleog, 0);
+			_goPlayer.image->frameRender(getMemDC(), _goPlayerRC[GOP_Baleog].left, _goPlayerRC[GOP_Baleog].top, 2, 0);
 			_ReStartGame.Re_Baleog = true;	// 벨로그가 살아났다는 표시
 			_PlayerRE[GOP_Baleog] = false;
 			_goPCnt = 0;
@@ -78,7 +79,7 @@ void gameOverScene::render()
 	
 	if (_ReStartGame.Re_Olaf)	// 올라프가 살아있다면 false의 값을 갖는다.
 	{
-		_goPlayer.image->frameRender(getMemDC(), _goPlayerRC[GOP_Olaf].left, _goPlayerRC[GOP_Olaf].top, GOP_Olaf, 0);
+		_goPlayer.image->frameRender(getMemDC(), _goPlayerRC[GOP_Olaf].left, _goPlayerRC[GOP_Olaf].top, 0, 0);
 	}
 
 	if (!_ReStartGame.Re_Olaf && _PlayerRE[GOP_Olaf])	// 만약 죽어있다면 출력하지 않는다.
@@ -89,7 +90,7 @@ void gameOverScene::render()
 
 		if (_goPCnt == 50)
 		{
-			_goPlayer.image->frameRender(getMemDC(), _goPlayerRC[GOP_Olaf].left, _goPlayerRC[GOP_Olaf].top, GOP_Olaf, 0);
+			_goPlayer.image->frameRender(getMemDC(), _goPlayerRC[GOP_Olaf].left, _goPlayerRC[GOP_Olaf].top, 0, 0);
 			_ReStartGame.Re_Olaf = true;	// 올라프가 살아났다는 표시
 			_PlayerRE[GOP_Olaf] = false;
 			_goPCnt = 0;
@@ -213,6 +214,7 @@ void gameOverScene::setting_Pos()
 	_goPlayerRC[GOP_Baleog] = RectMake(150, WINSIZEY / 2 - 150, 100, 337);
 	_goPlayerRC[GOP_Olaf] = RectMake(300, WINSIZEY / 2 - 140, 100, 337);
 
+
 	// 트라이 메시지의 위치
 	_tryPos[T_CENTER].rc = RectMake(WINSIZEX / 2 - 150, WINSIZEY / 2 - 100, 300, 127);
 
@@ -229,6 +231,21 @@ void gameOverScene::setting_Pos()
 	_trySelect.pos.y = _tryPos[T_YES].pos.y;
 	_trySelect.rc = RectMake(_trySelect.pos.x, _trySelect.pos.y, 10, 10);
 
+	_ReStartGame.Re_Eric = false;
+	_ReStartGame.Re_Baleog = false;
+	_ReStartGame.Re_Olaf = false;
+}
+
+void gameOverScene::setting_init()
+{
+	_goPCnt = 0;
+	_ResetTimer = 0;
+	_changeLight = false;
+	_SelectMove = false;
+	_SelectCnt = 0;
+	_PlayerRE[GOP_Eric] = false;
+	_PlayerRE[GOP_Baleog] = false;
+	_PlayerRE[GOP_Olaf] = false;
 	_ReStartGame.Re_Eric = false;
 	_ReStartGame.Re_Baleog = false;
 	_ReStartGame.Re_Olaf = false;
@@ -261,15 +278,32 @@ void gameOverScene::restart_Select()
 	// 만약 메시지가 나오기도 전에 엔터를 누른다면 바로 스테이지로 이동한다.
 	// 메시지에서 Yes를 누르면 스테이지로 간다.
 	// 메시지에서 No를 누르면 타이틀 선택화면으로 간다.
-	_goPLife = SCENEMANAGER->get_PlayerLife();
+	//_goPLife = SCENEMANAGER->get_PlayerLife();
 
 	// 캐릭터가 살아있다면 새로 시작할 준비를 한다.
-	if (!_goPLife[GOP_Eric])	_ReStartGame.Re_Eric = true;	// Stage씬에서 이 값을 받아서 플레이어를 되살리고
-	if (!_goPLife[GOP_Baleog])	_ReStartGame.Re_Baleog = true;	// 플레이어가 살아나면 라이트닝 씬이 출력 되지 않는다.
-	if (!_goPLife[GOP_Olaf])	_ReStartGame.Re_Olaf = true;	// 플레이어가 모두 살아나면 init을 이용하여 필드를 초기화한다.
+	if (!SCENEMANAGER->get_PlayerLife_Eric())	_ReStartGame.Re_Eric = true;	// Stage씬에서 이 값을 받아서 플레이어를 되살리고
+	if (!SCENEMANAGER->get_PlayerLife_Baleog())	_ReStartGame.Re_Baleog = true;	// 플레이어가 살아나면 라이트닝 씬이 출력 되지 않는다.
+	if (!SCENEMANAGER->get_PlayerLife_Olaf())	_ReStartGame.Re_Olaf = true;	// 플레이어가 모두 살아나면 init을 이용하여 필드를 초기화한다.
+
+
+
+	//cout << "외부 플레이어 상태 (0 : 살음, 1 : 죽음)" << endl;
+	//cout << SCENEMANAGER->get_PlayerLife_Eric() << endl;
+	//cout << SCENEMANAGER->get_PlayerLife_Baleog() << endl;
+	//cout << SCENEMANAGER->get_PlayerLife_Olaf() << endl;
+	//cout << endl;
+	//cout << "내부 플레이어 상태 (0 : 죽음, 1 : 살음)" << endl;
+	//cout << _ReStartGame.Re_Eric << endl;
+	//cout << _ReStartGame.Re_Baleog << endl;
+	//cout << _ReStartGame.Re_Olaf << endl;
+	//cout << _PlayerRE[GOP_Eric] << endl;
+	//cout << _PlayerRE[GOP_Baleog] << endl;
+	//cout << _PlayerRE[GOP_Olaf] << endl;
+	//cout << "===========================================================" << endl;
+
 
 	// 만약 죽어있을때 엔터를 눌렀다면 살리는 작업을 시작한다.
-	if (_goPLife[GOP_Eric] && !_ReStartGame.Re_Eric)
+	if (SCENEMANAGER->get_PlayerLife_Eric() && !_ReStartGame.Re_Eric)
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_RETURN) && !_PlayerRE[GOP_Eric])
 		{
@@ -278,7 +312,7 @@ void gameOverScene::restart_Select()
 		}
 	}
 
-	else if (_goPLife[GOP_Baleog] && !_ReStartGame.Re_Baleog)
+	else if (SCENEMANAGER->get_PlayerLife_Baleog() && !_ReStartGame.Re_Baleog)
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_RETURN) && !_PlayerRE[GOP_Baleog])
 		{
@@ -287,7 +321,7 @@ void gameOverScene::restart_Select()
 		}
 	}
 
-	else if (_goPLife[GOP_Olaf] && !_ReStartGame.Re_Olaf)
+	else if (SCENEMANAGER->get_PlayerLife_Olaf() && !_ReStartGame.Re_Olaf)
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_RETURN) && !_PlayerRE[GOP_Olaf])
 		{
@@ -311,6 +345,7 @@ void gameOverScene::restart_Select()
 			{
 				SCENEMANAGER->set_SceneState(SS_STAGE);
 				init();
+				SCENEMANAGER->playerDead_Reset();
 			}
 
 		}

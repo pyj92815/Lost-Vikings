@@ -16,6 +16,9 @@ gameNode* sceneManager::_currentScene = NULL;
 HRESULT sceneManager::init()
 {
 	_currentScene = NULL;
+	_YouDie[0] = false;
+	_YouDie[1] = false;
+	_YouDie[2] = false;
 
 	return S_OK;
 }

@@ -3,7 +3,7 @@
 
 #define INTROIMAGESIZE 5		// 인트로 이미지 개수
 #define NEXTSCENECOUNT 50		// 다음씬으로 넘어가기까지 멈춰있는 시간
-#define FADEINSPEED 50
+#define FADEINSPEED 5
 
 enum Scene_Select_RC
 {

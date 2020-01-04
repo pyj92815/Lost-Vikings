@@ -104,5 +104,11 @@ public:
 
 	void enemyColision();
 
+	void setEricDead() { _eric->setEricDead(false); }
+	void setBaleogDead() { _baleog->setBaleogDead(false); }
+	void setOlafDead() { _olaf->setOlafDead(false); }
+
+	bool getItem() { return _eric->getItem(); }
+	bool getTrade() { return _trade; }
 };
 

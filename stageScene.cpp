@@ -47,8 +47,23 @@ void stageScene::release()
 
 void stageScene::update()
 {
+	// 이 값이 true라면 게임오버에서 되 돌아온것
+	if (SCENEMANAGER->get_playerDead_Reset())
+	{
+		_pm->setEricDead();
+		_pm->setBaleogDead();
+		_pm->setOlafDead();
+		SCENEMANAGER->clear_YouDie();
+		SCENEMANAGER->playerDead_Reset_END();
+	}
+	cout << "플레이어의 상태" << endl;
+	cout << "에릭 : " << _pm->getPlayerEric().isDead << endl;
+	cout << "블렌 : " << _pm->getPlayerBaleog().isDead << endl;
+	cout << "올랖 : " << _pm->getPlayerOlaf().isDead << endl;
+	cout << "============================================" << endl;
+
 	// 기브업 메시지를 보고 있을땐 멈춰있는다.
-	if (!_giveUpStart)
+	if (!_giveUpStart && !CAMERAMANAGER->get_Camera_Move())
 	{
 		_wm->update();
 		_pm->update();
@@ -133,9 +148,8 @@ void stageScene::render()
 	// 인벤토리
 	for (int i = 0; i < 3; ++i)
 	{
-		if (_charNum == i)
+		if (_charNum == i && _pm->getItem() && !_pm->getTrade())
 		{
-	
 			_banjjack++;
 			if (_banjjack <= 20)
 			{
@@ -158,7 +172,23 @@ void stageScene::render()
 	for (int i = 0;i < _pm->get_vInven().size(); ++i)
 	{
 		if (0 > i) break;
-		_pm->get_vInven()[i].image->render(getMemDC(), _UI_Inventory[_pm->get_vInven()[i].player][_pm->get_vInven()[i].invenNumber].rc.left, _UI_Inventory[_pm->get_vInven()[i].player][_pm->get_vInven()[i].invenNumber].rc.top);
+
+		if (!_pm->get_vInven()[i].choice)
+		{
+			_pm->get_vInven()[i].image->render(getMemDC(), _UI_Inventory[_pm->get_vInven()[i].player][_pm->get_vInven()[i].invenNumber].rc.left, _UI_Inventory[_pm->get_vInven()[i].player][_pm->get_vInven()[i].invenNumber].rc.top);
+		}
+		else
+		{
+			_iBanCnt++;
+			if (_iBanCnt <= 20)
+			{
+				_pm->get_vInven()[i].image->render(getMemDC(), _UI_Inventory[_pm->get_vInven()[i].player][_pm->get_vInven()[i].invenNumber].rc.left, _UI_Inventory[_pm->get_vInven()[i].player][_pm->get_vInven()[i].invenNumber].rc.top);
+			}
+			if (_iBanCnt >= 30)
+			{
+				_iBanCnt = 0;
+			}
+		}
 	}
 	
 	
@@ -170,6 +200,7 @@ void stageScene::render()
 
 	if (_giveUpStart)
 	{
+		_giveCnt++;
 		// 기브업 센터 이미지는 계속 출력이 되고 있는다.
 		_UI_GiveUpPOS[0].image->render(getMemDC(), _UI_GiveUpPOS[0].rc.left, _UI_GiveUpPOS[0].rc.top);
 
@@ -177,15 +208,24 @@ void stageScene::render()
 		{
 			_UI_GiveUpPOS[1].image->frameRender(getMemDC(), _UI_GiveUpPOS[1].rc.left, _UI_GiveUpPOS[1].rc.top, _gBanZZank, 0);
 			_UI_GiveUpPOS[2].image->render(getMemDC(), _UI_GiveUpPOS[2].rc.left, _UI_GiveUpPOS[2].rc.top);
-			_gBanZZank = !_gBanZZank;
+			if (_giveCnt >= 10)
+			{
+				_gBanZZank = !_gBanZZank;
+				_giveCnt = 0;
+			}
 		}
 
 		if (_giveUpSelect)	
 		{
 			_UI_GiveUpPOS[1].image->render(getMemDC(), _UI_GiveUpPOS[1].rc.left, _UI_GiveUpPOS[1].rc.top);
 			_UI_GiveUpPOS[2].image->frameRender(getMemDC(), _UI_GiveUpPOS[2].rc.left, _UI_GiveUpPOS[2].rc.top, _gBanZZank, 0);
-			_gBanZZank = !_gBanZZank;
+			if (_giveCnt >= 10)
+			{
+				_gBanZZank = !_gBanZZank;
+				_giveCnt = 0;
+			}
 		}
+		
 	}
 	
 }
@@ -327,23 +367,48 @@ void stageScene::testStateImage()
 		// 만약 캐릭터가 아니라면 0의 이미지를 출력해주도록 바꿔준다.
 		// 캐릭터가 선택되어 있는 상황이라면 1의 이미지를 출력한다.
 
+		// 캐릭터가 전환이 될때
+		// 카메라 이동을 하라는 true의 값을 같이 넘겨준다. + 그 캐릭터의 좌표
+		// 카메라 매니저에서는 원하는 위치까지 이동 한 후에 false로 바꿔준후
+		// 그떄부터는 캐릭터의 좌표 기준으로 따라다닌다.
+		// 카메라 이동이 끝나면 불값이 바뀌고 그러면 카메라를 따라디닐 수 있도록 위치를 전송해준다.
+		switch (_charNum)
+		{
+			case 0:
+				CAMERAMANAGER->get_Next_CameraXY(_pm->getPlayerEric().x, _pm->getPlayerEric().y, true);
+				break;
+
+			case 1:
+				CAMERAMANAGER->get_Next_CameraXY(_pm->getPlayerBaleog().x, _pm->getPlayerBaleog().y, true);
+				break;
+
+			case 2:
+				CAMERAMANAGER->get_Next_CameraXY(_pm->getPlayerOlaf().x, _pm->getPlayerOlaf().y, true);
+				break;
+		}
 	}
+
+	CAMERAMANAGER->move_Camera();
 
 	_pm->set_Playing(_charNum);
 
-	switch (_charNum)
+	if (!CAMERAMANAGER->get_Camera_Move())
 	{
-		case 0:
-			CAMERAMANAGER->set_Camera_XY(_pm->getPlayerEric().x, _pm->getPlayerEric().y);
-			break;
 
-		case 1:
-			CAMERAMANAGER->set_Camera_XY(_pm->getPlayerBaleog().x, _pm->getPlayerBaleog().y);
-			break;
+		switch (_charNum)
+		{
+			case 0:
+				CAMERAMANAGER->set_Camera_XY(_pm->getPlayerEric().x, _pm->getPlayerEric().y);
+				break;
 
-		case 2:
-			CAMERAMANAGER->set_Camera_XY(_pm->getPlayerOlaf().x, _pm->getPlayerOlaf().y);
-			break;
+			case 1:
+				CAMERAMANAGER->set_Camera_XY(_pm->getPlayerBaleog().x, _pm->getPlayerBaleog().y);
+				break;
+
+			case 2:
+				CAMERAMANAGER->set_Camera_XY(_pm->getPlayerOlaf().x, _pm->getPlayerOlaf().y);
+				break;
+		}
 	}
 	
 
@@ -362,19 +427,19 @@ void stageScene::set_PlayerDead()
 	if (_UI_State[PT_ERIC].dead)
 	{
 		_UI_State[PT_ERIC].image->setFrameX(2);		// 이미지는 죽은 이미지로 교체한다.
-		SCENEMANAGER->set_PlayerLife(PT_ERIC, _pm->getPlayerEric().isDead);		// 200102 PM 11:23 플레이어 죽음 테스트
+		SCENEMANAGER->set_PlayerLife(PT_ERIC, true);		// 200102 PM 11:23 플레이어 죽음 테스트
 	}
 
 	if (_UI_State[PT_BALEOG].dead)
 	{
 		_UI_State[PT_BALEOG].image->setFrameX(2);	// 이미지는 죽은 이미지로 교체한다.
-		SCENEMANAGER->set_PlayerLife(PT_BALEOG, _pm->getPlayerBaleog().isDead);		// 200102 PM 11:23 플레이어 죽음 테스트
+		SCENEMANAGER->set_PlayerLife(PT_BALEOG, true);		// 200102 PM 11:23 플레이어 죽음 테스트
 	}
 
 	if (_UI_State[PT_OLAF].dead)
 	{
 		_UI_State[PT_OLAF].image->setFrameX(2);		// 이미지는 죽은 이미지로 교체한다.
-		SCENEMANAGER->set_PlayerLife(PT_OLAF, _pm->getPlayerOlaf().isDead);		// 200102 PM 11:23 플레이어 죽음 테스트
+		SCENEMANAGER->set_PlayerLife(PT_OLAF, true);		// 200102 PM 11:23 플레이어 죽음 테스트
 	}
 
 	// 만약 캐릭터가 죽었을 경우에 다음 캐릭터로 바꾸는 기능

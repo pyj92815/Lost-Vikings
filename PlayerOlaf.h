@@ -59,4 +59,6 @@ public:
 
 	void setItemKey() { _isItem ? _isItem = false : _isItem = true; }
 	void Set_OlafState(tagState state) { _olaf.state = state; }	// 상태를 정의해 주는 세터 
+
+	void setOlafDead(bool dead) { _olaf.isDead = dead; }	// 형길 추가
 };

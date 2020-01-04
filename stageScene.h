@@ -53,6 +53,8 @@ private:
 	bool			_giveUpSelect;				// 기브업 선택
 	bool			_gBanZZank;					// 기브업 반짝반짝
 	int				_giveCnt;
+	bool			_iBanZZack;					// 아이템이 반짝반짝
+	int				_iBanCnt;					// 아이템 반짝반짝 카운터
 
 	worldMap* _wm;
 	playerManager* _pm;
