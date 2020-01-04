@@ -29,6 +29,8 @@ private:
 	RECT _ericRect;
 	RECT _olafRect;
 	RECT _baleogRect;
+	int _playerMirraCount;
+	bool _playerMirra;
 
 public:
 	EnemyManager();

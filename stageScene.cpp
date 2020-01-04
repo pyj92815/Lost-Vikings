@@ -75,8 +75,8 @@ void stageScene::render()
 
 	//CAMERAMANAGER->get_WorImage()->render(getMemDC(), 0, 0);
 	_wm->render();
-	_pm->render();
 	_em->render();
+	_pm->render();
 
 	CAMERAMANAGER->get_WorImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(),
 		CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());

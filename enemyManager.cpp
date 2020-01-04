@@ -39,6 +39,15 @@ void EnemyManager::update()
 	_baleogRect = _playerManager->getPlayerBaleog().rc;
 	_olafRect = _playerManager->getPlayerOlaf().rc;
 
+	if (_playerMirra)
+	{
+		_playerMirraCount++;
+		if (_playerMirraCount > 100)
+		{
+			_playerMirra = false;
+			_playerMirraCount = 0;
+		}
+	}
 	EnemyRemove();
 	bulletFire();
 	Collision();
@@ -164,23 +173,28 @@ void EnemyManager::Collision()
 			{
 				_playerManager->getEric()->setEricState(STATE_MIRRA);
 				_playerManager->getEric()->setEricFrame();
-			}
 			
-			if (!_playerManager->getPlayerEric().isDead && _playerManager->getPlayerEric().currentFrameX >= _playerManager->getPlayerEric().image->getMaxFrameX())
-			{
-				EnemyCreate(_playerManager->getPlayerEric().x, _playerManager->getPlayerEric().y);
+				if (!_playerMirra && _playerManager->getPlayerEric().currentFrameX >_playerManager->getPlayerEric().image->getFrameX())
+				{
+					EnemyCreate(_playerManager->getPlayerEric().x + 30, _playerManager->getPlayerEric().y + 45);
+					_playerMirra = true;
+				}
 			}
 			break;
 
 		}
+		//발레오그 미라 생성
 		if (IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_baleogRect))
 		{
-			EnemyCreate(_playerManager->getPlayerBaleog().x, _playerManager->getPlayerBaleog().y);
+			//발레오그 상대정의
+			//
+			if (!_playerMirra)
+			{
+				EnemyCreate(_playerManager->getPlayerBaleog().x + 30, _playerManager->getPlayerBaleog().y);
+				_playerMirra = true;
+			}
 
-			/*_playerManager->getbaleog()->setBaleogHit();
-			_playerManager->getbaleog()->setBaleogHit();
-			_playerManager->getbaleog()->setBaleogHit();
-			break;*/
+			break;
 		}
 
 		for (int i = 0;i < _enemyBullet->getVBullet().size();i++)

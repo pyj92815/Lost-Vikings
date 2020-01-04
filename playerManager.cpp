@@ -190,7 +190,19 @@ void playerManager::itemUse()
 			switch (_vInven[i].typeItem)
 			{
 			case ITEM_BOMB:
-
+				if (_playing == 0)
+				{
+					_wo->MakeBoom(_eric->getEric().x, _eric->getEric().y);
+				}
+				else if (_playing == 1)
+				{
+					_wo->MakeBoom(_olaf->getOlaf().x, _olaf->getOlaf().y);
+				}
+				else if (_playing == 2)
+				{
+					_wo->MakeBoom(_baleog->getBaleog().x, _baleog->getBaleog().y);
+				}
+				this->removeInven(i);
 				break;
 			case ITEM_TOMATO:
 				if (_playing == 0)

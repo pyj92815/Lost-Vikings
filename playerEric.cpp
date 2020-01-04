@@ -133,7 +133,7 @@ void playerEric::render()
 	//Rectangle(getMemDC(), _test);
 
 	// 191229 PM 03:17 에릭이 그려지는 위치를 월드DC로 옴겼다.
-	Rectangle(CAMERAMANAGER->getWorDC(), _eric.rc);
+	//Rectangle(CAMERAMANAGER->getWorDC(), _eric.rc);
 	_eric.image->frameRender(CAMERAMANAGER->getWorDC(), _eric.x, _eric.y, _eric.currentFrameX, _eric.currentFrameY);
 	// 191229 PM 04:27 UI에서 출력을 하기 위해 주석처리
 	//CAMERAMANAGER->getWorImage()->render(getMemDC(), 0, 0,
@@ -469,6 +469,7 @@ void playerEric::ericFrameCount()
 					_eric.isDead = true;
 					_eric.x = -1000;
 					_eric.y = -1000;
+					_eric.currentFrameX++;
 				}
 				else
 				{
