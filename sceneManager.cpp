@@ -16,6 +16,9 @@ gameNode* sceneManager::_currentScene = NULL;
 HRESULT sceneManager::init()
 {
 	_currentScene = NULL;
+	_YouDie[0] = false;
+	_YouDie[1] = false;
+	_YouDie[2] = false;
 
 	return S_OK;
 }
@@ -102,9 +105,11 @@ void sceneManager::SceneChange()
 	case SS_STAGE:
 		// 스테이지 씬을 출력한다.
 		SCENEMANAGER->changeScene("Stage");
+		_scene.state = SS_RESTART;
 		break;
 
 	case SS_GAMEOVER:
+		SCENEMANAGER->changeScene("GameOver");
 		break;
 
 	case SS_STOP:

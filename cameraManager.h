@@ -5,8 +5,10 @@
 
 struct _tagCamera
 {
-	POINTFLOAT world_Size, cameraXY;		// 월드 사이즈, 카메라 좌표를 담을곳
-	int		   cameraSizeX, cameraSizeY;	// 카메라의 사이즈
+	POINTFLOAT world_Size, cameraXY, nextCameraXY;		// 월드 사이즈, 카메라 좌표를 담을곳, 다음 카메라 좌표
+	int		   cameraSizeX, cameraSizeY;				// 카메라의 사이즈
+	bool	   isMove;
+	bool	   ClearX, ClearY;
 };
 
 class cameraManager : public singletonBase<cameraManager>
@@ -48,6 +50,11 @@ public:
 
 	float get_Camera_X() { return _camera.cameraXY.x; }			// 카메라 X좌표를 가져온다.
 	float get_Camera_Y() { return _camera.cameraXY.y; }			// 카메라 y좌표를 가져온다.
+	bool get_Camera_Move() { return _camera.isMove; }			// 카메라가 움직이는 중인지 아닌지
+
+	// 다음 카메라의 좌표를 받는 함수
+	void get_Next_CameraXY(float x, float y, bool isMove);
+	void move_Camera();
 
 	// 카메라가 맵 밖으로 나가지 못하게
 	void Camera_Correction();									// 카메라 예외처리 함수
@@ -61,3 +68,7 @@ public:
 	image* get_worObImage() { return _worObImage; }
 };
 
+// 처음 시작은 에릭의 좌표를 받아와서 바로 카메라 셋팅을한다
+// 두번째 부터는 그 캐릭터의 좌표를 저장하고
+// 첫 캐릭터와 두번째 캐릭터 좌표를 비교하여 천천히 카메라를 이동시킨다.
+// 카메라의 좌표에 도착하면 더이상 이동하지 않고 멈춘다.

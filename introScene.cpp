@@ -47,6 +47,12 @@ HRESULT introScene::init()
 	// 패스워드 셀렉트 위치는 제일 왼쪽이다.
 	_passwordMove = 0;
 
+
+	// 임시로 사용할 이미지 DC
+	_sceneImage = new image;
+	_sceneImage = IMAGEMANAGER->addImage("sceneTemp", WINSIZEX, WINSIZEY);
+	_sceneDC = _sceneImage->getMemDC();
+
 	return S_OK;
 }
 
@@ -64,21 +70,24 @@ void introScene::render()
 {
 	IMAGEMANAGER->findImage("Intro_BG")->render(getMemDC(), 0, 0);
 
-	if (_introScene.scene_Number < INTROIMAGESIZE - 1)
+	if (!_changingScene)
 	{
-		_introScene.scene_Image->alphaRender(getMemDC(), _introScene.fade_In);
-	}
+		if (_introScene.scene_Number < INTROIMAGESIZE - 1)
+		{
+			_introScene.scene_Image->alphaRender(getMemDC(), _introScene.fade_In);
+		}
 
-	else
-	{
-		_introScene.scene_Image->render(getMemDC(), 0, 0);
+		else
+		{
+			_introScene.scene_Image->render(getMemDC(), 0, 0);
 
-		_introScene.scene_Select_Image->render(getMemDC(),
-			_introScene.scene_Select_Image->getX(), _introScene.scene_Select_Image->getY());
+			_introScene.scene_Select_Image->render(getMemDC(),
+				_introScene.scene_Select_Image->getX(), _introScene.scene_Select_Image->getY());
+		}
 	}
 
 	// 패스워드를 눌렀을때 출력을 한다.
-	if (_introScene.input_Pass)
+	if (_introScene.input_Pass && !_passMiss && !_changingScene)
 	{
 		IMAGEMANAGER->findImage("Intro3")->render(getMemDC(), 0, 0);
 		IMAGEMANAGER->findImage("PassImage")->render(getMemDC(), WINSIZEX / 2 - 135, WINSIZEY / 2);
@@ -90,6 +99,36 @@ void introScene::render()
 		}
 		IMAGEMANAGER->findImage("PassSelect")->render(getMemDC(), _password[_passwordMove].pass_Num_rc.left, _password[_passwordMove].pass_Num_rc.top - 5);
 	}
+
+	// 패스워드를 틀렸을때만 출력되는 이미지
+	if (_passMiss)
+	{
+		IMAGEMANAGER->findImage("Intro3")->render(getMemDC(), 0, 0);
+		IMAGEMANAGER->findImage("NoPass")->render(getMemDC(), WINSIZEX / 2 - 260, WINSIZEY / 2);
+	}
+
+	if (_changingScene)
+	{
+		IMAGEMANAGER->findImage("Intro3")->render(_sceneDC, 0, 0);
+		IMAGEMANAGER->findImage("PassImage")->render(_sceneDC, WINSIZEX / 2 - 135, WINSIZEY / 2);
+		for (int i = 0; i < 4; ++i)
+		{
+			//Rectangle(getMemDC(), _password[i].pass_Num_rc);
+			_password[i].pass_Num_Image->frameRender(_sceneDC, _password[i].pass_Num_rc.left, _password[i].pass_Num_rc.top,
+				_password[i].save_Num_Pos, 0);
+		}
+		IMAGEMANAGER->findImage("PassSelect")->render(_sceneDC, _password[_passwordMove].pass_Num_rc.left, _password[_passwordMove].pass_Num_rc.top - 5);
+		IMAGEMANAGER->findImage("sceneTemp")->alphaRender(getMemDC(), 0, 0, _introScene.fade_In);
+
+		if (_introScene.fade_In <= 0)
+		{
+			_introScene.fade_In = 0;
+			_changingScene = false;
+			_introScene.input_Pass = false;
+			SCENEMANAGER->set_SceneState(SS_STAGE);
+		}
+	}
+
 
 	// 테스트용 렉트
 	// Rectangle(getMemDC(), _introScene.scene_Select_rc[SS_GAME_START]);
@@ -113,6 +152,7 @@ void introScene::addIntroImage()
 	IMAGEMANAGER->addFrameImage("PassNum", "./image/UI/password/password_Font.bmp", 1650, 50, 33, 1, false, RGB(0, 0, 0));
 	IMAGEMANAGER->addImage("PassImage", "./image/UI/password/password_Image.bmp", 252, 28, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("PassSelect", "./image/UI/password/password_Select.bmp", 55, 60, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("NoPass", "./image/UI/password/password_Nopass.bmp", 500, 37, false, RGB(0, 0, 0));
 
 	// 기본 배경 이미지
 	IMAGEMANAGER->addImage("Intro_BG", "./image/UI/Intro/Intro_BG.bmp", WINSIZEX, WINSIZEY, false, RGB(0, 0, 0));
@@ -187,12 +227,12 @@ void introScene::setting_AlphaBlend()
 void introScene::Select_Key()
 {
 	// 씬 넘버가 4일때만 실행한다. (_introScene.input_Pass는 패스워드 입력을 누르지 않은 상태)
-	if (_introScene.scene_Number == 4 && !_introScene.input_Pass)
+	if (_introScene.scene_Number == 4 && !_introScene.input_Pass && !_passMiss)
 	{
-		
+
 		if (KEYMANAGER->isOnceKeyDown(VK_UP) || KEYMANAGER->isOnceKeyDown('W'))
 		{
-			if (!_introScene.scene_Change_pos)	
+			if (!_introScene.scene_Change_pos)
 			{
 				_introScene.scene_Select_Image->setX(_introScene.scene_Select_rc[SS_GAME_PASSWORD].left);
 				_introScene.scene_Select_Image->setY(_introScene.scene_Select_rc[SS_GAME_PASSWORD].top);
@@ -240,88 +280,87 @@ void introScene::Select_Key()
 				_introScene.input_Pass = true;
 			}
 		}
-
 	}
-		// true의 값을 가지고 있다면
-		if (_introScene.input_Pass)
-		{
-				// 틀린 비밀번호를 입력하면 틀렸다는 메시지가 출력된다.
-				// 일정 시간이 지나거나 엔터를 누르면 다시 선택으로 돌아간다.
-				// _introScene.input_Pass = false; 
-			
 
-				// 맞는 비밀번호라면 스테이지로 이동을 한다.
-				// SCENEMANAGER->set_SceneState(SS_STAGE);
-			if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+	// true의 값을 가지고 있다면
+	if (_introScene.input_Pass && !_passMiss)
+	{
+		// 틀린 비밀번호를 입력하면 틀렸다는 메시지가 출력된다.
+		// 일정 시간이 지나거나 엔터를 누르면 다시 선택으로 돌아간다.
+		// _introScene.input_Pass = false; 
+
+
+		// 맞는 비밀번호라면 스테이지로 이동을 한다.
+		// SCENEMANAGER->set_SceneState(SS_STAGE);
+		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+		{
+			_passwordMove--;
+			if (_passwordMove < 0) _passwordMove = 3;
+		}
+
+		if (KEYMANAGER->isStayKeyDown(VK_LEFT))
+		{
+			_passCnt++;
+			if (_passCnt == 10)
 			{
 				_passwordMove--;
 				if (_passwordMove < 0) _passwordMove = 3;
+
+				_passCnt = 0;
 			}
+		}
 
-			if (KEYMANAGER->isStayKeyDown(VK_LEFT))
-			{
-				_passCnt++;
-				if (_passCnt == 10)
-				{
-					_passwordMove--;
-					if (_passwordMove < 0) _passwordMove = 3;
+		if (KEYMANAGER->isOnceKeyDown(VK_UP))
+		{
+			_password[_passwordMove].save_Num_Pos++;
+			if (_password[_passwordMove].save_Num_Pos > 31) _password[_passwordMove].save_Num_Pos = 0;
+		}
 
-					_passCnt = 0;
-				}
-			}
-
-			if (KEYMANAGER->isOnceKeyDown(VK_UP))
+		if (KEYMANAGER->isStayKeyDown(VK_UP))
+		{
+			_passCnt++;
+			if (_passCnt == 10)
 			{
 				_password[_passwordMove].save_Num_Pos++;
 				if (_password[_passwordMove].save_Num_Pos > 31) _password[_passwordMove].save_Num_Pos = 0;
+
+				_passCnt = 0;
 			}
+		}
 
-			if (KEYMANAGER->isStayKeyDown(VK_UP))
-			{
-				_passCnt++;
-				if (_passCnt == 10)
-				{
-					_password[_passwordMove].save_Num_Pos++;
-					if (_password[_passwordMove].save_Num_Pos > 31) _password[_passwordMove].save_Num_Pos = 0;
+		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+		{
+			_passwordMove++;
+			if (_passwordMove > 3) _passwordMove = 0;
+		}
 
-					_passCnt = 0;
-				}
-			}
-
-			if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+		if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
+		{
+			_passCnt++;
+			if (_passCnt == 10)
 			{
 				_passwordMove++;
 				if (_passwordMove > 3) _passwordMove = 0;
+
+				_passCnt = 0;
 			}
+		}
 
-			if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
-			{
-				_passCnt++;
-				if (_passCnt == 10)
-				{
-					_passwordMove++;
-					if (_passwordMove > 3) _passwordMove = 0;
+		if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
+		{
+			_password[_passwordMove].save_Num_Pos--;
+			if (_password[_passwordMove].save_Num_Pos < 0) _password[_passwordMove].save_Num_Pos = 31;
+		}
 
-					_passCnt = 0;
-				}
-			}
-
-			if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
+		if (KEYMANAGER->isStayKeyDown(VK_DOWN))
+		{
+			_passCnt++;
+			if (_passCnt == 10)
 			{
 				_password[_passwordMove].save_Num_Pos--;
 				if (_password[_passwordMove].save_Num_Pos < 0) _password[_passwordMove].save_Num_Pos = 31;
-			}
 
-			if (KEYMANAGER->isStayKeyDown(VK_DOWN))
-			{
-				_passCnt++;
-				if (_passCnt == 10)
-				{
-					_password[_passwordMove].save_Num_Pos--;
-					if (_password[_passwordMove].save_Num_Pos < 0) _password[_passwordMove].save_Num_Pos = 31;
-
-					_passCnt = 0;
-				}
+				_passCnt = 0;
 			}
 		}
 
@@ -331,14 +370,205 @@ void introScene::Select_Key()
 			_passCnt = 0;
 		}
 
+		Input_Key();		// 키보드 입력을 했을때 처리
+
 		// 만약 패스워드가 맞다면 다음 스테이지로 이동을 한다.
 		if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
 		{
 			if (_password[0].save_Num_Pos == 30 && _password[1].save_Num_Pos == 32 &&
 				_password[2].save_Num_Pos == 21 && _password[3].save_Num_Pos == 15)
 			{
-				_introScene.input_Pass = false;
-				SCENEMANAGER->set_SceneState(SS_STAGE);
+				// ture로 변하면 씬을 바꾸는 준비를 한다.
+				_introScene.fade_In = 255;
+				_changingScene = true;
+			}
+
+			else
+			{
+				_passMiss = true;	// 패스워드가 틀렸다면 true의 값이 들어간다.
 			}
 		}
+	}
+
+	if (_passMiss)
+	{
+		// 패스워드가 틀렸을때 엔터를 누르면 다시 인트로 셀렉 화면으로 넘어간다.
+		if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
+		{
+			_introScene.input_Pass = false;
+			_passMiss = false;
+		}
+	}
+
+
+	if (_changingScene)
+	{
+		_introScene.fade_In -= 5;
+	}
+
+}
+
+void introScene::Input_Key()
+{
+	// 숫자
+	if (KEYMANAGER->isOnceKeyDown('0'))
+	{
+		_password[_passwordMove].save_Num_Pos = 0;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('1'))
+	{
+		_password[_passwordMove].save_Num_Pos = 1;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('2'))
+	{
+		_password[_passwordMove].save_Num_Pos = 2;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('3'))
+	{
+		_password[_passwordMove].save_Num_Pos = 3;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('4'))
+	{
+		_password[_passwordMove].save_Num_Pos = 4;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('5'))
+	{
+		_password[_passwordMove].save_Num_Pos = 5;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('6'))
+	{
+		_password[_passwordMove].save_Num_Pos = 6;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('7'))
+	{
+		_password[_passwordMove].save_Num_Pos = 7;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('8'))
+	{
+		_password[_passwordMove].save_Num_Pos = 8;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('9'))
+	{
+		_password[_passwordMove].save_Num_Pos = 9;
+	}
+
+	// 알파벳
+	if (KEYMANAGER->isOnceKeyDown('A'))
+	{
+		_password[_passwordMove].save_Num_Pos = 32;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('B'))
+	{
+		_password[_passwordMove].save_Num_Pos = 11;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('C'))
+	{
+		_password[_passwordMove].save_Num_Pos = 12;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('D'))
+	{
+		_password[_passwordMove].save_Num_Pos = 13;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('F'))
+	{
+		_password[_passwordMove].save_Num_Pos = 14;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('G'))
+	{
+		_password[_passwordMove].save_Num_Pos = 15;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('H'))
+	{
+		_password[_passwordMove].save_Num_Pos = 16;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('J'))
+	{
+		_password[_passwordMove].save_Num_Pos = 17;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('K'))
+	{
+		_password[_passwordMove].save_Num_Pos = 18;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('L'))
+	{
+		_password[_passwordMove].save_Num_Pos = 19;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('M'))
+	{
+		_password[_passwordMove].save_Num_Pos = 20;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('N'))
+	{
+		_password[_passwordMove].save_Num_Pos = 21;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('P'))
+	{
+		_password[_passwordMove].save_Num_Pos = 22;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('Q'))
+	{
+		_password[_passwordMove].save_Num_Pos = 23;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('R'))
+	{
+		_password[_passwordMove].save_Num_Pos = 24;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('S'))
+	{
+		_password[_passwordMove].save_Num_Pos = 25;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('T'))
+	{
+		_password[_passwordMove].save_Num_Pos = 26;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('V'))
+	{
+		_password[_passwordMove].save_Num_Pos = 27;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('W'))
+	{
+		_password[_passwordMove].save_Num_Pos = 28;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('X'))
+	{
+		_password[_passwordMove].save_Num_Pos = 29;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('Y'))
+	{
+		_password[_passwordMove].save_Num_Pos = 30;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('Z'))
+	{
+		_password[_passwordMove].save_Num_Pos = 31;
+	}
 }

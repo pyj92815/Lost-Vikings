@@ -273,6 +273,51 @@ HRESULT image::init(const char * fileName, int width, int height, int frameX, in
 	return S_OK;
 }
 
+HRESULT image::init_OB(int width, int height)
+{
+	//호옥시이 이미지 정보가 초기화 되어있지 않다면 해제를 시켜라
+	if (_imageInfo != NULL) release();
+
+	HDC hdc = GetDC(_hWnd);
+
+	_imageInfo = new IMAGE_INFO;
+	_imageInfo->loadType = LOAD_RESOURCE;
+	_imageInfo->resID = 0;
+	_imageInfo->hMemDC = CreateCompatibleDC(hdc);	//빈 DC영역을 생성한다
+	_imageInfo->hBit = (HBITMAP)CreateCompatibleBitmap(hdc, width, height);
+	_imageInfo->hOBit = (HBITMAP)SelectObject(_imageInfo->hMemDC, _imageInfo->hBit);
+	_imageInfo->width = width;
+	_imageInfo->height = height;
+
+
+	_trans = FALSE;
+	_transColor = RGB(0, 0, 0);
+
+	_blendFunc.BlendFlags = 0;
+	_blendFunc.AlphaFormat = 0;
+	_blendFunc.BlendOp = AC_SRC_OVER;
+
+	_blendImage = new IMAGE_INFO;
+	_blendImage->loadType = LOAD_EMPTY;
+	_blendImage->resID = 0;
+	_blendImage->hMemDC = CreateCompatibleDC(hdc);
+	_blendImage->hBit = (HBITMAP)CreateCompatibleBitmap(hdc, WINSIZEX, WINSIZEY);
+	_blendImage->hOBit = (HBITMAP)SelectObject(_blendImage->hMemDC, _blendImage->hBit);
+	_blendImage->width = WINSIZEX;
+	_blendImage->height = WINSIZEY;
+
+	if (_imageInfo->hBit == NULL)
+	{
+		release();
+
+		return E_FAIL;
+	}
+
+	ReleaseDC(_hWnd, hdc);
+
+	return S_OK;
+}
+
 void image::release()
 {
 	if (_imageInfo)
