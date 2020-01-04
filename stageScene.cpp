@@ -148,9 +148,8 @@ void stageScene::render()
 	// 인벤토리
 	for (int i = 0; i < 3; ++i)
 	{
-		if (_charNum == i)
+		if (_charNum == i && _pm->getItem() && !_pm->getTrade())
 		{
-	
 			_banjjack++;
 			if (_banjjack <= 20)
 			{
@@ -173,7 +172,23 @@ void stageScene::render()
 	for (int i = 0;i < _pm->get_vInven().size(); ++i)
 	{
 		if (0 > i) break;
-		_pm->get_vInven()[i].image->render(getMemDC(), _UI_Inventory[_pm->get_vInven()[i].player][_pm->get_vInven()[i].invenNumber].rc.left, _UI_Inventory[_pm->get_vInven()[i].player][_pm->get_vInven()[i].invenNumber].rc.top);
+
+		if (!_pm->get_vInven()[i].choice)
+		{
+			_pm->get_vInven()[i].image->render(getMemDC(), _UI_Inventory[_pm->get_vInven()[i].player][_pm->get_vInven()[i].invenNumber].rc.left, _UI_Inventory[_pm->get_vInven()[i].player][_pm->get_vInven()[i].invenNumber].rc.top);
+		}
+		else
+		{
+			_iBanCnt++;
+			if (_iBanCnt <= 20)
+			{
+				_pm->get_vInven()[i].image->render(getMemDC(), _UI_Inventory[_pm->get_vInven()[i].player][_pm->get_vInven()[i].invenNumber].rc.left, _UI_Inventory[_pm->get_vInven()[i].player][_pm->get_vInven()[i].invenNumber].rc.top);
+			}
+			if (_iBanCnt >= 30)
+			{
+				_iBanCnt = 0;
+			}
+		}
 	}
 	
 	
