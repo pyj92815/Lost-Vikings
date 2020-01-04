@@ -47,6 +47,8 @@ void stageScene::release()
 
 void stageScene::update()
 {
+	EFFECTMANAGER->update();			//이펙트 매니저 업데이트
+
 	// 이 값이 true라면 게임오버에서 되 돌아온것
 	if (SCENEMANAGER->get_playerDead_Reset())
 	{
@@ -73,6 +75,7 @@ void stageScene::render()
 	// 테스트용 배경이다. 이후에는 지울것!
 	//IMAGEMANAGER->findImage("Test_BG")->render(getMemDC(), 0, 0);
 
+	
 	//CAMERAMANAGER->get_WorImage()->render(getMemDC(), 0, 0);
 	_wm->render();
 	_em->render();
@@ -108,10 +111,10 @@ void stageScene::render()
 	//	}
 	//}
 
-
-	// 플레이어의 생명력을 출력
+	// 플레이어의 생명력을 출력==========================================
 	// 플레이어의 현재 체력의 개수만큼 출력한다.
 	// 플레이어가 체력이 떨어지면 그만큼 줄어든다.
+	//
 	if (!_pm->getPlayerEric().isDead)
 	{
 		for (int i = 0; i < _pm->getPlayerEric().hp; ++i)
@@ -120,7 +123,7 @@ void stageScene::render()
 			_UI_HP[PT_ERIC].image->render(getMemDC(), _UI_HP[PT_ERIC].rc.left + (i * 18), _UI_HP[PT_ERIC].rc.top);
 		}
 	}
-
+	//
 	if (!_pm->getPlayerBaleog().isDead)
 	{
 		for (int i = 0; i < _pm->getPlayerBaleog().hp; ++i)
@@ -129,7 +132,7 @@ void stageScene::render()
 			_UI_HP[PT_BALEOG].image->render(getMemDC(), _UI_HP[PT_BALEOG].rc.left + (i * 18), _UI_HP[PT_BALEOG].rc.top);
 		}
 	}
-
+	//
 	if (!_pm->getPlayerOlaf().isDead)
 	{
 		for (int i = 0; i < _pm->getPlayerOlaf().hp; ++i)
@@ -138,6 +141,8 @@ void stageScene::render()
 			_UI_HP[PT_OLAF].image->render(getMemDC(), _UI_HP[PT_OLAF].rc.left + (i * 18), _UI_HP[PT_OLAF].rc.top);
 		}
 	}
+	//
+	//==================================================================
 
 	// 인벤토리
 	for (int i = 0; i < 3; ++i)
@@ -221,6 +226,9 @@ void stageScene::render()
 		}
 		
 	}
+
+	EFFECTMANAGER->render();		//이펙트 매니저 렌더
+
 }
 
 void stageScene::posSetting()
@@ -296,7 +304,6 @@ void stageScene::posSetting()
 	// 캐릭터가 모두 죽었거나, Esc를 눌렀을때 들어가는 옵션이다.
 	// 위치 초기화
 	setting_GiveUpPos();
-
 
 	// 캐릭터 생명 위치 초기화
 	_UI_HP[PT_ERIC].image = new image;

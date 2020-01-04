@@ -16,7 +16,7 @@ HRESULT playerManager::init()
 	_olaf = new PlayerOlaf;
 	_olaf->init(180, 185);
 
-	EFFECTMANAGER->addEffect("ÀûÁ×À½", "Enemy_Die", 891, 73, 11, 1, 60, 5, NULL);
+	EFFECTMANAGER->addEffect("ÀûÁ×À½", "Enemy_Die", 891, 73, 81, 73,	1, 10, NULL);
 	for (int i = 0;i < 3;i++)
 	{
 		_itemCount[i] = 0;

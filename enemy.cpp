@@ -47,7 +47,7 @@ HRESULT Enemy::init(EnemyType enemyType, float x, float y)
 
 	_turn_Num = 0;
 	_turn = false;
-
+	_RIP = false;
 	_enemyRect = RectMakeCenter(_x, _y, _image->getFrameWidth(), _image->getFrameHeight());
 	_enemy_DISCOVERY_Rect = RectMakeCenter(_x, _y, 600, 200);
 	_cameraRect = RectMake(CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
@@ -91,7 +91,6 @@ void Enemy::update()
 
 void Enemy::render()
 {
-
 	if (KEYMANAGER->isToggleKey(VK_F1))
 	{
 		//Rectangle(CAMERAMANAGER->getWorDC(), _ericRect);
@@ -642,10 +641,9 @@ void Enemy::die()
 {
 	if (_enemyHP <= 0 && !_RIP)
 	{
-	/*	_RIP = true;
-		_frameX = 0;*/
+		_RIP = true;
+		_frameX = 0;
 		_enemyState = EnemyState::DIE;
-		
 	}
 }
 

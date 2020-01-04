@@ -14,7 +14,8 @@ EnemyManager::~EnemyManager()
 
 HRESULT EnemyManager::init()
 {
-	
+	EFFECTMANAGER->addEffect("Enemy_die", "./image./Enemy/Enemy_Die.bmp", 891, 73, 81, 73, 0.1f, 0.1f, 50);
+
 	_enemyBullet = new Enemy_Bullet;
 	_enemyBullet->init();
 	_worldObjects = new worldObjects;
@@ -33,6 +34,7 @@ void EnemyManager::update()
 	{
 		(*_viEnemy)->update();
 		(*_viEnemy)->setPlayerRect(_playerManager->getPlayerEric().rc, _playerManager->getPlayerBaleog().rc, _playerManager->getPlayerOlaf().rc);
+		//EFFECTMANAGER->play("Enemy_die", (*_viEnemy)->getX(), (*_viEnemy)->getY());
 	}
 	_enemyBullet->update();
 	_ericRect = _playerManager->getPlayerEric().rc;
@@ -194,6 +196,7 @@ void EnemyManager::Collision()
 			break;
 		}
 
+		//총알 충돌부분========================================================================================================================
 		for (int i = 0;i < _enemyBullet->getVBullet().size();i++)
 		{
 			if (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_ericRect))
