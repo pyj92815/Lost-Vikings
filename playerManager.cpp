@@ -197,11 +197,11 @@ void playerManager::itemUse()
 				}
 				else if (_playing == 1)
 				{
-					_wo->MakeBoom(_olaf->getOlaf().x, _olaf->getOlaf().y);
+					_wo->MakeBoom(_baleog->getBaleog().x, _baleog->getBaleog().y);
 				}
 				else if (_playing == 2)
 				{
-					_wo->MakeBoom(_baleog->getBaleog().x, _baleog->getBaleog().y);
+					_wo->MakeBoom(_olaf->getOlaf().x, _olaf->getOlaf().y);
 				}
 				this->removeInven(i);
 				break;
@@ -222,18 +222,61 @@ void playerManager::itemUse()
 				break;
 			case ITEM_REDKEY:
 				RECT temp;
-				for (int j = 0; j < _wo->get_vItem().size(); ++j)
+				if (_playing == 0)
 				{
-					if (IntersectRect(&temp, &_eric->getEricRect(), &_wo->get_vItem()[j].rc))
+					for (int j = 0; j < _wo->get_vItem().size(); ++j)
 					{
-						if (_wo->get_vItem()[j].item == ITEM_REDLOCKER)
+						if (IntersectRect(&temp, &_eric->getEricRect(), &_wo->get_vItem()[j].rc))
 						{
-							for (int k = 0; k < _wo->get_vTrap().size(); ++k)
+							if (_wo->get_vItem()[j].item == ITEM_REDLOCKER)
 							{
-								if (_wo->get_vTrap()[k].trap == TRAP_RED_UNBREAKABLE_WALL)
+								for (int k = 0; k < _wo->get_vTrap().size(); ++k)
 								{
-									_wo->setTrapCollision(k);
-									this->removeInven(i);
+									if (_wo->get_vTrap()[k].trap == TRAP_RED_UNBREAKABLE_WALL)
+									{
+										_wo->setTrapCollision(k);
+										this->removeInven(i);
+									}
+								}
+							}
+						}
+					}
+				}
+				else if (_playing == 1)
+				{
+					for (int j = 0; j < _wo->get_vItem().size(); ++j)
+					{
+						if (IntersectRect(&temp, &_baleog->getBaleogRect(), &_wo->get_vItem()[j].rc))
+						{
+							if (_wo->get_vItem()[j].item == ITEM_REDLOCKER)
+							{
+								for (int k = 0; k < _wo->get_vTrap().size(); ++k)
+								{
+									if (_wo->get_vTrap()[k].trap == TRAP_RED_UNBREAKABLE_WALL)
+									{
+										_wo->setTrapCollision(k);
+										this->removeInven(i);
+									}
+								}
+							}
+						}
+					}
+				}
+				else if (_playing == 2)
+				{
+					for (int j = 0; j < _wo->get_vItem().size(); ++j)
+					{
+						if (IntersectRect(&temp, & _olaf->GetOlafRC(), &_wo->get_vItem()[j].rc))
+						{
+							if (_wo->get_vItem()[j].item == ITEM_REDLOCKER)
+							{
+								for (int k = 0; k < _wo->get_vTrap().size(); ++k)
+								{
+									if (_wo->get_vTrap()[k].trap == TRAP_RED_UNBREAKABLE_WALL)
+									{
+										_wo->setTrapCollision(k);
+										this->removeInven(i);
+									}
 								}
 							}
 						}
@@ -244,18 +287,61 @@ void playerManager::itemUse()
 				break;
 			case ITEM_BLUEKEY:
 				RECT temp2;
-				for (int j = 0; j < _wo->get_vItem().size(); ++j)
+				if (_playing == 0)
 				{
-					if (IntersectRect(&temp2, &_eric->getEricRect(), &_wo->get_vItem()[j].rc))
+					for (int j = 0; j < _wo->get_vItem().size(); ++j)
 					{
-						if (_wo->get_vItem()[j].item == ITEM_BLUELOCKER)
+						if (IntersectRect(&temp2, &_eric->getEricRect(), &_wo->get_vItem()[j].rc))
 						{
-							for (int k = 0; k < _wo->get_vTrap().size(); ++k)
+							if (_wo->get_vItem()[j].item == ITEM_BLUELOCKER)
 							{
-								if (_wo->get_vTrap()[k].trap == TRAP_BLUE_UNBREAKABLE_WALL)
+								for (int k = 0; k < _wo->get_vTrap().size(); ++k)
 								{
-									_wo->setTrapCollision(k);
-									this->removeInven(i);
+									if (_wo->get_vTrap()[k].trap == TRAP_BLUE_UNBREAKABLE_WALL)
+									{
+										_wo->setTrapCollision(k);
+										this->removeInven(i);
+									}
+								}
+							}
+						}
+					}
+				}
+				else if (_playing == 1)
+				{
+					for (int j = 0; j < _wo->get_vItem().size(); ++j)
+					{
+						if (IntersectRect(&temp2, &_baleog->getBaleogRect(), &_wo->get_vItem()[j].rc))
+						{
+							if (_wo->get_vItem()[j].item == ITEM_BLUELOCKER)
+							{
+								for (int k = 0; k < _wo->get_vTrap().size(); ++k)
+								{
+									if (_wo->get_vTrap()[k].trap == TRAP_BLUE_UNBREAKABLE_WALL)
+									{
+										_wo->setTrapCollision(k);
+										this->removeInven(i);
+									}
+								}
+							}
+						}
+					}
+				}
+				else if (_playing == 2)
+				{
+					for (int j = 0; j < _wo->get_vItem().size(); ++j)
+					{
+						if (IntersectRect(&temp2, &_olaf->GetOlafRC(), &_wo->get_vItem()[j].rc))
+						{
+							if (_wo->get_vItem()[j].item == ITEM_BLUELOCKER)
+							{
+								for (int k = 0; k < _wo->get_vTrap().size(); ++k)
+								{
+									if (_wo->get_vTrap()[k].trap == TRAP_BLUE_UNBREAKABLE_WALL)
+									{
+										_wo->setTrapCollision(k);
+										this->removeInven(i);
+									}
 								}
 							}
 						}

@@ -72,11 +72,10 @@ void playerEric::release()
 
 void playerEric::update()
 {
-
 	if (!_isItem)
 	{
-		ericFrameCount();				  // 이미지 프레임 증가 
-		setEricImage();				      // image 세팅 
+		ericFrameCount();				    // 이미지 프레임 증가 
+		setEricImage();				        // image 세팅 
 
 		if (!_stop)
 		{
@@ -88,10 +87,7 @@ void playerEric::update()
 
 			ericJump();								// 점프 
 			ericHit();								// 맞을 때 이미지 
-				//======================구현 예정==================//
 			ericAttack();							// 공격 
-
-
 
 			// 에릭의 좌표를 카메라 매니저에 넘겨준다.
 			// CAMERAMANAGER->set_Camera_XY(_eric.rc);
@@ -101,9 +97,8 @@ void playerEric::update()
 			{
 				isJumpPixelCollision();
 				_isSlide = false;
-				// 중력값 
-				if (_gravity < 5)	 _gravity += 0.7;
 				_eric.y += _gravity;
+				if (_gravity < 5)	_gravity += 0.7;
 				if (_eric.state != STATE_ERIC_JUMP) // 떨어질 때 점프하면서 떨어지기 위한 
 				{
 					_eric.state = STATE_ERIC_JUMP;
