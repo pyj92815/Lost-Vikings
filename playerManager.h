@@ -110,5 +110,8 @@ public:
 
 	bool getItem() { return _eric->getItem(); }
 	bool getTrade() { return _trade; }
+
+
+
 };
 

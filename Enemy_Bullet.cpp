@@ -10,7 +10,7 @@ HRESULT Enemy_Bullet::init()
 		tagBullet Bullet;
 		ZeroMemory(&Bullet, sizeof(Bullet));
 		Bullet.image = new image;
-		Bullet.image = IMAGEMANAGER->addImage("Enemy_Bullet", "./image./Enemy/Enemy_Bullet.bmp", 24, 24, true, RGB(255, 0, 255));
+		Bullet.image = IMAGEMANAGER->addImage("Enemy_Bullet", "./image./Enemy/Enemy_Bullet.bmp", 12, 12, true, RGB(255, 0, 255));
 		Bullet.isFire = false;
 
 		_vBullet.push_back(Bullet);

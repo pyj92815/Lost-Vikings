@@ -12,7 +12,6 @@ void Enemy_Mummy::EnemyAction()
 		if (IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::SCOUT;
 		break;
 	case EnemyState::SCOUT:
-
 		Scout();				//움직이다 절벽/벽 을 만나면 반대편으로 돌아가도록 하는 함수
 		Move();					//좌우로 움직이게 하는 함수
 
@@ -38,8 +37,6 @@ void Enemy_Mummy::EnemyAction()
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 	case EnemyState::DIE:
-
-		_die = true;
 		break;
 	default:
 		break;
@@ -99,6 +96,13 @@ void Enemy_Mummy::Frame()
 		}
 		break;
 	case EnemyState::DIE:
+		_frameCount++;
+		if (_frameCount >= 10)
+		{
+			_frameX++;
+			if (_frameX > 10)
+			_die = true;
+		}
 		break;
 	default:
 		break;
