@@ -126,6 +126,7 @@ HRESULT worldObjects::init()
 	_Items[5].image = IMAGEMANAGER->addImage("BlueLocker", "./image/ImageCollection/BlueKey_Hole.bmp", 48, 48, false, RGB(0, 0, 0));
 	_Items[6].image = IMAGEMANAGER->addImage("RedKey", "./image/ImageCollection/RedKey.bmp", 50, 50, true, RGB(255, 0, 255));
 	_Items[7].image = IMAGEMANAGER->addImage("RedLocker", "./image/ImageCollection/RedKey_Hole.bmp", 48, 48, false, RGB(0, 0, 0));
+	_Items[8].image = IMAGEMANAGER->addFrameImage("BOOM", "./image/ImageCollection/Boom.bmp", 264, 84, 3, 1, true, RGB(255, 0, 255));
 	//ฦ๘ลบ มยวฅ
 	_Items[0].x = 750;
 	_Items[0].y = 60;
@@ -155,18 +156,18 @@ HRESULT worldObjects::init()
 	_Items[5].item = ITEM_BLUELOCKER;
 	_Items[6].item = ITEM_REDKEY;
 	_Items[7].item = ITEM_REDLOCKER;
+	_Items[8].item = ITEM_BOOB;
 	//กเกเกเกเกเกเกเกเกเกเกเกเกเพฦภฬลÛภป บคลอฟก ณึภฺกเกเกเกเกเกเกเกเกเกเกเกเกเกเกเกเกเกเกเ
-	for (int i = 0; i < 8; i++) 
+	for (int i = 0; i < 9; i++) 
 	{ 
+		_Items[8].frameX = 0;
+		_Items[8].frameY = 0;
 		_Items[i].rc = RectMake(_Items[i].x, _Items[i].y, _Items->image->getWidth(), _Items->image->getHeight());
 		_Items[i].isCollision = false;
 		_vItem.push_back(_Items[i]);
 	}
 	//_vTrap.push_back(_Items[5]);
 	//_vTrap.push_back(_Items[7]);
-	//กแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแฦ๘ลบภฬ ลอม๘ดู!กแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแ
-	_BOOM.image = IMAGEMANAGER->addFrameImage("BOOM", "./image/ImageCollection/Boom.bmp", 264, 84, 3, 1, true, RGB(255, 0, 255));
-	_BOOM.frameX = 0;
 	//กแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแฟฉทฏฐกม๖กแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแ
 	_frameCount = 0;
 	_boomCount = 0;
@@ -268,17 +269,6 @@ void worldObjects::render()
 			if (KEYMANAGER->isStayKeyDown('Q')) { Rectangle(CAMERAMANAGER->getWorDC(), _viTrap->rc); }
 		}
 	}
-	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
-	{//กแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแพฦภฬลÛ ภฬนฬม๖ รโทยกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแ
-		if (!_viItem->isCollision)
-		{
-			_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
-			if (KEYMANAGER->isStayKeyDown('Q'))
-			{
-				Rectangle(CAMERAMANAGER->getWorDC(), _viItem->rc);
-			}
-		}
-	}
 }
 
 void worldObjects::frameWork()
@@ -351,21 +341,27 @@ void worldObjects::frameWork()
 		}
 	}
 	//กแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแฦ๘ลบ วมทนภำกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแ
-	if (_boomCount <= 300)
+	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
 	{
-		if (_frameCount % 6 == 0)
+		if (_viItem->item == ITEM_BOOB)
 		{
-			_BOOM.image->setFrameX(_BOOM.frameX);
-			_BOOM.frameX++;
-			if (_BOOM.frameX > 1) { _BOOM.frameX = 0; }
+			if (_boomCount <= 300)
+			{
+				if (_frameCount % 6 == 0)
+				{
+					_viItem->image->setFrameX(_viItem->frameX);
+					_viItem->frameX++;
+					if (_viItem->frameX > 1) { _viItem->frameX = 0; }
+				}
+			}
+			if (_boomCount > 300)
+			{
+				_viItem->image->setFrameX(_viItem->frameX);
+				_viItem->frameX++;
+				if (_viItem->frameX > 2) { _viItem->frameX = 2; }
+				_boomCount = 0;
+			}
 		}
-	}
-	if (_boomCount > 300)
-	{
-		_BOOM.image->setFrameX(_BOOM.frameX);
-		_BOOM.frameX++;
-		if (_BOOM.frameX > 2) { _BOOM.frameX = 2; }
-		_boomCount = 0;
 	}
 	//กแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแฦ๘ฦ๗ วมทนภำกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแ
 	for (int i = 0; i < 3; i++)

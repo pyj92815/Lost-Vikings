@@ -5,6 +5,7 @@ class playerManager;
 enum tagTypeItem
 {
 	ITEM_BOMB,
+	ITEM_BOOB,
 	ITEM_TOMATO,
 	ITEM_REDKEY,
 	ITEM_REDLOCKER,
@@ -64,8 +65,7 @@ private:
 	tagObjects _waterFall[3];
 private:
 	//■■■■■■■■■■■아이템■■■■■■■■■■■■■■■■■■■■■■
-	tagObjects _Items[8];
-	tagObjects _BOOM;
+	tagObjects _Items[9];
 private:
 	int _frameCount;			//프레임 카운터
 	int _boomCount;				//폭탄사용후 폭탄이 터지는카운터
