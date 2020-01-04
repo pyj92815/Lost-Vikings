@@ -148,46 +148,35 @@ void EnemyManager::Collision()
 			{
 				(*_viEnemy)->setTurn();
 				(*_viEnemy)->setWall();
+				break;
+			}
+		}
+		for (int i = 0;i < _enemyBullet->getVBullet().size();i++)
+		{
+			if ((IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_ericRect)) || (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_ericRect)))
+			{
+				if (!_enemyBullet->getVBullet()[i].isFire)continue;
 				_enemyBullet->removeBullet(i);
 				if (!_playerManager->getEric()->getHit())
 				{
-					//_playerManager->getEric()->setHit();
-				//	_playerManager->getEric()->setEricHit();
+					_playerManager->getEric()->setHit();
+					_playerManager->getEric()->setEricHit();
 				}
-				
-	
 				break;
 			}
 			if ((IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_baleogRect)) || (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_baleogRect)))
 			{
-
+				if (!_enemyBullet->getVBullet()[i].isFire)continue;
+				_enemyBullet->removeBullet(i);
+				_playerManager->getbaleog()->setBaleogHit();
 			}
-			for (int i = 0;i < _enemyBullet->getVBullet().size();i++)
+			if ((IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_olafRect)) || (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_olafRect)))
 			{
-				if ((IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_ericRect)) || (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_ericRect)))
-				{
-					if (!_enemyBullet->getVBullet()[i].isFire)continue;
-					_enemyBullet->removeBullet(i);
-					if (!_playerManager->getEric()->getHit())
-					{
-						_playerManager->getEric()->setHit();
-						_playerManager->getEric()->setEricHit();
-					}
-					break;
-				}
-				if ((IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_baleogRect)) || (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_baleogRect)))
-				{
-					if (!_enemyBullet->getVBullet()[i].isFire)continue;
-					_enemyBullet->removeBullet(i);
-					_playerManager->getbaleog()->setBaleogHit();
-				}
-				if ((IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_olafRect)) || (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_olafRect)))
-				{
-					if (!_enemyBullet->getVBullet()[i].isFire)continue;
-					_enemyBullet->removeBullet(i);
-				}
+				if (!_enemyBullet->getVBullet()[i].isFire)continue;
+				_enemyBullet->removeBullet(i);
 			}
 		}
+
 	}
 }
 
