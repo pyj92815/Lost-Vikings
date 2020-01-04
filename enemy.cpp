@@ -126,13 +126,13 @@ void Enemy::Move()
 	if (_turn_Num % 2 == 1)
 	{
 		_enemyLR = EnemyLR::LEFT;
-		if (_frameX <= 3)
+		if (_frameX <= 3 && !_turn)
 			_x -= 3;
 	}
 	else
 	{
 		_enemyLR = EnemyLR::RIGHT;
-		if (_frameX <= 3)
+		if (_frameX <= 3&&!_turn)
 			_x += 3;
 	}
 }
@@ -145,7 +145,7 @@ void Enemy::Scout()
 		for (int i = _x - _image->getFrameWidth() / 2; i > _x - _image->getFrameWidth() / 2 - 30;--i)
 		{
 			//바닥에 색상을 구해온다
-			COLORREF platformCOLOR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), i, _probeY + 20);
+			COLORREF platformCOLOR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), i, _probeY + 60);
 			//벽에 색상을 구해온다
 			COLORREF wallCOLOR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), i, _y - _image->getFrameHeight());
 
@@ -156,7 +156,15 @@ void Enemy::Scout()
 			int platformR = GetRValue(platformCOLOR);
 			int platformG = GetGValue(platformCOLOR);
 			int platformB = GetBValue(platformCOLOR);
-
+			if (_wall)
+			{
+				_turn_Num++;
+				_turn = true;
+			}
+			else
+			{
+				_turn = false;
+			}
 			if (((platformR == 255 && platformG == 0 && platformB == 255) || (platformR == 255 && platformG == 255 && platformB == 255) || (platformR == 255 && platformG == 0 && platformB == 0) || (wallR == 255 && wallG == 255 && wallB == 0)))
 			{
 				_turn_Num++;
@@ -174,7 +182,7 @@ void Enemy::Scout()
 		for (int i = _x + _image->getFrameWidth() / 2; i < _x + _image->getFrameWidth() / 2 + 70;++i)
 		{
 			//바닥에 색상을 구해온다
-			COLORREF platformCOLOR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), i, _probeY + 50);
+			COLORREF platformCOLOR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), i, _probeY + 70);
 			//벽에 색상을 구해온다
 			COLORREF wallCOLOR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), i, _y - _image->getFrameHeight());
 
@@ -299,7 +307,7 @@ void Enemy::Tracking()
 	{
 	case DISCOVERYPlayer::ERIC:
 		//플레이어가 오른쪽에 있을때(에릭)
-		if (_x < (_ericRect.left + _ericRect.right) / 2&& !_wall)
+		if (_x < (_ericRect.left + _ericRect.right) / 2 && !_turn && !_wall)
 		{
 			_turn = true;
 			_enemyLR = EnemyLR::RIGHT;
@@ -307,7 +315,7 @@ void Enemy::Tracking()
 				_x += 3;
 		}
 		//플레이어가 왼쪽에 있을때(에릭)
-		if (_x > (_ericRect.left + _ericRect.right) / 2 && !_wall)
+		if (_x > (_ericRect.left + _ericRect.right) / 2 && !_turn && !_wall)
 		{
 			_turn = true;
 			_enemyLR = EnemyLR::LEFT;

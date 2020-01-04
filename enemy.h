@@ -96,7 +96,8 @@ public:
 	virtual void setisFire(bool isFire) { _isFire = isFire; }
 	virtual void Hit() { _enemyHP--; }
 	virtual void setTurn() { _turn_Num++; }
-	virtual void setWall() { _wall = true; }
+	virtual void setTrueWall() { _wall = true; }
+	virtual void setFalseWall() { _wall = false; }
 	virtual float getX() { return _x; }
 	virtual float getY() { return _y; }
 	virtual image* getImage() { return _Attack_image; }

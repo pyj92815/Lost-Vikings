@@ -73,7 +73,7 @@ void Enemy_Snake::Frame()
 		break;
 	case EnemyState::ATTACK:
 		_frameCount++;
-		if (_frameCount >= 10)
+		if (_frameCount >= 15)
 		{
 			_frameX++;
 			if (_frameX > 5)

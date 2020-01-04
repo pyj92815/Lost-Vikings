@@ -146,14 +146,25 @@ void EnemyManager::Collision()
 		{
 			if (IntersectRect(&temp, &(*_viEnemy)->getRect(), &_worldObjects->get_vTrap()[i].rc))
 			{
-				(*_viEnemy)->setTurn();
-				(*_viEnemy)->setWall();
+				//(*_viEnemy)->setTurn();
+				(*_viEnemy)->setTrueWall();
 				break;
 			}
+			else
+			{
+				(*_viEnemy)->setFalseWall();
+			}
 		}
+
+		if (IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_ericRect))
+		{
+			EnemyCreate(_playerManager->getPlayerEric().x, _playerManager->getPlayerEric().y);
+			break;
+		}
+
 		for (int i = 0;i < _enemyBullet->getVBullet().size();i++)
 		{
-			if ((IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_ericRect)) || (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_ericRect)))
+			if (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_ericRect))
 			{
 				if (!_enemyBullet->getVBullet()[i].isFire)continue;
 				_enemyBullet->removeBullet(i);
@@ -164,6 +175,7 @@ void EnemyManager::Collision()
 				}
 				break;
 			}
+			
 			if ((IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_baleogRect)) || (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_baleogRect)))
 			{
 				if (!_enemyBullet->getVBullet()[i].isFire)continue;

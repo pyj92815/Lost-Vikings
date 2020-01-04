@@ -12,20 +12,28 @@ void Enemy_PlayerMummy::EnemyAction()
 		if (IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::SCOUT;
 		break;
 	case EnemyState::SCOUT:
-
 		Scout();				//움직이다 절벽/벽 을 만나면 반대편으로 돌아가도록 하는 함수
 		Move();					//좌우로 움직이게 하는 함수
 
-		Discovery();			//적을 발견하는 함수
+		Discovery();
+
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 	case EnemyState::DISCOVERY:
-		Tracking();				//적을 쫓는 함수
+		Tracking();				//적을 추적하는 함수
 		Attack();				//적이 공격범위안에 들어올시 _enemyState를 ATTACK로 변경해주는 함수
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 	case EnemyState::ATTACK:
 		UnAttack();				//공격범위 밖으로 나가면 SCOUT
+		if (_frameX >= 3 && _frameX <= 5)
+		{
+			_enemyAttackRect = _enemyAttackRangeRect;
+		}
+		else
+		{
+			_enemyAttackRect = RectMakeCenter(0, 0, 0, 0);
+		}
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 	case EnemyState::DIE:
