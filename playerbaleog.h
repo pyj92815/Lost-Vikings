@@ -96,18 +96,6 @@ private:
 
 	RECT _testRect;
 
-	COLORREF getPixel_BC;
-	int r_BC;
-	int g_BC;
-	int b_BC;
-
-	COLORREF getPixel_TC;
-	int r_TC;
-	int g_TC;
-	int b_TC;
-
-	RECT _testRect;
-
 	int _hitCount;
 
 	int _baleogStateTemp;
