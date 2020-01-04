@@ -78,6 +78,8 @@ public:
 	HRESULT init(const char* fileName, int width, int height, int frameX, int frameY,
 		BOOL trans = FALSE, COLORREF transColor = FALSE);
 
+	HRESULT init_OB(int width, int height);
+
 	void release();
 
 	void setTransColor(BOOL trans, COLORREF transColor);

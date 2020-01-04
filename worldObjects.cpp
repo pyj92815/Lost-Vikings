@@ -248,6 +248,7 @@ void worldObjects::render()
 		815, 832, _waterFall[1].frameX, _waterFall[1].frameY);
 	IMAGEMANAGER->findImage("short_Water_Fall")->frameRender(CAMERAMANAGER->getWorDC(),
 		3263, -60, _waterFall[2].frameX, _waterFall[2].frameY);
+
 	//■■■■■■■■■■■■■■■■■벽 및 발판 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	if (KEYMANAGER->isStayKeyDown('Q'))
 	{//■■■■■■■■■■■■■■■■■벽 충돌 렉트 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
