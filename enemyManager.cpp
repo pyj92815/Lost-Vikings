@@ -157,6 +157,15 @@ void EnemyManager::Collision()
 			}
 			if ((IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_baleogRect)) || (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_baleogRect)))
 			{
+				_enemyBullet->removeBullet(i);
+				if (!_playerManager->getbaleog()->getHit())
+				{
+					_playerManager->getbaleog()->setHit();
+					_playerManager->getbaleog()->setBaleogHit();
+				}
+
+
+				break;
 
 			}
 			if ((IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_olafRect)) || (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_olafRect)))
