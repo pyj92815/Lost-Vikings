@@ -356,12 +356,15 @@ void playerManager::trapColision() // 함정과 충돌 시
 				else if (_wo->get_vTrap()[i].trap == TRAP_RED_UNBREAKABLE_WALL ||
 					_wo->get_vTrap()[i].trap == TRAP_BLUE_UNBREAKABLE_WALL)
 				{
-					if (!_wo->get_vTrap()[i].isCollision && _eric->getEric().state == STATE_MOVE)
+					if (!_wo->get_vTrap()[i].isCollision)
 					{
+						if (_eric->getEric().state == STATE_MOVE || _eric->getEric().state == STATE_ERIC_JUMP)
+						{
 						_eric->setEricState(STATE_PUSH);
 						_eric->setEricFrame();
-					}
 						_eric->setEricX(_wo->get_vTrap()[i].x - _eric->getEric().image->getFrameWidth() - 5);
+						}
+					}
 				}
 			}
 		}

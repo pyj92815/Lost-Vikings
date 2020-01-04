@@ -346,7 +346,7 @@ void worldObjects::frameWork()
 					if (_viTrap->frameX > _viTrap->image->getMaxFrameX())
 					{
 						_viTrap->y = -300;
-						_viTrap->isCollision = false;
+						//_viTrap->isCollision = false;
 					}
 				}
 			}
