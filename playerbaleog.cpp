@@ -201,9 +201,9 @@ void playerbaleog::update()
 			if (_baleog.currentFrameX > _baleog.image->getMaxFrameX())
 			{
 
-
 				_baleog.isDead = true;
-
+				_baleog.x = -1000;
+				_baleog.y = -1000;
 
 
 			}
