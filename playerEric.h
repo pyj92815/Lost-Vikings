@@ -81,7 +81,7 @@ public:
 	void setEricFrameSpeed(int speed) {	_eric.frameSpeed = speed; }
 	void setEricState(tagState state) { _eric.state = state; }	// 상태를 정의해 주는 세터 
 
-	void set_stopKey(bool stop)  { _stopControl = stop;}
+	void set_stopKey(bool stop)		  { _stopControl = stop;}
 	void setEricDead(bool dead)		  { _eric.isDead = dead; }	// ERIC 죽음 
 };
 

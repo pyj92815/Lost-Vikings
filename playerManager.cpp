@@ -754,8 +754,6 @@ void playerManager::enemyColision()
 				//여기에 적 HP를 깍아줄 코드
 				_baleog->getVArrow()->removeArrow(j);
 				_em->getVEnemy()[i]->Hit();
-
-
 				//충돌한 화살 삭제할 코드	
 				break;
 			}
