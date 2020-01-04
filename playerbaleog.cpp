@@ -27,7 +27,7 @@ HRESULT playerbaleog::init(float x, float y)
 	IMAGEMANAGER->addFrameImage("관통사", "./image/Characters/baleog_trapdie_x3.bmp", 288, 180, 3, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("사다리이동", "./image/Characters/baleog_ladder_x3.bmp", 321, 192, 4, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("사다리도착", "./image/Characters/bakeog_ladder_end_x3.bmp", 186, 192, 2, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("피격", "./image/Characters/baleog_hit_x3.bmp", 124, 128, 2, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("피격", "./image/Characters/baleog_hit_x3-1.bmp", 186, 192, 2, 2, true, RGB(255, 0, 255));
 
 	_baleog.image = IMAGEMANAGER->findImage("벨로그기본");	//처음에는 기본 이미지 찾아놓고
 	_baleog.image->setFrameY(0);
@@ -214,11 +214,11 @@ void playerbaleog::update()
 
 			if (_baleog.currentFrameX > _baleog.image->getMaxFrameX())
 			{
-				
-				
-					_baleog.isDead = true;
-				
-				
+
+
+				_baleog.isDead = true;
+
+
 
 			}
 			else if (_baleog.currentFrameX <= _baleog.image->getMaxFrameX())
@@ -254,7 +254,7 @@ void playerbaleog::update()
 			_baleog.frameCount = 0;
 		}
 
-    }
+	}
 
 
 	/*if (_count % 2 == 0 && _move.type != MT_BOSS &&
@@ -316,6 +316,18 @@ void playerbaleog::key()
 		_baleog.image->setFrameX(_baleog.currentFrameX);
 		_baleog.frameCount = 0;
 	}
+
+	if (KEYMANAGER->isStayKeyDown(VK_DOWN))
+	{
+		if (!_notMove)
+		{
+			_baleog.state = STATE_MOVE;
+			_baleog.y += 5;
+		}
+
+	}
+
+
 
 	////이동키 예외처리
 	//if (KEYMANAGER->isOnceKeyUp(VK_RIGHT))
@@ -516,6 +528,23 @@ void playerbaleog::PixelCollision()
 		int g = GetGValue(getPixel_Bottom);
 		int b = GetBValue(getPixel_Bottom);
 
+		//if (r == 255 && g == 255 && b == 0)	//땅
+		//{
+		//	_baleog.y = i - _baleog.image->getHeight() / 2;
+		//	_baleog.posState = POSSTATE_GROUND;
+		//	break;
+		//}
+		//else if (r == 255 & g == 0 && b == 255)	//공중
+		//{
+		//	ResetAnimation1();
+		//	_baleog.posState = POSSTATE_
+
+		//}
+
+
+
+
+
 		if (!(r == 255 && g == 0 && b == 255))
 		{
 			_baleog.y = i - _baleog.image->getFrameHeight();
@@ -668,6 +697,24 @@ void playerbaleog::PixelLeftCollision()
 		}
 		_baleog.x = _baleog.probeX + 6;
 	}
+}
+
+void playerbaleog::ResetAnimation1()
+{
+	if ((int)_baleog.state != (int)_baleogStateTemp)
+	{
+		_baleog.currentFrameX = 0;
+		_baleog.image->setFrameX(0);
+		_baleog.frameCount = 0;
+	}
+	_baleogStateTemp = (int)_baleog.state;
+}
+
+void playerbaleog::ResetAnimation2()
+{
+	_baleog.currentFrameX = 0;
+	_baleog.image->setFrameX(0);
+	_baleog.frameCount = 0;
 }
 
 //

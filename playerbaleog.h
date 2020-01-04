@@ -94,6 +94,9 @@ private:
 
 	int _hitCount;
 
+	int _baleogStateTemp;
+	int _baleogPosStateTemp;
+
 public:
 	playerbaleog();
 	~playerbaleog();
@@ -137,6 +140,10 @@ public:
 	void setBaleogHit() { _baleog.hp--; }
 
 	arrow* getVArrow() { return _ar; }
+
+
+	void ResetAnimation1();
+	void ResetAnimation2();
 
 };
 
