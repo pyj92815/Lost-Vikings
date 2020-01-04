@@ -102,6 +102,8 @@ public:
 	virtual image* getImage() { return _Attack_image; }
 	virtual void setPlayerRect(RECT eric, RECT baleog, RECT olaf);
 
+
+
 	//이미지 추가 함수
 	virtual void imageReset()
 	{
