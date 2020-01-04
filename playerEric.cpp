@@ -575,6 +575,7 @@ void playerEric::ericHit()
 		if (_hitCount > 20)
 		{
 			_isHit = false;
+			_ericUnable = false;
 			_hitCount = 0;
 			_eric.state = STATE_IDLE;
 			_eric.frameCount = 0;
