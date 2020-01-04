@@ -605,6 +605,22 @@ void playerManager::trapColision() // 함정과 충돌 시
 			}
 		}
 
+		//화살 벽돌
+		for (int j = 0; j < _baleog->getVArrow()->getVArrow().size(); j++)
+		{
+			//충돌용 RECT
+			RECT temp2;
+
+			if (IntersectRect(&temp2, &_baleog->getVArrow()->getArrowRect(j), &_wo->get_vTrap()[i].rc))
+			{
+
+
+				_baleog->getVArrow()->removeArrow(j); //충돌한 화살 삭제할 코드	
+
+
+			}
+		}
+
 		RECT temp2;
 		if (IntersectRect(&temp2, &_olaf->GetOlafRC(), &_wo->get_vTrap()[i].rc))
 		{
