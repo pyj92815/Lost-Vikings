@@ -181,6 +181,7 @@ void playerManager::itemKey()
 	}
 }
 
+//아이템 사용하는 기능
 void playerManager::itemUse()
 {
 	for (int i = 0; i < _vInven.size(); ++i)
@@ -355,6 +356,7 @@ void playerManager::itemUse()
 		}
 	}
 }
+
 
 int playerManager::itemConnect(int playing)
 {
