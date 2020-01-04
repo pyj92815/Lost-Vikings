@@ -127,6 +127,9 @@ HRESULT worldObjects::init()
 	_Items[6].image = IMAGEMANAGER->addImage("RedKey", "./image/ImageCollection/RedKey.bmp", 50, 50, true, RGB(255, 0, 255));
 	_Items[7].image = IMAGEMANAGER->addImage("RedLocker", "./image/ImageCollection/RedKey_Hole.bmp", 48, 48, false, RGB(0, 0, 0));
 	_Items[8].image = IMAGEMANAGER->addFrameImage("BOOM", "./image/ImageCollection/Boom.bmp", 264, 84, 3, 1, true, RGB(255, 0, 255));
+	_isBoomEffects.image = IMAGEMANAGER->addImage("IsBoom", "./image/ImageCollection/isBoom.bmp", 960, 758, false, RGB(0, 0, 0));
+	//폭탄 페이드 인
+	_isBoomEffects.fadeIn = 200;
 	//폭탄 좌표
 	_Items[0].x = 750;
 	_Items[0].y = 60;
@@ -157,11 +160,12 @@ HRESULT worldObjects::init()
 	_Items[6].item = ITEM_REDKEY;
 	_Items[7].item = ITEM_REDLOCKER;
 	_Items[8].item = ITEM_BOOM;
+	//폭탄 터지는 이펙트
+	_Items[8].frameX = 0;
+	_Items[8].frameY = 0;
 	//□□□□□□□□□□□□□아이템을 벡터에 넣자□□□□□□□□□□□□□□□□□□□
-	for (int i = 0; i < 9; i++) 
-	{ 
-		_Items[8].frameX = 0;
-		_Items[8].frameY = 0;
+	for (int i = 0; i < 8; i++)
+	{
 		_Items[i].rc = RectMake(_Items[i].x, _Items[i].y, _Items->image->getWidth(), _Items->image->getHeight());
 		_Items[i].isCollision = false;
 		_Items[i].isUse = false;
@@ -178,7 +182,6 @@ HRESULT worldObjects::init()
 void worldObjects::update()
 {
 	_frameCount++;
-	_boomCount++;
 	move();
 	frameWork();
 
@@ -186,7 +189,7 @@ void worldObjects::update()
 	{
 		if (_viTrap->trap == TRAP_POISION)
 		{
-			_viTrap->rc = RectMake(_viTrap->x, _viTrap->y + (_viTrap->image->getFrameHeight() / 2), 
+			_viTrap->rc = RectMake(_viTrap->x, _viTrap->y + (_viTrap->image->getFrameHeight() / 2),
 				_viTrap->image->getFrameWidth(), _viTrap->image->getFrameHeight() / 2);
 		}
 		else if (_viTrap->trap == TRAP_BORAD)
@@ -195,7 +198,7 @@ void worldObjects::update()
 		}
 		else if (_viTrap->trap == TRAP_WALL)
 		{
-			_viTrap->rc = RectMake(_viTrap->x, _viTrap->y, 
+			_viTrap->rc = RectMake(_viTrap->x, _viTrap->y,
 				_viTrap->image->getFrameWidth(), _viTrap->image->getFrameHeight());
 		}
 	}
@@ -207,23 +210,9 @@ void worldObjects::release()
 
 void worldObjects::render()
 {
-	if (!_isBoomShow)
-	{
-		for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
-		{//■■■■■■■■■■■■■■■■■아이템 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-			if (_viItem->item == ITEM_BOOM) { continue; }
-			if (!_viItem->isCollision)
-			{
-				_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
-				if (KEYMANAGER->isStayKeyDown('Q'))
-				{
-					Rectangle(CAMERAMANAGER->getWorDC(), _viItem->rc);
-				}
-			}
-		}
-	}
-	if (_isBoomShow)
-	{
+
+	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
+	{//■■■■■■■■■■■■■■■■■아이템 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 		if (!_viItem->isCollision)
 		{
 			_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
@@ -248,7 +237,6 @@ void worldObjects::render()
 		815, 832, _waterFall[1].frameX, _waterFall[1].frameY);
 	IMAGEMANAGER->findImage("short_Water_Fall")->frameRender(CAMERAMANAGER->getWorDC(),
 		3263, -60, _waterFall[2].frameX, _waterFall[2].frameY);
-
 	//■■■■■■■■■■■■■■■■■벽 및 발판 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	if (KEYMANAGER->isStayKeyDown('Q'))
 	{//■■■■■■■■■■■■■■■■■벽 충돌 렉트 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
@@ -286,15 +274,27 @@ void worldObjects::render()
 			if (KEYMANAGER->isStayKeyDown('Q')) { Rectangle(CAMERAMANAGER->getWorDC(), _viTrap->rc); }
 		}
 	}
-	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
-	{//■■■■■■■■■■■■■■■■■아이템 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-		if (!_viItem->isCollision)
+	if (_isBoomShow)
+	{
+		_Items[8].image->frameRender(CAMERAMANAGER->getWorDC(), _Items[8].x, _Items[8].y + 30, _Items[8].frameX, 0);
+		if (KEYMANAGER->isStayKeyDown('Q')) { Rectangle(CAMERAMANAGER->getWorDC(), _Items[8].rc); }
+		if (_boomCount >= 200)
 		{
-			_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
-			if (KEYMANAGER->isStayKeyDown('Q'))
+			_isBoomEffects.fadeIn++;
+			if (_isBoomEffects.fadeIn >= 207 && !_isChange)
 			{
-				Rectangle(CAMERAMANAGER->getWorDC(), _viItem->rc);
+				_isBoomEffects.fadeIn = 50;
+				_isBoomEffects.fadeIn++;
+				_isChange = true;
+			
 			}
+			if (_isBoomEffects.fadeIn >= 57 && _isChange)
+			{
+				_isBoomEffects.fadeIn = 200;
+				_isBoomEffects.fadeIn++;
+				_isChange = false;
+			}
+			_isBoomEffects.image->alphaRender(CAMERAMANAGER->getWorDC(), CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), _isBoomEffects.fadeIn);
 		}
 	}
 }
@@ -348,7 +348,7 @@ void worldObjects::frameWork()
 		}
 		if (_frameCount % 6 == 0)
 		{
-			if (_viTrap->trap == TRAP_RED_UNBREAKABLE_WALL || 
+			if (_viTrap->trap == TRAP_RED_UNBREAKABLE_WALL ||
 				_viTrap->trap == TRAP_BLUE_UNBREAKABLE_WALL)
 			{
 				if (!_viTrap->isCollision)
@@ -372,28 +372,33 @@ void worldObjects::frameWork()
 	//■■■■■■■■■■■■■■■■■폭탄 프레임■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	if (_isBoomShow)
 	{
-		for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
+		_boomCount++;
 		{
-			if (_viItem->item == ITEM_BOOM && _viItem->isUse)
+			if (_boomCount <= 200)
 			{
-				if (_boomCount <= 300)
+				if (_frameCount % 6 == 0)
 				{
-					if (_frameCount % 6 == 0)
-					{
-						_viItem->image->setFrameX(_viItem->frameX);
-						_viItem->frameX++;
-						if (_viItem->frameX > 1) { _viItem->frameX = 0; }
-					}
+					_Items[8].image->setFrameX(_Items[8].frameX);
+					_Items[8].frameX++;
+					if (_Items[8].frameX > 1) { _Items[8].frameX = 0; }
 				}
-				if (_boomCount > 300)
-				{
-					_viItem->image->setFrameX(_viItem->frameX);
-					_viItem->frameX++;
-					if (_viItem->frameX > 2) { _viItem->frameX = 2; }
-					_boomCount = 0;
+			}
+			else if (_boomCount >= 250)
+			{
+				_isBoomShow = false;
+				_boomCount = 0;
+			}
+			else
+			{
+				_Items[8].image->setFrameX(_Items[8].frameX);
+				_Items[8].frameX++;
+				if (_Items[8].frameX > 2)
+				{ 
+					_Items[8].frameX = 2;
 				}
 			}
 		}
+
 	}
 	//■■■■■■■■■■■■■■■■■폭포 프레임■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	for (int i = 0; i < 3; i++)
@@ -439,4 +444,13 @@ void worldObjects::move()
 			}
 		}
 	}
+}
+
+void worldObjects::MakeBoom(float x, float y)
+{
+	_isBoomShow = true;
+	_Items[8].x = x;
+	_Items[8].y = y;
+	_Items[8].rc = RectMake(x - 100, y - 100, _Items[8].image->getFrameWidth() + 200, _Items[8].image->getFrameHeight() + 100);
+
 }

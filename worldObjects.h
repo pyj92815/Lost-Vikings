@@ -20,6 +20,7 @@ enum tagTypeTrap
 	TRAP_RED_UNBREAKABLE_WALL,
 	TRAP_BLUE_UNBREAKABLE_WALL,
 	TRAP_BORAD,
+	TRAP_EXIT,
 };
 struct tagObjects
 {
@@ -68,6 +69,11 @@ private:
 private:
 	//■■■■■■■■■■■아이템■■■■■■■■■■■■■■■■■■■■■■
 	tagObjects _Items[9];
+	tagObjects _isBoomEffects;
+	bool _isChange;
+private:
+	//■■■■■■■■■■■탈출■■■■■■■■■■■■■■■■■■■■■■
+	tagObjects _EXIT;
 private:
 	int _frameCount;			//프레임 카운터
 	int _boomCount;				//폭탄사용후 폭탄이 터지는카운터
@@ -93,8 +99,13 @@ public:
 	virtual void frameWork();
 	virtual void move();
 	bool getUpDown() { return _isUpDown; }
+	void MakeBoom(float x, float y);
 	bool getIsBoomShow() { return _isBoomShow; }
+	void setIsBoomShow() { _isBoomShow = true; }
 	void setPlayerManagerAddressLink(playerManager* pm) { _pm = pm; }
+
+	RECT getBombRect() { return _Items[8].rc; }
+	int getBombFrameCount() { return _Items[8].frameX; }
 
 };
 
