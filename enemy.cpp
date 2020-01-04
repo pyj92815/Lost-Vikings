@@ -35,6 +35,7 @@ HRESULT Enemy::init(EnemyType enemyType, float x, float y)
 	default:
 		break;
 	}
+	_die_Image = IMAGEMANAGER->findImage("Enemy_Die");
 
 	_enemyHP = 4;
 
@@ -62,7 +63,7 @@ void Enemy::update()
 {
 	EnemyAction();		//적의 상태의 따른 행동을 지정하는 함수
 	Frame();			//적의 프레임을 관리하는 함수
-	if (_enemyHP <= 0)_enemyState = EnemyState::DIE;
+	die();
 	//playerLink();		//플레이어의 렉트를 받아오는 함수
 	switch (_enemyType)
 	{
@@ -97,7 +98,8 @@ void Enemy::render()
 		Rectangle(CAMERAMANAGER->getWorDC(), _enemy_DISCOVERY_Rect);
 		Rectangle(CAMERAMANAGER->getWorDC(), _enemyRect);
 	}
-	Rectangle(CAMERAMANAGER->getWorDC(), _enemyAttackRect);
+	//Rectangle(CAMERAMANAGER->getWorDC(), _enemyAttackRect);
+	//상태가 IDLE,SCOUT,DISCOVERY상태면 요거 실행
 	if (_enemyState != EnemyState::DIE && _enemyState != EnemyState::ATTACK)
 	{
 		_image->frameRender(CAMERAMANAGER->getWorDC(), _enemyRect.left, _enemyRect.top, _frameX, _frameY);
@@ -108,7 +110,7 @@ void Enemy::render()
 	}
 	if (_enemyState == EnemyState::DIE)
 	{
-
+		_die_Image->frameRender(CAMERAMANAGER->getWorDC(), _enemyRect.left, _enemyRect.top, _frameX, _frameY);
 	}
 }
 
@@ -126,13 +128,13 @@ void Enemy::Move()
 	if (_turn_Num % 2 == 1)
 	{
 		_enemyLR = EnemyLR::LEFT;
-		if (_frameX <= 3)
+		if (_frameX <= 3 && !_turn)
 			_x -= 3;
 	}
 	else
 	{
 		_enemyLR = EnemyLR::RIGHT;
-		if (_frameX <= 3)
+		if (_frameX <= 3&&!_turn)
 			_x += 3;
 	}
 }
@@ -145,7 +147,7 @@ void Enemy::Scout()
 		for (int i = _x - _image->getFrameWidth() / 2; i > _x - _image->getFrameWidth() / 2 - 30;--i)
 		{
 			//바닥에 색상을 구해온다
-			COLORREF platformCOLOR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), i, _probeY + 20);
+			COLORREF platformCOLOR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), i, _probeY + 60);
 			//벽에 색상을 구해온다
 			COLORREF wallCOLOR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), i, _y - _image->getFrameHeight());
 
@@ -156,7 +158,15 @@ void Enemy::Scout()
 			int platformR = GetRValue(platformCOLOR);
 			int platformG = GetGValue(platformCOLOR);
 			int platformB = GetBValue(platformCOLOR);
-
+			if (_wall)
+			{
+				_turn_Num++;
+				_turn = true;
+			}
+			else
+			{
+				_turn = false;
+			}
 			if (((platformR == 255 && platformG == 0 && platformB == 255) || (platformR == 255 && platformG == 255 && platformB == 255) || (platformR == 255 && platformG == 0 && platformB == 0) || (wallR == 255 && wallG == 255 && wallB == 0)))
 			{
 				_turn_Num++;
@@ -174,7 +184,7 @@ void Enemy::Scout()
 		for (int i = _x + _image->getFrameWidth() / 2; i < _x + _image->getFrameWidth() / 2 + 70;++i)
 		{
 			//바닥에 색상을 구해온다
-			COLORREF platformCOLOR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), i, _probeY + 50);
+			COLORREF platformCOLOR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), i, _probeY + 70);
 			//벽에 색상을 구해온다
 			COLORREF wallCOLOR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), i, _y - _image->getFrameHeight());
 
@@ -299,7 +309,7 @@ void Enemy::Tracking()
 	{
 	case DISCOVERYPlayer::ERIC:
 		//플레이어가 오른쪽에 있을때(에릭)
-		if (_x < (_ericRect.left + _ericRect.right) / 2 && !_turn)
+		if (_x < (_ericRect.left + _ericRect.right) / 2 && !_turn && !_wall)
 		{
 			_turn = true;
 			_enemyLR = EnemyLR::RIGHT;
@@ -307,7 +317,7 @@ void Enemy::Tracking()
 				_x += 3;
 		}
 		//플레이어가 왼쪽에 있을때(에릭)
-		if (_x > (_ericRect.left + _ericRect.right) / 2 && !_turn)
+		if (_x > (_ericRect.left + _ericRect.right) / 2 && !_turn && !_wall)
 		{
 			_turn = true;
 			_enemyLR = EnemyLR::LEFT;
@@ -318,7 +328,7 @@ void Enemy::Tracking()
 		break;
 	case DISCOVERYPlayer::BALEOG:
 		//플레이어가 오른쪽에 있을때(벨로그)
-		if (_x < (_baleogRect.left + _baleogRect.right) / 2 && !_turn)
+		if (_x < (_baleogRect.left + _baleogRect.right) / 2 && !_turn && !_wall)
 		{
 			_turn = true;
 			_enemyLR = EnemyLR::RIGHT;
@@ -326,7 +336,7 @@ void Enemy::Tracking()
 				_x += 3;
 		}
 		//플레이어가 왼쪽에 있을때(벨로그)
-		if (_x > (_baleogRect.left + _baleogRect.right) / 2 && !_turn)
+		if (_x > (_baleogRect.left + _baleogRect.right) / 2 && !_turn && !_wall)
 		{
 			_turn = true;
 			_enemyLR = EnemyLR::LEFT;
@@ -337,7 +347,7 @@ void Enemy::Tracking()
 		if (!IntersectRect(&temp, &_enemy_DISCOVERY_Rect, &_baleogRect))_enemyState = EnemyState::SCOUT;	//플레이어(벨로그)가 탐지범위 밖으로 나가면  SCOUT상태로 변함
 	case DISCOVERYPlayer::OLAF:
 		//플레이어가 오른쪽에 있을때(올라프)
-		if (_x < (_olafRect.left + _olafRect.right) / 2 && !_turn)
+		if (_x < (_olafRect.left + _olafRect.right) / 2 && !_turn && !_wall)
 		{
 			_turn = true;
 			_enemyLR = EnemyLR::RIGHT;
@@ -345,7 +355,7 @@ void Enemy::Tracking()
 				_x += 3;
 		}
 		//플레이어가 왼쪽에 있을때(올라프)
-		if (_x > (_olafRect.left + _olafRect.right) / 2 && !_turn)
+		if (_x > (_olafRect.left + _olafRect.right) / 2 && !_turn && !_wall)
 		{
 			_turn = true;
 			_enemyLR = EnemyLR::LEFT;
@@ -623,6 +633,16 @@ void Enemy::UnAttack()
 		break;
 	default:
 		break;
+	}
+}
+
+void Enemy::die()
+{
+	if (_enemyHP <= 0 && !_RIP)
+	{
+		_RIP = true;
+		_frameX = 0;
+		_enemyState = EnemyState::DIE;
 	}
 }
 
