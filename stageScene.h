@@ -3,6 +3,7 @@
 #include "worldMap.h"			// 스테이지에서만 필요하기 때문에 이곳으로 이동
 #include "playerManager.h"		// 스테이지에서만 필요하기 때문에 이곳으로 이동
 #include "enemyManager.h"		// 스테이지에서만 필요하기 때문에 이곳으로 이동
+#include "worldObjects.h"
 
 
 // 플레이어의 타입
@@ -57,6 +58,7 @@ private:
 	worldMap* _wm;
 	playerManager* _pm;
 	EnemyManager* _em;
+	worldObjects* _wo;
 
 public:
 	stageScene();

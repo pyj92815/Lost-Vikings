@@ -171,6 +171,7 @@ public:
 	inline int getFrameY() { return _imageInfo->currentFrameY; }
 
 	inline int getFrameWidth() { return _imageInfo->frameWidth; }
+
 	inline int getFrameHeight() { return _imageInfo->frameHeight; }
 
 };

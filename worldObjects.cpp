@@ -127,6 +127,9 @@ HRESULT worldObjects::init()
 	_Items[6].image = IMAGEMANAGER->addImage("RedKey", "./image/ImageCollection/RedKey.bmp", 50, 50, true, RGB(255, 0, 255));
 	_Items[7].image = IMAGEMANAGER->addImage("RedLocker", "./image/ImageCollection/RedKey_Hole.bmp", 48, 48, false, RGB(0, 0, 0));
 	_Items[8].image = IMAGEMANAGER->addFrameImage("BOOM", "./image/ImageCollection/Boom.bmp", 264, 84, 3, 1, true, RGB(255, 0, 255));
+	_isBoomEffects.image = IMAGEMANAGER->addImage("IsBoom", "./image/ImageCollection/isBoom.bmp", 960, 758, false, RGB(0, 0, 0));
+	//ฦ๘ลบ ฦไภฬตๅ ภฮ
+	_isBoomEffects.fadeIn = 200;
 	//ฦ๘ลบ มยวฅ
 	_Items[0].x = 750;
 	_Items[0].y = 60;
@@ -157,11 +160,12 @@ HRESULT worldObjects::init()
 	_Items[6].item = ITEM_REDKEY;
 	_Items[7].item = ITEM_REDLOCKER;
 	_Items[8].item = ITEM_BOOM;
+	//ฦ๘ลบ ลอม๖ดย ภฬฦๅฦฎ
+	_Items[8].frameX = 0;
+	_Items[8].frameY = 0;
 	//กเกเกเกเกเกเกเกเกเกเกเกเกเพฦภฬลÛภป บคลอฟก ณึภฺกเกเกเกเกเกเกเกเกเกเกเกเกเกเกเกเกเกเกเ
-	for (int i = 0; i < 9; i++) 
-	{ 
-		_Items[8].frameX = 0;
-		_Items[8].frameY = 0;
+	for (int i = 0; i < 8; i++)
+	{
 		_Items[i].rc = RectMake(_Items[i].x, _Items[i].y, _Items->image->getWidth(), _Items->image->getHeight());
 		_Items[i].isCollision = false;
 		_Items[i].isUse = false;
@@ -178,7 +182,6 @@ HRESULT worldObjects::init()
 void worldObjects::update()
 {
 	_frameCount++;
-	_boomCount++;
 	move();
 	frameWork();
 
@@ -186,7 +189,7 @@ void worldObjects::update()
 	{
 		if (_viTrap->trap == TRAP_POISION)
 		{
-			_viTrap->rc = RectMake(_viTrap->x, _viTrap->y + (_viTrap->image->getFrameHeight() / 2), 
+			_viTrap->rc = RectMake(_viTrap->x, _viTrap->y + (_viTrap->image->getFrameHeight() / 2),
 				_viTrap->image->getFrameWidth(), _viTrap->image->getFrameHeight() / 2);
 		}
 		else if (_viTrap->trap == TRAP_BORAD)
@@ -195,7 +198,7 @@ void worldObjects::update()
 		}
 		else if (_viTrap->trap == TRAP_WALL)
 		{
-			_viTrap->rc = RectMake(_viTrap->x, _viTrap->y, 
+			_viTrap->rc = RectMake(_viTrap->x, _viTrap->y,
 				_viTrap->image->getFrameWidth(), _viTrap->image->getFrameHeight());
 		}
 	}
@@ -207,23 +210,9 @@ void worldObjects::release()
 
 void worldObjects::render()
 {
-	if (!_isBoomShow)
-	{
-		for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
-		{//กแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแพฦภฬลÛ ภฬนฬม๖ รโทยกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแ
-			if (_viItem->item == ITEM_BOOM) { continue; }
-			if (!_viItem->isCollision)
-			{
-				_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
-				if (KEYMANAGER->isStayKeyDown('Q'))
-				{
-					Rectangle(CAMERAMANAGER->getWorDC(), _viItem->rc);
-				}
-			}
-		}
-	}
-	if (_isBoomShow)
-	{
+
+	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
+	{//กแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแพฦภฬลÛ ภฬนฬม๖ รโทยกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแ
 		if (!_viItem->isCollision)
 		{
 			_viItem->image->render(CAMERAMANAGER->getWorDC(), _viItem->x, _viItem->y);
@@ -285,6 +274,29 @@ void worldObjects::render()
 			if (KEYMANAGER->isStayKeyDown('Q')) { Rectangle(CAMERAMANAGER->getWorDC(), _viTrap->rc); }
 		}
 	}
+	if (_isBoomShow)
+	{
+		_Items[8].image->frameRender(CAMERAMANAGER->getWorDC(), _Items[8].x, _Items[8].y + 30, _Items[8].frameX, 0);
+		if (KEYMANAGER->isStayKeyDown('Q')) { Rectangle(CAMERAMANAGER->getWorDC(), _Items[8].rc); }
+		if (_boomCount >= 200)
+		{
+			_isBoomEffects.fadeIn++;
+			if (_isBoomEffects.fadeIn >= 207 && !_isChange)
+			{
+				_isBoomEffects.fadeIn = 50;
+				_isBoomEffects.fadeIn++;
+				_isChange = true;
+			
+			}
+			if (_isBoomEffects.fadeIn >= 57 && _isChange)
+			{
+				_isBoomEffects.fadeIn = 200;
+				_isBoomEffects.fadeIn++;
+				_isChange = false;
+			}
+			_isBoomEffects.image->alphaRender(CAMERAMANAGER->getWorDC(), CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), _isBoomEffects.fadeIn);
+		}
+	}
 }
 
 void worldObjects::frameWork()
@@ -336,7 +348,7 @@ void worldObjects::frameWork()
 		}
 		if (_frameCount % 6 == 0)
 		{
-			if (_viTrap->trap == TRAP_RED_UNBREAKABLE_WALL || 
+			if (_viTrap->trap == TRAP_RED_UNBREAKABLE_WALL ||
 				_viTrap->trap == TRAP_BLUE_UNBREAKABLE_WALL)
 			{
 				if (!_viTrap->isCollision)
@@ -360,28 +372,33 @@ void worldObjects::frameWork()
 	//กแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแฦ๘ลบ วมทนภำกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแ
 	if (_isBoomShow)
 	{
-		for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
+		_boomCount++;
 		{
-			if (_viItem->item == ITEM_BOOM && _viItem->isUse)
+			if (_boomCount <= 200)
 			{
-				if (_boomCount <= 300)
+				if (_frameCount % 6 == 0)
 				{
-					if (_frameCount % 6 == 0)
-					{
-						_viItem->image->setFrameX(_viItem->frameX);
-						_viItem->frameX++;
-						if (_viItem->frameX > 1) { _viItem->frameX = 0; }
-					}
+					_Items[8].image->setFrameX(_Items[8].frameX);
+					_Items[8].frameX++;
+					if (_Items[8].frameX > 1) { _Items[8].frameX = 0; }
 				}
-				if (_boomCount > 300)
-				{
-					_viItem->image->setFrameX(_viItem->frameX);
-					_viItem->frameX++;
-					if (_viItem->frameX > 2) { _viItem->frameX = 2; }
-					_boomCount = 0;
+			}
+			else if (_boomCount >= 250)
+			{
+				_isBoomShow = false;
+				_boomCount = 0;
+			}
+			else
+			{
+				_Items[8].image->setFrameX(_Items[8].frameX);
+				_Items[8].frameX++;
+				if (_Items[8].frameX > 2)
+				{ 
+					_Items[8].frameX = 2;
 				}
 			}
 		}
+
 	}
 	//กแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแฦ๘ฦ๗ วมทนภำกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแกแ
 	for (int i = 0; i < 3; i++)
@@ -427,4 +444,13 @@ void worldObjects::move()
 			}
 		}
 	}
+}
+
+void worldObjects::MakeBoom(float x, float y)
+{
+	_isBoomShow = true;
+	_Items[8].x = x;
+	_Items[8].y = y;
+	_Items[8].rc = RectMake(x - 100, y - 100, _Items[8].image->getFrameWidth() + 200, _Items[8].image->getFrameHeight() + 100);
+
 }

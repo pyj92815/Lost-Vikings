@@ -184,7 +184,19 @@ void playerManager::itemUse()
 			switch (_vInven[i].typeItem)
 			{
 			case ITEM_BOMB:
-
+					if (_playing == 0)
+					{
+						_wo->MakeBoom(_eric->getEric().x, _eric->getEric().y);
+					}
+					else if (_playing == 1)
+					{
+						_wo->MakeBoom(_olaf->getOlaf().x, _olaf->getOlaf().y);
+					}
+					else if (_playing == 2)
+					{
+						_wo->MakeBoom(_baleog->getBaleog().x, _baleog->getBaleog().y);
+					}
+					this->removeInven(i);
 				break;
 			case ITEM_TOMATO:
 				if (_playing == 0)
@@ -527,10 +539,8 @@ void playerManager::itemColision()
 			}
 		}
 	}
-
 	//=============================
 	//발레오그 충돌
-
 	for (int i = 0; i < _wo->get_vItem().size(); ++i)
 	{
 		if (0 > _wo->get_vItem().size()) break;
@@ -629,7 +639,19 @@ void playerManager::enemyColision()
 				break;
 			}
 		}
-
+		// 에너미 폭탄 충돌 
+		if (_wo->getIsBoomShow())
+		{
+			RECT temp3;
+			if (IntersectRect(&temp3, &_wo->getBombRect(), &_em->getVEnemy()[i]->getRect()))
+			{
+				if (_wo->getBombFrameCount() >= 2)
+				{
+					_em->EnemyRemove(i);
+					break;
+				}
+			}
+		}
 
 	}
 }
