@@ -579,6 +579,7 @@ void playerbaleog::PixelRightCollision()
 	}
 }
 
+
 void playerbaleog::PixelLeftCollision()
 {
 	_baleog.probeX = _baleog.x - 3;
@@ -654,6 +655,8 @@ void playerbaleog::baleogHit()
 }
 
 
+
+
 HRESULT arrow::init(int arrowMax)
 {
 	_arrowMax = arrowMax;
@@ -717,6 +720,8 @@ void arrow::fire(float x, float y, float speed, float angle, int direction, floa
 	arrow.direction = direction;
 
 	_vArrow.push_back(arrow);
+
+
 }
 
 void arrow::blade(float x, float y, float speed, float angle, int direction, float range)
@@ -752,6 +757,7 @@ void arrow::removeArrow(int arrNum)
 
 void arrow::arrowMove(bool fire)
 {
+
 	if (fire == 0)
 	{
 		for (_viArrow = _vArrow.begin(); _viArrow != _vArrow.end();)
@@ -762,6 +768,19 @@ void arrow::arrowMove(bool fire)
 			_viArrow->rc = RectMakeCenter(_viArrow->x, _viArrow->y,
 				_viArrow->arrowImage->getFrameWidth(),
 				_viArrow->arrowImage->getFrameHeight());
+
+			// º® Ãæµ¹
+			_viArrow->probeX = _viArrow->x + _viArrow->arrowImage->getFrameWidth();
+
+			COLORREF getPixel_ARROW = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _viArrow->probeX + 2, _viArrow->y);
+
+			int r = GetRValue(getPixel_ARROW);
+			int g = GetGValue(getPixel_ARROW);
+			int b = GetBValue(getPixel_ARROW);
+
+			
+
+
 			if (_viArrow->range < getDistance(_viArrow->x, _viArrow->y, _viArrow->fireX,
 				_viArrow->fireY))
 			{
@@ -769,10 +788,45 @@ void arrow::arrowMove(bool fire)
 				SAFE_DELETE(_viArrow->arrowImage);
 				_viArrow = _vArrow.erase(_viArrow);
 			}
+			else if (!(r == 255 && g == 0 && b == 255))
+				{
+				SAFE_RELEASE(_viArrow->arrowImage);
+				SAFE_DELETE(_viArrow->arrowImage);
+					_viArrow = _vArrow.erase(_viArrow);
+				}
 			else ++_viArrow;
 
 		}
 
 	}
 }
+//
+//void arrow::arrowPixelCollision()
+//{
+//	for (_viArrow = _vArrow.begin(); _viArrow != _vArrow.end();)
+//	{
+//		_baleog.probeX = _baleog.x + _baleog.image->getFrameWidth();
+//		
+//			COLORREF getPixel_RIGHT = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _baleog.probeX + 2, _baleog.y);
+//
+//		int r = GetRValue(getPixel_RIGHT);
+//		int g = GetGValue(getPixel_RIGHT);
+//		int b = GetBValue(getPixel_RIGHT);
+//
+//		if (!(r == 255 && g == 0 && b == 255))
+//		{
+//			if (_baleog.posState == POSSTATE_GROUND)
+//			{
+//				if (_baleog.state != STATE_PUSH)
+//				{
+//					_baleog.state = STATE_PUSH;
+//					_baleog.currentFrameX = 0;
+//					_baleog.image->setFrameX(0);
+//
+//				}
+//			}
+//			_baleog.x = _baleog.probeX - _baleog.image->getFrameWidth();
+//		}
+//	}
+//}
 
