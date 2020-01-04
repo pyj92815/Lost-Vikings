@@ -145,6 +145,8 @@ public:
 	void ResetAnimation1();
 	void ResetAnimation2();
 
+	void setBaleogDead(bool dead) { _baleog.isDead = dead; }	// 형길 추가
+
 };
 
 

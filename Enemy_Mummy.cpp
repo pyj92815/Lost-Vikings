@@ -101,7 +101,8 @@ void Enemy_Mummy::Frame()
 		{
 			_frameX++;
 			if (_frameX > 10)
-			_die = true;
+				_frameX = 0;
+			_frameCount = 0;
 		}
 		break;
 	default:
