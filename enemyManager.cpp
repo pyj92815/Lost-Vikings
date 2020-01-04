@@ -149,7 +149,7 @@ void EnemyManager::Collision()
 				if (!_playerManager->getEric()->getHit())
 				{
 					//_playerManager->getEric()->setHit();
-					//_playerManager->getEric()->setEricHit();
+				//	_playerManager->getEric()->setEricHit();
 				}
 				
 	

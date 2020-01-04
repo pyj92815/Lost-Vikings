@@ -126,6 +126,7 @@ HRESULT worldObjects::init()
 	_Items[5].image = IMAGEMANAGER->addImage("BlueLocker", "./image/ImageCollection/BlueKey_Hole.bmp", 48, 48, false, RGB(0, 0, 0));
 	_Items[6].image = IMAGEMANAGER->addImage("RedKey", "./image/ImageCollection/RedKey.bmp", 50, 50, true, RGB(255, 0, 255));
 	_Items[7].image = IMAGEMANAGER->addImage("RedLocker", "./image/ImageCollection/RedKey_Hole.bmp", 48, 48, false, RGB(0, 0, 0));
+	_Items[8].image = IMAGEMANAGER->addFrameImage("BOOM", "./image/ImageCollection/Boom.bmp", 264, 84, 3, 1, true, RGB(255, 0, 255));
 	//폭탄 좌표
 	_Items[0].x = 750;
 	_Items[0].y = 60;
@@ -146,15 +147,6 @@ HRESULT worldObjects::init()
 	_Items[6].y = 555;
 	_Items[7].x = 2040;		//빨간 자물쇠
 	_Items[7].y = 185;
-	//렉트
-	//_Items[0].rc = RectMake(750, 40, 40, 38);		//폭탄
-	//_Items[1].rc = RectMake(3600, 665, 40, 48);
-	//_Items[2].rc = RectMake(2790, 615, 40, 48);		//토마토
-	//_Items[3].rc = RectMake(2790, 615, 40, 48);
-	//_Items[4].rc = RectMake(2075, 955, 27, 45);		//파란 열쇠
-	//_Items[5].rc = RectMake(3520, 2105, 48, 48);	//파란 자물쇠
-	//_Items[6].rc = RectMake(1840, 555, 27, 54);		//빨간 열쇠
-	//_Items[7].rc = RectMake(2040, 185, 48, 48);		//빨간 자물쇠
 	//상태
 	_Items[0].item = ITEM_BOMB;
 	_Items[1].item = ITEM_BOMB;
@@ -164,9 +156,12 @@ HRESULT worldObjects::init()
 	_Items[5].item = ITEM_BLUELOCKER;
 	_Items[6].item = ITEM_REDKEY;
 	_Items[7].item = ITEM_REDLOCKER;
+	_Items[8].item = ITEM_BOOB;
 	//□□□□□□□□□□□□□아이템을 벡터에 넣자□□□□□□□□□□□□□□□□□□□
-	for (int i = 0; i < 8; i++) 
+	for (int i = 0; i < 9; i++) 
 	{ 
+		_Items[8].frameX = 0;
+		_Items[8].frameY = 0;
 		_Items[i].rc = RectMake(_Items[i].x, _Items[i].y, _Items->image->getWidth(), _Items->image->getHeight());
 		_Items[i].isCollision = false;
 		_vItem.push_back(_Items[i]);
@@ -175,12 +170,14 @@ HRESULT worldObjects::init()
 	//_vTrap.push_back(_Items[7]);
 	//■■■■■■■■■■■■■■■■■■■■여러가지■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	_frameCount = 0;
+	_boomCount = 0;
 	return S_OK;
 }
 
 void worldObjects::update()
 {
 	_frameCount++;
+	_boomCount++;
 	move();
 	frameWork();
 
@@ -236,9 +233,6 @@ void worldObjects::render()
 	IMAGEMANAGER->findImage("short_Water_Fall")->frameRender(CAMERAMANAGER->getWorDC(),
 		3263, -60, _waterFall[2].frameX, _waterFall[2].frameY);
 	//■■■■■■■■■■■■■■■■■벽 및 발판 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	IMAGEMANAGER->findImage("BrownDoor_1")->frameRender(CAMERAMANAGER->getWorDC(), _unbreakableWallOne.rc.left, _unbreakableWallOne.rc.top);
-	IMAGEMANAGER->findImage("BrownDoor_2")->frameRender(CAMERAMANAGER->getWorDC(), _unbreakableWallTwo.rc.left, _unbreakableWallTwo.rc.top);
-	//IMAGEMANAGER->findImage("Moving_Flatform")->render(CAMERAMANAGER->getWorDC(), _flyingBoard.rc.left, _flyingBoard.rc.top);
 	if (KEYMANAGER->isStayKeyDown('Q'))
 	{//■■■■■■■■■■■■■■■■■벽 충돌 렉트 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 		Rectangle(CAMERAMANAGER->getWorDC(), _breakableWallOne.rc);
@@ -263,6 +257,12 @@ void worldObjects::render()
 			if (KEYMANAGER->isStayKeyDown('Q')) { Rectangle(CAMERAMANAGER->getWorDC(), _viTrap->rc); }
 		}
 		else if (_viTrap->trap == TRAP_WALL)
+		{//■■■■■■■■■■■■■■■■■부셔지는 벽 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+			_viTrap->image->frameRender(CAMERAMANAGER->getWorDC(), _viTrap->x, _viTrap->y, _viTrap->frameX, _viTrap->frameY);
+			//부셔지는 벽 렉트 출력
+			if (KEYMANAGER->isStayKeyDown('Q')) { Rectangle(CAMERAMANAGER->getWorDC(), _viTrap->rc); }
+		}
+		else if (_viTrap->trap == TRAP_RED_UNBREAKABLE_WALL || _viTrap->trap == TRAP_BLUE_UNBREAKABLE_WALL)
 		{//■■■■■■■■■■■■■■■■■부셔지는 벽 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 			_viTrap->image->frameRender(CAMERAMANAGER->getWorDC(), _viTrap->x, _viTrap->y, _viTrap->frameX, _viTrap->frameY);
 			//부셔지는 벽 렉트 출력
@@ -351,7 +351,30 @@ void worldObjects::frameWork()
 				}
 			}
 		}
-	}   
+	}
+	//■■■■■■■■■■■■■■■■■폭탄 프레임■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
+	{
+		if (_viItem->item == ITEM_BOOB)
+		{
+			if (_boomCount <= 300)
+			{
+				if (_frameCount % 6 == 0)
+				{
+					_viItem->image->setFrameX(_viItem->frameX);
+					_viItem->frameX++;
+					if (_viItem->frameX > 1) { _viItem->frameX = 0; }
+				}
+			}
+			if (_boomCount > 300)
+			{
+				_viItem->image->setFrameX(_viItem->frameX);
+				_viItem->frameX++;
+				if (_viItem->frameX > 2) { _viItem->frameX = 2; }
+				_boomCount = 0;
+			}
+		}
+	}
 	//■■■■■■■■■■■■■■■■■폭포 프레임■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	for (int i = 0; i < 3; i++)
 	{
