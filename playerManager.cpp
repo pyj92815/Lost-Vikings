@@ -29,9 +29,12 @@ void playerManager::update()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_TAB))
 	{
-		_eric->setItemKey();
-		_baleog->setItemKey();
-		_olaf->setItemKey();
+		if (!_trade)
+		{
+			_eric->setItemKey();
+			_baleog->setItemKey();
+			_olaf->setItemKey();
+		}
 	}
 	KILLPlayer();	// 플레이어를 죽인다
 
@@ -127,15 +130,16 @@ void playerManager::itemKey()
 		}
 		if (KEYMANAGER->isOnceKeyDown('F'))
 		{
-			_trade ? _trade = false : _trade = true;
 			for (int i = 0; i < _vInven.size(); ++i)
 			{
 				if (0 > _vInven.size()) break;
 				if (_vInven[i].player == _playing && _vInven[i].invenNumber == _direction[_playing])
 				{
 					_vInven[i].choice = true;
+					cout << _vInven[i].choice << endl;
 				}
 			}
+			_trade ? _trade = false : _trade = true;
 		}
 	}
 	else
@@ -143,30 +147,32 @@ void playerManager::itemKey()
 		for (int i = 0; i < _vInven.size(); ++i)
 		{
 			if (0 > _vInven.size()) break;
+			if (!_vInven[i].choice) continue;
 			if (_vInven[i].choice)
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 				{
-					if (_vInven[i].player > 0) _vInven[i].player--;
+					if (_vInven[i].player > 0)
+					{
+						_vInven[i].invenNumber = itemConnect(_vInven[i].player - 1);
+						_vInven[i].player--;
+					}
 				}
 				if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 				{
-					if (_vInven[i].player < 3)_vInven[i].player++;
+					if (_vInven[i].player < 3)
+					{
+						_vInven[i].invenNumber = itemConnect(_vInven[i].player + 1);
+						_vInven[i].player++;
+					}
 				}
 				if (KEYMANAGER->isOnceKeyDown('F'))
 				{
-					_trade ? _trade = false : _trade = true;
 					_vInven[i].choice = false;
 					if (_vInven[i].player == 3)
 					{
 						this->removeInven(i);
 					}
-				}
-			}
-			else
-			{
-				if (KEYMANAGER->isOnceKeyDown('F'))
-				{
 					_trade ? _trade = false : _trade = true;
 				}
 			}
@@ -184,19 +190,7 @@ void playerManager::itemUse()
 			switch (_vInven[i].typeItem)
 			{
 			case ITEM_BOMB:
-					if (_playing == 0)
-					{
-						_wo->MakeBoom(_eric->getEric().x, _eric->getEric().y);
-					}
-					else if (_playing == 1)
-					{
-						_wo->MakeBoom(_olaf->getOlaf().x, _olaf->getOlaf().y);
-					}
-					else if (_playing == 2)
-					{
-						_wo->MakeBoom(_baleog->getBaleog().x, _baleog->getBaleog().y);
-					}
-					this->removeInven(i);
+
 				break;
 			case ITEM_TOMATO:
 				if (_playing == 0)
@@ -231,7 +225,7 @@ void playerManager::itemUse()
 							}
 						}
 					}
-				}	
+				}
 				break;
 			case ITEM_REDLOCKER:
 				break;
@@ -261,6 +255,44 @@ void playerManager::itemUse()
 			break;
 		}
 	}
+}
+
+int playerManager::itemConnect(int playing)
+{
+	list<int> num;
+	list<int>::iterator inum;
+	invenNum = 0;
+
+	if (_vInven.empty()) return 0;
+
+	for (int i = 0; i < _vInven.size();++i)
+	{
+		if (_vInven[i].player == playing)
+		{
+			for (int j = 0; j < 4; ++j)
+			{
+				if (_vInven[i].invenNumber == j)
+				{
+					num.push_back(j);
+				}
+			}
+		}
+	}
+
+	if (num.empty()) return 0;
+	num.sort();
+
+	for (inum = num.begin(); inum != num.end();)
+	{
+		if (*inum == invenNum)
+		{
+			inum++;
+			invenNum++;
+		}
+		else break;
+	}
+	return invenNum;
+
 }
 
 void playerManager::trapColision() // 함정과 충돌 시
@@ -313,12 +345,12 @@ void playerManager::trapColision() // 함정과 충돌 시
 								_eric->setEricStop();
 							}
 						}
-					}	
-					else if ((_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left+10 &&
-						  	_eric->getEric().rc.right <= _wo->get_vTrap()[i].rc.right-10  )
-						   	||
-						    (_eric->getEric().rc.left >= _wo->get_vTrap()[i].rc.left+10  &&
-						   	_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right-10 ))
+					}
+					else if ((_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left + 10 &&
+						_eric->getEric().rc.right <= _wo->get_vTrap()[i].rc.right - 10)
+						||
+						(_eric->getEric().rc.left >= _wo->get_vTrap()[i].rc.left + 10 &&
+							_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right - 10))
 					{
 						if (_eric->getEric().state != STATE_PRESSDIE)
 						{
@@ -372,9 +404,9 @@ void playerManager::trapColision() // 함정과 충돌 시
 					{
 						if (_eric->getEric().state == STATE_MOVE || _eric->getEric().state == STATE_ERIC_JUMP)
 						{
-						_eric->setEricState(STATE_PUSH);
-						_eric->setEricFrame();
-						_eric->setEricX(_wo->get_vTrap()[i].x - _eric->getEric().image->getFrameWidth() - 5);
+							_eric->setEricState(STATE_PUSH);
+							_eric->setEricFrame();
+							_eric->setEricX(_wo->get_vTrap()[i].x - _eric->getEric().image->getFrameWidth() - 5);
 						}
 					}
 				}
@@ -455,14 +487,14 @@ void playerManager::trapColision() // 함정과 충돌 시
 				else if (_wo->get_vTrap()[i].trap == TRAP_WALL)
 				{
 
-					
+
 					if (!_wo->get_vTrap()[i].isCollision && _baleog->getBaleog().state == STATE_MOVE)
 					{
 						_baleog->setBaleogState(STATE_PUSH);
 						_baleog->setBaleogFrame();
 						_baleog->setBaleogX(_wo->get_vTrap()[i].x - _baleog->getBaleog().image->getFrameWidth() - 5);
 					}
-					
+
 					else
 					{
 						_baleog->setBaleogX(_wo->get_vTrap()[i].x - _baleog->getBaleog().image->getFrameWidth() - 5);
@@ -516,12 +548,14 @@ void playerManager::itemColision()
 				inven.image = _wo->get_vItem()[i].image;
 				inven.typeItem = _wo->get_vItem()[i].item;
 				inven.player = _playing;
+				inven.choice = false;
 				_itemCount[_playing] = 0;
 				for (_viInven = _vInven.begin(); _viInven != _vInven.end(); ++_viInven)
 				{
 					if (_viInven->player == _playing) _itemCount[_playing]++;
 				}
-				inven.invenNumber = _itemCount[_playing]; // 순차적으로 아이템을 넣는다.
+				//inven.invenNumber = _itemCount[_playing]; // 순차적으로 아이템을 넣는다.
+				inven.invenNumber = itemConnect(_playing);
 				if (_itemCount[_playing] < 4)
 				{
 					_vInven.push_back(inven);
@@ -533,14 +567,17 @@ void playerManager::itemColision()
 					cout << "인벤 image 높이 :" << _viInven->image->getHeight() << endl;
 					cout << "플레이어 숫자 :" << _viInven->player << endl;
 					cout << "아이템 넘버 :" << _viInven->invenNumber << endl;
+					cout << "BOOL :" << _viInven->choice << endl;
 
 				}
 				break;
 			}
 		}
 	}
+
 	//=============================
 	//발레오그 충돌
+
 	for (int i = 0; i < _wo->get_vItem().size(); ++i)
 	{
 		if (0 > _wo->get_vItem().size()) break;
@@ -639,20 +676,6 @@ void playerManager::enemyColision()
 				break;
 			}
 		}
-		// 에너미 폭탄 충돌 
-		if (_wo->getIsBoomShow())
-		{
-			RECT temp3;
-			if (IntersectRect(&temp3, &_wo->getBombRect(), &_em->getVEnemy()[i]->getRect()))
-			{
-				if (_wo->getBombFrameCount() >= 2)
-				{
-					_em->EnemyRemove(i);
-					break;
-				}
-			}
-		}
-
 	}
 }
 
