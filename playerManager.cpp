@@ -798,22 +798,6 @@ void playerManager::itemColision()
 }
 
 
-void playerManager::boradColision()
-{
-	/*for (int i = 0; i < _wo->get_vTrap().size(); ++i)
-	{
-		if (0 > _wo->get_vTrap().size()) break;
-		if (_wo->get_vTrap()[i].trap == TRAP_BORAD)
-		{
-			if(_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left &&
-				_eric->getEric().x+)
-
-
-
-
-		}
-	}*/
-}
 
 void playerManager::enemyColision()
 {
