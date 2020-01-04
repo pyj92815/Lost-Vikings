@@ -30,9 +30,11 @@ private:
 	int g_TC;
 	int b_TC;
 
-	RECT _testRect;
+	RECT _ladderRect[9];
+	int _selectedLadderIdx;
 	bool _stopControl;
 	bool _isItem;
+
 public:
 	PlayerOlaf();
 	~PlayerOlaf();
@@ -43,6 +45,7 @@ public:
 	virtual void render();
 
 	void init_SettingOlafImg();
+	void init_SetLadder();
 	void UpdateFrame();
 	void KeyControl();
 	void SetOlafState();
