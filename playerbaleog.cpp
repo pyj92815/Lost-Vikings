@@ -201,7 +201,11 @@ void playerbaleog::update()
 			_baleog.frameCount = 0;	//프레임카운트 0으로 초기화
 		}
 	}
-	else
+	else if (_baleog.state == STATE_DIE ||
+		_baleog.state == STATE_MIRRA ||
+		_baleog.state == STATE_PRESSDIE ||
+		_baleog.state == STATE_POISON ||
+		_baleog.state == STATE_TRAPDIE)
 	{
 		if (_baleog.frameCount >= _baleog.frameSpeed)	//프레임카운트 > 프레임스피드 면
 		{
@@ -210,20 +214,35 @@ void playerbaleog::update()
 
 			if (_baleog.currentFrameX > _baleog.image->getMaxFrameX())
 			{
-				if (_baleog.state == STATE_DIE ||
-					_baleog.state == STATE_MIRRA ||
-					_baleog.state == STATE_PRESSDIE ||
-					_baleog.state == STATE_POISON ||
-					_baleog.state == STATE_TRAPDIE)
-				{
+				
+				
 					_baleog.isDead = true;
-				}
-				else
-				{
-					_baleog.currentFrameX = 0;
-				}
+				
+				
 
 			}
+			else if (_baleog.currentFrameX <= _baleog.image->getMaxFrameX())
+			{
+				_baleog.currentFrameX = _baleog.image->getMaxFrameX();
+			}
+
+
+			//if (_baleog.image->getMaxFrameX() < _baleog.currentFrameX)
+			//{
+
+			//	_baleog.currentFrameX = 0;
+
+			//}
+			_baleog.frameCount = 0;
+		}
+
+	}
+	else
+	{
+		if (_baleog.frameCount >= _baleog.frameSpeed)	//프레임카운트 > 프레임스피드 면
+		{
+			_baleog.currentFrameX++;
+			_baleog.image->setFrameX(_baleog.currentFrameX);
 
 
 			if (_baleog.image->getMaxFrameX() < _baleog.currentFrameX)
@@ -234,7 +253,8 @@ void playerbaleog::update()
 			}
 			_baleog.frameCount = 0;
 		}
-	}
+
+    }
 
 
 	/*if (_count % 2 == 0 && _move.type != MT_BOSS &&
@@ -723,7 +743,8 @@ void arrow::render()
 {
 	for (_viArrow = _vArrow.begin(); _viArrow != _vArrow.end(); ++_viArrow)
 	{
-		if (!_viArrow->isFire)continue;
+		if (!_viArrow->isFire)continue;//blade만 랜더링 거를 수 있도록
+
 		_viArrow->arrowImage->frameRender(CAMERAMANAGER->getWorDC(),
 			_viArrow->rc.left,
 			_viArrow->rc.top,
@@ -775,7 +796,7 @@ void arrow::blade(float x, float y, float speed, float angle, int direction, flo
 
 	arrow.arrowImage = new image;
 	arrow.arrowImage->init("./image/Characters/화살1.bmp", 0, 0, 126, 28, 3, 2, true, RGB(255, 0, 255));
-	arrow.isFire = false;
+	arrow.isFire = false;	//랜더링에서 거를 수 있게
 	arrow.speed = speed;
 	arrow.angle = angle;
 	arrow.range = range;
