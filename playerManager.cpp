@@ -137,7 +137,6 @@ void playerManager::itemKey()
 				if (_vInven[i].player == _playing && _vInven[i].invenNumber == _direction[_playing])
 				{
 					_vInven[i].choice = true;
-					cout << _vInven[i].choice << endl;
 				}
 			}
 			_trade ? _trade = false : _trade = true;
