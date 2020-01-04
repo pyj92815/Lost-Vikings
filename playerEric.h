@@ -63,7 +63,7 @@ public:
 	void isJumpPixelCollision();	// 점프시 충돌 처리 
 	void setHit() { _isHit = true; }
 	bool getHit() { return _isHit; }
-	void setEricHP() { _eric.hp++; }
+	void setEricHP() { _eric.hp++; if (_eric.hp >= 3) _eric.hp = 3; }
 	void set_stopKey(bool stop) { _stopControl = stop; }
 	void player_Kill() { _eric.isDead = true; } // 지울 예정 
 	void setEricUnable() { _ericUnable = true;	}

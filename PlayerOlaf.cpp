@@ -54,6 +54,7 @@ void PlayerOlaf::update()
 		PixelCollision();
 		UpdateFrame();
 	}
+
 }
 
 void PlayerOlaf::render()
@@ -234,6 +235,17 @@ void PlayerOlaf::KeyControl()
 		{
 			ResetAnimation2();
 			if (_olaf.posState == POSSTATE_GROUND) _olaf.state = STATE_IDLE;
+		}
+
+		
+		if (KEYMANAGER->isStayKeyDown('O'))
+		{
+			_olaf.y -= 5;
+		}
+
+		if (KEYMANAGER->isStayKeyDown('L'))
+		{
+			_olaf.y += 5;
 		}
 
 		// πÊ∆– ≈∞

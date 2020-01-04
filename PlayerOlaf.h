@@ -67,4 +67,5 @@ public:
 	void Set_OlafState(tagState state) { _olaf.state = state; }	// 상태를 정의해 주는 세터 
 
 	void setOlafDead(bool dead) { _olaf.isDead = dead; }	// 형길 추가
+	void setOlagHP() { _olaf.hp++; if (_olaf.hp >= 3) _olaf.hp = 3; }
 };

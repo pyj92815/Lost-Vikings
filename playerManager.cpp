@@ -196,11 +196,11 @@ void playerManager::itemUse()
 				}
 				else if (_playing == 1)
 				{
-					_wo->MakeBoom(_olaf->getOlaf().x, _olaf->getOlaf().y);
+					_wo->MakeBoom(_baleog->getBaleog().x, _baleog->getBaleog().y);
 				}
 				else if (_playing == 2)
 				{
-					_wo->MakeBoom(_baleog->getBaleog().x, _baleog->getBaleog().y);
+					_wo->MakeBoom(_olaf->getOlaf().x, _olaf->getOlaf().y);
 				}
 				this->removeInven(i);
 				break;
@@ -211,11 +211,11 @@ void playerManager::itemUse()
 				}
 				else if (_playing == 1)
 				{
-
+					_baleog->setBaleogHP();
 				}
 				else if (_playing == 2)
 				{
-
+					_olaf->setOlagHP();
 				}
 				this->removeInven(i);
 				break;
@@ -223,7 +223,9 @@ void playerManager::itemUse()
 				RECT temp;
 				for (int j = 0; j < _wo->get_vItem().size(); ++j)
 				{
-					if (IntersectRect(&temp, &_eric->getEricRect(), &_wo->get_vItem()[j].rc))
+					if (IntersectRect(&temp, &_eric->getEricRect(), &_wo->get_vItem()[j].rc) ||
+						IntersectRect(&temp, &_baleog->getBaleogRect(), &_wo->get_vItem()[j].rc) ||
+							IntersectRect(&temp, &_olaf->GetOlafRC(), &_wo->get_vItem()[j].rc))
 					{
 						if (_wo->get_vItem()[j].item == ITEM_REDLOCKER)
 						{
@@ -245,7 +247,9 @@ void playerManager::itemUse()
 				RECT temp2;
 				for (int j = 0; j < _wo->get_vItem().size(); ++j)
 				{
-					if (IntersectRect(&temp2, &_eric->getEricRect(), &_wo->get_vItem()[j].rc))
+					if (IntersectRect(&temp2, &_eric->getEricRect(), &_wo->get_vItem()[j].rc) ||
+						IntersectRect(&temp2, &_baleog->getBaleogRect(), &_wo->get_vItem()[j].rc) ||
+						IntersectRect(&temp2, &_olaf->GetOlafRC(), &_wo->get_vItem()[j].rc))
 					{
 						if (_wo->get_vItem()[j].item == ITEM_BLUELOCKER)
 						{
@@ -627,7 +631,45 @@ void playerManager::itemColision()
 		}
 	}
 
+	//=============================
+	//올라프 충돌
 
+	for (int i = 0; i < _wo->get_vItem().size(); ++i)
+	{
+		if (0 > _wo->get_vItem().size()) break;
+		RECT temp;
+		if (IntersectRect(&temp, &_olaf->GetOlafRC(), &_wo->get_vItem()[i].rc))
+		{
+			if (_wo->get_vItem()[i].item == ITEM_BLUELOCKER ||
+				_wo->get_vItem()[i].item == ITEM_REDLOCKER) continue;
+			if (!_wo->get_vItem()[i].isCollision)
+			{
+				tagInven inven;
+				inven.image = _wo->get_vItem()[i].image;
+				inven.player = _playing;
+				_itemCount[_playing] = 0;
+				for (_viInven = _vInven.begin(); _viInven != _vInven.end(); ++_viInven)
+				{
+					if (_viInven->player == _playing) _itemCount[_playing]++;
+				}
+				inven.invenNumber = _itemCount[_playing]; // 순차적으로 아이템을 넣는다.
+				if (_itemCount[_playing] < 4)
+				{
+					_vInven.push_back(inven);
+					_wo->setItemCollision(i);
+				}
+				for (_viInven = _vInven.begin(); _viInven != _vInven.end(); ++_viInven)
+				{
+					cout << "=========================================================" << endl;
+					cout << "인벤 image 높이 :" << _viInven->image->getHeight() << endl;
+					cout << "플레이어 숫자 :" << _viInven->player << endl;
+					cout << "아이템 넘버 :" << _viInven->invenNumber << endl;
+
+				}
+				break;
+			}
+		}
+	}
 
 
 }
