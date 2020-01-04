@@ -66,6 +66,25 @@ void stageScene::update()
 	}
 	testStateImage();  // 캐릭터 전환 테스트
 	setting_InvenSelectPos();
+
+	RECT ttemp;
+	_ERC = _pm->getPlayerEric().rc;
+	_BRC = _pm->getPlayerBaleog().rc;
+	_ORC = _pm->getPlayerOlaf().rc;
+
+	//cout << "======================================================================" << endl;
+	//cout << "에릭" << (_ERC.left + _ERC.right) / 2 << " " << (_ERC.top + _ERC.bottom) / 2 << endl;
+	//cout << "벨로그" << (_BRC.left + _BRC.right) / 2 << " " << (_BRC.top + _BRC.bottom) / 2 << endl;
+	//cout << "올라프" << (_ORC.left + _ORC.right) / 2 << " " << (_ORC.top + _ORC.bottom) / 2 << endl;
+	//cout << "엔딩" << _UI_Ending.rc.left << " " << _UI_Ending.rc.top << endl;
+	//cout << "도착" << _CC << endl;
+
+	if (IntersectRect(&ttemp, &_UI_Ending.rc, &_ERC) &&
+		IntersectRect(&ttemp, &_UI_Ending.rc, &_BRC) &&
+		IntersectRect(&ttemp, &_UI_Ending.rc, &_ORC))
+	{
+		SCENEMANAGER->set_SceneState(SS_CLEAR);
+	}
 }
 
 void stageScene::render()
@@ -80,7 +99,6 @@ void stageScene::render()
 
 	CAMERAMANAGER->get_WorImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(),
 		CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
-
 
 	IMAGEMANAGER->findImage("OBJECT")->render(getMemDC(), 0, 0, CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(),
 		CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
@@ -221,6 +239,8 @@ void stageScene::render()
 		}
 		
 	}
+
+
 }
 
 void stageScene::posSetting()
@@ -312,6 +332,10 @@ void stageScene::posSetting()
 	_UI_HP[PT_BALEOG].rc = RectMake(_UI_State[PT_BALEOG].rc.left , _UI_State[PT_BALEOG].rc.bottom+1, 12, 12);
 	_UI_HP[PT_OLAF].rc = RectMake(_UI_State[PT_OLAF].rc.left , _UI_State[PT_OLAF].rc.bottom+1, 12, 12);
 
+
+	// 엔딩 정보 초기화
+	_UI_Ending.image = new image;
+	_UI_Ending.rc = RectMake(CAMERAMANAGER->get_WorldSize_X() - 100, CAMERAMANAGER->get_WorldSize_Y() - 200, 100, 100);
 }
 
 void stageScene::addStageImage()

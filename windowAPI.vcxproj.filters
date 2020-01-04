@@ -195,6 +195,9 @@
     <ClInclude Include="Enemy_Bullet.h">
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="Ending.h">
+      <Filter>playGround\scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -310,6 +313,9 @@
     </ClCompile>
     <ClCompile Include="Enemy_Bullet.cpp">
       <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Ending.cpp">
+      <Filter>playGround\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
