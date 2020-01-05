@@ -302,25 +302,25 @@ void EnemyManager::Collision()
 
 				if (_playerManager->getOlaf()->getOlafHP() != 0)
 				{
-					if (_playerManager->getOlaf()->GetOlafShieldState())
+					if (_playerManager->getOlaf()->GetOlafShieldState()) // 방패를 들었을때
 					{
 						_playerManager->getOlaf()->Set_OlafState(STATE_HIT);
 						_playerManager->getOlaf()->OlafHit();
 					}
-					else
+					else // 방패를 들지 않았을때
 					{
 						if (_playerManager->getOlaf()->GetOlafDir()) // 방패방향 왼쪽인 경우
 						{
-							if ((_playerManager->getOlaf()->GetOlafRC().right + _playerManager->getOlaf()->GetOlafRC().left) / 2 < _enemyBullet->getVBullet()[i].x)
+							if (_playerManager->getOlaf()->GetOlafRC().left < _enemyBullet->getVBullet()[i].x)
 							{
 								_playerManager->getOlaf()->Set_OlafState(STATE_HIT);
 								_playerManager->getOlaf()->setOlafHit();
 								_playerManager->getOlaf()->OlafHit();
 							}
 						}
-						else
+						else // 방패방향이 오른쪽인 경우
 						{
-							if ((_playerManager->getOlaf()->GetOlafRC().right + _playerManager->getOlaf()->GetOlafRC().left) / 2 > _enemyBullet->getVBullet()[i].x)
+							if (_playerManager->getOlaf()->GetOlafRC().right > _enemyBullet->getVBullet()[i].x)
 							{
 								_playerManager->getOlaf()->Set_OlafState(STATE_HIT);
 								_playerManager->getOlaf()->setOlafHit();
