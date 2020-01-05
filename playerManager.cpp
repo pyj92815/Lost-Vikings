@@ -212,12 +212,11 @@ void playerManager::itemUse()
 				}
 				else if (_playing == 1)
 				{
-
-
+					_baleog->setBaleogHP();
 				}
 				else if (_playing == 2)
 				{
-
+					_olaf->setOlagHP();
 				}
 				this->removeInven(i);
 				break;
