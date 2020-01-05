@@ -16,6 +16,9 @@ gameNode* sceneManager::_currentScene = NULL;
 HRESULT sceneManager::init()
 {
 	_currentScene = NULL;
+	_YouDie[0] = false;
+	_YouDie[1] = false;
+	_YouDie[2] = false;
 
 	return S_OK;
 }
@@ -48,6 +51,7 @@ void sceneManager::render()
 	if (_currentScene) _currentScene->render();
 }
 
+// 씬 키값, 씬 클래스를 받아와 씬을 추가 시킨다.
 gameNode * sceneManager::addScene(string sceneName, gameNode * scene)
 {
 	if(!scene) return nullptr;
@@ -59,14 +63,14 @@ gameNode * sceneManager::addScene(string sceneName, gameNode * scene)
 
 HRESULT sceneManager::changeScene(string sceneName)
 {
-	mapSceneIter find = _mSceneList.find(sceneName);
+	mapSceneIter find = _mSceneList.find(sceneName);	//씬의 키값을 찾아낸다.
 
-	if (find == _mSceneList.end()) return E_FAIL;
-	if (find->second == _currentScene) return S_OK;
+	if (find == _mSceneList.end()) return E_FAIL;		
+	if (find->second == _currentScene) return S_OK;		
 
 	if (SUCCEEDED(find->second->init()))
 	{
-		//어떤 씬의 정보가 처음에 들어있기 때문에 릴리즈 시켜줘라
+		//어떤 씬의 정보가 처음에 들어있기 때문에 릴리즈 시켜준다.
 		if (_currentScene) _currentScene->release();
 
 		//현재 씬에 바꾸려는 씬을 담는다
@@ -80,7 +84,7 @@ HRESULT sceneManager::changeScene(string sceneName)
 
 void sceneManager::set_SceneState(int state)
 {
-	if (state >= 0 && state <= 5) _scene.state = (SceneState)state;
+	if (state >= 0 && state <= 7) _scene.state = (SceneState)state;
 }
 
 void sceneManager::SceneChange()
@@ -102,12 +106,18 @@ void sceneManager::SceneChange()
 	case SS_STAGE:
 		// 스테이지 씬을 출력한다.
 		SCENEMANAGER->changeScene("Stage");
+		_scene.state = SS_RESTART;
 		break;
 
 	case SS_GAMEOVER:
+		SCENEMANAGER->changeScene("GameOver");
 		break;
 
 	case SS_STOP:
+		break;
+
+	case SS_CLEAR:
+		SCENEMANAGER->changeScene("Ending");
 		break;
 	}
 }

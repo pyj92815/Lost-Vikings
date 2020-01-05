@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "playerEric.h"
 
 
@@ -21,44 +21,43 @@ HRESULT playerEric::init(float x, float y)
 	IMAGEMANAGER->addFrameImage("eric_breath", "./image/Characters/eric_breath.bmp", 270, 192, 3, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("eric_poison", "./image/Characters/eric_poison.bmp", 630, 192, 7, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("eric_trapdie", "./image/Characters/eric_trapdie.bmp", 174, 186, 2, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("eric_hitState", "./image/Characters/eric_hitState.bmp", 93, 192, 1, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("eric_hitState", "./image/Characters/eric_hitState.bmp", 93, 192, 1, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("eric_pressdie", "./image/Characters/eric_pressdie.bmp", 384, 192, 4, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("eric_headbutt", "./image/Characters/eric_headbutt.bmp", 888, 192, 8, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("eric_mirra.bmp", "./image/Characters/eric_mirraddie.bmp", 216, 180, 3, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("eric_mirra", "./image/Characters/eric_mirraddie.bmp", 216, 180, 3, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("eric_stepladder", "./image/Characters/eric_stepladder.bmp", 336, 105, 4, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("eric_headbuttend", "./image/Characters/eric_headbuttend.bmp", 990, 186, 11, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("eric_stepladderend", "./image/Characters/eric_stepladderend.bmp", 186, 78, 2, 1, true, RGB(255, 0, 255));
 
-	_eric.currentFrameX = _eric.currentFrameY = _eric.frameCount = 0;		 // ÇÁ·¹ÀÓ ÃÊ±â°ª 
-	_eric.frameSpeed = 15;												     // ÇÁ·¹ÀÓ ½ºÇÇµå ÃÊ±â°ª
-	_eric.state = STATE_IDLE;												 // »óÅÂ°ª ÃÊ±â°ª
-	_eric.posState = POSSTATE_GROUND;										 // À§Ä¡   ÃÊ±â°ª
-	_eric.image = IMAGEMANAGER->findImage("eric_idle");						 // ÀÌ¹ÌÁö ÃÊ±â°ª
+	_eric.currentFrameX = _eric.currentFrameY = _eric.frameCount = 0;		 // í”„ë ˆì„ ì´ˆê¸°ê°’ 
+	_eric.frameSpeed = 15;												     // í”„ë ˆì„ ìŠ¤í”¼ë“œ ì´ˆê¸°ê°’
+	_eric.state = STATE_IDLE;												 // ìƒíƒœê°’ ì´ˆê¸°ê°’
+	_eric.posState = POSSTATE_GROUND;										 // ìœ„ì¹˜   ì´ˆê¸°ê°’
+	_eric.image = IMAGEMANAGER->findImage("eric_idle");						 // ì´ë¯¸ì§€ ì´ˆê¸°ê°’
 	_eric.x = x;															 // x 
 	_eric.y = y;															 // y
 	_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());   // RECT
-	
-	_eric.hp = 3;		
-	_eric.isDead = false;// Ã¼·Â 
-	//========================== Á¡ÇÁ °ü·Ã ==================================//
-	_ericJump = false;					
+	_eric.hp = 3;
+	_eric.isDead = false;// ì²´ë ¥ 
+	//========================== ì í”„ ê´€ë ¨ ==================================//
+	_ericJump = false;
 	_eric.jumpPower = 15;
 	_eric.gravity = 0.3;
-	//========================== ÀÌµ¿ °ü·Ã ==================================//
+	//========================== ì´ë™ ê´€ë ¨ ==================================//
 	_eric.movePower = 2;
 	_eric.movePowerCount = 0;
-	//========================== °ø°İ °ü·Ã ==================================//
+	//========================== ê³µê²© ê´€ë ¨ ==================================//
 	_ericAttack = false;
 	_ericUnable = false;
-	//========================== Æ¯ÀÌ »óÈ² °ü·Ã =============================//
+	//========================== íŠ¹ì´ ìƒí™© ê´€ë ¨ =============================//
 	_breathCount = 0;
 	_breathFrameCount = 0;
-	
-
-	_gravity = 0;			// ERIC AIR »óÅÂÀÏ ¶§ Áß·Â 
+	_gravity = 0;			// ERIC AIR ìƒíƒœì¼ ë•Œ ì¤‘ë ¥ 
 	_slidePower = 7;		// 
-	_isSlide = false;		// ½½¶óÀÌµù 
-	//========================== Ãæµ¹Ã³¸® ÃÊ±âÈ­ ============================//
+	_isSlide = false;		// ìŠ¬ë¼ì´ë”© 
+	_stop = false;
+	_isItem = false;
+	//========================== ì¶©ëŒì²˜ë¦¬ ì´ˆê¸°í™” ============================//
 	_eric.probeX = _eric.x + _eric.image->getFrameWidth() / 2;
 	_eric.probeY = _eric.y + _eric.image->getFrameHeight() / 2;
 	return S_OK;
@@ -70,70 +69,50 @@ void playerEric::release()
 
 void playerEric::update()
 {
-
-	if (_stopControl)				// ÄÉ¸¯ÅÍ ¼±ÅÃ BOOL°ª
+	if (!_isItem)  // ì•„ì´í…œì„ ì‚¬ìš©í•˜ë©´ ì „ë¶€ ë©ˆì¶˜ë‹¤ 
 	{
-		if (!_ericUnable) key();	// ÀüÅõ ºÒ´É »óÅÂ°¡ ¾Æ´Ï¸é key°ª 
-	}	
-	ericFrameCount();				// ÀÌ¹ÌÁö ÇÁ·¹ÀÓ Áõ°¡ 
-	ericJump();						// Á¡ÇÁ 
-	ericHit();						// ¸ÂÀ» ¶§ ÀÌ¹ÌÁö 
-	setEricImage();					// image ¼¼ÆÃ 
-		//======================±¸Çö ¿¹Á¤==================//
-	ericAttack();							// °ø°İ 
-	if (_ericUnable) ericAttackMove();		// °ø°İÇÏ¸é Æ¨°Ü³ª¿À´Â ÇÔ¼ö 
+		ericFrameCount();				    // image frame ì¦ê°€ 
+		setEricImage();				        // image ì„¸íŒ… 
 
-
-	_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());   // RECT °»½Å
-
-
-	// ¿¡¸¯ÀÇ ÁÂÇ¥¸¦ Ä«¸Ş¶ó ¸Å´ÏÀú¿¡ ³Ñ°ÜÁØ´Ù.
-	// CAMERAMANAGER->set_Camera_XY(_eric.rc);
-
-
-	// ¿¡¸¯ÀÇ À§Ä¡°¡ ±×¶ó¿îµåÀÌ¸é 
-
-	// Á¡ÇÁ°¡ ¾Æ´Ï¸é ÇÈ¼¿Ãæµ¹, Á¡ÇÁÁß¿¡µµ ÇÈ¼¿Ãæµ¹ 
-	if (_eric.posState == POSSTATE_GROUND)
-	{
-		PixelCollision();
-	}
-	else // ¿¡¸¯ÀÇ À§Ä¡°¡ °ø±âÁßÀÌ¸é 
-	{
-		isJumpPixelCollision();
-
-		// Áß·Â°ª 
-		if (_gravity < 5)	 _gravity += 0.7;
-		_eric.y += _gravity;
-		if (_eric.state != STATE_ERIC_JUMP) // ¶³¾îÁú ¶§ Á¡ÇÁÇÏ¸é¼­ ¶³¾îÁö±â À§ÇÑ 
+		if (!_stop)	  // ì£½ëŠ”ê±° í‘œì‹œí•˜ê¸° ìœ„í•´ì„œ 
 		{
-			_eric.state = STATE_ERIC_JUMP;
-			_eric.currentFrameX = 2;
-			_eric.image->setFrameX(_eric.currentFrameX);
-		}
-	}
+			if (_stopControl)				// ì¼€ë¦­í„° ì„ íƒ BOOLê°’
+			{
+				if (!_ericUnable) key();	// ì „íˆ¬ ë¶ˆëŠ¥ ìƒíƒœê°€ ì•„ë‹ˆë©´ keyê°’ 
+			}
+			if (_eric.state == STATE_ERIC_HEADBUTTEND) ericAttackMove();
 
+			ericJump();								// ì í”„ 
+			ericHit();								// ë§ì„ ë•Œ ì´ë¯¸ì§€ 
+
+			// ì í”„ê°€ ì•„ë‹ˆë©´ í”½ì…€ì¶©ëŒ, ì í”„ì¤‘ì—ë„ í”½ì…€ì¶©ëŒ 
+			if (_eric.posState == POSSTATE_AIR)
+			{
+				isJumpPixelCollision();
+				_isSlide = false;
+				_eric.y += _gravity;
+				if (_gravity < 5)	_gravity += 0.7;
+				if (_eric.state != STATE_ERIC_JUMP) // ë–¨ì–´ì§ˆ ë•Œ ì í”„í•˜ë©´ì„œ ë–¨ì–´ì§€ê¸° ìœ„í•œ 
+				{
+					_eric.state = STATE_ERIC_JUMP;
+					_eric.currentFrameX = 2;
+					_eric.image->setFrameX(_eric.currentFrameX);
+				}
+			}
+			else if (_eric.posState == POSSTATE_GROUND)// ì—ë¦­ì˜ ìœ„ì¹˜ê°€ ê³µê¸°ì¤‘ì´ë©´ 
+			{
+				PixelCollision();
+			}
+		}
+		ericDie(); 	//  í”Œë ˆì´ì–´ ì‚¬ë§
+		_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());   // RECT ê°±ì‹ 
+
+	}
 }
 
 void playerEric::render()
 {
-
-	// ÀÓ½Ã ·»´õ¸µ °ª 
-	Rectangle(getMemDC(), _eric.rc);
-
-	//Rectangle(getMemDC(), _test);
-
-	// 191229 PM 03:17 ¿¡¸¯ÀÌ ±×·ÁÁö´Â À§Ä¡¸¦ ¿ùµåDC·Î ¿È°å´Ù.
 	_eric.image->frameRender(CAMERAMANAGER->getWorDC(), _eric.x, _eric.y, _eric.currentFrameX, _eric.currentFrameY);
-	// 191229 PM 04:27 UI¿¡¼­ Ãâ·ÂÀ» ÇÏ±â À§ÇØ ÁÖ¼®Ã³¸®
-	//CAMERAMANAGER->getWorImage()->render(getMemDC(), 0, 0,
-	//	CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y()
-	//	, CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
-
-	char str[100];
-	sprintf_s(str, "%d", _breathCount);
-	TextOut(getMemDC(), WINSIZEX / 2, WINSIZEY / 2, str, strlen(str));
-
 }
 
 void playerEric::move()
@@ -142,75 +121,56 @@ void playerEric::move()
 
 void playerEric::key()
 {
-	//¸¸¾à¿¡ ÁÂ¿ì Å°¸¦ ´©¸£¸é 
+	//ë§Œì•½ì— ì¢Œìš° í‚¤ë¥¼ ëˆ„ë¥´ë©´ 
 	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 	{
 		_eric.frameSpeed = 10;
 		_breathCount = 0;
 		if (_eric.state != STATE_PUSH) _eric.currentFrameY = 0;
+		if (_isSlide && _eric.state != STATE_PUSH)  _isSlideOn = true;		// ìŠ¬ë¼ì´ë”©ì„ í™œì„±í™” ì‹œí‚¤ê¸° ìœ„í•œ 
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 	{
 		_eric.frameSpeed = 10;
 		_breathCount = 0;
-		if(_eric.state != STATE_PUSH) _eric.currentFrameY = 1;
+		if (_eric.state != STATE_PUSH) _eric.currentFrameY = 1;
+		if (_isSlide && _eric.state != STATE_PUSH)   _isSlideOn = true;		// ìŠ¬ë¼ì´ë”©ì„ í™œì„±í™” ì‹œí‚¤ê¸° ìœ„í•œ 
 	}
 
+	// ì‚¬ë‹¤ë¦¬íƒ€ê¸° êµ¬í˜„
+	if (KEYMANAGER->isOnceKeyDown(VK_UP))
+	{
+		if (_eric.state != STATE_STEPLADDER)	_eric.currentFrameY = 0;
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
+	{
+		if (_eric.state != STATE_STEPLADDER)	_eric.currentFrameY = 0;
+	}
 
 	if (KEYMANAGER->isStayKeyDown(VK_UP))
 	{
 		_eric.state = STATE_STEPLADDER;
 		_eric.currentFrameY = 0;
+		_eric.y -= 2.5;
+		_eric.frameCount += 2;
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_DOWN))
 	{
+		_eric.state = STATE_STEPLADDER;
+		_eric.currentFrameY = 0;
+		_eric.y += 2.5;
+		_eric.frameCount += 2;
 	}
 
-	// ¿ŞÂÊ Å°¸¦ Áö¼ÓÀûÀ¸·Î ´©¸£¸é 
+	// ì™¼ìª½ í‚¤ë¥¼ ì§€ì†ì ìœ¼ë¡œ ëˆ„ë¥´ë©´ 
 	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
 	{
-		// ¿ŞÂÊ ÇÈ¼¿ Ãæµ¹ 
+		// ì™¼ìª½ í”½ì…€ ì¶©ëŒ 
 		PixelLeftCollision();
 		if (_eric.state != STATE_PUSH)
 		{
-			_breathCount++;						 // ¿À·¡ ¶Ù¸é ¼û ÀÌ¹ÌÁö°¡ ³ªÅ¸³² 
-			//==========ÀÌµ¿ °ü·ÃµÈ ÄÚµå =========//
-			_eric.movePowerCount++;				 
-			if (_eric.movePower <= 8)
-			{
-				if (_eric.movePowerCount > 4)
-				{
-					_eric.movePower += 0.5;
-					_eric.movePowerCount = 0;
-				}
-			}
-			//==========»óÅÂ¿¡ µû¶ó¼­ Àû¿ë 
-			if (_eric.state == STATE_ERIC_HEADBUTT || _eric.state == STATE_ERIC_JUMP || _eric.state == STATE_PUSH)
-			{
-				_eric.x -= _eric.movePower;
-			}
-			else if (_eric.state == STATE_PUSH)
-			{
-				// ¾Æ¹«°Íµµ ¾Æ´Ï¾î¾ßÇÔ 
-			}
-			else
-			{
-				_eric.state = STATE_MOVE;
-				_eric.x -= _eric.movePower;
-			}
-			// ¸¸¾à ½½¶óÀÌµù ÀÌ¶ó¸é ½½¶óÀÌµù ½ÃÄÑ¶ó 
-			if (_isSlide) _isSlideOn = true;  
-		}
-	}
-	// ¿À¸¥ÂÊ Å°¸¦ Áö¼ÓÀûÀ¸·Î ´©¸£¸é 
-	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
-	{
-		//¿À¸¥ÂÊ ÇÈ¼¿ Ãæµ¹ 
-		PixelRightCollision();
-		if (_eric.state != STATE_PUSH)
-		{
-			_breathCount++;						 // ¿À·¡ ¶Ù¸é ¼û ÀÌ¹ÌÁö°¡ ³ªÅ¸³² 
-			//==========ÀÌµ¿ °ü·ÃµÈ ÄÚµå =========//
+			_breathCount++;						 // ì˜¤ë˜ ë›°ë©´ ìˆ¨ ì´ë¯¸ì§€ê°€ ë‚˜íƒ€ë‚¨ 
+			//==========ì´ë™ ê´€ë ¨ëœ ì½”ë“œ =========//
 			_eric.movePowerCount++;
 			if (_eric.movePower <= 8)
 			{
@@ -220,32 +180,65 @@ void playerEric::key()
 					_eric.movePowerCount = 0;
 				}
 			}
-			//==========»óÅÂ¿¡ µû¶ó¼­ Àû¿ë 
+			//==========ìƒíƒœì— ë”°ë¼ì„œ ì ìš© 
+			if (_eric.state == STATE_ERIC_HEADBUTT || _eric.state == STATE_ERIC_JUMP || _eric.state == STATE_PUSH)
+			{
+				_eric.x -= _eric.movePower;
+			}
+			else if (_eric.state == STATE_PUSH)
+			{
+				// ì•„ë¬´ê²ƒë„ ì•„ë‹ˆì–´ì•¼í•¨ 
+			}
+			else
+			{
+				_eric.state = STATE_MOVE;
+				_eric.x -= _eric.movePower;
+			}
+			// ë§Œì•½ ìŠ¬ë¼ì´ë”© ì´ë¼ë©´ ìŠ¬ë¼ì´ë”© ì‹œì¼œë¼ 
+			if (_breathCount > 10 && _eric.state != STATE_PUSH) _isSlide = true;
+		}
+	}
+	// ì˜¤ë¥¸ìª½ í‚¤ë¥¼ ì§€ì†ì ìœ¼ë¡œ ëˆ„ë¥´ë©´ 
+	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
+	{
+		//ì˜¤ë¥¸ìª½ í”½ì…€ ì¶©ëŒ 
+		PixelRightCollision();
+		if (_eric.state != STATE_PUSH)
+		{
+			_breathCount++;						 // ì˜¤ë˜ ë›°ë©´ ìˆ¨ ì´ë¯¸ì§€ê°€ ë‚˜íƒ€ë‚¨ 
+			//==========ì´ë™ ê´€ë ¨ëœ ì½”ë“œ =========//
+			_eric.movePowerCount++;
+			if (_eric.movePower <= 8)
+			{
+				if (_eric.movePowerCount > 4)
+				{
+					_eric.movePower += 0.5;
+					_eric.movePowerCount = 0;
+				}
+			}
+			//==========ìƒíƒœì— ë”°ë¼ì„œ ì ìš© 
 			if (_eric.state == STATE_ERIC_HEADBUTT || _eric.state == STATE_ERIC_JUMP || _eric.state == STATE_PUSH)
 			{
 				_eric.x += _eric.movePower;
 			}
 			else if (_eric.state == STATE_PUSH)
 			{
-				// ¾Æ¹«°Íµµ ¾Æ´Ï¾î¾ßÇÔ 
+				// ì•„ë¬´ê²ƒë„ ì•„ë‹ˆì–´ì•¼í•¨ 
 			}
 			else
 			{
 				_eric.state = STATE_MOVE;
-				_eric.x += _eric.movePower;	 // 0 ÀÌ ¿À¸¥ÂÊ 
+				_eric.x += _eric.movePower;	 // 0 ì´ ì˜¤ë¥¸ìª½ 
 			}
 
-			if (_isSlide)  _isSlideOn = true;
+			if (_breathCount > 10 && _eric.state != STATE_PUSH) _isSlide = true;
 		}
 	}
 
-	//  ÁÂ¿ìÅ°¸¦ ¶§¸é 
+	//  ì¢Œìš°í‚¤ë¥¼ ë•Œë©´ 
 	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) || KEYMANAGER->isOnceKeyUp(VK_RIGHT))
 	{
-		// ½½¶óÀÌµùÀ» È°¼ºÈ­ ½ÃÅ°±â À§ÇÑ 
-		if (_breathCount > 10 && _eric.state != STATE_PUSH) _isSlide = true;
-	
-		// ¼û Ä«¿îÆ®°¡ 150ÀÌ»óÀÌ¸é ¼û ¿¡¸¯ ÀÌ¹ÌÁö¸¦ ¶ç¿î´Ù 
+		// ìˆ¨ ì¹´ìš´íŠ¸ê°€ 150ì´ìƒì´ë©´ ìˆ¨ ì—ë¦­ ì´ë¯¸ì§€ë¥¼ ë„ìš´ë‹¤ 
 		if (_breathCount > 150)
 		{
 			_eric.state = STATE_BREATH;
@@ -253,9 +246,9 @@ void playerEric::key()
 			_eric.currentFrameX = 0;
 			_eric.image->setFrameX(_eric.currentFrameX);
 			_eric.movePower = 2;
-			_breathCount = 0; // ¼ûÄ«¿îÆ® 
+			_breathCount = 0; // ìˆ¨ì¹´ìš´íŠ¸ 
 		}
-		else // ¼û Ä«¿îÆ®°¡ ¾Æ´Ï¸é 
+		else // ìˆ¨ ì¹´ìš´íŠ¸ê°€ ì•„ë‹ˆë©´ 
 		{
 			if (_eric.state == STATE_ERIC_HEADBUTT || _eric.state == STATE_ERIC_JUMP)
 			{
@@ -268,10 +261,10 @@ void playerEric::key()
 				_eric.frameSpeed = 15;
 				_eric.currentFrameX = 0;
 			}
-			_breathCount = 0; // ¼ûÄ«¿îÆ® 
+			_breathCount = 0; // ìˆ¨ì¹´ìš´íŠ¸ 
 		}
 	}
-	//===============½½¶óÀÌµùÀ» ÇÏ±â À§ÇÑ ±¸ºĞ 
+	//===============ìŠ¬ë¼ì´ë”©ì„ í•˜ê¸° ìœ„í•œ êµ¬ë¶„ 
 	if (_isSlide)
 	{
 		_slideCount++;
@@ -281,28 +274,34 @@ void playerEric::key()
 			_isSlide = false;
 		}
 	}
-	// ¸¸¾à ½½¶óÀÌµùÀÌ ÄÑÁö¸é 
+	// ë§Œì•½ ìŠ¬ë¼ì´ë”©ì´ ì¼œì§€ë©´ 
 	if (_isSlideOn)
 	{
-		if (_eric.currentFrameY == 0)
+		if (_eric.state == STATE_MOVE)
 		{
-			_eric.x -= _slidePower;
-		}
-		else
-		{
-			_eric.x += _slidePower;
-		}
-		if (_slidePower >= 0)
-		{
-			_slidePower -= 0.1;
-		}
-		else
-		{
-			_slidePower = 7;
-			_isSlideOn = false;
+			if (_eric.currentFrameY == 0)
+			{
+				_eric.x -= _slidePower;
+			}
+			else
+			{
+				_eric.x += _slidePower;
+			}
+
+			if (_slidePower >= 0)
+			{
+				_slidePower -= 0.1;
+			}
+			else
+			{
+				_slidePower = 7;
+				_isSlideOn = false;
+
+
+			}
 		}
 	}
-	// °ø°İ ±¸ºĞ 
+	// ê³µê²© êµ¬ë¶„ 
 	if (KEYMANAGER->isOnceKeyDown('D'))
 	{
 		_eric.state = STATE_ERIC_HEADBUTT;
@@ -311,14 +310,14 @@ void playerEric::key()
 		_eric.image->setFrameX(0);
 		_ericAttack = true;
 	}
-	// Á¡ÇÁ ±¸ºĞ 
+	// ì í”„ êµ¬ë¶„ 
 	if (!_ericJump)
 	{
 		if (KEYMANAGER->isOnceKeyDown('F'))
 		{
 			_ericJump = true;
 			_eric.state = STATE_ERIC_JUMP;
-			_eric.posState = POSSTATE_AIR; // Á¡ÇÁÀÌ¸é air
+			_eric.posState = POSSTATE_AIR; // ì í”„ì´ë©´ air
 			_eric.jumpPower = 14;
 			_eric.frameCount = 0;
 			_eric.frameSpeed = 15;
@@ -329,7 +328,7 @@ void playerEric::key()
 	}
 
 
-	// 191229 PM 03:18 Å×½ºÆ®¿ë ÀÌµ¿Å° Ãß°¡ (»èÁ¦ÇØ¾ßÇÔ)
+	// 191229 PM 03:18 í…ŒìŠ¤íŠ¸ìš© ì´ë™í‚¤ ì¶”ê°€ (ì‚­ì œí•´ì•¼í•¨)
 	if (KEYMANAGER->isStayKeyDown('O'))
 	{
 		_eric.y -= 20;
@@ -339,12 +338,12 @@ void playerEric::key()
 		_eric.y += 20;
 	}
 }
-
+// ERIC í”„ë ˆì„ ì¹´ìš´íŠ¸
 void playerEric::ericFrameCount()
 {
-	_eric.frameCount++; // ÇÁ·¹ÀÓ Ä«¿îÅÍ Áõ°¡ 
-
-	// »óÅÂ°¡ ¸¸¾à °ø°İ »óÅÂ
+	_eric.frameCount++; // í”„ë ˆì„ ì¹´ìš´í„° ì¦ê°€ 
+	
+	// ìƒíƒœê°€ ë§Œì•½ ê³µê²© ìƒíƒœ
 	if (_eric.state == STATE_ERIC_HEADBUTT)
 	{
 		if (_eric.frameCount >= _eric.frameSpeed)
@@ -374,15 +373,14 @@ void playerEric::ericFrameCount()
 			_eric.frameCount = 0;
 		}
 	}
-	else if (_eric.state == STATE_ERIC_HEADBUTTEND)  // ¹ÚÄ¡±â¸¦ ÇÑ »óÅÂ 
+	else if (_eric.state == STATE_ERIC_HEADBUTTEND)  // ë°•ì¹˜ê¸°ë¥¼ í•œ ìƒíƒœ 
 	{
 		if (_eric.frameCount >= _eric.frameSpeed)
 		{
 			_eric.currentFrameX++;
 			_eric.image->setFrameX(_eric.currentFrameX);
 
-
-			if (_eric.currentFrameX > _eric.image->getMaxFrameX())
+			if (_eric.currentFrameX > _eric.image->getMaxFrameX()) // ì¡°ê¸ˆ ëŠë¦¬ê²Œ í•˜ê³  ì‹¶ìŒ
 			{
 				_ericUnable = false;
 				_eric.currentFrameX = 0;
@@ -391,7 +389,7 @@ void playerEric::ericFrameCount()
 			_eric.frameCount = 0;
 		}
 	}
-	else if (_eric.state == STATE_ERIC_JUMP)   // Á¡ÇÁ¸¦ ÇÑ »óÅÂ 
+	else if (_eric.state == STATE_ERIC_JUMP)   // ì í”„ë¥¼ í•œ ìƒíƒœ 
 	{
 		if (_eric.frameCount >= _eric.frameSpeed)
 		{
@@ -410,17 +408,31 @@ void playerEric::ericFrameCount()
 			_eric.image->setFrameX(_eric.currentFrameX);
 		}
 	}
-	else  // ±× ÀÌ¿ÜÀÇ »óÅÂ 
+	else if (_eric.state == STATE_STEPLADDER)
+	{
+		_eric.frameCount--;
+		if (_eric.frameCount >= _eric.frameSpeed)
+		{
+			_eric.currentFrameX++;
+			_eric.image->setFrameX(_eric.currentFrameX);
+			if (_eric.currentFrameX > _eric.image->getMaxFrameX())
+			{
+				_eric.currentFrameX = 0;
+			}
+			_eric.frameCount = 0;
+		}
+	}
+	else  // ê·¸ ì´ì™¸ì˜ ìƒíƒœ 
 	{
 		if (_eric.frameCount >= _eric.frameSpeed)
 		{
 			_eric.currentFrameX++;
 			_eric.image->setFrameX(_eric.currentFrameX);
-	
-			
+
+
 			if (_eric.currentFrameX > _eric.image->getMaxFrameX())
 			{
-				//Á×´Â »óÅÂ¶ó¸é 
+				//ì£½ëŠ” ìƒíƒœë¼ë©´ 
 				if (_eric.state == STATE_DIE ||
 					_eric.state == STATE_MIRRA ||
 					_eric.state == STATE_PRESSDIE ||
@@ -428,12 +440,14 @@ void playerEric::ericFrameCount()
 					_eric.state == STATE_TRAPDIE)
 				{
 					_eric.isDead = true;
+					_eric.x = -1000;
+					_eric.y = -1000;
 				}
 				else
 				{
-					_eric.currentFrameX = 0;	
+					_eric.currentFrameX = 0;
 				}
-				//¼û½¬±â À§ÇÑ 
+				//ìˆ¨ì‰¬ê¸° ìœ„í•œ 
 				if (_eric.state == STATE_BREATH) _breathFrameCount++;
 				if (_breathFrameCount > 3)
 				{
@@ -445,15 +459,18 @@ void playerEric::ericFrameCount()
 		}
 	}
 }
-
+// ERIC ì í”„í•˜ëŠ” í•¨ìˆ˜ 
 void playerEric::ericJump()
 {
 	if (_ericJump)
 	{
-		_eric.y -= _eric.jumpPower;
-		_eric.jumpPower -= _eric.gravity;
-		// Á¡ÇÁ ÃÊ±â°ª && °ø±âÁßÀÌ¶ó¸é 
-		if (_jumpStart <= _eric.y && _eric.state == POSSTATE_AIR)
+		if (_eric.posState != POSSTATE_GROUND)
+		{
+			_eric.y -= _eric.jumpPower;
+			_eric.jumpPower -= _eric.gravity;
+		}
+		// ì í”„ ì´ˆê¸°ê°’ && ê³µê¸°ì¤‘ì´ë¼ë©´ 
+		if (_jumpStart <= _eric.y && _eric.posState == POSSTATE_AIR)
 		{
 			_eric.y = _jumpStart;
 			_ericJump = false;
@@ -464,72 +481,39 @@ void playerEric::ericJump()
 	}
 
 }
-//=============================±¸Çö ¿¹Á¤ 
-void playerEric::ericAttack()
-{
-	// ericÀÇ º® 
-	//if (_eric.state != STATE_ERIC_HEADBUTT && _eric.state != STATE_ERIC_HEADBUTTEND)
-	//{
-	//	if (_test.left < _eric.x + _eric.image->getFrameWidth())
-	//	{
-	//		_eric.state = STATE_PUSH;
-	//		if (_eric.image->getMaxFrameX() < _eric.currentFrameX)
-	//		{
-	//			_eric.currentFrameX = 0;
-	//			_eric.image->setFrameX(_eric.currentFrameX);
-	//		}
-	//		_eric.x = _test.left - _eric.image->getFrameWidth();
-	//	}
-	//}
-
-	//if (_eric.state == STATE_ERIC_HEADBUTT && _eric.currentFrameX > 3)
-	//{
-	//	RECT temp;
-	//	if (IntersectRect(&temp, &_eric.rc, &_test))
-	//	{
-	//		// º®À» ºÎµúÈ÷¸é ¿¡¸¯ÀÇ À§Ä¡´Â 
-	//		_eric.state = STATE_ERIC_HEADBUTTEND;
-	//		_eric.currentFrameX = 0;
-	//		_eric.image->setFrameX(0);
-	//		_ericUnable = true;
-	//		_eric.frameSpeed = 12;
-	//	}
-	//}
-}
-// °ø°İÈÄ 
+// ERIC ê³µê²©í•˜ë©´ ë°€ë ¤ë‚˜ëŠ” í•¨ìˆ˜
 void playerEric::ericAttackMove()
 {
 	if (_eric.currentFrameY == 0)
 	{
-		_eric.x -= 0.3;
+		_eric.x -= 0.5;
 	}
 	else
 	{
-		_eric.x += 0.3;
+		_eric.x += 0.5;
 	}
-	// °ø½ÄÀÌ ¾ÈÁÁÀ½ ¾Ş¤·±Û·Î ¹Ù²Ü¿¹Á¤
-	// ÇÁ·¹ÀÓ 4¹ø ¿Ã¸®°í 4¹ø ³·Ãá´Ù 
+	// í”½ì…€ ì¶©ëŒë¡œ í™œì„±í™” ë˜ì§€ ì•ŠìŒ 
 	if (_eric.currentFrameX >= 0 && _eric.currentFrameX < 4)
 	{
-		_eric.y -= 0.3;
+		_eric.y -= 1;
 	}
 	else if (_eric.currentFrameX > 4 && _eric.currentFrameX < _eric.image->getMaxFrameX() - 1)
 	{
-		_eric.y += 0.3;
+		_eric.y += 1;
 	}
 }
-
-// ERICÀÌ ¸ÂÀ» ‹š ÇÔ¼ö 
+// ERIC ë§ì„ ë–„ í•¨ìˆ˜ 
 void playerEric::ericHit()
 {
-	//¸ÂÀ» ¶§ È÷Æ®°ªÀ» Á¶Á¤ÇØÁÖ¼À 
+	//ë§ì„ ë•Œ íˆíŠ¸ê°’ì„ ì¡°ì •í•´ì£¼ì…ˆ 
 	if (_isHit)
 	{
 		_hitCount++;
 		if (_eric.state != STATE_HIT)  _eric.state = STATE_HIT;
-		if (_hitCount > 10)
+		if (_hitCount > 20)
 		{
 			_isHit = false;
+			_ericUnable = false;
 			_hitCount = 0;
 			_eric.state = STATE_IDLE;
 			_eric.frameCount = 0;
@@ -538,7 +522,7 @@ void playerEric::ericHit()
 		}
 	}
 }
-// ¿¡¸¯ÀÇ ÀÌ¹ÌÁö¸¦ ¼³Á¤ÇØÁÖ´Â ÇÔ¼ö 
+// ERIC ì´ë¯¸ì§€ë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜  
 void playerEric::setEricImage()
 {
 	if (_eric.hp == 0)
@@ -547,62 +531,62 @@ void playerEric::setEricImage()
 	}
 	switch (_eric.state)
 	{
-		case STATE_IDLE:
+	case STATE_IDLE:
 		_eric.image = IMAGEMANAGER->findImage("eric_idle");
 		break;
-		case STATE_MOVE:
+	case STATE_MOVE:
 		_eric.image = IMAGEMANAGER->findImage("eric_move");
 		break;
-		case STATE_ERIC_JUMP:
+	case STATE_ERIC_JUMP:
 		_eric.image = IMAGEMANAGER->findImage("eric_jump");
 		break;
-		case STATE_ERIC_HEADBUTT:
+	case STATE_ERIC_HEADBUTT:
 		_eric.image = IMAGEMANAGER->findImage("eric_headbutt");
 		break;
-		case STATE_ERIC_HEADBUTTEND:
+	case STATE_ERIC_HEADBUTTEND:
 		_eric.image = IMAGEMANAGER->findImage("eric_headbuttend");
 		break;
-		case STATE_OLAF_GUARD:
+	case STATE_OLAF_GUARD:
 		break;
-		case STATE_OLAF_FLY:
+	case STATE_OLAF_FLY:
 		break;
-		case STATE_BALEOG_ARROW:
+	case STATE_BALEOG_ARROW:
 		break;
-		case STATE_BALEOG_SWORD:
+	case STATE_BALEOG_SWORD:
 		break;
-		case STATE_BREATH:
+	case STATE_BREATH:
 		_eric.image = IMAGEMANAGER->findImage("eric_breath");
 		break;
-		case STATE_HIT:
+	case STATE_HIT:
 		_eric.image = IMAGEMANAGER->findImage("eric_hitState");
 		break;
-		case STATE_PUSH:
+	case STATE_PUSH:
 		_eric.image = IMAGEMANAGER->findImage("eric_push");
 		break;
-		case STATE_DIE:
+	case STATE_DIE:
 		_eric.image = IMAGEMANAGER->findImage("eric_die");
 		break;
-		case STATE_POISON:
+	case STATE_POISON:
 		_eric.image = IMAGEMANAGER->findImage("eric_poison");
 		break;
-		case STATE_MIRRA:
+	case STATE_MIRRA:
 		_eric.image = IMAGEMANAGER->findImage("eric_mirra");
 		break;
-		case STATE_PRESSDIE:
+	case STATE_PRESSDIE:
 		_eric.image = IMAGEMANAGER->findImage("eric_pressdie");
 		break;
-		case STATE_TRAPDIE:
+	case STATE_TRAPDIE:
 		_eric.image = IMAGEMANAGER->findImage("eric_trapdie");
 		break;
-		case STATE_STEPLADDER:
+	case STATE_STEPLADDER:
 		_eric.image = IMAGEMANAGER->findImage("eric_stepladder");
 		break;
-		case STATE_STEPLADDEREND:
+	case STATE_STEPLADDEREND:
 		_eric.image = IMAGEMANAGER->findImage("eric_stepladderend");
 		break;
 	}
 }
-//ÇÈ¼¿ Ãæµ¹ 
+//í”½ì…€ ì¶©ëŒ 
 void playerEric::PixelCollision()
 {
 	_eric.probeY = _eric.y + _eric.image->getFrameHeight();
@@ -611,29 +595,39 @@ void playerEric::PixelCollision()
 	{
 		COLORREF getPixel_Bottom = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_eric.rc.left + _eric.rc.right) / 2, i);
 
+		COLORREF getPixel_TOP = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_eric.rc.left + _eric.rc.right) / 2, _eric.y);
+
 		int r = GetRValue(getPixel_Bottom);
 		int g = GetGValue(getPixel_Bottom);
 		int b = GetBValue(getPixel_Bottom);
 
-		if (!(r == 255 && g == 0 && b == 255))
+		int r_top = GetRValue(getPixel_TOP);
+		int g_top = GetGValue(getPixel_TOP);
+		int b_top = GetBValue(getPixel_TOP);
+
+		if ((r == 255 && g == 0 && b == 0) || (r == 255 && g == 255 && b == 0))
 		{
-			_eric.y = i - _eric.image->getFrameHeight();
-			_eric.posState = POSSTATE_GROUND;
-			if (_gravity > 0)
+			if (!(r_top == 255 && g_top == 0 && b_top == 0))
 			{
-				_gravity = 0;
+				if (!(_eric.state == STATE_STEPLADDER || _eric.state == STATE_STEPLADDEREND))
+				{
+
+					_eric.y = i - _eric.image->getFrameHeight();
+					_eric.posState = POSSTATE_GROUND;
+					if (_gravity > 0)
+					{
+						_gravity = 0;
+					}
+					break;
+				}
 			}
-			break;
 		}
 		else
 		{
 			_eric.posState = POSSTATE_AIR;
 		}
 	}
-	
 }
-
-
 void playerEric::PixelRightCollision()
 {
 	_eric.probeX = _eric.x + _eric.image->getFrameWidth(); // _eric.right  
@@ -644,7 +638,7 @@ void playerEric::PixelRightCollision()
 	int g = GetGValue(getPixel_RIGHT);
 	int b = GetBValue(getPixel_RIGHT);
 
-	if (!(r == 255 && g == 0 && b == 255))
+	if (!((r == 255 && g == 0 && b == 0) || (r == 255 && g == 0 && b == 255)))
 	{
 		if (_eric.posState == POSSTATE_GROUND)
 		{
@@ -658,7 +652,6 @@ void playerEric::PixelRightCollision()
 		_eric.x = _eric.probeX - _eric.image->getFrameWidth();
 	}
 }
-
 void playerEric::PixelLeftCollision()
 {
 	_eric.probeX = _eric.x - 3;
@@ -669,7 +662,7 @@ void playerEric::PixelLeftCollision()
 	int g = GetGValue(getPixel_LEFT);
 	int b = GetBValue(getPixel_LEFT);
 
-	if (!(r == 255 && g == 0 && b == 255))
+	if (!((r == 255 && g == 0 && b == 0) || (r == 255 && g == 0 && b == 255)))
 	{
 		if (_eric.posState == POSSTATE_GROUND)
 		{
@@ -683,45 +676,44 @@ void playerEric::PixelLeftCollision()
 		_eric.x = _eric.probeX + 6;
 	}
 }
-
 void playerEric::isJumpPixelCollision()
 {
-		// Á¡ÇÁ ÁßÀÏ ‹š ¿ŞÂÊ¾Æ·¡ ¸ğ¼­¸® ÇÈ¼¿ Ãæµ¹ 
-		_eric.probeX = _eric.x - 3;
+	// ì í”„ ì¤‘ì¼ ë–„ ì™¼ìª½ì•„ë˜ ëª¨ì„œë¦¬ í”½ì…€ ì¶©ëŒ 
+	_eric.probeX = _eric.x - 3;
 
-		COLORREF getPixel_AIR2 = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _eric.probeX, _eric.y + _eric.image->getFrameHeight());
+	COLORREF getPixel_AIR2 = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _eric.probeX, _eric.y + _eric.image->getFrameHeight());
 
-		int r2 = GetRValue(getPixel_AIR2);
-		int g2 = GetGValue(getPixel_AIR2);
-		int b2 = GetBValue(getPixel_AIR2);
+	int r2 = GetRValue(getPixel_AIR2);
+	int g2 = GetGValue(getPixel_AIR2);
+	int b2 = GetBValue(getPixel_AIR2);
 
-		if (!(r2 == 255 && g2 == 0 && b2 == 255))
+	if ((r2 == 255 && g2 == 255 && b2 == 0))
+	{
+		if (_eric.posState == POSSTATE_AIR)
 		{
-			if (_eric.posState == POSSTATE_AIR)
-			{
 			_eric.x = _eric.probeX + 8;
-			}
 		}
-	
-		// Á¡ÇÁ ÁßÀÏ ‹š ¿À¸¥ÂÊ¾Æ·¡ ¸ğ¼­¸® ÇÈ¼¿ Ãæµ¹ 
-		_eric.probeX = _eric.x + _eric.image->getFrameWidth(); // _eric.right  
+	}
 
-		COLORREF getPixel_AIR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _eric.probeX + 8, _eric.y + _eric.image->getFrameHeight());
+	// ì í”„ ì¤‘ì¼ ë–„ ì˜¤ë¥¸ìª½ì•„ë˜ ëª¨ì„œë¦¬ í”½ì…€ ì¶©ëŒ 
+	_eric.probeX = _eric.x + _eric.image->getFrameWidth(); // _eric.right  
 
-		int r = GetRValue(getPixel_AIR);
-		int g = GetGValue(getPixel_AIR);
-		int b = GetBValue(getPixel_AIR);
+	COLORREF getPixel_AIR = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), _eric.probeX + 8, _eric.y + _eric.image->getFrameHeight());
 
-		if (!(r == 255 && g == 0 && b == 255))
+	int r = GetRValue(getPixel_AIR);
+	int g = GetGValue(getPixel_AIR);
+	int b = GetBValue(getPixel_AIR);
+
+	if ((r == 255 && g == 255 && b == 0))
+	{
+		if (_eric.posState == POSSTATE_AIR)
 		{
-			if (_eric.posState == POSSTATE_AIR)
-			{
-				_eric.x = _eric.probeX - _eric.image->getFrameWidth() - 8;
-			}
+			_eric.x = _eric.probeX - _eric.image->getFrameWidth() - 8;
 		}
+	}
 
 
-	// Á¡ÇÁ ÁßÀÏ ¶§ ÇÈ¼¿ Ãæµ¹ (YÃà)
+	// ì í”„ ì¤‘ì¼ ë•Œ í”½ì…€ ì¶©ëŒ (Yì¶•)
 	_eric.probeY = _eric.y + _eric.image->getFrameHeight();
 
 	for (int i = _eric.probeY; i < _eric.probeY + 10; ++i)
@@ -752,8 +744,12 @@ void playerEric::isJumpPixelCollision()
 		}
 	}
 }
-
+//ERIC ì£½ì—ˆì„ ë•Œ
 void playerEric::ericDie()
 {
-
+	if (_eric.hp <= 0)
+	{
+		_eric.state == STATE_DIE;
+		_stop = true;
+	}
 }
