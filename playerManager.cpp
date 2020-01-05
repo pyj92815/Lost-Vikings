@@ -37,7 +37,7 @@ void playerManager::update()
 			_olaf->setItemKey();
 		}
 	}
-	KILLPlayer();	// 플레이어를 죽인다
+	//KILLPlayer();	// 플레이어를 죽인다
 
 	switch (_playing)
 	{
@@ -72,6 +72,7 @@ void playerManager::update()
 	trapColision();
 	itemColision();
 	enemyColision();
+	StandOnOlafShield();
 }
 
 void playerManager::release()
@@ -212,12 +213,11 @@ void playerManager::itemUse()
 				}
 				else if (_playing == 1)
 				{
-
-
+					_baleog->setBaleogHP();
 				}
 				else if (_playing == 2)
 				{
-
+					_olaf->setOlagHP();
 				}
 				this->removeInven(i);
 				break;
@@ -434,7 +434,6 @@ void playerManager::trapColision() // 함정과 충돌 시
 							_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right - 10 &&
 							_eric->getEric().rc.bottom >= _wo->get_vTrap()[i].rc.bottom))
 					{
-
 						if (_eric->getEric().state != STATE_PRESSDIE) _eric->setEricY(_wo->get_vTrap()[i].rc.bottom);
 						if (_eric->getEric().posState == POSSTATE_GROUND)
 						{
@@ -453,6 +452,7 @@ void playerManager::trapColision() // 함정과 충돌 시
 						(_eric->getEric().rc.left >= _wo->get_vTrap()[i].rc.left + 10 &&
 							_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right - 10))
 					{
+					
 						if (_eric->getEric().state != STATE_PRESSDIE)
 						{
 							_eric->setEricPosState(POSSTATE_GROUND);
@@ -470,7 +470,6 @@ void playerManager::trapColision() // 함정과 충돌 시
 						}
 					}
 				}
-
 				else if (_wo->get_vTrap()[i].trap == TRAP_WALL)
 				{
 
@@ -850,7 +849,42 @@ void playerManager::enemyColision()
 				break;
 			}
 		}
+		// 에너미 폭탄 충돌 
+		if (_wo->getIsBoomShow())
+		{
+			RECT temp3;
+			if (IntersectRect(&temp3, &_wo->getBombRect(), &_em->getVEnemy()[i]->getRect()))
+			{
+				if (_wo->getBombFrameCount() >= 2)
+				{
+					_em->EnemyRemove(i);
+					break;
+				}
+			}
+		}
 	}
 }
 
+void playerManager::StandOnOlafShield()
+{
+	/*
+	RECT temp;
+	if (_olaf->GetOlafShieldState())
+	{
+		if (IntersectRect(&temp, &_olaf->GetOlafRC(), &_eric->getEricRect()))
+		{
+			if (_eric->getEricRect().bottom < _olaf->GetOlafRC().top)
+			{
+				_eric->setEricY(_olaf->GetOlafRC().top - (_eric->getEricRect().bottom + _eric->getEricRect().top) / 2);
+				_eric->setEricPosState(POSSTATE_GROUND);
+				_eric->setEricState(STATE_IDLE);
+				_eric->setEricJump();
+			}
+			else
+			{
 
+			}
+		}
+	}
+	*/
+}

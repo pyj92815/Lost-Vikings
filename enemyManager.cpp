@@ -266,7 +266,6 @@ void EnemyManager::Collision()
 		//총알 충돌부분========================================================================================================================
 		for (int i = 0; i < _enemyBullet->getVBullet().size(); i++)
 		{
-			//에릭
 			if (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_ericRect))
 			{
 				if (!_enemyBullet->getVBullet()[i].isFire)continue;
@@ -279,48 +278,39 @@ void EnemyManager::Collision()
 				break;
 			}
 
-			//벨로그
 			if ((IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_baleogRect)))
 			{
 				if (!_enemyBullet->getVBullet()[i].isFire)continue;
 				_enemyBullet->removeBullet(i);
-				if (!_playerManager->getbaleog()->getHit())
-				{
-					_playerManager->getbaleog()->setHit();
-					_playerManager->getbaleog()->setBaleogHit();
-				}
-				break;
+				_playerManager->getbaleog()->setBaleogHit();
 			}
-
-			//울라프
 
 			if ((IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_olafRect)))
 			{
 				if (!_enemyBullet->getVBullet()[i].isFire)continue;
 				_enemyBullet->removeBullet(i);
 
-
 				if (_playerManager->getOlaf()->getOlafHP() != 0)
 				{
-					if (_playerManager->getOlaf()->GetOlafShieldState()) // 방패를 들었을때
+					if (_playerManager->getOlaf()->GetOlafShieldState())
 					{
 						_playerManager->getOlaf()->Set_OlafState(STATE_HIT);
 						_playerManager->getOlaf()->OlafHit();
 					}
-					else // 방패를 들지 않았을때
+					else
 					{
 						if (_playerManager->getOlaf()->GetOlafDir()) // 방패방향 왼쪽인 경우
 						{
-							if (_playerManager->getOlaf()->GetOlafRC().left < _enemyBullet->getVBullet()[i].x)
+							if ((_playerManager->getOlaf()->GetOlafRC().right + _playerManager->getOlaf()->GetOlafRC().left) / 2 < _enemyBullet->getVBullet()[i].x)
 							{
 								_playerManager->getOlaf()->Set_OlafState(STATE_HIT);
 								_playerManager->getOlaf()->setOlafHit();
 								_playerManager->getOlaf()->OlafHit();
 							}
 						}
-						else // 방패방향이 오른쪽인 경우
+						else
 						{
-							if (_playerManager->getOlaf()->GetOlafRC().right > _enemyBullet->getVBullet()[i].x)
+							if ((_playerManager->getOlaf()->GetOlafRC().right + _playerManager->getOlaf()->GetOlafRC().left) / 2 > _enemyBullet->getVBullet()[i].x)
 							{
 								_playerManager->getOlaf()->Set_OlafState(STATE_HIT);
 								_playerManager->getOlaf()->setOlafHit();
@@ -329,7 +319,6 @@ void EnemyManager::Collision()
 						}
 					}
 				}
-
 			}
 		}
 	}

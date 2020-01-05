@@ -57,7 +57,7 @@ HRESULT playerbaleog::init(float x, float y)
 	_moveSpeed = 5;
 
 	_stop = false;
-	
+
 	return S_OK;
 }
 
@@ -67,161 +67,187 @@ void playerbaleog::release()
 
 void playerbaleog::update()
 {
-
-	// 비밀이동키
-	//if (!_baleogAttack) hgKey();
-	setBaleogImage();
-	setBaleogPosImage();
-	
-	if (!_stop)
+	if (!_isItem)
 	{
-		if (_stopControl)key();
-		if (_stopControl) PixelCollision();
 
-		//PixelRightCollision();
-		//PixelLeftCollision();
 
-		baleogHit();
 
-		if (_baleog.posState == POSSTATE_AIR)
+		// 비밀이동키
+		//if (!_baleogAttack) hgKey();
+		setBaleogImage();
+		setBaleogPosImage();
+
+		if (!_stop)
 		{
-			_baleog.currentFrameX = 0;	//낙하하기 직전에 깜빡이는 문제 해결 하기 위해서 프레임 0에서 바로 시작하도록
-			_baleog.image->setFrameX(_baleog.currentFrameX);	//프레임을 셋에 고정하는 예외처리 문장
+			if (_stopControl)key();
+			if (_stopControl) PixelCollision();
 
-			if (_baleog.state != STATE_STEPLADDER)
+			//PixelRightCollision();
+			//PixelLeftCollision();
+
+			baleogHit();
+
+
+			if (_baleog.posState == POSSTATE_AIR)
 			{
-				if (_baleog.gravity < 5)	_baleog.gravity += 0.7;
-				_baleog.y += _baleog.gravity;
+				_baleog.currentFrameX = 0;	//낙하하기 직전에 깜빡이는 문제 해결 하기 위해서 프레임 0에서 바로 시작하도록
+				_baleog.image->setFrameX(_baleog.currentFrameX);	//프레임을 셋에 고정하는 예외처리 문장
+
+				if (_baleog.state != STATE_STEPLADDER)
+				{
+					if (_baleog.gravity < 5)	_baleog.gravity += 0.7;
+					_baleog.y += _baleog.gravity;
+				}
+
+			}
+			else if (_baleog.posState == POSSTATE_GROUND)// 
+			{
+				PixelCollision();
+			}
+		}
+
+		baleogDie();
+
+		_baleog.rc = RectMake(_baleog.x, _baleog.y, _baleog.image->getFrameWidth(), _baleog.image->getFrameHeight());
+
+
+		//프레임회전
+		_baleog.frameCount++;
+
+
+		//이구문 
+		if (_baleog.state == STATE_BALEOG_SWORD1 || _baleog.state == STATE_BALEOG_SWORD2)
+		{
+
+			if (_baleog.state == STATE_BALEOG_SWORD1)
+			{
+				_baleogAttackMotion = true;
+
+
+			}
+			else
+			{
+				_baleogAttackMotion = false;
+
+
+			}
+			if (_baleog.frameCount > _baleog.frameSpeed - 5)
+			{
+
+				_baleog.currentFrameX++;
+				_baleog.image->setFrameX(_baleog.currentFrameX);
+
+				if (_baleog.image->getMaxFrameX() <= _baleog.currentFrameX)
+				{
+					_baleog.state = STATE_IDLE;
+					_baleog.currentFrameX = 0;
+					_baleog.image->setFrameX(_baleog.currentFrameX);
+					_notMove = false;
+				}
+
+				if (_baleog.currentFrameX >= 1)//프레임 1이 넘어가면 칼질의 참격이 적용됌
+				{
+					_ar->blade(_baleog.x + _baleog.image->getFrameWidth() / 2,
+						_baleog.y + _baleog.image->getFrameHeight() / 2, 20.f, _baleog.currentFrameY * PI, _baleog.currentFrameY, 40);
+				}
+				_baleog.frameCount = 0;
+			}
+		}
+		else if (_baleog.state == STATE_BALEOG_ARROW_REDY)//활을 준비하면
+		{
+			//벨로그 프레임카운트가 돌아간다
+			if (_baleog.frameCount >= _baleog.frameSpeed - 5)	//프레임카운트가 15를 넘어가면
+			{
+
+				_baleog.image->setFrameX(_baleog.currentFrameX);//이미지 프레임셋은 currentFrameX변수로 셋팅한다
+				//_baleog.currentFrameX++;
+
+				if (_baleog.image->getMaxFrameX() > _baleog.currentFrameX) _baleog.currentFrameX++;
+				//currentFrameX가 이미지 최대보다 작으면 currentFrameX++해서 돌아가도록
+
+				if (_baleog.image->getMaxFrameX() < _baleog.currentFrameX)//currentFrameX가 이미지 최대보다 크면 불값은 꺼진다
+				{
+					/*
+					if(_baleog.state == STATE_BALEOG_ARROW_REDY)*/
+					//_baleog.currentFrameX = 3;
+					_pullString = false;	//즉,이미지 프레임이 최대에 도착하면 이미지가 돌아가는 걸 멈추는 것
+				}
+				_baleog.frameCount = 0;	//프레임카운트 0으로 초기화
+			}
+		}
+		else if (_baleog.state == STATE_BALEOG_ARROW_FIRE)//활을 쏘고나면
+		{
+			//벨로그 프레임카운트가 돌아간다
+			if (_baleog.frameCount >= _baleog.frameSpeed - 5)	//프레임카운트가 15를 넘어가면
+			{
+
+				_baleog.image->setFrameX(_baleog.currentFrameX);//이미지 프레임셋은 currentFrameX변수로 셋팅한다
+				//_baleog.currentFrameX++;
+				_baleog.state = STATE_IDLE;
+				if (_baleog.image->getMaxFrameX() > _baleog.currentFrameX) _baleog.currentFrameX++;
+				//currentFrameX가 이미지 최대보다 작으면 currentFrameX++해서 돌아가도록
+				_notMove = false;
+
+				_baleog.frameCount = 0;	//프레임카운트 0으로 초기화
+			}
+		}
+		else if (_baleog.state == STATE_DIE ||
+			_baleog.state == STATE_MIRRA ||
+			_baleog.state == STATE_PRESSDIE ||
+			_baleog.state == STATE_POISON ||
+			_baleog.state == STATE_TRAPDIE)
+		{
+			if (_baleog.frameCount >= _baleog.frameSpeed)	//프레임카운트 > 프레임스피드 면
+			{
+				_baleog.currentFrameX++;
+				_baleog.image->setFrameX(_baleog.currentFrameX);
+
+				if (_baleog.currentFrameX > _baleog.image->getMaxFrameX())
+				{
+
+					_baleog.isDead = true;
+					_baleog.x = -1000;
+					_baleog.y = -1000;
+
+
+				}
+				else if (_baleog.currentFrameX <= _baleog.image->getMaxFrameX())
+				{
+					_baleog.currentFrameX = _baleog.image->getMaxFrameX();
+				}
+
+
+				//if (_baleog.image->getMaxFrameX() < _baleog.currentFrameX)
+				//{
+
+				//	_baleog.currentFrameX = 0;
+
+				//}
+				_baleog.frameCount = 0;
 			}
 
 		}
-		else if (_baleog.posState == POSSTATE_GROUND)// 
+		else if (_baleog.state == STATE_STEPLADDER)
 		{
-			PixelCollision();
-		}
-	}
-
-	baleogDie();
-
-	_baleog.rc = RectMake(_baleog.x, _baleog.y, _baleog.image->getFrameWidth(), _baleog.image->getFrameHeight());
-
-
-	//프레임회전
-	_baleog.frameCount++;
+			_baleog.frameCount--;
+			{
+				if (_baleog.frameCount >= _baleog.frameSpeed)	//프레임카운트 > 프레임스피드 면
+				{
+					_baleog.currentFrameX++;
+					_baleog.image->setFrameX(_baleog.currentFrameX);
 
 
-	//이구문 
-	if (_baleog.state == STATE_BALEOG_SWORD1 || _baleog.state == STATE_BALEOG_SWORD2)
-	{
+					if (_baleog.image->getMaxFrameX() < _baleog.currentFrameX)
+					{
 
-		if (_baleog.state == STATE_BALEOG_SWORD1)
-		{
-			_baleogAttackMotion = true;
+						_baleog.currentFrameX = 0;
+
+					}
+					_baleog.frameCount = 0;
+				}
+			}
 		}
 		else
-		{
-			_baleogAttackMotion = false;
-		}
-		if (_baleog.frameCount > _baleog.frameSpeed - 5)
-		{
-
-			_baleog.currentFrameX++;
-			_baleog.image->setFrameX(_baleog.currentFrameX);
-
-			if (_baleog.image->getMaxFrameX() <= _baleog.currentFrameX)
-			{
-				_baleog.state = STATE_IDLE;
-				_baleog.currentFrameX = 0;
-				_baleog.image->setFrameX(_baleog.currentFrameX);
-				_notMove = false;
-			}
-
-			if (_baleog.currentFrameX >= 1)//프레임 1이 넘어가면 칼질의 참격이 적용됌
-			{
-				_ar->blade(_baleog.x + _baleog.image->getFrameWidth() / 2,
-					_baleog.y + _baleog.image->getFrameHeight() / 2, 20.f,
-					_baleog.currentFrameY * PI, _baleog.currentFrameY, 40);
-			}
-			_baleog.frameCount = 0;
-		}
-	}
-	else if (_baleog.state == STATE_BALEOG_ARROW_REDY)//활을 준비하면
-	{
-		//벨로그 프레임카운트가 돌아간다
-		if (_baleog.frameCount >= _baleog.frameSpeed - 5)	//프레임카운트가 15를 넘어가면
-		{
-
-			_baleog.image->setFrameX(_baleog.currentFrameX);//이미지 프레임셋은 currentFrameX변수로 셋팅한다
-			//_baleog.currentFrameX++;
-
-			if (_baleog.image->getMaxFrameX() > _baleog.currentFrameX) _baleog.currentFrameX++;
-			//currentFrameX가 이미지 최대보다 작으면 currentFrameX++해서 돌아가도록
-
-			if (_baleog.image->getMaxFrameX() < _baleog.currentFrameX)//currentFrameX가 이미지 최대보다 크면 불값은 꺼진다
-			{
-				/*
-				if(_baleog.state == STATE_BALEOG_ARROW_REDY)*/
-				//_baleog.currentFrameX = 3;
-				_pullString = false;	//즉,이미지 프레임이 최대에 도착하면 이미지가 돌아가는 걸 멈추는 것
-			}
-			_baleog.frameCount = 0;	//프레임카운트 0으로 초기화
-		}
-	}
-	else if (_baleog.state == STATE_BALEOG_ARROW_FIRE)//활을 쏘고나면
-	{
-		//벨로그 프레임카운트가 돌아간다
-		if (_baleog.frameCount >= _baleog.frameSpeed - 5)	//프레임카운트가 15를 넘어가면
-		{
-
-			_baleog.image->setFrameX(_baleog.currentFrameX);//이미지 프레임셋은 currentFrameX변수로 셋팅한다
-			//_baleog.currentFrameX++;
-			_baleog.state = STATE_IDLE;
-			if (_baleog.image->getMaxFrameX() > _baleog.currentFrameX) _baleog.currentFrameX++;
-			//currentFrameX가 이미지 최대보다 작으면 currentFrameX++해서 돌아가도록
-			_notMove = false;
-
-			_baleog.frameCount = 0;	//프레임카운트 0으로 초기화
-		}
-	}
-	else if (_baleog.state == STATE_DIE ||
-		_baleog.state == STATE_MIRRA ||
-		_baleog.state == STATE_PRESSDIE ||
-		_baleog.state == STATE_POISON ||
-		_baleog.state == STATE_TRAPDIE)
-	{
-		if (_baleog.frameCount >= _baleog.frameSpeed)	//프레임카운트 > 프레임스피드 면
-		{
-			_baleog.currentFrameX++;
-			_baleog.image->setFrameX(_baleog.currentFrameX);
-
-			if (_baleog.currentFrameX > _baleog.image->getMaxFrameX())
-			{
-
-				_baleog.isDead = true;
-				_baleog.x = -1000;
-				_baleog.y = -1000;
-
-
-			}
-			else if (_baleog.currentFrameX <= _baleog.image->getMaxFrameX())
-			{
-				_baleog.currentFrameX = _baleog.image->getMaxFrameX();
-			}
-
-
-			//if (_baleog.image->getMaxFrameX() < _baleog.currentFrameX)
-			//{
-
-			//	_baleog.currentFrameX = 0;
-
-			//}
-			_baleog.frameCount = 0;
-		}
-
-	}
-	else if (_baleog.state == STATE_STEPLADDER)
-	{
-		_baleog.frameCount--;
 		{
 			if (_baleog.frameCount >= _baleog.frameSpeed)	//프레임카운트 > 프레임스피드 면
 			{
@@ -237,43 +263,25 @@ void playerbaleog::update()
 				}
 				_baleog.frameCount = 0;
 			}
+
 		}
-	}
-	else
-	{
-		if (_baleog.frameCount >= _baleog.frameSpeed)	//프레임카운트 > 프레임스피드 면
+
+
+		/*if (_count % 2 == 0 && _move.type != MT_BOSS &&
+			_move.type != MT_BOSS2)
+			if(_count % 2 == 0)
 		{
-			_baleog.currentFrameX++;
-			_baleog.image->setFrameX(_baleog.currentFrameX);
+			if (_baleog.currentFrameX >= _baleog.image->getMaxFrameX()) _baleog.currentFrameX = 0;
 
-
-			if (_baleog.image->getMaxFrameX() < _baleog.currentFrameX)
-			{
-
-				_baleog.currentFrameX = 0;
-
-			}
-			_baleog.frameCount = 0;
+			_imageName->setFrameX(_currentFrameX);
+			_currentFrameX++;
+			_count = 0;
 		}
+	*/
+
+		_ar->update();
 
 	}
-
-
-	/*if (_count % 2 == 0 && _move.type != MT_BOSS &&
-		_move.type != MT_BOSS2)
-		if(_count % 2 == 0)
-	{
-		if (_baleog.currentFrameX >= _baleog.image->getMaxFrameX()) _baleog.currentFrameX = 0;
-
-		_imageName->setFrameX(_currentFrameX);
-		_currentFrameX++;
-		_count = 0;
-	}
-*/
-
-	_ar->update();
-
-
 }
 
 void playerbaleog::render()
@@ -422,16 +430,14 @@ void playerbaleog::PixelCollision()
 
 	for (int i = _baleog.probeY - 6; i < _baleog.probeY + 10; ++i)
 	{
-		COLORREF getPixel_Bottom = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), 
-			(_baleog.rc.left + _baleog.rc.right) / 2, i);
+		COLORREF getPixel_Bottom = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_baleog.rc.left + _baleog.rc.right) / 2, i);
 
 
 		int r = GetRValue(getPixel_Bottom);
 		int g = GetGValue(getPixel_Bottom);
 		int b = GetBValue(getPixel_Bottom);
 
-		COLORREF getPixel_Top = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), 
-			(_baleog.rc.left + _baleog.rc.right) / 2, _baleog.y);
+		COLORREF getPixel_Top = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_baleog.rc.left + _baleog.rc.right) / 2, _baleog.y);
 		int r_top = GetRValue(getPixel_Top);
 		int g_top = GetGValue(getPixel_Top);
 		int b_top = GetBValue(getPixel_Top);
@@ -570,7 +576,7 @@ void playerbaleog::PixelRightCollision()
 				_baleog.state = STATE_PUSH;
 				_baleog.currentFrameX = 0;
 				_baleog.image->setFrameX(0);
-				
+
 			}
 		}
 		_baleog.x = _baleog.probeX - _baleog.image->getFrameWidth();
@@ -597,7 +603,7 @@ void playerbaleog::PixelLeftCollision()
 				_baleog.state = STATE_PUSH;
 				_baleog.currentFrameX = 0;
 				_baleog.image->setFrameX(0);
-				
+
 			}
 		}
 		_baleog.x = _baleog.probeX + 6;
@@ -635,7 +641,7 @@ void playerbaleog::baleogDie()
 
 void playerbaleog::baleogHit()
 {
-	
+	//맞을 때 히트값을 조정해주셈 
 	if (_isHit)
 	{
 		_hitCount++;
@@ -737,8 +743,8 @@ void arrow::blade(float x, float y, float speed, float angle, int direction, flo
 	arrow.x = arrow.fireX = x;
 	arrow.y = arrow.fireY = y;
 	arrow.rc = RectMakeCenter(arrow.x, arrow.y,
-		200,
-		100);
+		126,
+		28);
 	/*arrow.rc = RectMakeCenter(arrow.x, arrow.y,
 		arrow.arrowImage->getFrameWidth(),
 		arrow.arrowImage->getFrameHeight());*/
@@ -776,6 +782,9 @@ void arrow::arrowMove(bool fire)
 			int g = GetGValue(getPixel_ARROW);
 			int b = GetBValue(getPixel_ARROW);
 
+
+
+
 			if (_viArrow->range < getDistance(_viArrow->x, _viArrow->y, _viArrow->fireX,
 				_viArrow->fireY))
 			{
@@ -784,11 +793,11 @@ void arrow::arrowMove(bool fire)
 				_viArrow = _vArrow.erase(_viArrow);
 			}
 			else if (!(r == 255 && g == 0 && b == 255))
-				{
+			{
 				SAFE_RELEASE(_viArrow->arrowImage);
 				SAFE_DELETE(_viArrow->arrowImage);
-					_viArrow = _vArrow.erase(_viArrow);
-				}
+				_viArrow = _vArrow.erase(_viArrow);
+			}
 			else ++_viArrow;
 
 		}

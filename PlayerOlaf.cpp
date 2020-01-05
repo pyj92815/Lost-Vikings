@@ -65,7 +65,7 @@ void PlayerOlaf::render()
 		{
 			for (int i = 0; i < 9; ++i)
 			{
-				//Rectangle(CAMERAMANAGER->getWorDC(), _ladderRect[i]);
+				Rectangle(CAMERAMANAGER->getWorDC(), _ladderRect[i]);
 			}
 			Rectangle(CAMERAMANAGER->getWorDC(), _olaf.rc);
 
