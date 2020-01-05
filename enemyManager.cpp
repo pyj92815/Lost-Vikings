@@ -282,7 +282,9 @@ void EnemyManager::Collision()
 			{
 				if (!_enemyBullet->getVBullet()[i].isFire)continue;
 				_enemyBullet->removeBullet(i);
-				
+
+				//_playerManager->getbaleog()->setBaleogHit();
+
 				if (!_playerManager->getbaleog()->getHit())
 				{
 					_playerManager->getbaleog()->setHit();
@@ -326,7 +328,6 @@ void EnemyManager::Collision()
 						}
 					}
 				}
-				break;
 			}
 		}
 	}
