@@ -72,7 +72,7 @@ void playerbaleog::update()
 	//if (!_baleogAttack) hgKey();
 	setBaleogImage();
 	setBaleogPosImage();
-
+	
 	if (!_stop)
 	{
 		if (_stopControl)key();
@@ -82,7 +82,6 @@ void playerbaleog::update()
 		//PixelLeftCollision();
 
 		baleogHit();
-
 
 		if (_baleog.posState == POSSTATE_AIR)
 		{
@@ -740,7 +739,7 @@ void arrow::blade(float x, float y, float speed, float angle, int direction, flo
 	arrow.y = arrow.fireY = y;
 	arrow.rc = RectMakeCenter(arrow.x, arrow.y,
 		126,
-		28);
+		100);
 	/*arrow.rc = RectMakeCenter(arrow.x, arrow.y,
 		arrow.arrowImage->getFrameWidth(),
 		arrow.arrowImage->getFrameHeight());*/

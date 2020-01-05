@@ -207,6 +207,7 @@ void EnemyManager::Collision()
 		//총알 충돌부분========================================================================================================================
 		for (int i = 0;i < _enemyBullet->getVBullet().size();i++)
 		{
+			//에릭
 			if (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_ericRect))
 			{
 				if (!_enemyBullet->getVBullet()[i].isFire)continue;
@@ -218,17 +219,25 @@ void EnemyManager::Collision()
 				}
 				break;
 			}
-			
+			//벨로그
 			if ((IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_baleogRect)))
 			{
 				if (!_enemyBullet->getVBullet()[i].isFire)continue;
 				_enemyBullet->removeBullet(i);
-				_playerManager->getbaleog()->setBaleogHit();
+				if (!_playerManager->getbaleog()->getHit())
+				{
+					_playerManager->getbaleog()->setHit();
+					_playerManager->getbaleog()->setBaleogHit();
+				}
+				break;
 			}
+
+			//울라프
 			if ((IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_olafRect)))
 			{
 				if (!_enemyBullet->getVBullet()[i].isFire)continue;
 				_enemyBullet->removeBullet(i);
+
 			}
 		}
 
