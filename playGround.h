@@ -6,7 +6,7 @@
 #include "playerManager.h" // 플레이어
 #include"enemyManager.h"
 #include "scene_Manager.h"
-
+#include "effect.h"
 class playGround : public gameNode
 {
 private:
@@ -17,9 +17,8 @@ private:
 
 	
 
-	
-
 	scene_Manager* _sm;
+
 public:
 	playGround();
 	~playGround();

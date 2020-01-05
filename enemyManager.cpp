@@ -14,12 +14,17 @@ EnemyManager::~EnemyManager()
 
 HRESULT EnemyManager::init()
 {
-	EFFECTMANAGER->addEffect("Enemy_die", "./image./Enemy/Enemy_Die.bmp", 891, 73, 81, 73, 0.1f, 0.1f, 50);
+	EFFECTMANAGER->addEffect("Enemy_die", "./image./Enemy/Enemy_Die.bmp", 891, 73, 81, 73, 1.0f, 0.1f, 50);
+	IMAGEMANAGER->addFrameImage("Enemy_Die", "./image./Enemy/Enemy_Die.bmp", 891, 73, 11, 1, true, RGB(255, 0, 255));
 
 	_enemyBullet = new Enemy_Bullet;
 	_enemyBullet->init();
 	_worldObjects = new worldObjects;
 	_worldObjects->init();
+
+	_enemyEffect = new effect;
+	_enemyEffect->init(IMAGEMANAGER->findImage("Enemy_Die"), 81, 73, 1.0f, 0.25f,true);
+
 	EnemyCreate();
 	return S_OK;
 }
@@ -53,6 +58,14 @@ void EnemyManager::update()
 	EnemyRemove();
 	bulletFire();
 	Collision();
+	
+	_enemyEffect->update();
+
+	for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
+	{
+		(*_viEffect)->update();
+	}
+
 }
 
 void EnemyManager::render()
@@ -62,7 +75,12 @@ void EnemyManager::render()
 		(*_viEnemy)->render();
 	}
 	_enemyBullet->render();
+	_enemyEffect->render(CAMERAMANAGER->getWorDC());
 
+	for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
+	{
+		(*_viEffect)->render(CAMERAMANAGER->getWorDC());
+	}
 }
 
 void EnemyManager::EnemyCreate()
@@ -138,8 +156,9 @@ void EnemyManager::EnemyRemove()
 	{
 		if ((*_viEnemy)->getDie())
 		{
-			EFFECTMANAGER->play("ÀûÁ×À½", (*_viEnemy)->getX(), (*_viEnemy)->getY());
+			//EFFECTMANAGER->play("die", (*_viEnemy)->getRect().left, (*_viEnemy)->getRect().top);
 			//EFFECTMANAGER->play("Enemy_Die", (*_viEnemy)->getX(), (*_viEnemy)->getY());
+			createEffect((*_viEnemy)->getX(), (*_viEnemy)->getY());
 			_vEnemy.erase(_viEnemy);
 			break;
 		}
@@ -350,4 +369,13 @@ void EnemyManager::bulletFire()
 			break;
 		}
 	}
+}
+
+void EnemyManager::createEffect(float x, float y)
+{
+	effect* Enemyeffect;
+	Enemyeffect = new effect;
+	Enemyeffect->init(IMAGEMANAGER->findImage("Enemy_Die"), 81, 73, 1.0f, 0.25f, true, x, y);
+	_vEffect.push_back(Enemyeffect);
+
 }

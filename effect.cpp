@@ -35,6 +35,57 @@ HRESULT effect::init(image* effectImage, int frameW, int frameH, int fps, float 
 	return S_OK;
 }
 
+HRESULT effect::init(image* effectImage, int frameW, int frameH, int fps, float elapsedTime, bool last)
+{
+	//이펙트 이미지가 없으면 실패를 띄워라
+	if (!effectImage) return E_FAIL;
+
+	_isRunning = false;
+	_effectImage = effectImage;
+	_elapsedTime = elapsedTime;
+	_last = last;
+
+	if (!_effectAnimation) _effectAnimation = new animation;
+
+	_effectAnimation->init(_effectImage->getWidth(), _effectImage->getHeight(), frameW, frameH);
+	_effectAnimation->setDefPlayFrame(false, false);
+	_effectAnimation->setFPS(fps);
+	_effectAnimation->stop();
+	_effectAnimation->frameContinue();
+	return S_OK;
+}
+
+HRESULT effect::init(image* effectImage, int frameW, int frameH, int fps, float elapsedTime, bool last, float x, float y)
+{
+	//이펙트 이미지가 없으면 실패를 띄워라
+	if (!effectImage) return E_FAIL;
+
+	_isRunning = false;
+	_effectImage = effectImage;
+	_elapsedTime = elapsedTime;
+	_last = last;
+
+	if (!_effectAnimation) _effectAnimation = new animation;
+
+	_effectAnimation->init(_effectImage->getWidth(), _effectImage->getHeight(), frameW, frameH);
+	_effectAnimation->setDefPlayFrame(false, false);
+	_effectAnimation->setFPS(fps);
+	_effectAnimation->frameContinue();
+	_effectAnimation->start();
+
+	//if (!_effectImage || !_effectAnimation) return;
+
+	//일단 중앙값으로... 레탑들은 레탑으로 해...
+	_x = x - (_effectAnimation->getFrameWidth() / 2);
+	_y = y - (_effectAnimation->getFrameHeight() / 2);
+
+	_isRunning = true;
+
+	_effectAnimation->start();
+
+	return S_OK;
+}
+
 void effect::release()
 {
 	_effectImage = NULL;
@@ -49,18 +100,32 @@ void effect::update()
 	_effectAnimation->frameUpdate(_elapsedTime);
 
 	//만약 애니메이션 재생신호가 false면 이펙트를 꺼라
-	if (!_effectAnimation->isPlay()) killEffect();
-
+	if (!_effectAnimation->isPlay())
+	{
+		if (!_effectAnimation->isLast())
+		{
+			killEffect();
+		}
+	}
 }
 
 void effect::render()
 {
 
 	if (!_isRunning) return;
-
+	
+	//_effectImage->aniRender(getMemDC(), _x, _y, _effectAnimation);
 	_effectImage->aniRender(getMemDC(), _x, _y, _effectAnimation);
-
 }
+
+void effect::render(HDC hdc)
+{
+	if (!_isRunning) return;
+	//_effectImage->aniRender(getMemDC(), _x, _y, _effectAnimation);
+
+	_effectImage->aniRender(hdc, _x, _y, _effectAnimation);
+}
+
 
 void effect::startEffect(int x, int y)
 {
@@ -73,7 +138,19 @@ void effect::startEffect(int x, int y)
 	_isRunning = true;
 
 	_effectAnimation->start();
+}
 
+void effect::startEffect(float x, float y)
+{
+	if (!_effectImage || !_effectAnimation) return;
+
+	//일단 중앙값으로... 레탑들은 레탑으로 해...
+	_x = x; //- (_effectAnimation->getFrameWidth() / 2);
+	_y = y; //- (_effectAnimation->getFrameHeight() / 2);
+
+	_isRunning = true;
+
+	_effectAnimation->start();
 }
 
 void effect::killEffect()

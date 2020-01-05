@@ -7,6 +7,8 @@
 #include"Enemy_Bullet.h"
 #include"worldObjects.h"
 #include<vector>
+#include "effect.h"
+
 using namespace std;
 
 class playerManager;
@@ -32,6 +34,9 @@ private:
 	int _playerMirraCount;
 	bool _playerMirra;
 
+	effect* _enemyEffect;
+	vector<effect*>						_vEffect;
+	vector<effect*>::iterator		   _viEffect;
 public:
 	EnemyManager();
 	~EnemyManager();
@@ -44,12 +49,16 @@ public:
 	void EnemyCreate();
 	void EnemyCreate(float x, float y);
 	void EnemyRemove();
-	void EnemyRemove(int Num) {	_vEnemy.erase(_vEnemy.begin() + Num);}
+	void EnemyRemove(int Num) 
+	{
+		createEffect(_vEnemy[Num]->getX(), _vEnemy[Num]->getY());
+		_vEnemy.erase(_vEnemy.begin() + Num);
+	}
 	void Collision();
 	void AddressLink(playerManager* pm) { _playerManager = pm; }
 	
 	void bulletFire();
-
+	void createEffect(float x,float y);
 	vector<Enemy*> getVEnemy() { return _vEnemy; }
 	vector<Enemy*>::iterator getViEnemy() { return _viEnemy; }
 };

@@ -652,3 +652,20 @@ void image::aniRender(HDC hdc, int destX, int destY, animation * ani)
 {
 	render(hdc, destX, destY, ani->getFramePos().x, ani->getFramePos().y, ani->getFrameWidth(), ani->getFrameHeight());
 }
+
+void image::aniRender(HDC hdc, int destX, int destY, animation* ani, bool last)
+{
+	if (last)// 계속 유지하면 
+	{
+		if (ani->getFramePos().x >= ani->getMaxFrame())
+		{
+			render(hdc, destX, destY, ani->getMaxFrame(), ani->getFramePos().y, ani->getFrameWidth(), ani->getFrameHeight());
+		}
+		else
+		{
+			render(hdc, destX, destY, ani->getFramePos().x, ani->getFramePos().y, ani->getFrameWidth(), ani->getFrameHeight());
+		}
+	}
+	else render(hdc, destX, destY, ani->getFramePos().x, ani->getFramePos().y, ani->getFrameWidth(), ani->getFrameHeight());
+
+}

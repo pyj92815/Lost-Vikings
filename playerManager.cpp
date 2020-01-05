@@ -16,7 +16,8 @@ HRESULT playerManager::init()
 	_olaf = new PlayerOlaf;
 	_olaf->init(180, 185);
 
-	EFFECTMANAGER->addEffect("ÀûÁ×À½", "Enemy_Die", 891, 73, 81, 73,	1, 10, NULL);
+
+	EFFECTMANAGER->addEffect("die", "./image./Enemy/Enemy_Die.bmp", 891, 73, 81, 73,1.0f, 0.25f,100,true);
 	for (int i = 0;i < 3;i++)
 	{
 		_itemCount[i] = 0;
@@ -844,6 +845,9 @@ void playerManager::enemyColision()
 		{
 			if (_eric->getEric().state == STATE_ERIC_HEADBUTT && _eric->getEric().currentFrameX > 3)
 			{
+				//_em->getVEnemy()[i]->Hit();
+				//EFFECTMANAGER->play("die", _em->getVEnemy()[i]->getRect().left, _em->getVEnemy()[i]->getRect().top);
+				EFFECTMANAGER->play("die", 50, 50);
 				_em->getVEnemy()[i]->Hit();
 				//_em->EnemyRemove(i);
 				_eric->setEricState(STATE_ERIC_HEADBUTTEND);
