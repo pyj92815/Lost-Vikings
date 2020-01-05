@@ -848,6 +848,19 @@ void playerManager::enemyColision()
 				break;
 			}
 		}
+		// ¿¡³Ê¹Ì ÆøÅº Ãæµ¹ 
+		if (_wo->getIsBoomShow())
+		{
+			RECT temp3;
+			if (IntersectRect(&temp3, &_wo->getBombRect(), &_em->getVEnemy()[i]->getRect()))
+			{
+				if (_wo->getBombFrameCount() >= 2)
+				{
+					_em->EnemyRemove(i);
+					break;
+				}
+			}
+		}
 	}
 }
 

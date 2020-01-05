@@ -50,8 +50,8 @@ HRESULT worldObjects::init()
 		_poision[i].trap = TRAP_POISION;
 	}//□□□□□□□□□□□□□독 함정을 벡터에 넣자□□□□□□□□□□□□□□□□□□□
 	for (int i = 0; i < 4; i++) { _vTrap.push_back(_poision[i]); }
-	//■■■■■■■■■■■■■■■■■폭포 위치 렉트■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	IMAGEMANAGER->addFrameImage("Water_Fall", "./image/ImageCollection/water_Fall.bmp", 564, 602, 4, 1, true, RGB(255, 0, 255));
+	//■■■■■■■■■■■■■■■■■폭포 클래스로 옮김■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	/*IMAGEMANAGER->addFrameImage("Water_Fall", "./image/ImageCollection/water_Fall.bmp", 564, 602, 4, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("long_Water_Fall", "./image/ImageCollection/long_Water_Fall.bmp", 1152, 1467, 4, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("short_Water_Fall", "./image/ImageCollection/short_Water_Fall.bmp", 564, 622, 4, 1, true, RGB(255, 0, 255));
 	_waterFall[0].image = IMAGEMANAGER->findImage("Water_Fall");
@@ -61,13 +61,13 @@ HRESULT worldObjects::init()
 	{
 		_waterFall[i].frameX = 0;
 		_waterFall[i].frameY = 0;
-	}
+	}*/
 	//■■■■■■■■■■■■■■■■■벽 및 발판 위치■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	_isUpDown = false;
 	_breakableWallOne.image = IMAGEMANAGER->addFrameImage("Stone_Door_5", "./image/ImageCollection/Stone_Door_5.bmp", 384, 240, 8, 1, true, RGB(255, 0, 255));
 	_breakableWallTwo.image = IMAGEMANAGER->addFrameImage("Stone_Door_4", "./image/ImageCollection/Stone_Door_4.bmp", 336, 192, 7, 1, true, RGB(255, 0, 255));
-	_unbreakableWallOne.image = IMAGEMANAGER->addFrameImage("BrownDoor_1", "./image/ImageCollection/BrownDoor.bmp", 315, 195, 7, 1, true, RGB(255, 0, 255));
-	_unbreakableWallTwo.image = IMAGEMANAGER->addFrameImage("BrownDoor_2", "./image/ImageCollection/BrownDoor.bmp", 315, 195, 7, 1, true, RGB(255, 0, 255));
+	_unbreakableWallOne.image = IMAGEMANAGER->addFrameImage("BrownDoor_1", "./image/ImageCollection/BrownDoor.bmp", 315, 192, 7, 1, true, RGB(255, 0, 255));
+	_unbreakableWallTwo.image = IMAGEMANAGER->addFrameImage("BrownDoor_2", "./image/ImageCollection/BrownDoor.bmp", 315, 192, 7, 1, true, RGB(255, 0, 255));
 	_flyingBoard.image = IMAGEMANAGER->addImage("Moving_Flatform", "./image/ImageCollection/Moving_Flatform.bmp", 192, 45, false, RGB(0, 0, 0));
 	_flyingBoard.rc = RectMake(1679, 325, 192, 45);
 	//발판 좌표
@@ -210,7 +210,6 @@ void worldObjects::release()
 
 void worldObjects::render()
 {
-
 	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
 	{//■■■■■■■■■■■■■■■■■아이템 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 		if (!_viItem->isCollision)
@@ -230,13 +229,6 @@ void worldObjects::render()
 			Rectangle(CAMERAMANAGER->getWorDC(), _niddle[i].rc);
 		}
 	}
-	//■■■■■■■■■■■■■■■■■폭포 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	IMAGEMANAGER->findImage("Water_Fall")->frameRender(CAMERAMANAGER->getWorDC(),
-		1150, 148, _waterFall[0].frameX, _waterFall[0].frameY);
-	IMAGEMANAGER->findImage("long_Water_Fall")->frameRender(CAMERAMANAGER->getWorDC(),
-		815, 832, _waterFall[1].frameX, _waterFall[1].frameY);
-	IMAGEMANAGER->findImage("short_Water_Fall")->frameRender(CAMERAMANAGER->getWorDC(),
-		3263, -60, _waterFall[2].frameX, _waterFall[2].frameY);
 	//■■■■■■■■■■■■■■■■■벽 및 발판 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	if (KEYMANAGER->isStayKeyDown('Q'))
 	{//■■■■■■■■■■■■■■■■■벽 충돌 렉트 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
@@ -274,28 +266,36 @@ void worldObjects::render()
 			if (KEYMANAGER->isStayKeyDown('Q')) { Rectangle(CAMERAMANAGER->getWorDC(), _viTrap->rc); }
 		}
 	}
+	//IMAGEMANAGER->findImage("OBJECT")->render(CAMERAMANAGER->getWorDC(), 0, 0);
+	////■■■■■■■■■■■■■■■■■폭포 클래스로 옮김■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	//IMAGEMANAGER->findImage("Water_Fall")->frameRender(CAMERAMANAGER->getWorDC(),
+	//	1150, 148, _waterFall[0].frameX, _waterFall[0].frameY);
+	//IMAGEMANAGER->findImage("long_Water_Fall")->frameRender(CAMERAMANAGER->getWorDC(),
+	//	815, 832, _waterFall[1].frameX, _waterFall[1].frameY);
+	//IMAGEMANAGER->findImage("short_Water_Fall")->frameRender(CAMERAMANAGER->getWorDC(),
+	//	3263, -60, _waterFall[2].frameX, _waterFall[2].frameY);
 	if (_isBoomShow)
-	{
+	{//■■■■■■■■■■■■■■■■■폭탄이 폭파할때 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 		_Items[8].image->frameRender(CAMERAMANAGER->getWorDC(), _Items[8].x, _Items[8].y + 30, _Items[8].frameX, 0);
 		if (KEYMANAGER->isStayKeyDown('Q')) { Rectangle(CAMERAMANAGER->getWorDC(), _Items[8].rc); }
-		if (_boomCount >= 200)
-		{
-			_isBoomEffects.fadeIn++;
-			if (_isBoomEffects.fadeIn >= 207 && !_isChange)
-			{
-				_isBoomEffects.fadeIn = 50;
-				_isBoomEffects.fadeIn++;
-				_isChange = true;
-			
-			}
-			if (_isBoomEffects.fadeIn >= 57 && _isChange)
-			{
-				_isBoomEffects.fadeIn = 200;
-				_isBoomEffects.fadeIn++;
-				_isChange = false;
-			}
-			_isBoomEffects.image->alphaRender(CAMERAMANAGER->getWorDC(), CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), _isBoomEffects.fadeIn);
-		}
+	//	if (_boomCount >= 200)
+	//	{
+	//		_isBoomEffects.fadeIn++;
+	//		if (_isBoomEffects.fadeIn >= 207 && !_isChange)
+	//		{
+	//			_isBoomEffects.fadeIn = 50;
+	//			_isBoomEffects.fadeIn++;
+	//			_isChange = true;
+	//		
+	//		}
+	//		if (_isBoomEffects.fadeIn >= 57 && _isChange)
+	//		{
+	//			_isBoomEffects.fadeIn = 200;
+	//			_isBoomEffects.fadeIn++;
+	//			_isChange = false;
+	//		}
+	//		_isBoomEffects.image->alphaRender(CAMERAMANAGER->getWorDC(), CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(), _isBoomEffects.fadeIn);
+	//	}
 	}
 }
 
@@ -400,16 +400,16 @@ void worldObjects::frameWork()
 		}
 
 	}
-	//■■■■■■■■■■■■■■■■■폭포 프레임■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	for (int i = 0; i < 3; i++)
-	{
-		if (_frameCount % 4 == 0)
-		{
-			_waterFall[i].image->setFrameX(_waterFall[i].frameX);
-			_waterFall[i].frameX++;
-			if (_waterFall[i].frameX > _waterFall[i].image->getMaxFrameX()) { _waterFall[i].frameX = 0; }
-		}
-	}
+	////■■■■■■■■■■■■■■■■■폭포 클래스로 옮김■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	if (_frameCount % 4 == 0)
+	//	{
+	//		_waterFall[i].image->setFrameX(_waterFall[i].frameX);
+	//		_waterFall[i].frameX++;
+	//		if (_waterFall[i].frameX > _waterFall[i].image->getMaxFrameX()) { _waterFall[i].frameX = 0; }
+	//	}
+	//}
 }
 
 void worldObjects::move()
@@ -451,6 +451,6 @@ void worldObjects::MakeBoom(float x, float y)
 	_isBoomShow = true;
 	_Items[8].x = x;
 	_Items[8].y = y;
-	_Items[8].rc = RectMake(x - 100, y - 100, _Items[8].image->getFrameWidth() + 200, _Items[8].image->getFrameHeight() + 100);
+	_Items[8].rc = RectMake(x - 100, y - 100, _Items[8].image->getFrameWidth() + 200, _Items[8].image->getFrameHeight() + 200);
 
 }

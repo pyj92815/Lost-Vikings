@@ -23,6 +23,9 @@ HRESULT stageScene::init()
 	_em = new EnemyManager;
 	_em->init();
 
+	_wf = new waterFall;
+	_wf->init();
+
 	_pm->setWorldObjectAddressLink(_wm->getWorldObject());
 	_wm->getWorldObject()->setPlayerManagerAddressLink(_pm);
 
@@ -37,7 +40,8 @@ HRESULT stageScene::init()
 
 	_playerAllDeadTimer = 0;
 	_giveUpStart = false;
-
+	_boomCount = 0;
+	_fadeIn = 200;
 	return S_OK;
 }
 
@@ -65,6 +69,8 @@ void stageScene::update()
 		_wm->update();
 		_pm->update();
 		_em->update();
+		_wf->update();
+	
 	}
 	testStateImage();  // 캐릭터 전환 테스트
 	setting_InvenSelectPos();
@@ -99,13 +105,36 @@ void stageScene::render()
 	_wm->render();
 	_em->render();
 	_pm->render();
-
+	_wf->render();
+	
+	
 	CAMERAMANAGER->get_WorImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(),
 		CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
 
 	IMAGEMANAGER->findImage("OBJECT")->render(getMemDC(), 0, 0, CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(),
 		CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
+	if (_wm->getWorldObject()->getIsBoomShow())
+	{
+		_boomCount++;
+		if (_boomCount >= 200)
+		{
+			_fadeIn++;
+			if (_fadeIn >= 207 && !_isChange)
+			{
+				_fadeIn = 50;
+				_fadeIn++;
+				_isChange = true;
 
+			}
+			if (_fadeIn >= 57 && _isChange)
+			{
+				_fadeIn = 200;
+				_fadeIn++;
+				_isChange = false;
+			}
+			IMAGEMANAGER->findImage("IsBoom")->alphaRender(getMemDC(), 0, 0, _fadeIn);
+		}
+	}
 	IMAGEMANAGER->findImage("UI_Image")->render(getMemDC(), 0, WINSIZEY - (WINSIZEY - 573));
 
 	// 쓰레기통 출력
