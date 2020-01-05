@@ -132,34 +132,31 @@ void stageScene::render()
 	// 플레이어의 생명력을 출력==========================================
 	// 플레이어의 현재 체력의 개수만큼 출력한다.
 	// 플레이어가 체력이 떨어지면 그만큼 줄어든다.
-	//
 	if (!_pm->getPlayerEric().isDead)
 	{
 		for (int i = 0; i < _pm->getPlayerEric().hp; ++i)
 		{
-			//	Rectangle(getMemDC(), _UI_HP[i].rc);
 			_UI_HP[PT_ERIC].image->render(getMemDC(), _UI_HP[PT_ERIC].rc.left + (i * 18), _UI_HP[PT_ERIC].rc.top);
 		}
 	}
-	//
+	
 	if (!_pm->getPlayerBaleog().isDead)
 	{
 		for (int i = 0; i < _pm->getPlayerBaleog().hp; ++i)
 		{
-			//Rectangle(getMemDC(), _UI_HP[i].rc);
 			_UI_HP[PT_BALEOG].image->render(getMemDC(), _UI_HP[PT_BALEOG].rc.left + (i * 18), _UI_HP[PT_BALEOG].rc.top);
 		}
 	}
-	//
+	
 	if (!_pm->getPlayerOlaf().isDead)
 	{
 		for (int i = 0; i < _pm->getPlayerOlaf().hp; ++i)
 		{
-			//Rectangle(getMemDC(), _UI_HP[i].rc);
+		
 			_UI_HP[PT_OLAF].image->render(getMemDC(), _UI_HP[PT_OLAF].rc.left + (i * 18), _UI_HP[PT_OLAF].rc.top);
 		}
 	}
-	//
+	
 	//==================================================================
 
 	// 인벤토리
@@ -362,6 +359,8 @@ void stageScene::addStageImage()
 
 void stageScene::testStateImage()
 {
+	set_PlayerDead();
+	CAMERAMANAGER->move_Camera();
 
 	// 테스트용 컨트롤을 누른다면
 	if (KEYMANAGER->isOnceKeyDown(VK_CONTROL))
@@ -410,31 +409,37 @@ void stageScene::testStateImage()
 		}
 	}
 
-	CAMERAMANAGER->move_Camera();
+	//CAMERAMANAGER->move_Camera();
 
 	_pm->set_Playing(_charNum);
 
+
 	if (!CAMERAMANAGER->get_Camera_Move())
 	{
-
+	
 		switch (_charNum)
 		{
 			case 0:
+				if(!_pm->getPlayerEric().isDead)
 				CAMERAMANAGER->set_Camera_XY(_pm->getPlayerEric().x, _pm->getPlayerEric().y);
 				break;
-
+	
 			case 1:
+				if(!_pm->getPlayerBaleog().isDead)
 				CAMERAMANAGER->set_Camera_XY(_pm->getPlayerBaleog().x, _pm->getPlayerBaleog().y);
 				break;
-
+	
 			case 2:
+				if(!_pm->getPlayerOlaf().isDead)
 				CAMERAMANAGER->set_Camera_XY(_pm->getPlayerOlaf().x, _pm->getPlayerOlaf().y);
 				break;
 		}
 	}
+
+	//CAMERAMANAGER->move_Camera();
 	
 
-	set_PlayerDead();
+	//set_PlayerDead();
 }
 
 void stageScene::set_PlayerDead()
@@ -449,19 +454,19 @@ void stageScene::set_PlayerDead()
 	if (_UI_State[PT_ERIC].dead)
 	{
 		_UI_State[PT_ERIC].image->setFrameX(2);		// 이미지는 죽은 이미지로 교체한다.
-		SCENEMANAGER->set_PlayerLife(PT_ERIC, true);		// 200102 PM 11:23 플레이어 죽음 테스트
+		SCENEMANAGER->set_PlayerLife(PT_ERIC, true);		
 	}
 
 	if (_UI_State[PT_BALEOG].dead)
 	{
 		_UI_State[PT_BALEOG].image->setFrameX(2);	// 이미지는 죽은 이미지로 교체한다.
-		SCENEMANAGER->set_PlayerLife(PT_BALEOG, true);		// 200102 PM 11:23 플레이어 죽음 테스트
+		SCENEMANAGER->set_PlayerLife(PT_BALEOG, true);		
 	}
 
 	if (_UI_State[PT_OLAF].dead)
 	{
 		_UI_State[PT_OLAF].image->setFrameX(2);		// 이미지는 죽은 이미지로 교체한다.
-		SCENEMANAGER->set_PlayerLife(PT_OLAF, true);		// 200102 PM 11:23 플레이어 죽음 테스트
+		SCENEMANAGER->set_PlayerLife(PT_OLAF, true);		
 	}
 
 	// 만약 캐릭터가 죽었을 경우에 다음 캐릭터로 바꾸는 기능
@@ -499,10 +504,23 @@ void stageScene::set_PlayerDead()
 			if (!_UI_State[_charNum].dead)
 			{
 				_UI_State[_charNum].image->setFrameX(1);	// 캐릭터가 살이있으니까 캐릭터를 켜준다.
+
+				switch (_charNum)
+				{
+				case 0:
+					CAMERAMANAGER->get_Next_CameraXY(_pm->getPlayerEric().x, _pm->getPlayerEric().y, true);
+					break;
+
+				case 1:
+					CAMERAMANAGER->get_Next_CameraXY(_pm->getPlayerBaleog().x, _pm->getPlayerBaleog().y, true);
+					break;
+
+				case 2:
+					CAMERAMANAGER->get_Next_CameraXY(_pm->getPlayerOlaf().x, _pm->getPlayerOlaf().y, true);
+					break;
+				}
 				break;										// 만약 다음 캐릭터가 죽지 않았다면 와일문 나가기
 			}
-
-
 			//if (_charNum == 3)	_charNum = 0;				// 만약 캐릭터의 개수를 초과했다면 다시 0번으로
 		}
 	}
@@ -556,6 +574,9 @@ void stageScene::set_PlayerDead()
 		{
 			if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
 			{
+				_pm->init();
+				_wm->init();
+				_em->init();
 				SCENEMANAGER->set_SceneState(SS_GAMEOVER);
 			}
 		}

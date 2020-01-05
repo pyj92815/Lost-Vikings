@@ -30,6 +30,21 @@ void scene_Manager::release()
 
 void scene_Manager::update()
 {
+	if (KEYMANAGER->isOnceKeyDown(VK_F5))
+	{
+		SCENEMANAGER->set_SceneState(SS_INTRO);
+	}
+
+	if (KEYMANAGER->isOnceKeyDown(VK_F6))
+	{
+		SCENEMANAGER->set_SceneState(SS_STAGE);
+	}
+
+	if (KEYMANAGER->isOnceKeyDown(VK_F7))
+	{
+		SCENEMANAGER->set_SceneState(SS_GAMEOVER);
+	}
+
 	SCENEMANAGER->SceneChange();	// ¾À »óÅÂ¿¡ µû¶ó ¾ÀÀ» ¹Ù²ãÁØ´Ù.
 	SCENEMANAGER->update();
 }

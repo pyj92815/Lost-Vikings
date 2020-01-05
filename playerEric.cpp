@@ -294,6 +294,8 @@ void playerEric::key()
 			{
 				_slidePower = 7;
 				_isSlideOn = false;
+
+
 			}
 		}
 	}
