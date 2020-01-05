@@ -72,6 +72,7 @@ void playerManager::update()
 	trapColision();
 	itemColision();
 	enemyColision();
+	StandOnOlafShield();
 }
 
 void playerManager::release()
@@ -853,4 +854,26 @@ void playerManager::enemyColision()
 	}
 }
 
+void playerManager::StandOnOlafShield()
+{
+	/*
+	RECT temp;
+	if (_olaf->GetOlafShieldState())
+	{
+		if (IntersectRect(&temp, &_olaf->GetOlafRC(), &_eric->getEricRect()))
+		{
+			if (_eric->getEricRect().bottom < _olaf->GetOlafRC().top)
+			{
+				_eric->setEricY(_olaf->GetOlafRC().top - (_eric->getEricRect().bottom + _eric->getEricRect().top) / 2);
+				_eric->setEricPosState(POSSTATE_GROUND);
+				_eric->setEricState(STATE_IDLE);
+				_eric->setEricJump();
+			}
+			else
+			{
 
+			}
+		}
+	}
+	*/
+}
