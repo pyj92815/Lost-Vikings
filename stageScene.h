@@ -3,7 +3,8 @@
 #include "worldMap.h"			// 스테이지에서만 필요하기 때문에 이곳으로 이동
 #include "playerManager.h"		// 스테이지에서만 필요하기 때문에 이곳으로 이동
 #include "enemyManager.h"		// 스테이지에서만 필요하기 때문에 이곳으로 이동
-#include "worldObjects.h"
+#include "waterFall.h"
+
 
 
 // 플레이어의 타입
@@ -39,6 +40,9 @@ private:
 	_tagStateUI		_UI_Inventory[3][4];		// 캐릭터마다 인벤토리가 있다. 각각 4칸씩
 	_tagStateUI		_UI_Garbage;				// 휴지통 이미지 위치
 	_tagStateUI		_UI_HP[3];					// HP 정보
+	_tagStateUI		_UI_Ending;					// 엔딩 정보
+	RECT			_ERC, _BRC, _ORC;
+	bool			_CC;	
 
 	int				_charNum;					// 캐릭터를 가리키는 번호
 	int				_banjjack;					// 반짝반짝
@@ -54,12 +58,18 @@ private:
 	bool			_giveUpSelect;				// 기브업 선택
 	bool			_gBanZZank;					// 기브업 반짝반짝
 	int				_giveCnt;
+	bool			_iBanZZack;					// 아이템이 반짝반짝
+	int				_iBanCnt;					// 아이템 반짝반짝 카운터
 
 	worldMap* _wm;
 	playerManager* _pm;
 	EnemyManager* _em;
-	worldObjects* _wo;
-
+	waterFall* _wf;
+private:
+	//폭파 했을때
+	int _boomCount;
+	int _fadeIn;
+	bool _isChange;
 public:
 	stageScene();
 	~stageScene();

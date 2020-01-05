@@ -25,6 +25,8 @@ struct tagArrow
 
 	int count;
 	int direction;
+
+	float probeX;
 };
 
 class arrow : public gameNode				//화살 클래스
@@ -51,6 +53,8 @@ public:
 
 	void removeArrow(int arrNum);
 	void arrowMove(bool fire);
+	void arrowPixelCollision();
+
 
 	vector<tagArrow> getVArrow() { return _vArrow; }
 	vector<tagArrow>::iterator getViArrow() { return _viArrow; }
@@ -67,12 +71,13 @@ private:
 	bool _baleogAttackMotion;		//불값이 켜지면 칼공격2, 꺼지면 칼공격1이 나온다.
 	bool _pullString;				//활시위를 땡겼을 때 유지하는 불값
 	bool _notMove;					//공격을 할 때 이동을 금지하게 하는 불값			
+	bool _isHit;
 
 	float _probeY;
 	float _moveSpeed;
 
 	arrow* _ar;						//화살 클래스를 포인터로 가리킨다
-	
+
 
 	bool _stopControl;		// 이값이 true라면 움직일 수 없다.
 	bool _isItem;
@@ -91,6 +96,10 @@ private:
 
 	RECT _testRect;
 
+	int _hitCount;
+
+	int _baleogStateTemp;
+	int _baleogPosStateTemp;
 
 public:
 	playerbaleog();
@@ -102,12 +111,13 @@ public:
 	virtual void render();
 
 	void key();									//조작키 함수
-	void setBaleogState(tagState state) {_baleog.state = state;}						//상태에 이미지 찾아주는 함수
+	void setBaleogState(tagState state) { _baleog.state = state; }						//상태에 이미지 찾아주는 함수
 	void PixelCollision();						//픽셀 충돌 함수
-	void setBaleogPosState(tagPosState posstate) {_baleog.posState = posstate;}			//큰범위 상태에 이미지 찾아주는 함수
+	void setBaleogPosState(tagPosState posstate) { _baleog.posState = posstate; }			//큰범위 상태에 이미지 찾아주는 함수
 	void setBaleogImage();
 	void setBaleogPosImage();
 	void baleogDie();
+	void baleogHit();
 
 	tagPlayer getBaleog() { return _baleog; }
 
@@ -127,10 +137,21 @@ public:
 	void setBaleogStop() { _stop = true; }
 	void setBaleogFrameSpeed(int speed) { _baleog.frameSpeed = speed; }
 	void setBaleogUnable() { _baleogUnable = true; }
-	
+
+	void setHit() { _isHit = true; }
+	bool getHit() { return _isHit; }
+
 	void setBaleogHit() { _baleog.hp--; }
 
 	arrow* getVArrow() { return _ar; }
+
+
+	void ResetAnimation1();
+	void ResetAnimation2();
+
+	void setBaleogDead(bool dead) { _baleog.isDead = dead; }	// 형길 추가
+	void setBaleogHP() { _baleog.hp++; if (_baleog.hp >= 3) _baleog.hp = 3; }
+
 
 };
 

@@ -11,6 +11,10 @@ private:
 	tagPlayer _olaf;
 	int _olafStateTemp;
 	int _olafPosStateTemp;
+	int _currentLadderState;
+	int _beforeLadderState;
+	int _currentPosstate;
+	int _beforePosstate;
 
 	float _probeX_FixRange; // 사다리 탈 상황에 검색 길이 값 조정하기 위한 변수
 	float _probeY_FixRange;
@@ -30,9 +34,11 @@ private:
 	int g_TC;
 	int b_TC;
 
-	RECT _testRect;
+	RECT _ladderRect[9];
+	int _selectedLadderIdx;
 	bool _stopControl;
 	bool _isItem;
+
 public:
 	PlayerOlaf();
 	~PlayerOlaf();
@@ -43,6 +49,7 @@ public:
 	virtual void render();
 
 	void init_SettingOlafImg();
+	void init_SetLadder();
 	void UpdateFrame();
 	void KeyControl();
 	void SetOlafState();
@@ -50,6 +57,8 @@ public:
 	void PixelCollision();
 	void ResetAnimation1();
 	void ResetAnimation2();
+	void ResetAnimation3();
+	void ResetAnimation4();
 
 	void set_stopKey(bool stop) { _stopControl = stop; }
 	void player_Kill() { _olaf.isDead = true; } // 지울 예정
@@ -59,4 +68,13 @@ public:
 
 	void setItemKey() { _isItem ? _isItem = false : _isItem = true; }
 	void Set_OlafState(tagState state) { _olaf.state = state; }	// 상태를 정의해 주는 세터 
+	void Set_OlafPosState(tagPosState posState) { _olaf.posState = posState; }
+
+	void setOlafDead(bool dead) { _olaf.isDead = dead; }	// 형길 추가
+	void setOlagHP() { _olaf.hp++; if (_olaf.hp >= 3) _olaf.hp = 3; }
+
+	void setOlafX(float x) { _olaf.x = x; }		 // ERIC X
+	void setOlafY(float y) { _olaf.y = y; }        // ERIC Y
+
+	void setOlafFrameSpeed(int speed) { _olaf.frameSpeed = speed; }
 };

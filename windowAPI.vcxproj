@@ -153,6 +153,7 @@
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
+    <ClInclude Include="Ending.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemyManager.h" />
     <ClInclude Include="Enemy_Bullet.h" />
@@ -174,6 +175,7 @@
     <ClInclude Include="PlayerOlaf.h" />
     <ClInclude Include="scene_Manager.h" />
     <ClInclude Include="stageScene.h" />
+    <ClInclude Include="waterFall.h" />
     <ClInclude Include="worldMap.h" />
     <ClInclude Include="playGround.h" />
     <ClInclude Include="progressBar.h" />
@@ -197,6 +199,7 @@
     <ClCompile Include="cameraManager.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
+    <ClCompile Include="Ending.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="enemyManager.cpp" />
     <ClCompile Include="Enemy_Bullet.cpp" />
@@ -218,6 +221,7 @@
     <ClCompile Include="PlayerOlaf.cpp" />
     <ClCompile Include="scene_Manager.cpp" />
     <ClCompile Include="stageScene.cpp" />
+    <ClCompile Include="waterFall.cpp" />
     <ClCompile Include="worldMap.cpp" />
     <ClCompile Include="playGround.cpp" />
     <ClCompile Include="progressBar.cpp" />

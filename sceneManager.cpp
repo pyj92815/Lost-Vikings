@@ -16,6 +16,9 @@ gameNode* sceneManager::_currentScene = NULL;
 HRESULT sceneManager::init()
 {
 	_currentScene = NULL;
+	_YouDie[0] = false;
+	_YouDie[1] = false;
+	_YouDie[2] = false;
 
 	return S_OK;
 }
@@ -80,7 +83,7 @@ HRESULT sceneManager::changeScene(string sceneName)
 
 void sceneManager::set_SceneState(int state)
 {
-	if (state >= 0 && state <= 5) _scene.state = (SceneState)state;
+	if (state >= 0 && state <= 7) _scene.state = (SceneState)state;
 }
 
 void sceneManager::SceneChange()
@@ -110,6 +113,10 @@ void sceneManager::SceneChange()
 		break;
 
 	case SS_STOP:
+		break;
+
+	case SS_CLEAR:
+		SCENEMANAGER->changeScene("Ending");
 		break;
 	}
 }

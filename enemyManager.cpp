@@ -14,8 +14,12 @@ EnemyManager::~EnemyManager()
 
 HRESULT EnemyManager::init()
 {
+	EFFECTMANAGER->addEffect("Enemy_die", "./image./Enemy/Enemy_Die.bmp", 891, 73, 81, 73, 0.1f, 0.1f, 50);
+
 	_enemyBullet = new Enemy_Bullet;
 	_enemyBullet->init();
+	_worldObjects = new worldObjects;
+	_worldObjects->init();
 	EnemyCreate();
 	return S_OK;
 }
@@ -30,12 +34,22 @@ void EnemyManager::update()
 	{
 		(*_viEnemy)->update();
 		(*_viEnemy)->setPlayerRect(_playerManager->getPlayerEric().rc, _playerManager->getPlayerBaleog().rc, _playerManager->getPlayerOlaf().rc);
+		//EFFECTMANAGER->play("Enemy_die", (*_viEnemy)->getX(), (*_viEnemy)->getY());
 	}
 	_enemyBullet->update();
 	_ericRect = _playerManager->getPlayerEric().rc;
 	_baleogRect = _playerManager->getPlayerBaleog().rc;
 	_olafRect = _playerManager->getPlayerOlaf().rc;
-	
+
+	if (_playerMirra)
+	{
+		_playerMirraCount++;
+		if (_playerMirraCount > 100)
+		{
+			_playerMirra = false;
+			_playerMirraCount = 0;
+		}
+	}
 	EnemyRemove();
 	bulletFire();
 	Collision();
@@ -48,7 +62,7 @@ void EnemyManager::render()
 		(*_viEnemy)->render();
 	}
 	_enemyBullet->render();
-	
+
 }
 
 void EnemyManager::EnemyCreate()
@@ -76,24 +90,23 @@ void EnemyManager::EnemyCreate()
 
 	Enemy* Mummy_5;
 	Mummy_5 = new Enemy_Mummy;
-	Mummy_5->init(EnemyType::MUMMY, 3390, 1240);
+	Mummy_5->init(EnemyType::MUMMY, 3470, 1300);
 	_vEnemy.push_back(Mummy_5);
 
+	//Enemy* Scorpion_1;
+	//Scorpion_1 = new Enemy_Scorpion;
+	//Scorpion_1->init(EnemyType::SCORPION, 1440, 375);
+	//_vEnemy.push_back(Scorpion_1);
 
-	Enemy* Scorpion_1;
-	Scorpion_1 = new Enemy_Scorpion;
-	Scorpion_1->init(EnemyType::SCORPION, 1440, 375);
-	_vEnemy.push_back(Scorpion_1);
+	//Enemy* Scorpion_2;
+	//Scorpion_2 = new Enemy_Scorpion;
+	//Scorpion_2->init(EnemyType::SCORPION, 2063, 950);
+	//_vEnemy.push_back(Scorpion_2);
 
-	Enemy* Scorpion_2;
-	Scorpion_2 = new Enemy_Scorpion;
-	Scorpion_2->init(EnemyType::SCORPION, 2063, 950);
-	_vEnemy.push_back(Scorpion_2);
-
-	Enemy* Scorpion_3;
-	Scorpion_3 = new Enemy_Scorpion;
-	Scorpion_3->init(EnemyType::SCORPION, 3246, 1245);
-	_vEnemy.push_back(Scorpion_3);
+	//Enemy* Scorpion_3;
+	//Scorpion_3 = new Enemy_Scorpion;
+	//Scorpion_3->init(EnemyType::SCORPION, 3246, 1245);
+	//_vEnemy.push_back(Scorpion_3);
 
 	Enemy* Snake_1;
 	Snake_1 = new Enemy_Snake;
@@ -125,6 +138,8 @@ void EnemyManager::EnemyRemove()
 	{
 		if ((*_viEnemy)->getDie())
 		{
+			EFFECTMANAGER->play("적죽음", (*_viEnemy)->getX(), (*_viEnemy)->getY());
+			//EFFECTMANAGER->play("Enemy_Die", (*_viEnemy)->getX(), (*_viEnemy)->getY());
 			_vEnemy.erase(_viEnemy);
 			break;
 		}
@@ -139,44 +154,101 @@ void EnemyManager::EnemyRemove()
 void EnemyManager::Collision()
 {
 	RECT temp;
-	for (_viEnemy = _vEnemy.begin();_viEnemy!=_vEnemy.end();++_viEnemy)
+	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
+		for (int i = 0;i < _worldObjects->get_vTrap().size();++i)
+		{
+			if (IntersectRect(&temp, &(*_viEnemy)->getRect(), &_worldObjects->get_vTrap()[i].rc))
+			{
+				//(*_viEnemy)->setTurn();
+				(*_viEnemy)->setTrueWall();
+				break;
+			}
+			else
+			{
+				(*_viEnemy)->setFalseWall();
+			}
+		}
+		// 에릭 미라 생성 
+		if (IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_ericRect))
+		{
+			if (_playerManager->getPlayerEric().state != STATE_MIRRA)
+			{
+				_playerManager->getEric()->setEricState(STATE_MIRRA);
+			    _playerManager->getEric()->setEricFrame();
+				_playerManager->getEric()->setEricStop();
+			}
+			if (!_playerMirra && _playerManager->getPlayerEric().currentFrameX > _playerManager->getPlayerEric().image->getMaxFrameX()-1)
+			{
+				EnemyCreate(_playerManager->getPlayerEric().x + 30, _playerManager->getPlayerEric().y + 45);
+				_playerMirra = true;
+			}
+			break;
+		}
+		//발레오그 미라 생성
+		if (IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_baleogRect))
+		{
+			//발레오그 상대정의
+			//
+			if (_playerManager->getPlayerBaleog().state != STATE_MIRRA)
+			{
+				_playerManager->getbaleog()->setBaleogState(STATE_MIRRA);
+				_playerManager->getbaleog()->setBaleogFrame();
+				_playerManager->getbaleog()->setBaleogStop();
+			}
+			if (!_playerMirra)
+			{
+				EnemyCreate(_playerManager->getPlayerBaleog().x + 30, _playerManager->getPlayerBaleog().y);
+				_playerMirra = true;
+			}
+			break;
+		}
+
+		//총알 충돌부분========================================================================================================================
 		for (int i = 0;i < _enemyBullet->getVBullet().size();i++)
 		{
-			if ((IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_ericRect)) || (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_ericRect)))
+			if (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_ericRect))
 			{
+				if (!_enemyBullet->getVBullet()[i].isFire)continue;
 				_enemyBullet->removeBullet(i);
 				if (!_playerManager->getEric()->getHit())
 				{
-					//_playerManager->getEric()->setHit();
-				//	_playerManager->getEric()->setEricHit();
+					_playerManager->getEric()->setHit();
+					_playerManager->getEric()->setEricHit();
 				}
-				
-	
 				break;
 			}
-			if ((IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_baleogRect)) || (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_baleogRect)))
+			
+			if ((IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_baleogRect)))
 			{
-
+				if (!_enemyBullet->getVBullet()[i].isFire)continue;
+				_enemyBullet->removeBullet(i);
+				_playerManager->getbaleog()->setBaleogHit();
 			}
-			if ((IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_olafRect)) || (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_olafRect)))
+			if ((IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_olafRect)))
 			{
-
+				if (!_enemyBullet->getVBullet()[i].isFire)continue;
+				_enemyBullet->removeBullet(i);
 			}
 		}
+
 	}
 }
 
 void EnemyManager::bulletFire()
 {
-	
+
 	for (_viEnemy = _vEnemy.begin(); _viEnemy != _vEnemy.end(); ++_viEnemy)
 	{
-		
+
 		if ((*_viEnemy)->getisFire())
 		{
+			
+			if(DISCOVERYPlayer::BALEOG==(*_viEnemy)->getDiscoveryPlayer())_enemyBullet->bulletFire((*_viEnemy)->getX(), (*_viEnemy)->getY() - (*_viEnemy)->getImage()->getFrameHeight() / 2, getAngle((*_viEnemy)->getX(), (*_viEnemy)->getY() - (*_viEnemy)->getImage()->getFrameHeight() / 2, _playerManager->getPlayerBaleog().x, _playerManager->getPlayerBaleog().y+50));
+			if(DISCOVERYPlayer::ERIC== (*_viEnemy)->getDiscoveryPlayer())_enemyBullet->bulletFire((*_viEnemy)->getX(), (*_viEnemy)->getY() - (*_viEnemy)->getImage()->getFrameHeight() / 2, getAngle((*_viEnemy)->getX(), (*_viEnemy)->getY() - (*_viEnemy)->getImage()->getFrameHeight() / 2, _playerManager->getPlayerEric().x, _playerManager->getPlayerEric().y+50));
+			if (DISCOVERYPlayer::OLAF == (*_viEnemy)->getDiscoveryPlayer())_enemyBullet->bulletFire((*_viEnemy)->getX(), (*_viEnemy)->getY() - (*_viEnemy)->getImage()->getFrameHeight() / 2, getAngle((*_viEnemy)->getX(), (*_viEnemy)->getY() - (*_viEnemy)->getImage()->getFrameHeight() / 2, _playerManager->getPlayerOlaf().x, _playerManager->getPlayerOlaf().y+50));
+			
 			(*_viEnemy)->setisFire(false);
-			_enemyBullet->bulletFire((*_viEnemy)->getX(),(*_viEnemy)->getY()-(*_viEnemy)->getImage()->getFrameHeight()/2,getAngle((*_viEnemy)->getX(), (*_viEnemy)->getY() - (*_viEnemy)->getImage()->getFrameHeight() / 2,_playerManager->getPlayerEric().x, _playerManager->getPlayerEric().y));
 			break;
 		}
 	}

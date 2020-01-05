@@ -16,6 +16,7 @@ HRESULT scene_Manager::init()
 	SCENEMANAGER->addScene("Intro", new introScene);
 	SCENEMANAGER->addScene("Stage", new stageScene);
 	SCENEMANAGER->addScene("GameOver", new gameOverScene);
+	SCENEMANAGER->addScene("Ending", new Ending);
 
 	// 제일 처음에는 인트로를 보여줘야 한다.
 	SCENEMANAGER->set_SceneState(SS_INTRO);

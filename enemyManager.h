@@ -5,6 +5,7 @@
 #include"Enemy_Snake.h"
 #include"Enemy_PlayerMummy.h"
 #include"Enemy_Bullet.h"
+#include"worldObjects.h"
 #include<vector>
 using namespace std;
 
@@ -22,12 +23,14 @@ private:
 	vEnemy _vEnemy;
 	viEnemy _viEnemy;
 	Enemy_Bullet* _enemyBullet;
-	
+	worldObjects* _worldObjects;
 
 	playerManager* _playerManager;
 	RECT _ericRect;
 	RECT _olafRect;
 	RECT _baleogRect;
+	int _playerMirraCount;
+	bool _playerMirra;
 
 public:
 	EnemyManager();
