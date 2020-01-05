@@ -117,14 +117,10 @@ void playerbaleog::update()
 		if (_baleog.state == STATE_BALEOG_SWORD1)
 		{
 			_baleogAttackMotion = true;
-
-
 		}
 		else
 		{
 			_baleogAttackMotion = false;
-
-
 		}
 		if (_baleog.frameCount > _baleog.frameSpeed - 5)
 		{
@@ -143,7 +139,8 @@ void playerbaleog::update()
 			if (_baleog.currentFrameX >= 1)//프레임 1이 넘어가면 칼질의 참격이 적용됌
 			{
 				_ar->blade(_baleog.x + _baleog.image->getFrameWidth() / 2,
-					_baleog.y + _baleog.image->getFrameHeight() / 2, 20.f, _baleog.currentFrameY * PI, _baleog.currentFrameY, 40);
+					_baleog.y + _baleog.image->getFrameHeight() / 2, 20.f,
+					_baleog.currentFrameY * PI, _baleog.currentFrameY, 40);
 			}
 			_baleog.frameCount = 0;
 		}
@@ -425,14 +422,16 @@ void playerbaleog::PixelCollision()
 
 	for (int i = _baleog.probeY - 6; i < _baleog.probeY + 10; ++i)
 	{
-		COLORREF getPixel_Bottom = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_baleog.rc.left + _baleog.rc.right) / 2, i);
+		COLORREF getPixel_Bottom = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), 
+			(_baleog.rc.left + _baleog.rc.right) / 2, i);
 
 
 		int r = GetRValue(getPixel_Bottom);
 		int g = GetGValue(getPixel_Bottom);
 		int b = GetBValue(getPixel_Bottom);
 
-		COLORREF getPixel_Top = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), (_baleog.rc.left + _baleog.rc.right) / 2, _baleog.y);
+		COLORREF getPixel_Top = GetPixel(IMAGEMANAGER->findImage("BG")->getMemDC(), 
+			(_baleog.rc.left + _baleog.rc.right) / 2, _baleog.y);
 		int r_top = GetRValue(getPixel_Top);
 		int g_top = GetGValue(getPixel_Top);
 		int b_top = GetBValue(getPixel_Top);
@@ -636,7 +635,7 @@ void playerbaleog::baleogDie()
 
 void playerbaleog::baleogHit()
 {
-	//맞을 때 히트값을 조정해주셈 
+	
 	if (_isHit)
 	{
 		_hitCount++;
@@ -776,9 +775,6 @@ void arrow::arrowMove(bool fire)
 			int r = GetRValue(getPixel_ARROW);
 			int g = GetGValue(getPixel_ARROW);
 			int b = GetBValue(getPixel_ARROW);
-
-			
-
 
 			if (_viArrow->range < getDistance(_viArrow->x, _viArrow->y, _viArrow->fireX,
 				_viArrow->fireY))

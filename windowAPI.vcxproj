@@ -175,6 +175,7 @@
     <ClInclude Include="PlayerOlaf.h" />
     <ClInclude Include="scene_Manager.h" />
     <ClInclude Include="stageScene.h" />
+    <ClInclude Include="waterFall.h" />
     <ClInclude Include="worldMap.h" />
     <ClInclude Include="playGround.h" />
     <ClInclude Include="progressBar.h" />
@@ -220,6 +221,7 @@
     <ClCompile Include="PlayerOlaf.cpp" />
     <ClCompile Include="scene_Manager.cpp" />
     <ClCompile Include="stageScene.cpp" />
+    <ClCompile Include="waterFall.cpp" />
     <ClCompile Include="worldMap.cpp" />
     <ClCompile Include="playGround.cpp" />
     <ClCompile Include="progressBar.cpp" />

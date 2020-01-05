@@ -65,6 +65,10 @@ public:
 	RECT GetOlafRC() { return _olaf.rc; }
 	bool GetOlafShieldState() { return _isShieldUp; }
 	tagPlayer getOlaf() { return _olaf; }
+	int GetOlafDir() { return  _olaf.currentFrameY; }
+	float getOlafX() { return _olaf.x; }
+	float getOlafY() { return _olaf.y; }
+	int getOlafHP() { return _olaf.hp; }
 
 	void setItemKey() { _isItem ? _isItem = false : _isItem = true; }
 	void Set_OlafState(tagState state) { _olaf.state = state; }	// 상태를 정의해 주는 세터 
@@ -72,9 +76,11 @@ public:
 
 	void setOlafDead(bool dead) { _olaf.isDead = dead; }	// 형길 추가
 	void setOlagHP() { _olaf.hp++; if (_olaf.hp >= 3) _olaf.hp = 3; }
+	void OlafHit() { --_olaf.hp; }
 
-	void setOlafX(float x) { _olaf.x = x; }		 // ERIC X
-	void setOlafY(float y) { _olaf.y = y; }        // ERIC Y
+	void setOlafHit() { _olaf.isHit = true; }
+	void setOlafX(float x) { _olaf.x = x; }	
+	void setOlafY(float y) { _olaf.y = y; }
 
 	void setOlafFrameSpeed(int speed) { _olaf.frameSpeed = speed; }
 };

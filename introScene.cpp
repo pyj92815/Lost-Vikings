@@ -113,10 +113,12 @@ void introScene::render()
 		IMAGEMANAGER->findImage("PassImage")->render(_sceneDC, WINSIZEX / 2 - 135, WINSIZEY / 2);
 		for (int i = 0; i < 4; ++i)
 		{
+			
 			//Rectangle(getMemDC(), _password[i].pass_Num_rc);
 			_password[i].pass_Num_Image->frameRender(_sceneDC, _password[i].pass_Num_rc.left, _password[i].pass_Num_rc.top,
 				_password[i].save_Num_Pos, 0);
 		}
+
 		IMAGEMANAGER->findImage("PassSelect")->render(_sceneDC, _password[_passwordMove].pass_Num_rc.left, _password[_passwordMove].pass_Num_rc.top - 5);
 		IMAGEMANAGER->findImage("sceneTemp")->alphaRender(getMemDC(), 0, 0, _introScene.fade_In);
 
@@ -126,6 +128,20 @@ void introScene::render()
 			_changingScene = false;
 			_introScene.input_Pass = false;
 			SCENEMANAGER->set_SceneState(SS_STAGE);
+		}
+	}
+
+	if (KEYMANAGER->isToggleKey('P'))
+	{
+		Rectangle(getMemDC(), _introScene.scene_Select_rc[SS_GAME_START]);
+		Rectangle(getMemDC(), _introScene.scene_Select_rc[SS_GAME_PASSWORD]);
+	}
+
+	for (int i = 0; i < 4; ++i)
+	{
+		if (KEYMANAGER->isToggleKey('O'))
+		{
+			Rectangle(getMemDC(), _password[i].pass_Num_rc);
 		}
 	}
 
@@ -292,16 +308,21 @@ void introScene::Select_Key()
 
 		// 맞는 비밀번호라면 스테이지로 이동을 한다.
 		// SCENEMANAGER->set_SceneState(SS_STAGE);
+
+
+		// 키를 한번만 눌렀을때
 		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 		{
-			_passwordMove--;
-			if (_passwordMove < 0) _passwordMove = 3;
+			_passwordMove--;							// 패스워드 렉트를 이동 시켜준다. 0, 1, 2, 3
+			if (_passwordMove < 0) _passwordMove = 3;	// 만약 0 이하라면 제일 오른쪽인 3의 값으로 바꿔준다.
 		}
 
+		// 키를 누르고 있었을때
 		if (KEYMANAGER->isStayKeyDown(VK_LEFT))
 		{
 			_passCnt++;
-			if (_passCnt == 10)
+
+			if (_passCnt == 10)							// 인터벌을 이용하여 너무 빠르게 넘어가는것을 보정해준다.
 			{
 				_passwordMove--;
 				if (_passwordMove < 0) _passwordMove = 3;
@@ -312,8 +333,10 @@ void introScene::Select_Key()
 
 		if (KEYMANAGER->isOnceKeyDown(VK_UP))
 		{
-			_password[_passwordMove].save_Num_Pos++;
-			if (_password[_passwordMove].save_Num_Pos > 31) _password[_passwordMove].save_Num_Pos = 0;
+			// 패스워드 프레임 이미지에서 해당 번호에 위치한 이미지를 출력할때 사용
+
+			_password[_passwordMove].save_Num_Pos++;	// 패스워드를 가리키는 값을 증가시켜준다.
+			if (_password[_passwordMove].save_Num_Pos > 31) _password[_passwordMove].save_Num_Pos = 0;	// 맥스를 초과했을때 보정
 		}
 
 		if (KEYMANAGER->isStayKeyDown(VK_UP))

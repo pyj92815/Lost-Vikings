@@ -98,15 +98,15 @@ void playerManager::KILLPlayer()
 		_eric->setEricState(STATE_DIE);
 	}
 
-	//if (KEYMANAGER->isOnceKeyDown(VK_F2))
-	//{
-	//	_baleog->player_Kill();
-	//}
+	if (KEYMANAGER->isOnceKeyDown(VK_F2))
+	{
+		_baleog->player_Kill();
+	}
 
-	//if (KEYMANAGER->isOnceKeyDown(VK_F3))
-	//{
-	//	_olaf->player_Kill();
-	//}
+	if (KEYMANAGER->isOnceKeyDown(VK_F3))
+	{
+		_olaf->player_Kill();
+	}
 }
 
 void playerManager::itemKey()
