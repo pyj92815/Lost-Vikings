@@ -227,6 +227,7 @@ void worldObjects::render()
 		if (KEYMANAGER->isStayKeyDown('Q'))
 		{
 			Rectangle(CAMERAMANAGER->getWorDC(), _niddle[i].rc);
+			Rectangle(CAMERAMANAGER->getWorDC(), _EXIT.rc);
 		}
 	}
 	//■■■■■■■■■■■■■■■■■벽 및 발판 이미지 출력■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
