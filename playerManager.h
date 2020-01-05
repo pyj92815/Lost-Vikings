@@ -102,5 +102,6 @@ public:
 	void setBaleogDead() { _baleog->setBaleogDead(false); }
 	void setOlafDead() { _olaf->setOlafDead(false); }
 
+	//ÈÆÀç Ãß°¡
+	void StandOnOlafShield();
 };
-

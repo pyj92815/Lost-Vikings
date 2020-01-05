@@ -88,6 +88,10 @@ void PlayerOlaf::render()
 			char checkGravityAccel[128];
 			sprintf_s(checkGravityAccel, sizeof(checkGravityAccel), "PosState: %f", _olaf.gravity);
 			TextOut(CAMERAMANAGER->getWorDC(), _olaf.x, _olaf.y - 120, checkGravityAccel, strlen(checkGravityAccel));
+
+			char checkDirection[128];
+			sprintf_s(checkDirection, sizeof(checkDirection), "Direction : %d", _olaf.currentFrameY);
+			TextOut(CAMERAMANAGER->getWorDC(), _olaf.x, _olaf.y - 120, checkDirection, strlen(checkDirection));
 		}
 		_olaf.image->frameRender(CAMERAMANAGER->getWorDC(), _olaf.x, _olaf.y, _olaf.currentFrameX, _olaf.currentFrameY);
 	}
@@ -173,6 +177,19 @@ void PlayerOlaf::UpdateFrame()
 				if (_olaf.hp != 0)
 				{
 					_olaf.state = STATE_IDLE;
+				}
+			}
+			if (_olaf.state == STATE_HIT)
+			{
+				if (_olaf.hp != 0)
+				{
+					_olaf.state = STATE_IDLE;
+					_olaf.isHit = false;
+				}
+				else
+				{
+					_olaf.state = STATE_DIE;
+					ResetAnimation1();
 				}
 			}
 			_olaf.currentFrameX = 0;
@@ -337,6 +354,9 @@ void PlayerOlaf::SetOlafState()
 			_olaf.image = IMAGEMANAGER->findImage("Olaf_Push");
 			ResetAnimation1();
 
+		case STATE_HIT:
+			_olaf.image = IMAGEMANAGER->findImage("Olaf_Hit");
+			ResetAnimation1();
 		default:
 			break;
 	}
