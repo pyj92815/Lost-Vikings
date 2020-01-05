@@ -39,6 +39,9 @@ private:
 	_tagStateUI		_UI_Inventory[3][4];		// 캐릭터마다 인벤토리가 있다. 각각 4칸씩
 	_tagStateUI		_UI_Garbage;				// 휴지통 이미지 위치
 	_tagStateUI		_UI_HP[3];					// HP 정보
+	_tagStateUI		_UI_Ending;					// 엔딩 정보
+	RECT			_ERC, _BRC, _ORC;
+	bool			_CC;	
 
 	int				_charNum;					// 캐릭터를 가리키는 번호
 	int				_banjjack;					// 반짝반짝

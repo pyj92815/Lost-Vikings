@@ -3,6 +3,7 @@
 #include "introScene.h"
 #include "stageScene.h"
 #include "gameOverScene.h"
+#include "Ending.h"
 
 
 class scene_Manager : public gameNode

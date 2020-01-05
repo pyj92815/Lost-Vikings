@@ -2,12 +2,6 @@
 #include "gameNode.h"
 #include "player.h"
 
-//#ifdef UNICODE
-//#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
-//#else
-//#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
-//#endif
-
 class playerEric : public player
 {
 private:
@@ -47,7 +41,6 @@ public:
 
 	void ericFrameCount();
 	void ericJump();
-	void ericAttack();
 	void ericAttackMove();
 	void ericHit();
 	void setEricImage();
@@ -64,7 +57,7 @@ public:
 	void setEricY(float y)		 { _eric.y = y; }        // ERIC Y
 	void setHit()			     { _isHit = true; }      // ERIC 맞을 때 BOOL값
 	bool getHit()		         { return _isHit; }
-	void setEricHP()			 { _eric.hp++; }		 // ERIC HP++
+	void setEricHP()			 { if(_eric.hp<3) _eric.hp++; }		 // ERIC HP++
 	void setEricHit()			 { _eric.hp--; }		 //		 HP--
 	
 
@@ -81,7 +74,7 @@ public:
 	void setEricFrameSpeed(int speed) {	_eric.frameSpeed = speed; }
 	void setEricState(tagState state) { _eric.state = state; }	// 상태를 정의해 주는 세터 
 
-	void set_stopKey(bool stop)  { _stopControl = stop;}
+	void set_stopKey(bool stop)		  { _stopControl = stop;}
 	void setEricDead(bool dead)		  { _eric.isDead = dead; }	// ERIC 죽음 
 };
 

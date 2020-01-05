@@ -137,7 +137,6 @@ void playerManager::itemKey()
 				if (_vInven[i].player == _playing && _vInven[i].invenNumber == _direction[_playing])
 				{
 					_vInven[i].choice = true;
-					cout << _vInven[i].choice << endl;
 				}
 			}
 			_trade ? _trade = false : _trade = true;
@@ -181,6 +180,7 @@ void playerManager::itemKey()
 	}
 }
 
+//아이템 사용하는 기능
 void playerManager::itemUse()
 {
 	for (int i = 0; i < _vInven.size(); ++i)
@@ -212,6 +212,7 @@ void playerManager::itemUse()
 				}
 				else if (_playing == 1)
 				{
+
 
 				}
 				else if (_playing == 2)
@@ -266,7 +267,7 @@ void playerManager::itemUse()
 				{
 					for (int j = 0; j < _wo->get_vItem().size(); ++j)
 					{
-						if (IntersectRect(&temp, & _olaf->GetOlafRC(), &_wo->get_vItem()[j].rc))
+						if (IntersectRect(&temp, &_olaf->GetOlafRC(), &_wo->get_vItem()[j].rc))
 						{
 							if (_wo->get_vItem()[j].item == ITEM_REDLOCKER)
 							{
@@ -355,6 +356,7 @@ void playerManager::itemUse()
 		}
 	}
 }
+
 
 int playerManager::itemConnect(int playing)
 {
@@ -582,10 +584,8 @@ void playerManager::trapColision() // 함정과 충돌 시
 						}
 					}
 				}
-
 				else if (_wo->get_vTrap()[i].trap == TRAP_WALL)
 				{
-
 
 					if (!_wo->get_vTrap()[i].isCollision && _baleog->getBaleog().state == STATE_MOVE)
 					{
@@ -600,6 +600,22 @@ void playerManager::trapColision() // 함정과 충돌 시
 					}
 
 				}
+
+			}
+		}
+
+		//화살 벽돌
+		for (int j = 0; j < _baleog->getVArrow()->getVArrow().size(); j++)
+		{
+			//충돌용 RECT
+			RECT temp2;
+
+			if (IntersectRect(&temp2, &_baleog->getVArrow()->getArrowRect(j), &_wo->get_vTrap()[i].rc))
+			{
+
+
+				_baleog->getVArrow()->removeArrow(j); //충돌한 화살 삭제할 코드	
+
 
 			}
 		}
@@ -625,10 +641,68 @@ void playerManager::trapColision() // 함정과 충돌 시
 					//_eric->setEricStop();
 					break;
 				}
+				else if (_wo->get_vTrap()[i].trap == TRAP_BORAD)
+				{
+					if ((_olaf->getOlaf().rc.right >= _wo->get_vTrap()[i].rc.left + 10 &&
+						_olaf->getOlaf().rc.right <= _wo->get_vTrap()[i].rc.right - 10 &&
+						_olaf->getOlaf().rc.bottom >= _wo->get_vTrap()[i].rc.bottom) ||
+						(_olaf->getOlaf().rc.left >= _wo->get_vTrap()[i].rc.left + 10 &&
+							_olaf->getOlaf().rc.left <= _wo->get_vTrap()[i].rc.right - 10 &&
+							_olaf->getOlaf().rc.bottom >= _wo->get_vTrap()[i].rc.bottom))
+					{
+						if (_olaf->getOlaf().state != STATE_PRESSDIE) _olaf->setOlafY(_wo->get_vTrap()[i].rc.bottom);
+						if (_olaf->getOlaf().posState == POSSTATE_GROUND)
+						{
+							if (_olaf->getOlaf().state != STATE_PRESSDIE)
+							{
+								_olaf->Set_OlafState(STATE_PRESSDIE);
+								_olaf->ResetAnimation1();
+								_olaf->setOlafFrameSpeed(10);
+							}
+
+						}
+					}
+
+					else if ((_olaf->getOlaf().rc.right >= _wo->get_vTrap()[i].rc.left + 10 &&
+						_olaf->getOlaf().rc.right <= _wo->get_vTrap()[i].rc.right - 10)
+						||
+						(_olaf->getOlaf().rc.left >= _wo->get_vTrap()[i].rc.left + 10 &&
+							_olaf->getOlaf().rc.left <= _wo->get_vTrap()[i].rc.right - 10))
+					{
+						if (_olaf->getOlaf().state != STATE_PRESSDIE)
+						{
+							_olaf->Set_OlafPosState(POSSTATE_GROUND);
+							//_olaf->setEricJump();
+							//_olaf->setEricJumpPower();
+
+							if (_wo->getUpDown())
+							{
+								_olaf->setOlafY(_wo->get_vTrap()[i].rc.top - _olaf->getOlaf().image->getFrameHeight() + 3);
+							}
+							else
+							{
+								_olaf->setOlafY(_wo->get_vTrap()[i].rc.top - _olaf->getOlaf().image->getFrameHeight() + 7);
+							}
+						}
+					}
+				}
+				else if (_wo->get_vTrap()[i].trap == TRAP_WALL)
+				{
+
+					if (!_wo->get_vTrap()[i].isCollision && _olaf->getOlaf().state == STATE_MOVE)
+					{
+						_olaf->Set_OlafState(STATE_PUSH);
+						_olaf->ResetAnimation1();
+						_olaf->setOlafX(_wo->get_vTrap()[i].x - _olaf->getOlaf().image->getFrameWidth() - 5);
+					}
+					else
+					{
+						_olaf->setOlafX(_wo->get_vTrap()[i].x - _olaf->getOlaf().image->getFrameWidth() - 5);
+					}
+				}
 			}
 		}
 	}
-
 }
 
 void playerManager::itemColision()
@@ -660,15 +734,6 @@ void playerManager::itemColision()
 					_vInven.push_back(inven);
 					_wo->setItemCollision(i);
 				}
-				for (_viInven = _vInven.begin(); _viInven != _vInven.end(); ++_viInven)
-				{
-					cout << "=========================================================" << endl;
-					cout << "인벤 image 높이 :" << _viInven->image->getHeight() << endl;
-					cout << "플레이어 숫자 :" << _viInven->player << endl;
-					cout << "아이템 넘버 :" << _viInven->invenNumber << endl;
-					cout << "BOOL :" << _viInven->choice << endl;
-
-				}
 				break;
 			}
 		}
@@ -689,25 +754,55 @@ void playerManager::itemColision()
 			{
 				tagInven inven;
 				inven.image = _wo->get_vItem()[i].image;
+				inven.typeItem = _wo->get_vItem()[i].item;
 				inven.player = _playing;
+				inven.choice = false;
 				_itemCount[_playing] = 0;
 				for (_viInven = _vInven.begin(); _viInven != _vInven.end(); ++_viInven)
 				{
 					if (_viInven->player == _playing) _itemCount[_playing]++;
 				}
-				inven.invenNumber = _itemCount[_playing]; // 순차적으로 아이템을 넣는다.
+				//inven.invenNumber = _itemCount[_playing]; // 순차적으로 아이템을 넣는다.
+				inven.invenNumber = itemConnect(_playing);
 				if (_itemCount[_playing] < 4)
 				{
 					_vInven.push_back(inven);
 					_wo->setItemCollision(i);
 				}
+				break;
+			}
+		}
+	}
+
+	//=============================
+	//올라프 충돌
+
+	for (int i = 0; i < _wo->get_vItem().size(); ++i)
+	{
+		if (0 > _wo->get_vItem().size()) break;
+		RECT temp;
+		if (IntersectRect(&temp, &_olaf->GetOlafRC(), &_wo->get_vItem()[i].rc))
+		{
+			if (_wo->get_vItem()[i].item == ITEM_BLUELOCKER ||
+				_wo->get_vItem()[i].item == ITEM_REDLOCKER) continue;
+			if (!_wo->get_vItem()[i].isCollision)
+			{
+				tagInven inven;
+				inven.image = _wo->get_vItem()[i].image;
+				inven.typeItem = _wo->get_vItem()[i].item;
+				inven.player = _playing;
+				inven.choice = false;
+				_itemCount[_playing] = 0;
 				for (_viInven = _vInven.begin(); _viInven != _vInven.end(); ++_viInven)
 				{
-					cout << "=========================================================" << endl;
-					cout << "인벤 image 높이 :" << _viInven->image->getHeight() << endl;
-					cout << "플레이어 숫자 :" << _viInven->player << endl;
-					cout << "아이템 넘버 :" << _viInven->invenNumber << endl;
-
+					if (_viInven->player == _playing) _itemCount[_playing]++;
+				}
+				//inven.invenNumber = _itemCount[_playing]; // 순차적으로 아이템을 넣는다.
+				inven.invenNumber = itemConnect(_playing);
+				if (_itemCount[_playing] < 4)
+				{
+					_vInven.push_back(inven);
+					_wo->setItemCollision(i);
 				}
 				break;
 			}
@@ -715,27 +810,9 @@ void playerManager::itemColision()
 	}
 
 
-
-
 }
 
 
-void playerManager::boradColision()
-{
-	/*for (int i = 0; i < _wo->get_vTrap().size(); ++i)
-	{
-		if (0 > _wo->get_vTrap().size()) break;
-		if (_wo->get_vTrap()[i].trap == TRAP_BORAD)
-		{
-			if(_eric->getEric().rc.right >= _wo->get_vTrap()[i].rc.left &&
-				_eric->getEric().x+)
-
-
-
-
-		}
-	}*/
-}
 
 void playerManager::enemyColision()
 {
@@ -754,8 +831,6 @@ void playerManager::enemyColision()
 				//여기에 적 HP를 깍아줄 코드
 				_baleog->getVArrow()->removeArrow(j);
 				_em->getVEnemy()[i]->Hit();
-
-
 				//충돌한 화살 삭제할 코드	
 				break;
 			}
