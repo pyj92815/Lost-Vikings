@@ -738,7 +738,7 @@ void arrow::blade(float x, float y, float speed, float angle, int direction, flo
 	arrow.x = arrow.fireX = x;
 	arrow.y = arrow.fireY = y;
 	arrow.rc = RectMakeCenter(arrow.x, arrow.y,
-		126,
+		200,
 		100);
 	/*arrow.rc = RectMakeCenter(arrow.x, arrow.y,
 		arrow.arrowImage->getFrameWidth(),
