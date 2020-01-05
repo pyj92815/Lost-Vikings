@@ -20,7 +20,7 @@ HRESULT PlayerOlaf::init(float x, float y)
 	_olaf.x = x;
 	_olaf.y = y;
 	_olaf.rc = RectMake(_olaf.x, _olaf.y, _olaf.image->getFrameWidth(), _olaf.image->getFrameHeight());
-	_olaf.hp = 2;
+	_olaf.hp = 3;
 	_olaf.frameCount = _olaf.currentFrameX = _olaf.currentFrameY = _olaf.gravity = 0;
 	_olaf.state = STATE_IDLE;
 	_olaf.posState = POSSTATE_GROUND;
