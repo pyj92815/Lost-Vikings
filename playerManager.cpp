@@ -37,7 +37,7 @@ void playerManager::update()
 			_olaf->setItemKey();
 		}
 	}
-	KILLPlayer();	// 플레이어를 죽인다
+	//KILLPlayer();	// 플레이어를 죽인다
 
 	switch (_playing)
 	{
@@ -434,7 +434,6 @@ void playerManager::trapColision() // 함정과 충돌 시
 							_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right - 10 &&
 							_eric->getEric().rc.bottom >= _wo->get_vTrap()[i].rc.bottom))
 					{
-
 						if (_eric->getEric().state != STATE_PRESSDIE) _eric->setEricY(_wo->get_vTrap()[i].rc.bottom);
 						if (_eric->getEric().posState == POSSTATE_GROUND)
 						{
@@ -453,6 +452,7 @@ void playerManager::trapColision() // 함정과 충돌 시
 						(_eric->getEric().rc.left >= _wo->get_vTrap()[i].rc.left + 10 &&
 							_eric->getEric().rc.left <= _wo->get_vTrap()[i].rc.right - 10))
 					{
+					
 						if (_eric->getEric().state != STATE_PRESSDIE)
 						{
 							_eric->setEricPosState(POSSTATE_GROUND);
@@ -470,7 +470,6 @@ void playerManager::trapColision() // 함정과 충돌 시
 						}
 					}
 				}
-
 				else if (_wo->get_vTrap()[i].trap == TRAP_WALL)
 				{
 

@@ -67,7 +67,7 @@ public:
 	void setEricStop()		 { _stop = true; }		  // STOP 
 	void setEricFrame()		 { _eric.currentFrameX = 0;}
 	void setEricJump()		 { _ericJump = false; }
-	void setEricJumpPower()  { _eric.jumpPower = 14; }
+	void setEricJumpPower()  { _eric.jumpPower = 17; }
 	bool getItem()			 { return _isItem; }
 	void setItemKey()		 { _isItem ? _isItem = false : _isItem = true; }
 

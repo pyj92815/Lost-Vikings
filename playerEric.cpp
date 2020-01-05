@@ -105,6 +105,8 @@ void playerEric::update()
 			}
 		}
 		ericDie(); 	//  플레이어 사망
+		_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());   // RECT 갱신
+
 	}
 }
 
@@ -338,8 +340,7 @@ void playerEric::key()
 void playerEric::ericFrameCount()
 {
 	_eric.frameCount++; // 프레임 카운터 증가 
-	_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());   // RECT 갱신
-
+	
 	// 상태가 만약 공격 상태
 	if (_eric.state == STATE_ERIC_HEADBUTT)
 	{
