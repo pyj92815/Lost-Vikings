@@ -51,7 +51,9 @@ public:
 	void EnemyRemove();
 	void EnemyRemove(int Num) 
 	{
-		createEffect(_vEnemy[Num]->getX(), _vEnemy[Num]->getY());
+		createEffect(_vEnemy[Num]->getX(), _vEnemy[Num]->getY() - 15
+		
+		);
 		_vEnemy.erase(_vEnemy.begin() + Num);
 	}
 	void Collision();

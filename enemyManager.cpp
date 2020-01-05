@@ -158,7 +158,7 @@ void EnemyManager::EnemyRemove()
 		{
 			//EFFECTMANAGER->play("die", (*_viEnemy)->getRect().left, (*_viEnemy)->getRect().top);
 			//EFFECTMANAGER->play("Enemy_Die", (*_viEnemy)->getX(), (*_viEnemy)->getY());
-			createEffect((*_viEnemy)->getX(), (*_viEnemy)->getY());
+			createEffect((*_viEnemy)->getX(), (*_viEnemy)->getY() + 15);
 			_vEnemy.erase(_viEnemy);
 			break;
 		}
