@@ -282,7 +282,16 @@ void EnemyManager::Collision()
 			{
 				if (!_enemyBullet->getVBullet()[i].isFire)continue;
 				_enemyBullet->removeBullet(i);
+<<<<<<< HEAD
 				_playerManager->getbaleog()->setBaleogHit();
+=======
+				if (!_playerManager->getbaleog()->getHit())
+				{
+					_playerManager->getbaleog()->setHit();
+					_playerManager->getbaleog()->setBaleogHit();
+				}
+				/*_playerManager->getbaleog()->setBaleogHit();*/
+>>>>>>> 8f07cc1c95bffbc2033fb3e6c4c93d6516547190
 			}
 
 			if ((IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_olafRect)))

@@ -611,7 +611,10 @@ void playerManager::trapColision() // 함정과 충돌 시
 
 			if (IntersectRect(&temp2, &_baleog->getVArrow()->getArrowRect(j), &_wo->get_vTrap()[i].rc))
 			{
+
 				_baleog->getVArrow()->removeArrow(j); //충돌한 화살 삭제할 코드	
+
+
 			}
 		}
 
@@ -845,7 +848,7 @@ void playerManager::enemyColision()
 				break;
 			}
 		}
-		// 에너미 폭탄 충돌+
+		// 에너미 폭탄 충돌 
 		if (_wo->getIsBoomShow())
 		{
 			RECT temp3;

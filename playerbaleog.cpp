@@ -36,7 +36,7 @@ HRESULT playerbaleog::init(float x, float y)
 	_baleog.posState = POSSTATE_GROUND;
 	_baleog.x = x;
 	_baleog.y = y;
-	_baleog.hp = 3;
+	_baleog.hp = 2;
 	_baleog.frameSpeed = 15;
 	_baleog.frameCount = 0;
 	_baleog.rc = RectMake(_baleog.x, _baleog.y, _baleog.image->getFrameWidth(), _baleog.image->getFrameHeight());
