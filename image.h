@@ -106,6 +106,7 @@ public:
 	void scaleRender(HDC, int destX, int destY, int scaleX, int scaleY);
 
 	void aniRender(HDC hdc, int destX, int destY, animation* ani);
+	void aniRender(HDC hdc, int destX, int destY, animation* ani, bool last);
 
 	inline HDC getMemDC() { return _imageInfo->hMemDC; }
 

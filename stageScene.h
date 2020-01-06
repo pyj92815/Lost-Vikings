@@ -65,6 +65,7 @@ private:
 	playerManager* _pm;
 	EnemyManager* _em;
 	waterFall* _wf;
+
 private:
 	//폭파 했을때
 	int _boomCount;

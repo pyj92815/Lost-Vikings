@@ -22,6 +22,7 @@ private:
 	int _frameHeight;				//프레임 세로크기
 
 	BOOL _loop;						//애니메이션 루프 여부
+	BOOL _last;						//애니메이션 지속 여부
 
 	float _frameUpdateSec;			//프레임 경과시간
 	float _elapsedSec;				//델타 타임
@@ -62,13 +63,18 @@ public:
 	//렌더링
 	void frameUpdate(float elapsedTime);
 
+	//지속여부를 확인하는 
+	void frameContinue() { _last = true; }
+
 	void start();
 	void stop();
 	void pause();
 	void resume();
 
 	inline BOOL isPlay() { return _play; }
+	inline BOOL isLast() { return _last;  }
 	inline POINT getFramePos() { return _frameList[_playList[_nowPlayIndex]]; }
+	inline int getMaxFrame() { return _frameNum; }	 // 마지막번째 프레임
 	inline int getFrameWidth() { return _frameWidth; }
 	inline int getFrameHeight() { return _frameHeight; }
 };

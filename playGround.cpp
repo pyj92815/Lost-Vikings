@@ -16,8 +16,6 @@ HRESULT playGround::init()
 {
 	gameNode::init(true);
 
-
-
 	//_wd = new worldMap;
 	//_wd->init();
 	//
@@ -30,7 +28,7 @@ HRESULT playGround::init()
 
 	_sm = new scene_Manager;
 	_sm->init();
-	
+
 	return S_OK;
 }
 
@@ -74,9 +72,8 @@ void playGround::render()
 	//_enemyManager->render();
 	//
 	//_sm->render();
-
-	_sm->render();
 	
+	_sm->render();
 	//===================================================
 	//µü ¸»Çß´Ù
 	_backBuffer->render(getHDC(), 0, 0);

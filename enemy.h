@@ -125,6 +125,5 @@ public:
 		IMAGEMANAGER->addFrameImage("Enemy_Snake", "./image./Enemy/Enemy_Snake.bmp", 88, 20, 2, 2, true, RGB(255, 0, 255));
 		IMAGEMANAGER->addFrameImage("Enemy_Snake_Attack", "./image./Enemy/Enemy_Snake_Attack.bmp", 618, 146, 6, 2, true, RGB(255, 0, 255));
 
-		IMAGEMANAGER->addFrameImage("Enemy_Die", "./image./Enemy/Enemy_Die.bmp", 891, 73, 11, 1, true, RGB(255, 0, 255));
 	}
 };

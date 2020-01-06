@@ -93,6 +93,11 @@ void stageScene::update()
 	{
 		SCENEMANAGER->set_SceneState(SS_CLEAR);
 	}
+
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	{
+		//EFFECTMANAGER->play("Enemy_die", _ptMouse.x, _ptMouse.y);
+	}
 }
 
 void stageScene::render()
@@ -106,7 +111,7 @@ void stageScene::render()
 	_em->render();
 	_pm->render();
 	_wf->render();
-	
+
 	
 	CAMERAMANAGER->get_WorImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y(),
 		CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());

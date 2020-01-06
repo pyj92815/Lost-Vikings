@@ -20,6 +20,7 @@ private:
 private:
 	arrTotalEffect _vTotalEffect;
 
+	bool _last;
 
 public:
 	effectManager();
@@ -32,8 +33,9 @@ public:
 
 	void addEffect(string effectName, const char* imageName, int imageWidth, int imageHeight,
 		int effectWidth, int effectHeight, int fps, float elapsedTime, int buffer);
+	void addEffect(string effectName, const char* imageName, int imageWidth, int imageHeight,
+		int effectWidth, int effectHeight, int fps, float elapsedTime, int buffer, bool last);
 
 	void play(string effectName, int x, int y);
-
 };
 
