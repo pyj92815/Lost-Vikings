@@ -54,6 +54,7 @@ void PlayerOlaf::update()
 		PixelCollision();
 		UpdateFrame();
 	}
+
 }
 
 void PlayerOlaf::render()
@@ -87,6 +88,10 @@ void PlayerOlaf::render()
 			char checkGravityAccel[128];
 			sprintf_s(checkGravityAccel, sizeof(checkGravityAccel), "PosState: %f", _olaf.gravity);
 			TextOut(CAMERAMANAGER->getWorDC(), _olaf.x, _olaf.y - 120, checkGravityAccel, strlen(checkGravityAccel));
+
+			char checkDirection[128];
+			sprintf_s(checkDirection, sizeof(checkDirection), "Direction : %d", _olaf.currentFrameY);
+			TextOut(CAMERAMANAGER->getWorDC(), _olaf.x, _olaf.y - 120, checkDirection, strlen(checkDirection));
 		}
 		_olaf.image->frameRender(CAMERAMANAGER->getWorDC(), _olaf.x, _olaf.y, _olaf.currentFrameX, _olaf.currentFrameY);
 	}
@@ -174,6 +179,19 @@ void PlayerOlaf::UpdateFrame()
 					_olaf.state = STATE_IDLE;
 				}
 			}
+			if (_olaf.state == STATE_HIT)
+			{
+				if (_olaf.hp != 0)
+				{
+					_olaf.state = STATE_IDLE;
+					_olaf.isHit = false;
+				}
+				else
+				{
+					_olaf.state = STATE_DIE;
+					ResetAnimation1();
+				}
+			}
 			_olaf.currentFrameX = 0;
 		}
 		_olaf.frameCount = 0;
@@ -236,6 +254,17 @@ void PlayerOlaf::KeyControl()
 			if (_olaf.posState == POSSTATE_GROUND) _olaf.state = STATE_IDLE;
 		}
 
+		
+		if (KEYMANAGER->isStayKeyDown('O'))
+		{
+			_olaf.y -= 5;
+		}
+
+		if (KEYMANAGER->isStayKeyDown('L'))
+		{
+			_olaf.y += 5;
+		}
+
 		// 방패 키
 		if ((KEYMANAGER->isOnceKeyDown('D') || KEYMANAGER->isOnceKeyDown(VK_SPACE)) && _olaf.posState != POSSTATE_STEPLADDER)
 		{
@@ -252,18 +281,36 @@ void PlayerOlaf::SetOlafState()
 		// 올라프 기본 움직임들
 		case STATE_IDLE:
 			if (!_isShieldUp)
+			{
 				_olaf.image = IMAGEMANAGER->findImage("Olaf_Idle_ShieldForward");
+				_currentPosstate = 1;
+			}
 			else
+			{
 				_olaf.image = IMAGEMANAGER->findImage("Olaf_Idle_ShieldUp");
+				_currentPosstate = 2;
+			}
 			ResetAnimation1();
+			ResetAnimation4();
 			break;
 
 		case STATE_MOVE:
+			if (_olaf.state == STATE_PUSH)
+			{
+				break;
+			}
 			if (!_isShieldUp)
+			{
 				_olaf.image = IMAGEMANAGER->findImage("Olaf_Move_ShieldForward");
+				_currentPosstate = 3;
+			}
 			else
+			{
 				_olaf.image = IMAGEMANAGER->findImage("Olaf_Move_ShieldUp");
+				_currentPosstate = 4;
+			}
 			ResetAnimation1();
+			ResetAnimation4();
 			break;
 
 		// 올라프 죽는 조건들
@@ -303,6 +350,13 @@ void PlayerOlaf::SetOlafState()
 			ResetAnimation1();
 			break;
 
+		case STATE_PUSH:
+			_olaf.image = IMAGEMANAGER->findImage("Olaf_Push");
+			ResetAnimation1();
+
+		case STATE_HIT:
+			_olaf.image = IMAGEMANAGER->findImage("Olaf_Hit");
+			ResetAnimation1();
 		default:
 			break;
 	}
@@ -335,7 +389,9 @@ void PlayerOlaf::SetOlafPosState()
 					_olaf.y -= (_olaf.gravity - 1);
 					_olaf.gravity = 0;
 				}
+				_currentPosstate = 5;
 			}
+			ResetAnimation4();
 			ResetAnimation1();
 			break;
 
@@ -596,5 +652,15 @@ void PlayerOlaf::ResetAnimation3()
 		_olaf.frameCount = 0;
 	}
 	_beforeLadderState = _currentLadderState;
+}
+void PlayerOlaf::ResetAnimation4()
+{
+	if (_currentPosstate != _beforePosstate)
+	{
+		_olaf.currentFrameX = 0;
+		_olaf.image->setFrameX(0);
+		_olaf.frameCount = 0;
+	}
+	_beforePosstate = _currentPosstate;
 }
 // 문제점 : 어떻게하면 검사해야하는 부분을 줄일 수 있을까? 지금 조건이 너무 많아서 이대로 가단 유지보수가 엄청 어려워 질수 있음. + 렉도 발생함

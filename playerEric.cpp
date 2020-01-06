@@ -37,7 +37,6 @@ HRESULT playerEric::init(float x, float y)
 	_eric.x = x;															 // x 
 	_eric.y = y;															 // y
 	_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());   // RECT
-
 	_eric.hp = 3;
 	_eric.isDead = false;// 체력 
 	//========================== 점프 관련 ==================================//
@@ -58,8 +57,6 @@ HRESULT playerEric::init(float x, float y)
 	_isSlide = false;		// 슬라이딩 
 	_stop = false;
 	_isItem = false;
-
-
 	//========================== 충돌처리 초기화 ============================//
 	_eric.probeX = _eric.x + _eric.image->getFrameWidth() / 2;
 	_eric.probeY = _eric.y + _eric.image->getFrameHeight() / 2;
@@ -72,13 +69,12 @@ void playerEric::release()
 
 void playerEric::update()
 {
-
-	if (!_isItem)
+	if (!_isItem)  // 아이템을 사용하면 전부 멈춘다 
 	{
-		ericFrameCount();				  // 이미지 프레임 증가 
-		setEricImage();				      // image 세팅 
+		ericFrameCount();				    // image frame 증가 
+		setEricImage();				        // image 세팅 
 
-		if (!_stop)
+		if (!_stop)	  // 죽는거 표시하기 위해서 
 		{
 			if (_stopControl)				// 케릭터 선택 BOOL값
 			{
@@ -88,22 +84,14 @@ void playerEric::update()
 
 			ericJump();								// 점프 
 			ericHit();								// 맞을 때 이미지 
-				//======================구현 예정==================//
-			ericAttack();							// 공격 
 
-
-
-			// 에릭의 좌표를 카메라 매니저에 넘겨준다.
-			// CAMERAMANAGER->set_Camera_XY(_eric.rc);
-			// 에릭의 위치가 그라운드이면 
 			// 점프가 아니면 픽셀충돌, 점프중에도 픽셀충돌 
 			if (_eric.posState == POSSTATE_AIR)
 			{
 				isJumpPixelCollision();
 				_isSlide = false;
-				// 중력값 
-				if (_gravity < 5)	 _gravity += 0.7;
 				_eric.y += _gravity;
+				if (_gravity < 5)	_gravity += 0.7;
 				if (_eric.state != STATE_ERIC_JUMP) // 떨어질 때 점프하면서 떨어지기 위한 
 				{
 					_eric.state = STATE_ERIC_JUMP;
@@ -115,34 +103,16 @@ void playerEric::update()
 			{
 				PixelCollision();
 			}
-
 		}
-		//  플레이어 사망
-		ericDie();
-		//렉트갱신
+		ericDie(); 	//  플레이어 사망
 		_eric.rc = RectMake(_eric.x, _eric.y, _eric.image->getFrameWidth(), _eric.image->getFrameHeight());   // RECT 갱신
-	}
 
+	}
 }
 
 void playerEric::render()
 {
-
-	// 임시 렌더링 값 
-
-	//Rectangle(getMemDC(), _test);
-
-	// 191229 PM 03:17 에릭이 그려지는 위치를 월드DC로 옴겼다.
-	Rectangle(CAMERAMANAGER->getWorDC(), _eric.rc);
 	_eric.image->frameRender(CAMERAMANAGER->getWorDC(), _eric.x, _eric.y, _eric.currentFrameX, _eric.currentFrameY);
-	// 191229 PM 04:27 UI에서 출력을 하기 위해 주석처리
-	//CAMERAMANAGER->getWorImage()->render(getMemDC(), 0, 0,
-	//	CAMERAMANAGER->get_Camera_X(), CAMERAMANAGER->get_Camera_Y()
-	//	, CAMERAMANAGER->get_CameraSizeX(), CAMERAMANAGER->get_CameraSizeY());
-
-	char str[100];
-	sprintf_s(str, "%d", _breathCount);
-	TextOut(getMemDC(), WINSIZEX / 2, WINSIZEY / 2, str, strlen(str));
 }
 
 void playerEric::move()
@@ -176,6 +146,7 @@ void playerEric::key()
 	{
 		if (_eric.state != STATE_STEPLADDER)	_eric.currentFrameY = 0;
 	}
+
 	if (KEYMANAGER->isStayKeyDown(VK_UP))
 	{
 		_eric.state = STATE_STEPLADDER;
@@ -316,6 +287,7 @@ void playerEric::key()
 			{
 				_eric.x += _slidePower;
 			}
+
 			if (_slidePower >= 0)
 			{
 				_slidePower -= 0.1;
@@ -324,6 +296,8 @@ void playerEric::key()
 			{
 				_slidePower = 7;
 				_isSlideOn = false;
+
+
 			}
 		}
 	}
@@ -364,12 +338,11 @@ void playerEric::key()
 		_eric.y += 20;
 	}
 }
-
-
+// ERIC 프레임 카운트
 void playerEric::ericFrameCount()
 {
 	_eric.frameCount++; // 프레임 카운터 증가 
-
+	
 	// 상태가 만약 공격 상태
 	if (_eric.state == STATE_ERIC_HEADBUTT)
 	{
@@ -407,7 +380,7 @@ void playerEric::ericFrameCount()
 			_eric.currentFrameX++;
 			_eric.image->setFrameX(_eric.currentFrameX);
 
-			if (_eric.currentFrameX > _eric.image->getMaxFrameX()) // 조금 느리게 하고 싶음 
+			if (_eric.currentFrameX > _eric.image->getMaxFrameX()) // 조금 느리게 하고 싶음
 			{
 				_ericUnable = false;
 				_eric.currentFrameX = 0;
@@ -486,7 +459,7 @@ void playerEric::ericFrameCount()
 		}
 	}
 }
-
+// ERIC 점프하는 함수 
 void playerEric::ericJump()
 {
 	if (_ericJump)
@@ -508,40 +481,7 @@ void playerEric::ericJump()
 	}
 
 }
-//=============================구현 예정 
-void playerEric::ericAttack()
-{
-	// eric의 벽 
-	//if (_eric.state != STATE_ERIC_HEADBUTT && _eric.state != STATE_ERIC_HEADBUTTEND)
-	//{
-	//	if (_test.left < _eric.x + _eric.image->getFrameWidth())
-	//	{
-	//		_eric.state = STATE_PUSH;
-	//		if (_eric.image->getMaxFrameX() < _eric.currentFrameX)
-	//		{
-	//			_eric.currentFrameX = 0;
-	//			_eric.image->setFrameX(_eric.currentFrameX);
-	//		}
-	//		_eric.x = _test.left - _eric.image->getFrameWidth();
-	//	}
-	//}
-	/*
-	if (_eric.state == STATE_ERIC_HEADBUTT && _eric.currentFrameX > 3)
-	{
-		RECT temp;
-		if (IntersectRect(&temp, &_eric.rc, &_test))
-		{
-		// 벽을 부딪히면 에릭의 위치는
-			_eric.state = STATE_ERIC_HEADBUTTEND;
-			_eric.currentFrameX = 0;
-			_eric.image->setFrameX(0);
-			_ericUnable = true;
-			_eric.frameSpeed = 12;
-	}
-	*/
-	//}
-}
-// 공격후 
+// ERIC 공격하면 밀려나는 함수
 void playerEric::ericAttackMove()
 {
 	if (_eric.currentFrameY == 0)
@@ -552,8 +492,7 @@ void playerEric::ericAttackMove()
 	{
 		_eric.x += 0.5;
 	}
-	// 공식이 안좋음 앵ㅇ글로 바꿀예정
-	// 프레임 4번 올리고 4번 낮춘다 
+	// 픽셀 충돌로 활성화 되지 않음 
 	if (_eric.currentFrameX >= 0 && _eric.currentFrameX < 4)
 	{
 		_eric.y -= 1;
@@ -563,8 +502,7 @@ void playerEric::ericAttackMove()
 		_eric.y += 1;
 	}
 }
-
-// ERIC이 맞을 떄 함수 
+// ERIC 맞을 떄 함수 
 void playerEric::ericHit()
 {
 	//맞을 때 히트값을 조정해주셈 
@@ -584,7 +522,7 @@ void playerEric::ericHit()
 		}
 	}
 }
-// 에릭의 이미지를 설정해주는 함수 
+// ERIC 이미지를 설정하는 함수  
 void playerEric::setEricImage()
 {
 	if (_eric.hp == 0)
@@ -690,8 +628,6 @@ void playerEric::PixelCollision()
 		}
 	}
 }
-
-
 void playerEric::PixelRightCollision()
 {
 	_eric.probeX = _eric.x + _eric.image->getFrameWidth(); // _eric.right  
@@ -716,7 +652,6 @@ void playerEric::PixelRightCollision()
 		_eric.x = _eric.probeX - _eric.image->getFrameWidth();
 	}
 }
-
 void playerEric::PixelLeftCollision()
 {
 	_eric.probeX = _eric.x - 3;
@@ -741,7 +676,6 @@ void playerEric::PixelLeftCollision()
 		_eric.x = _eric.probeX + 6;
 	}
 }
-
 void playerEric::isJumpPixelCollision()
 {
 	// 점프 중일 떄 왼쪽아래 모서리 픽셀 충돌 
@@ -810,7 +744,7 @@ void playerEric::isJumpPixelCollision()
 		}
 	}
 }
-
+//ERIC 죽었을 때
 void playerEric::ericDie()
 {
 	if (_eric.hp <= 0)

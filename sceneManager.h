@@ -13,7 +13,8 @@ enum SceneState
 	SS_STAGE,
 	SS_GAMEOVER,
 	SS_STOP,
-	SS_RESTART
+	SS_RESTART,
+	SS_CLEAR
 };
 
 enum PlayerName

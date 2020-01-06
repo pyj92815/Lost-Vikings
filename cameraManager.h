@@ -8,6 +8,7 @@ struct _tagCamera
 	POINTFLOAT world_Size, cameraXY, nextCameraXY;		// 월드 사이즈, 카메라 좌표를 담을곳, 다음 카메라 좌표
 	int		   cameraSizeX, cameraSizeY;				// 카메라의 사이즈
 	bool	   isMove;
+	bool       fastMove;
 	bool	   ClearX, ClearY;
 };
 

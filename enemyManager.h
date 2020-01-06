@@ -29,6 +29,8 @@ private:
 	RECT _ericRect;
 	RECT _olafRect;
 	RECT _baleogRect;
+	int _playerMirraCount;
+	bool _playerMirra;
 
 public:
 	EnemyManager();
@@ -51,6 +53,3 @@ public:
 	vector<Enemy*> getVEnemy() { return _vEnemy; }
 	vector<Enemy*>::iterator getViEnemy() { return _viEnemy; }
 };
-
-
-

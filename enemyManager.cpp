@@ -14,7 +14,8 @@ EnemyManager::~EnemyManager()
 
 HRESULT EnemyManager::init()
 {
-	
+	EFFECTMANAGER->addEffect("Enemy_die", "./image./Enemy/Enemy_Die.bmp", 891, 73, 81, 73, 0.1f, 0.1f, 50);
+
 	_enemyBullet = new Enemy_Bullet;
 	_enemyBullet->init();
 	_worldObjects = new worldObjects;
@@ -33,12 +34,22 @@ void EnemyManager::update()
 	{
 		(*_viEnemy)->update();
 		(*_viEnemy)->setPlayerRect(_playerManager->getPlayerEric().rc, _playerManager->getPlayerBaleog().rc, _playerManager->getPlayerOlaf().rc);
+		//EFFECTMANAGER->play("Enemy_die", (*_viEnemy)->getX(), (*_viEnemy)->getY());
 	}
 	_enemyBullet->update();
 	_ericRect = _playerManager->getPlayerEric().rc;
 	_baleogRect = _playerManager->getPlayerBaleog().rc;
 	_olafRect = _playerManager->getPlayerOlaf().rc;
 
+	if (_playerMirra)
+	{
+		_playerMirraCount++;
+		if (_playerMirraCount > 100)
+		{
+			_playerMirra = false;
+			_playerMirraCount = 0;
+		}
+	}
 	EnemyRemove();
 	bulletFire();
 	Collision();
@@ -79,7 +90,7 @@ void EnemyManager::EnemyCreate()
 
 	Enemy* Mummy_5;
 	Mummy_5 = new Enemy_Mummy;
-	Mummy_5->init(EnemyType::MUMMY, 1100, 380);
+	Mummy_5->init(EnemyType::MUMMY, 3470, 1300);
 	_vEnemy.push_back(Mummy_5);
 
 	//Enemy* Scorpion_1;
@@ -97,10 +108,10 @@ void EnemyManager::EnemyCreate()
 	//Scorpion_3->init(EnemyType::SCORPION, 3246, 1245);
 	//_vEnemy.push_back(Scorpion_3);
 
-	/*Enemy* Snake_1;
+	Enemy* Snake_1;
 	Snake_1 = new Enemy_Snake;
 	Snake_1->init(EnemyType::SNAKE, 1100, 380);
-	_vEnemy.push_back(Snake_1);*/
+	_vEnemy.push_back(Snake_1);
 
 	Enemy* Snake_2;
 	Snake_2 = new Enemy_Snake;
@@ -123,11 +134,12 @@ void EnemyManager::EnemyCreate(float x, float y)
 
 void EnemyManager::EnemyRemove()
 {
-	/*for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();)
+	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();)
 	{
 		if ((*_viEnemy)->getDie())
 		{
-			EFFECTMANAGER->play("Enemy_Die", (*_viEnemy)->getX(), (*_viEnemy)->getY());
+			EFFECTMANAGER->play("적죽음", (*_viEnemy)->getX(), (*_viEnemy)->getY());
+			//EFFECTMANAGER->play("Enemy_Die", (*_viEnemy)->getX(), (*_viEnemy)->getY());
 			_vEnemy.erase(_viEnemy);
 			break;
 		}
@@ -135,7 +147,7 @@ void EnemyManager::EnemyRemove()
 		{
 			++_viEnemy;
 		}
-	}*/
+	}
 }
 
 
@@ -163,27 +175,96 @@ void EnemyManager::Collision()
 			if (_playerManager->getPlayerEric().state != STATE_MIRRA)
 			{
 				_playerManager->getEric()->setEricState(STATE_MIRRA);
-				_playerManager->getEric()->setEricFrame();
+			    _playerManager->getEric()->setEricFrame();
+				_playerManager->getEric()->setEricStop();
 			}
-			
-			if (!_playerManager->getPlayerEric().isDead && _playerManager->getPlayerEric().currentFrameX >= _playerManager->getPlayerEric().image->getMaxFrameX())
+			if (!_playerMirra && _playerManager->getPlayerEric().currentFrameX > _playerManager->getPlayerEric().image->getMaxFrameX()-1)
 			{
-				EnemyCreate(_playerManager->getPlayerEric().x, _playerManager->getPlayerEric().y);
+				EnemyCreate(_playerManager->getPlayerEric().x + 30, _playerManager->getPlayerEric().y + 45);
+				_playerMirra = true;
 			}
 			break;
-
 		}
+		//발레오그 미라 생성
 		if (IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_baleogRect))
 		{
-			EnemyCreate(_playerManager->getPlayerBaleog().x, _playerManager->getPlayerBaleog().y);
-
-			/*_playerManager->getbaleog()->setBaleogHit();
-			_playerManager->getbaleog()->setBaleogHit();
-			_playerManager->getbaleog()->setBaleogHit();
-			break;*/
+			//발레오그 상대정의
+			//
+			if (_playerManager->getPlayerBaleog().state != STATE_MIRRA)
+			{
+				_playerManager->getbaleog()->setBaleogState(STATE_MIRRA);
+				_playerManager->getbaleog()->setBaleogFrame();
+				_playerManager->getbaleog()->setBaleogStop();
+			}
+			if (!_playerMirra)
+			{
+				EnemyCreate(_playerManager->getPlayerBaleog().x + 30, _playerManager->getPlayerBaleog().y);
+				_playerMirra = true;
+			}
+			break;
 		}
 
-		for (int i = 0;i < _enemyBullet->getVBullet().size();i++)
+		//올라프 미라 생성
+		if (IntersectRect(&temp, &(*_viEnemy)->getAttackRect(), &_olafRect))
+		{
+			//올라프 상태정의
+			//
+			if (_playerManager->getOlaf()->getOlafHP() != 0)
+			{
+				if (_playerManager->getOlaf()->GetOlafShieldState())
+				{
+					if (_playerManager->getPlayerOlaf().state != STATE_MIRRA)
+					{
+						_playerManager->getOlaf()->Set_OlafState(STATE_MIRRA);
+					}
+					if (!_playerMirra)
+					{
+						EnemyCreate(_playerManager->getOlaf()->getOlafX() + 30, _playerManager->getOlaf()->getOlafY());
+						_playerMirra = true;
+					}
+				}
+				else
+				{ //0이 오른쪽
+					if (_playerManager->getOlaf()->GetOlafDir()) // 왼쪽
+					{
+						if (  (_playerManager->getOlaf()->GetOlafRC().right + _playerManager->getOlaf()->GetOlafRC().left) / 2 < 
+							((*_viEnemy)->getAttackRect().right + (*_viEnemy)->getAttackRect().left) / 2)
+						{
+							if (_playerManager->getPlayerOlaf().state != STATE_MIRRA)
+							{
+								_playerManager->getOlaf()->Set_OlafState(STATE_MIRRA);
+							}
+							if (!_playerMirra)
+							{
+								//EnemyCreate(_playerManager->getOlaf()->getOlafX() + 30, _playerManager->getOlaf()->getOlafY());
+								_playerMirra = true;
+							}
+						}
+					}
+					else // 오른쪽
+					{
+						if ((_playerManager->getOlaf()->GetOlafRC().right + _playerManager->getOlaf()->GetOlafRC().left) / 2 >
+							((*_viEnemy)->getAttackRect().right + (*_viEnemy)->getAttackRect().left) / 2)
+						{
+							if (_playerManager->getPlayerOlaf().state != STATE_MIRRA)
+							{
+								_playerManager->getOlaf()->Set_OlafState(STATE_MIRRA);
+							}
+							if (!_playerMirra)
+							{
+								//EnemyCreate(_playerManager->getOlaf()->getOlafX() + 30, _playerManager->getOlaf()->getOlafY());
+								_playerMirra = true;
+							}
+						}
+					}
+				}
+			}
+			break;
+		}
+
+
+		//총알 충돌부분========================================================================================================================
+		for (int i = 0; i < _enemyBullet->getVBullet().size(); i++)
 		{
 			if (IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_ericRect))
 			{
@@ -196,20 +277,59 @@ void EnemyManager::Collision()
 				}
 				break;
 			}
-			
+
 			if ((IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_baleogRect)))
 			{
 				if (!_enemyBullet->getVBullet()[i].isFire)continue;
 				_enemyBullet->removeBullet(i);
-				_playerManager->getbaleog()->setBaleogHit();
+
+				//_playerManager->getbaleog()->setBaleogHit();
+
+				if (!_playerManager->getbaleog()->getHit())
+				{
+					_playerManager->getbaleog()->setHit();
+					_playerManager->getbaleog()->setBaleogHit();
+				}
+				/*_playerManager->getbaleog()->setBaleogHit();*/
+				break;
 			}
+
 			if ((IntersectRect(&temp, &_enemyBullet->getVBullet()[i].rect, &_olafRect)))
 			{
 				if (!_enemyBullet->getVBullet()[i].isFire)continue;
 				_enemyBullet->removeBullet(i);
+
+				if (_playerManager->getOlaf()->getOlafHP() != 0)
+				{
+					if (_playerManager->getOlaf()->GetOlafShieldState())
+					{
+						_playerManager->getOlaf()->Set_OlafState(STATE_HIT);
+						_playerManager->getOlaf()->OlafHit();
+					}
+					else
+					{
+						if (_playerManager->getOlaf()->GetOlafDir()) // 방패방향 왼쪽인 경우
+						{
+							if ((_playerManager->getOlaf()->GetOlafRC().right + _playerManager->getOlaf()->GetOlafRC().left) / 2 < _enemyBullet->getVBullet()[i].x)
+							{
+								_playerManager->getOlaf()->Set_OlafState(STATE_HIT);
+								_playerManager->getOlaf()->setOlafHit();
+								_playerManager->getOlaf()->OlafHit();
+							}
+						}
+						else
+						{
+							if ((_playerManager->getOlaf()->GetOlafRC().right + _playerManager->getOlaf()->GetOlafRC().left) / 2 > _enemyBullet->getVBullet()[i].x)
+							{
+								_playerManager->getOlaf()->Set_OlafState(STATE_HIT);
+								_playerManager->getOlaf()->setOlafHit();
+								_playerManager->getOlaf()->OlafHit();
+							}
+						}
+					}
+				}
 			}
 		}
-
 	}
 }
 

@@ -37,6 +37,7 @@ void Enemy_Mummy::EnemyAction()
 		if (!IntersectRect(&temp, &_enemyRect, &_cameraRect)) _enemyState = EnemyState::IDLE;				//카메라 밖으로 나가면 IDLE상태로 변함
 		break;
 	case EnemyState::DIE:
+		_die = true;
 		break;
 	default:
 		break;
@@ -96,14 +97,13 @@ void Enemy_Mummy::Frame()
 		}
 		break;
 	case EnemyState::DIE:
-		_frameCount++;
-		if (_frameCount >= 10)
-		{
-			_frameX++;
-			if (_frameX > 10)
-				_frameX = 0;
-			_frameCount = 0;
-		}
+		//_frameCount++;
+		//if (_frameCount >= 10)
+		//{
+		//	if (_frameX < 10) _frameX++;
+		//	_frameCount = 0;
+		//	if (_frameX > 10)_die = true;
+		//}
 		break;
 	default:
 		break;
