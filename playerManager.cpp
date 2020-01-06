@@ -847,7 +847,6 @@ void playerManager::enemyColision()
 			{
 				//_em->getVEnemy()[i]->Hit();
 				//EFFECTMANAGER->play("die", _em->getVEnemy()[i]->getRect().left, _em->getVEnemy()[i]->getRect().top);
-				EFFECTMANAGER->play("die", 50, 50);
 				_em->getVEnemy()[i]->Hit();
 				//_em->EnemyRemove(i);
 				_eric->setEricState(STATE_ERIC_HEADBUTTEND);
